@@ -62,7 +62,7 @@ jobs:
     # Model tests - always check cache, only download if needed
     - name: Cache model files
       id: cache-models
-      uses: actions/cache@v3
+      uses: actions/cache@v4
       with:
         path: models
         key: ${{ runner.os }}-models-tinyllama-v1
