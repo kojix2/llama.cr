@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.14.0">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="llama">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="llama">
+  <title>Llama - llama main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          llama
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="llama/Llama" data-name="llama">
+      <a href="Llama.html">Llama</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Context" data-name="llama::context">
+      <a href="Llama/Context.html">Context</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
+      <a href="Llama/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Model" data-name="llama::model">
+      <a href="Llama/Model.html">Model</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Vocab" data-name="llama::vocab">
+      <a href="Llama/Vocab.html">Vocab</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">module</span> Llama
+
+</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/14b162d66bdcbc5fd78ca4c7a3700a87483896b0/src/llama.cr#L11" target="_blank">
+        llama.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/14b162d66bdcbc5fd78ca4c7a3700a87483896b0/src/llama/context.cr#L1" target="_blank">
+        llama/context.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/14b162d66bdcbc5fd78ca4c7a3700a87483896b0/src/llama/lib_llama.cr#L1" target="_blank">
+        llama/lib_llama.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/14b162d66bdcbc5fd78ca4c7a3700a87483896b0/src/llama/model.cr#L1" target="_blank">
+        llama/model.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/14b162d66bdcbc5fd78ca4c7a3700a87483896b0/src/llama/vocab.cr#L1" target="_blank">
+        llama/vocab.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+  
+    <h2>
+      <a id="constant-summary" class="anchor" href="#constant-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+      Constant Summary
+    </h2>
+  
+  <dl>
+    
+      <dt class="entry-const" id="VERSION">
+        <strong>VERSION</strong> = <code><span class="s">&quot;0.1.0&quot;</span></code>
+      </dt>
+      
+    
+  </dl>
+
+
+
+
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#generate%28model_path%3AString%2Cprompt%3AString%2Cmax_tokens%3AInt32%3D128%2Ctemperature%3AFloat32%3D0.8%29%3AString-class-method" class="signature"><strong>.generate</strong>(model_path : String, prompt : String, max_tokens : Int32 = <span class="n">128</span>, temperature : Float32 = <span class="n">0.8</span>) : String</a>
+        
+          <div class="summary"><p>A simple example of text generation</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#system_info%3AString-class-method" class="signature"><strong>.system_info</strong> : String</a>
+        
+          <div class="summary"><p>Returns the llama.cpp system information</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+
+
+<div class="methods-inherited">
+  
+</div>
+
+
+
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="generate(model_path:String,prompt:String,max_tokens:Int32=128,temperature:Float32=0.8):String-class-method">
+      <div class="signature">
+        
+        def self.<strong>generate</strong>(model_path : String, prompt : String, max_tokens : Int32 = <span class="n">128</span>, temperature : Float32 = <span class="n">0.8</span>) : String
+
+        <a class="method-permalink" href="#generate%28model_path%3AString%2Cprompt%3AString%2Cmax_tokens%3AInt32%3D128%2Ctemperature%3AFloat32%3D0.8%29%3AString-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>A simple example of text generation</p>
+<p>Parameters:</p>
+<ul>
+<li>model_path: Path to the model file (.gguf format)</li>
+<li>prompt: The input prompt</li>
+<li>max_tokens: Maximum number of tokens to generate</li>
+<li>temperature: Sampling temperature (0.0 = greedy, 1.0 = more random)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The generated text</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/14b162d66bdcbc5fd78ca4c7a3700a87483896b0/src/llama.cr#L29" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="system_info:String-class-method">
+      <div class="signature">
+        
+        def self.<strong>system_info</strong> : String
+
+        <a class="method-permalink" href="#system_info%3AString-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the llama.cpp system information</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/14b162d66bdcbc5fd78ca4c7a3700a87483896b0/src/llama.cr#L15" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+
+</div>
+
+</body>
+</html>

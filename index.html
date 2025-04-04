@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.14.0">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="llama">
+
+
+
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/doc.js"></script>
+
+  <meta name="repository-name" content="llama">
+  <title>llama main</title>
+  <script type="text/javascript">
+  CrystalDocs.base_path = "";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="index.html">
+          llama
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent " data-id="llama/Llama" data-name="llama">
+      <a href="Llama.html">Llama</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Context" data-name="llama::context">
+      <a href="Llama/Context.html">Context</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
+      <a href="Llama/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Model" data-name="llama::model">
+      <a href="Llama/Model.html">Model</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Vocab" data-name="llama::vocab">
+      <a href="Llama/Vocab.html">Vocab</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1><a id="llama.cr" class="anchor" href="#llama.cr">  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>llama.cr</h1>
+<p>Crystal bindings for <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.</p>
+<h2><a id="features" class="anchor" href="#features">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Features</h2>
+<ul>
+<li>Low-level bindings to the llama.cpp C API</li>
+<li>High-level Crystal wrapper classes for easy usage</li>
+<li>Memory management for C resources</li>
+<li>Simple text generation interface</li>
+</ul>
+<h2><a id="installation" class="anchor" href="#installation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Installation</h2>
+<h3><a id="prerequisites" class="anchor" href="#prerequisites">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Prerequisites</h3>
+<p>Before using this shard, you need to have llama.cpp compiled and installed on your system:</p>
+<ol>
+<li>
+<p>Clone and build llama.cpp:</p>
+<pre><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
+cd llama.cpp
+make</code></pre>
+</li>
+<li>
+<p>Install the library to your system (optional):</p>
+<pre><code class="language-bash">sudo make install</code></pre>
+</li>
+</ol>
+<h3><a id="adding-to-your-project" class="anchor" href="#adding-to-your-project">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Adding to Your Project</h3>
+<ol>
+<li>
+<p>Add the dependency to your <code>shard.yml</code>:</p>
+<pre><code class="language-yaml">dependencies:
+  llama:
+    github: kojix2/llama.cr</code></pre>
+</li>
+<li>
+<p>Run <code>shards install</code></p>
+</li>
+</ol>
+<h2><a id="usage" class="anchor" href="#usage">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Usage</h2>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
+
+<span class="c"># Load a model</span>
+model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+
+<span class="c"># Create a context</span>
+context <span class="o">=</span> model.context
+
+<span class="c"># Generate text</span>
+response <span class="o">=</span> context.generate(<span class="s">&quot;Once upon a time&quot;</span>, max_tokens: <span class="n">100</span>, temperature: <span class="n">0.8</span>)
+puts response
+
+<span class="c"># Or use the convenience method</span>
+response <span class="o">=</span> <span class="t">Llama</span>.generate(<span class="s">&quot;/path/to/model.gguf&quot;</span>, <span class="s">&quot;Once upon a time&quot;</span>)
+puts response</code></pre>
+<h2><a id="api-documentation" class="anchor" href="#api-documentation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>API Documentation</h2>
+<h3><a id="llamamodel" class="anchor" href="#llamamodel">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Llama::Model</h3>
+<p>The <code>Model</code> class represents a loaded LLaMA model.</p>
+<pre><code class="language-crystal"><span class="c"># Load a model</span>
+model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+
+<span class="c"># Get model information</span>
+puts model.n_params  <span class="c"># Number of parameters</span>
+puts model.n_embd    <span class="c"># Embedding size</span>
+puts model.n_layer   <span class="c"># Number of layers</span>
+puts model.n_head    <span class="c"># Number of attention heads</span></code></pre>
+<h3><a id="llamacontext" class="anchor" href="#llamacontext">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Llama::Context</h3>
+<p>The <code>Context</code> class handles the inference state for a model.</p>
+<pre><code class="language-crystal"><span class="c"># Create a context</span>
+context <span class="o">=</span> model.context
+
+<span class="c"># Generate text</span>
+response <span class="o">=</span> context.generate(<span class="s">&quot;Hello, I am a&quot;</span>, max_tokens: <span class="n">50</span>, temperature: <span class="n">0.7</span>)</code></pre>
+<h3><a id="llamavocab" class="anchor" href="#llamavocab">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Llama::Vocab</h3>
+<p>The <code>Vocab</code> class provides access to the model's vocabulary.</p>
+<pre><code class="language-crystal"><span class="c"># Get the vocabulary</span>
+vocab <span class="o">=</span> model.vocab
+
+<span class="c"># Tokenize text</span>
+tokens <span class="o">=</span> vocab.tokenize(<span class="s">&quot;Hello, world!&quot;</span>)
+
+<span class="c"># Convert tokens back to text</span>
+text <span class="o">=</span> tokens.map { <span class="o">|</span>token<span class="o">|</span> vocab.token_to_text(token) }.join</code></pre>
+<h2><a id="development" class="anchor" href="#development">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Development</h2>
+<p>See <a href="DEVELOPMENT.md">DEVELOPMENT.md</a> for development guidelines.</p>
+<h2><a id="contributing" class="anchor" href="#contributing">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Contributing</h2>
+<ol>
+<li>Fork it (<a href="https://github.com/kojix2/llama.cr/fork">https://github.com/kojix2/llama.cr/fork</a>)</li>
+<li>Create your feature branch (<code>git checkout -b my-new-feature</code>)</li>
+<li>Commit your changes (<code>git commit -am 'Add some feature'</code>)</li>
+<li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
+<li>Create a new Pull Request</li>
+</ol>
+<h2><a id="contributors" class="anchor" href="#contributors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Contributors</h2>
+<ul>
+<li><a href="https://github.com/kojix2">kojix2</a> - creator and maintainer</li>
+</ul>
+<h2><a id="license" class="anchor" href="#license">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>License</h2>
+<p>This project is available under the MIT License. See the LICENSE file for more info.</p>
+</div>
+</body>
+</html>
