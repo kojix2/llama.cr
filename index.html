@@ -133,6 +133,33 @@ make</code></pre>
 <pre><code class="language-bash">sudo make install</code></pre>
 </li>
 </ol>
+<h3><a id="obtaining-gguf-model-files" class="anchor" href="#obtaining-gguf-model-files">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Obtaining GGUF Model Files</h3>
+<p>You'll need a model file in GGUF format to use with this library. Here are some options:</p>
+<ol>
+<li>
+<p><strong>Download pre-converted models from Hugging Face</strong>:</p>
+<ul>
+<li><a href="https://huggingface.co/TheBloke">TheBloke's GGUF models</a> - Large collection of models converted to GGUF format</li>
+<li>Popular models include:
+<ul>
+<li><a href="https://huggingface.co/TheBloke/Llama-3-8B-Instruct-GGUF">Llama 3 8B Instruct</a></li>
+<li><a href="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF">Mistral 7B Instruct v0.2</a></li>
+<li><a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF">TinyLlama 1.1B</a> (good for testing)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Convert models yourself using llama.cpp</strong>:</p>
+<pre><code class="language-bash"># Example: Converting a Hugging Face model to GGUF
+python3 llama.cpp/convert.py /path/to/model --outfile model.gguf</code></pre>
+</li>
+</ol>
+<p>For testing, smaller quantized models (1-3B parameters) with Q4_K_M quantization are recommended.</p>
 <h3><a id="adding-to-your-project" class="anchor" href="#adding-to-your-project">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -169,6 +196,37 @@ puts response
 <span class="c"># Or use the convenience method</span>
 response <span class="o">=</span> <span class="t">Llama</span>.generate(<span class="s">&quot;/path/to/model.gguf&quot;</span>, <span class="s">&quot;Once upon a time&quot;</span>)
 puts response</code></pre>
+<h2><a id="examples" class="anchor" href="#examples">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Examples</h2>
+<p>The <code>examples</code> directory contains sample code demonstrating how to use the library:</p>
+<h3><a id="text-generation" class="anchor" href="#text-generation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Text Generation</h3>
+<p>A simple example showing how to generate text from a prompt:</p>
+<pre><code class="language-bash">crystal examples/text_generation.cr -- /path/to/model.gguf &quot;Once upon a time&quot;</code></pre>
+<p>Optional parameters:</p>
+<ul>
+<li>Third argument: Maximum number of tokens to generate (default: 128)</li>
+<li>Fourth argument: Temperature (default: 0.8)</li>
+</ul>
+<h3><a id="tokenization" class="anchor" href="#tokenization">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Tokenization</h3>
+<p>An example demonstrating tokenization and vocabulary features:</p>
+<pre><code class="language-bash">crystal examples/tokenization.cr -- /path/to/model.gguf &quot;Hello, world!&quot;</code></pre>
+<p>This example shows:</p>
+<ul>
+<li>How to tokenize text into token IDs</li>
+<li>How to convert token IDs back to text</li>
+<li>How to access special tokens in the vocabulary</li>
+</ul>
 <h2><a id="api-documentation" class="anchor" href="#api-documentation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
