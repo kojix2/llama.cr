@@ -140,7 +140,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d623ce41efcce0263db4f6cfe91d2c753aa45008/src/llama/vocab.cr#L3" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L3" target="_blank">
         llama/vocab.cr
       </a>
     
@@ -187,9 +187,44 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#bos%3AInt32-instance-method" class="signature"><strong>#bos</strong> : Int32</a>
+        
+          <div class="summary"><p>Special token methods Returns the beginning-of-sentence token ID</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#eos%3AInt32-instance-method" class="signature"><strong>#eos</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the end-of-sentence token ID</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#eot%3AInt32-instance-method" class="signature"><strong>#eot</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the end-of-turn token ID</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#n_tokens%3AInt32-instance-method" class="signature"><strong>#n_tokens</strong> : Int32</a>
         
           <div class="summary"><p>Returns the number of tokens in the vocabulary</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#nl%3AInt32-instance-method" class="signature"><strong>#nl</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the newline token ID</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pad%3AInt32-instance-method" class="signature"><strong>#pad</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the padding token ID</p></div>
         
       </li>
     
@@ -276,7 +311,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d623ce41efcce0263db4f6cfe91d2c753aa45008/src/llama/vocab.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -297,6 +332,70 @@ Users should obtain Vocab instances through Model#vocab.</p>
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="bos:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>bos</strong> : Int32
+
+        <a class="method-permalink" href="#bos%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Special token methods
+Returns the beginning-of-sentence token ID</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L66" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="eos:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>eos</strong> : Int32
+
+        <a class="method-permalink" href="#eos%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the end-of-sentence token ID</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L71" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="eot:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>eot</strong> : Int32
+
+        <a class="method-permalink" href="#eot%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the end-of-turn token ID</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L76" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="n_tokens:Int32-instance-method">
       <div class="signature">
         
@@ -313,7 +412,49 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d623ce41efcce0263db4f6cfe91d2c753aa45008/src/llama/vocab.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L12" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="nl:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>nl</strong> : Int32
+
+        <a class="method-permalink" href="#nl%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the newline token ID</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L81" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pad:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>pad</strong> : Int32
+
+        <a class="method-permalink" href="#pad%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the padding token ID</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -334,7 +475,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d623ce41efcce0263db4f6cfe91d2c753aa45008/src/llama/vocab.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L91" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -355,7 +496,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d623ce41efcce0263db4f6cfe91d2c753aa45008/src/llama/vocab.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -376,7 +517,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d623ce41efcce0263db4f6cfe91d2c753aa45008/src/llama/vocab.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b784c28c61832e945ac5661349cf47bf90c679fa/src/llama/vocab.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>

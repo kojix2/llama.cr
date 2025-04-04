@@ -123,14 +123,29 @@
 <p>Before using this shard, you need to have llama.cpp compiled and installed on your system:</p>
 <ol>
 <li>
-<p>Clone and build llama.cpp:</p>
+<p>Clone and build llama.cpp using CMake:</p>
 <pre><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
-make</code></pre>
+mkdir build &amp;&amp; cd build
+cmake ..
+cmake --build . --config Release</code></pre>
 </li>
 <li>
-<p>Install the library to your system (optional):</p>
-<pre><code class="language-bash">sudo make install</code></pre>
+<p>Install the library to your system:</p>
+<pre><code class="language-bash"># On Linux
+sudo cmake --install .
+sudo ldconfig
+
+# On macOS
+sudo cmake --install .</code></pre>
+</li>
+<li>
+<p>Alternatively, you can specify the library location using environment variables:</p>
+<pre><code class="language-bash"># Set the library path at compile time
+LLAMA_LIBRARY_PATH=/path/to/llama.cpp/build crystal build examples/text_generation.cr
+
+# Or set the library path at runtime
+LD_LIBRARY_PATH=/path/to/llama.cpp/build crystal examples/text_generation.cr -- /path/to/model.gguf &quot;Your prompt&quot;</code></pre>
 </li>
 </ol>
 <h3><a id="obtaining-gguf-model-files" class="anchor" href="#obtaining-gguf-model-files">
