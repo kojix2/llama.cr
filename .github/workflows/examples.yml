@@ -1,0 +1,112 @@
+name: examples
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal: latest
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install cmake
+
+      # Define llama.cpp version
+      - name: Set llama.cpp version
+        run: echo "LLAMA_VERSION=b5054" >> $GITHUB_ENV
+
+      - name: Install llama.cpp (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${{ env.LLAMA_VERSION }}/llama-${{ env.LLAMA_VERSION }}-bin-ubuntu-x64.zip -o llama.zip
+          unzip llama.zip
+          sudo mkdir -p /usr/local/lib
+          sudo cp build/bin/*.so /usr/local/lib/
+          sudo ldconfig
+
+      - name: Install llama.cpp (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${{ env.LLAMA_VERSION }}/llama-${{ env.LLAMA_VERSION }}-bin-macos-arm64.zip -o llama.zip
+          unzip llama.zip
+          sudo mkdir -p /usr/local/lib
+          sudo cp build/bin/*.dylib /usr/local/lib/
+
+      # Set the DYLD_LIBRARY_PATH for macOS to include the installed library path
+      - name: Set library path (macOS)
+        if: runner.os == 'macOS'
+        run: echo 'DYLD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: shards install
+
+      - name: Cache model files
+        id: cache-models
+        uses: actions/cache@v4
+        with:
+          path: models
+          key: ${{ runner.os }}-models-tinyllama-v1
+
+      - name: Download test model (if not cached)
+        if: steps.cache-models.outputs.cache-hit != 'true'
+        run: |
+          mkdir -p models
+          curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
+
+      - name: Build examples
+        run: |
+          crystal build examples/chat.cr -o chat_example
+          crystal build examples/sampling.cr -o sampling_example
+          crystal build examples/text_generation.cr -o text_generation_example
+          crystal build examples/tokenization.cr -o tokenization_example
+          crystal build examples/advanced.cr -o advanced_example
+          crystal build examples/embeddings.cr -o embeddings_example
+          crystal build examples/advanced_sampling.cr -o advanced_sampling_example
+          crystal build examples/model_metadata.cr -o model_metadata_example
+
+      - name: Run chat example
+        run: NON_INTERACTIVE=true ./chat_example models/tiny_model.gguf
+
+      - name: Run sampling example
+        run: ./sampling_example models/tiny_model.gguf "This is a sample prompt."
+
+      - name: Run text generation example
+        run: ./text_generation_example models/tiny_model.gguf "Once upon a time" 50 0.7
+
+      - name: Run tokenization example
+        run: ./tokenization_example models/tiny_model.gguf "Hello, world!"
+
+      - name: Run advanced example
+        run: ./advanced_example models/tiny_model.gguf
+
+      - name: Run embeddings example
+        run: ./embeddings_example models/tiny_model.gguf
+
+      - name: Run advanced sampling example
+        run: ./advanced_sampling_example models/tiny_model.gguf
+
+      - name: Run model metadata example
+        run: ./model_metadata_example models/tiny_model.gguf
