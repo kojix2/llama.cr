@@ -6,38 +6,74 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    
+    runs-on: ${{ matrix.os }}
+    
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install Crystal
-        uses: crystal-lang/install-crystal@v1
-
-      - name: Install llama.cpp
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake
-          git clone https://github.com/ggml-org/llama.cpp.git
-          cd llama.cpp
-          mkdir build && cd build
-          cmake ..
-          cmake --build . --config Release
+    - uses: actions/checkout@v4
+    
+    - name: Install Crystal
+      uses: crystal-lang/install-crystal@v1
+    
+    - name: Install dependencies (Ubuntu)
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake
+    
+    - name: Install dependencies (macOS)
+      if: runner.os == 'macOS'
+      run: |
+        brew install cmake
+    
+    - name: Install llama.cpp
+      run: |
+        git clone https://github.com/ggml-org/llama.cpp.git
+        cd llama.cpp
+        mkdir build && cd build
+        cmake ..
+        cmake --build . --config Release
+        
+        if [ "$RUNNER_OS" == "Linux" ]; then
           sudo cmake --install .
           sudo ldconfig
-
-      - name: Install dependencies
-        run: shards install
-
-      - name: Run static analysis
-        run: crystal tool format --check
-
-      - name: Build
-        run: crystal build --no-codegen src/llama.cr
-
-      - name: Run basic tests (no model required)
-        run: |
-          # Modify the spec file to only run tests that don't require a model
-          sed -i 's/info.should_not be_empty/# info.should_not be_empty/' spec/llama_spec.cr
-          crystal spec
+        else
+          sudo cmake --install .
+        fi
+    
+    - name: Install dependencies
+      run: shards install
+    
+    - name: Run static analysis
+      run: crystal tool format --check
+    
+    - name: Build
+      run: crystal build --no-codegen src/llama.cr
+    
+    - name: Run basic tests
+      run: |
+        crystal spec spec/llama_spec.cr
+    
+    # Model tests - always check cache, only download if needed
+    - name: Cache model files
+      id: cache-models
+      uses: actions/cache@v3
+      with:
+        path: models
+        key: ${{ runner.os }}-models-tinyllama-v1
+    
+    - name: Download test model (if not cached)
+      if: steps.cache-models.outputs.cache-hit != 'true'
+      run: |
+        mkdir -p models
+        curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
+    
+    - name: Run tests with model
+      if: github.event_name == 'workflow_dispatch'
+      run: |
+        crystal spec spec/model_test.cr -- --model=models/tiny_model.gguf
