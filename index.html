@@ -98,6 +98,8 @@
     <use href="#octicon-link"/>
   </svg>
 </a>llama.cr</h1>
+<p><a href="https://github.com/kojix2/llama.cr/actions/workflows/test.yml"><img src="https://github.com/kojix2/llama.cr/actions/workflows/test.yml/badge.svg" alt="test" /></a>
+<a href="https://kojix2.github.io/llama.cr"><img src="https://img.shields.io/badge/docs-latest-blue.svg" alt="docs" /></a></p>
 <p>Crystal bindings for <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.</p>
 <h2><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
@@ -122,32 +124,30 @@
 </a>Prerequisites</h3>
 <p>Before using this shard, you need to have llama.cpp compiled and installed on your system:</p>
 <ol>
-<li>
-<p>Clone and build llama.cpp using CMake:</p>
+<li>Clone and build llama.cpp using CMake:</li>
+</ol>
 <pre><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
 mkdir build &amp;&amp; cd build
 cmake ..
 cmake --build . --config Release</code></pre>
-</li>
-<li>
-<p>Install the library to your system:</p>
+<ol start="2">
+<li>Install the library to your system:</li>
+</ol>
 <pre><code class="language-bash"># On Linux
 sudo cmake --install .
 sudo ldconfig
 
 # On macOS
 sudo cmake --install .</code></pre>
-</li>
-<li>
-<p>Alternatively, you can specify the library location using environment variables:</p>
+<ol start="3">
+<li>Alternatively, you can specify the library location without installing:</li>
+</ol>
 <pre><code class="language-bash"># Set the library path at compile time
-LLAMA_LIBRARY_PATH=/path/to/llama.cpp/build crystal build examples/text_generation.cr
+crystal build examples/text_generation.cr --link-flags=&quot;-L/path/to/llama.cpp/build/bin&quot;
 
 # Or set the library path at runtime
-LD_LIBRARY_PATH=/path/to/llama.cpp/build crystal examples/text_generation.cr -- /path/to/model.gguf &quot;Your prompt&quot;</code></pre>
-</li>
-</ol>
+LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./text_generation /path/to/model.gguf &quot;Your prompt here&quot;</code></pre>
 <h3><a id="obtaining-gguf-model-files" class="anchor" href="#obtaining-gguf-model-files">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -170,10 +170,10 @@ LD_LIBRARY_PATH=/path/to/llama.cpp/build crystal examples/text_generation.cr -- 
 </li>
 <li>
 <p><strong>Convert models yourself using llama.cpp</strong>:</p>
-<pre><code class="language-bash"># Example: Converting a Hugging Face model to GGUF
-python3 llama.cpp/convert.py /path/to/model --outfile model.gguf</code></pre>
 </li>
 </ol>
+<pre><code class="language-bash"># Example: Converting a Hugging Face model to GGUF
+python3 llama.cpp/convert.py /path/to/model --outfile model.gguf</code></pre>
 <p>For testing, smaller quantized models (1-3B parameters) with Q4_K_M quantization are recommended.</p>
 <h3><a id="adding-to-your-project" class="anchor" href="#adding-to-your-project">
   <svg class="octicon-link" aria-hidden="true">
@@ -181,15 +181,13 @@ python3 llama.cpp/convert.py /path/to/model --outfile model.gguf</code></pre>
   </svg>
 </a>Adding to Your Project</h3>
 <ol>
-<li>
-<p>Add the dependency to your <code>shard.yml</code>:</p>
+<li>Add the dependency to your <code>shard.yml</code>:</li>
+</ol>
 <pre><code class="language-yaml">dependencies:
   llama:
     github: kojix2/llama.cr</code></pre>
-</li>
-<li>
-<p>Run <code>shards install</code></p>
-</li>
+<ol start="2">
+<li>Run <code>shards install</code></li>
 </ol>
 <h2><a id="usage" class="anchor" href="#usage">
   <svg class="octicon-link" aria-hidden="true">
@@ -223,7 +221,8 @@ puts response</code></pre>
   </svg>
 </a>Text Generation</h3>
 <p>A simple example showing how to generate text from a prompt:</p>
-<pre><code class="language-bash">crystal examples/text_generation.cr -- /path/to/model.gguf &quot;Once upon a time&quot;</code></pre>
+<pre><code class="language-bash">crystal build examples/text_generation.cr --link-flags=&quot;-L/path/to/llama.cpp/build/bin&quot;
+LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./text_generation /path/to/model.gguf &quot;Once upon a time&quot;</code></pre>
 <p>Optional parameters:</p>
 <ul>
 <li>Third argument: Maximum number of tokens to generate (default: 128)</li>
@@ -235,7 +234,8 @@ puts response</code></pre>
   </svg>
 </a>Tokenization</h3>
 <p>An example demonstrating tokenization and vocabulary features:</p>
-<pre><code class="language-bash">crystal examples/tokenization.cr -- /path/to/model.gguf &quot;Hello, world!&quot;</code></pre>
+<pre><code class="language-bash">crystal build examples/tokenization.cr --link-flags=&quot;-L/path/to/llama.cpp/build/bin&quot;
+LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./tokenization /path/to/model.gguf &quot;Hello, world!&quot;</code></pre>
 <p>This example shows:</p>
 <ul>
 <li>How to tokenize text into token IDs</li>
@@ -304,14 +304,6 @@ text <span class="o">=</span> tokens.map { <span class="o">|</span>token<span cl
 <li>Push to the branch (<code>git push origin my-new-feature</code>)</li>
 <li>Create a new Pull Request</li>
 </ol>
-<h2><a id="contributors" class="anchor" href="#contributors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Contributors</h2>
-<ul>
-<li><a href="https://github.com/kojix2">kojix2</a> - creator and maintainer</li>
-</ul>
 <h2><a id="license" class="anchor" href="#license">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
