@@ -196,6 +196,18 @@
   </h2>
 
   <p>Wrapper for a chain of samplers</p>
+<p>The SamplerChain class allows you to combine multiple sampling methods
+in a sequence. Each sampler in the chain filters the token probabilities
+before passing them to the next sampler.</p>
+<p>Example:</p>
+<pre><code class="language-crystal">chain <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">SamplerChain</span>.new
+chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">TopKSampler</span>.new(<span class="n">40</span>))      <span class="c"># First filter with top-k</span>
+chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">TopPSampler</span>.new(<span class="n">0.95</span>, <span class="n">1</span>)) <span class="c"># Then apply top-p</span>
+chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">TempSampler</span>.new(<span class="n">0.8</span>))     <span class="c"># Apply temperature</span>
+chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">DistSampler</span>.new(<span class="n">42</span>))      <span class="c"># Final distribution sampling</span>
+
+<span class="c"># Generate text with the custom sampler chain</span>
+result <span class="o">=</span> context.generate_with_sampler(<span class="s">&quot;Your prompt&quot;</span>, chain, <span class="n">150</span>)</code></pre>
 
 
 
@@ -220,7 +232,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L27" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L47" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -398,7 +410,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L35" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -439,7 +451,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L87" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -464,7 +476,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L66" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -486,7 +498,7 @@ Overrides the parent class's finalize method to also clean up the samplers array
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L73" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -516,7 +528,7 @@ Overrides the parent class's finalize method to also clean up the samplers array
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L79" target="_blank">View source</a>]
         
       </div>
     </div>

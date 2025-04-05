@@ -196,6 +196,11 @@
   </h2>
 
   <p>Top-P (nucleus) sampler</p>
+<p>The Top-P sampler (also known as nucleus sampling) keeps tokens whose
+cumulative probability exceeds the threshold P. This helps to filter out
+the long tail of low-probability tokens.</p>
+<p>Example:</p>
+<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">TopPSampler</span>.new(<span class="n">0.95</span>, <span class="n">1</span>) <span class="c"># Keep tokens until 95% probability is covered</span></code></pre>
 
 
 
@@ -220,7 +225,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L98" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L135" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -359,7 +364,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L144" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -195,8 +195,13 @@
     Overview
   </h2>
 
-  <p>Mirostat sampler (version 2)
-Mirostat 2.0 algorithm described in the paper https://arxiv.org/abs/2007.14966</p>
+  <p>Mirostat sampler (version 2)</p>
+<p>The Mirostat V2 sampler is an improved version of the Mirostat algorithm
+that requires fewer parameters and is more efficient. It dynamically
+adjusts sampling to maintain a target entropy level.</p>
+<p>Based on the paper: https://arxiv.org/abs/2007.14966</p>
+<p>Example:</p>
+<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">MirostatV2Sampler</span>.new(<span class="n">42</span>, <span class="n">5.0</span>, <span class="n">0.1</span>)</code></pre>
 
 
 
@@ -221,7 +226,7 @@ Mirostat 2.0 algorithm described in the paper https://arxiv.org/abs/2007.14966</
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L201" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L298" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -361,7 +366,7 @@ Mirostat 2.0 algorithm described in the paper https://arxiv.org/abs/2007.14966</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L211" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L308" target="_blank">View source</a>]
         
       </div>
     </div>

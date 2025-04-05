@@ -195,8 +195,13 @@
     Overview
   </h2>
 
-  <p>Penalties sampler
-Applies various penalties to token probabilities</p>
+  <p>Penalties sampler</p>
+<p>The Penalties sampler applies various penalties to token probabilities
+to reduce repetition and improve diversity in the generated text.
+It can penalize recently used tokens, frequent tokens, and more.</p>
+<p>Example:</p>
+<pre><code class="language-crystal"><span class="c"># Apply penalties to the last 64 tokens with a repetition penalty of 1.1</span>
+sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">PenaltiesSampler</span>.new(<span class="n">64</span>, <span class="n">1.1</span>, <span class="n">0.0</span>, <span class="n">0.0</span>)</code></pre>
 
 
 
@@ -221,7 +226,7 @@ Applies various penalties to token probabilities</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L262" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L385" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -362,7 +367,7 @@ Applies various penalties to token probabilities</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L273" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L396" target="_blank">View source</a>]
         
       </div>
     </div>

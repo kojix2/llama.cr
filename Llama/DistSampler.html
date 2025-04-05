@@ -196,6 +196,12 @@
   </h2>
 
   <p>Distribution sampler (final sampler in a chain)</p>
+<p>The Distribution sampler is typically the final sampler in a chain.
+It samples a token from the probability distribution after all other
+samplers have filtered the logits. This sampler is required to actually
+select a token from the distribution.</p>
+<p>Example:</p>
+<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">DistSampler</span>.new(<span class="n">42</span>) <span class="c"># Use seed 42 for reproducibility</span></code></pre>
 
 
 
@@ -220,7 +226,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L129" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L186" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -358,7 +364,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L137" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L194" target="_blank">View source</a>]
         
       </div>
     </div>

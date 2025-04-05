@@ -196,6 +196,10 @@
   </h2>
 
   <p>Top-K sampler</p>
+<p>The Top-K sampler keeps only the K most likely tokens and zeros out the rest.
+This is a simple but effective way to filter out unlikely tokens.</p>
+<p>Example:</p>
+<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">TopKSampler</span>.new(<span class="n">40</span>) <span class="c"># Keep only the top 40 tokens</span></code></pre>
 
 
 
@@ -220,7 +224,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L83" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L111" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -358,7 +362,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L91" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L119" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -195,8 +195,21 @@
     Overview
   </h2>
 
-  <p>Grammar sampler
-Constrains generation to follow a formal grammar</p>
+  <p>Grammar sampler</p>
+<p>The Grammar sampler constrains token generation to follow a formal grammar
+defined in GBNF format. This is useful for generating structured text like
+JSON, XML, or code that must follow specific syntax rules.</p>
+<p>Example:</p>
+<pre><code class="language-crystal"><span class="c"># Define a simple grammar for a numbered list</span>
+grammar <span class="o">=</span> <span class="s">%q{
+  root ::= list
+  list ::= item+
+  item ::= number &quot; &quot; text &quot;\n&quot;
+  number ::= &quot;1&quot; | &quot;2&quot; | &quot;3&quot; | &quot;4&quot; | &quot;5&quot;
+  text ::= [a-zA-Z ]+
+}</span>
+
+sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">GrammarSampler</span>.new(model.vocab, grammar, <span class="s">&quot;root&quot;</span>)</code></pre>
 
 
 
@@ -221,7 +234,7 @@ Constrains generation to follow a formal grammar</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L219" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L333" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -380,7 +393,7 @@ Constrains generation to follow a formal grammar</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L229" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L343" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -417,7 +430,7 @@ Constrains generation to follow a formal grammar</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L244" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L358" target="_blank">View source</a>]
         
       </div>
     </div>

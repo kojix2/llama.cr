@@ -181,6 +181,7 @@
 <p><a href="https://github.com/kojix2/llama.cr/actions/workflows/test.yml"><img src="https://github.com/kojix2/llama.cr/actions/workflows/test.yml/badge.svg" alt="test" /></a>
 <a href="https://kojix2.github.io/llama.cr"><img src="https://img.shields.io/badge/docs-latest-blue.svg" alt="docs" /></a></p>
 <p>Crystal bindings for <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.</p>
+<p>Compatible with llama.cpp version b5054 and newer.</p>
 <h2><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -191,6 +192,10 @@
 <li>High-level Crystal wrapper classes for easy usage</li>
 <li>Memory management for C resources</li>
 <li>Simple text generation interface</li>
+<li>Advanced sampling methods (Min-P, Typical, Mirostat, etc.)</li>
+<li>Batch processing for efficient token handling</li>
+<li>KV cache management for optimized inference</li>
+<li>State saving and loading</li>
 </ul>
 <h2><a id="installation" class="anchor" href="#installation">
   <svg class="octicon-link" aria-hidden="true">
@@ -233,28 +238,13 @@ LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./text_generation /path/to/model.gg
     <use href="#octicon-link"/>
   </svg>
 </a>Obtaining GGUF Model Files</h3>
-<p>You'll need a model file in GGUF format to use with this library. Here are some options:</p>
-<ol>
-<li>
-<p><strong>Download pre-converted models from Hugging Face</strong>:</p>
+<p>You'll need a model file in GGUF format. For testing, smaller quantized models (1-3B parameters) with Q4_K_M quantization are recommended.</p>
+<p>Popular options:</p>
 <ul>
-<li><a href="https://huggingface.co/TheBloke">TheBloke's GGUF models</a> - Large collection of models converted to GGUF format</li>
-<li>Popular models include:
-<ul>
+<li><a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF">TinyLlama 1.1B</a> (good for testing)</li>
 <li><a href="https://huggingface.co/TheBloke/Llama-3-8B-Instruct-GGUF">Llama 3 8B Instruct</a></li>
 <li><a href="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF">Mistral 7B Instruct v0.2</a></li>
-<li><a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF">TinyLlama 1.1B</a> (good for testing)</li>
 </ul>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>Convert models yourself using llama.cpp</strong>:</p>
-</li>
-</ol>
-<pre><code class="language-bash"># Example: Converting a Hugging Face model to GGUF
-python3 llama.cpp/convert.py /path/to/model --outfile model.gguf</code></pre>
-<p>For testing, smaller quantized models (1-3B parameters) with Q4_K_M quantization are recommended.</p>
 <h3><a id="adding-to-your-project" class="anchor" href="#adding-to-your-project">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -274,6 +264,11 @@ python3 llama.cpp/convert.py /path/to/model --outfile model.gguf</code></pre>
     <use href="#octicon-link"/>
   </svg>
 </a>Usage</h2>
+<h3><a id="basic-text-generation" class="anchor" href="#basic-text-generation">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Basic Text Generation</h3>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
 
 <span class="c"># Load a model</span>
@@ -289,83 +284,123 @@ puts response
 <span class="c"># Or use the convenience method</span>
 response <span class="o">=</span> <span class="t">Llama</span>.generate(<span class="s">&quot;/path/to/model.gguf&quot;</span>, <span class="s">&quot;Once upon a time&quot;</span>)
 puts response</code></pre>
+<h3><a id="advanced-sampling" class="anchor" href="#advanced-sampling">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Advanced Sampling</h3>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
+
+model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+context <span class="o">=</span> model.context
+
+<span class="c"># Create a sampler chain with multiple sampling methods</span>
+chain <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">SamplerChain</span>.new
+chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">TopKSampler</span>.new(<span class="n">40</span>))      <span class="c"># First filter with top-k</span>
+chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">MinPSampler</span>.new(<span class="n">0.05</span>, <span class="n">1</span>)) <span class="c"># Then apply min-p</span>
+chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">TempSampler</span>.new(<span class="n">0.8</span>))     <span class="c"># Apply temperature</span>
+chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">DistSampler</span>.new(<span class="n">42</span>))      <span class="c"># Final distribution sampling</span>
+
+<span class="c"># Generate text with the custom sampler chain</span>
+result <span class="o">=</span> context.generate_with_sampler(<span class="s">&quot;Write a short poem about AI:&quot;</span>, chain, <span class="n">150</span>)
+puts result</code></pre>
+<h3><a id="chat-conversations" class="anchor" href="#chat-conversations">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Chat Conversations</h3>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
+<span class="k">require</span> <span class="s">&quot;llama/chat&quot;</span>
+
+model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+context <span class="o">=</span> model.context
+
+<span class="c"># Create a chat conversation</span>
+messages <span class="o">=</span> [
+  <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;system&quot;</span>, <span class="s">&quot;You are a helpful assistant.&quot;</span>),
+  <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;user&quot;</span>, <span class="s">&quot;Hello, who are you?&quot;</span>)
+]
+
+<span class="c"># Generate a response</span>
+response <span class="o">=</span> context.chat(messages)
+puts <span class="s">&quot;Assistant: </span><span class="i">#{</span>response<span class="i">}</span><span class="s">&quot;</span>
+
+<span class="c"># Continue the conversation</span>
+messages <span class="o">&lt;&lt;</span> <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;assistant&quot;</span>, response)
+messages <span class="o">&lt;&lt;</span> <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;user&quot;</span>, <span class="s">&quot;Tell me a joke&quot;</span>)
+response <span class="o">=</span> context.chat(messages)
+puts <span class="s">&quot;Assistant: </span><span class="i">#{</span>response<span class="i">}</span><span class="s">&quot;</span></code></pre>
+<h3><a id="embeddings" class="anchor" href="#embeddings">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Embeddings</h3>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
+
+model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+
+<span class="c"># Create a context with embeddings enabled</span>
+params <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Context</span>.default_params
+params.embeddings <span class="o">=</span> <span class="n">true</span>
+context <span class="o">=</span> model.context(params)
+
+<span class="c"># Get embeddings for text</span>
+text <span class="o">=</span> <span class="s">&quot;Hello, world!&quot;</span>
+tokens <span class="o">=</span> model.vocab.tokenize(text)
+batch <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Batch</span>.get_one(tokens)
+context.decode(batch)
+embeddings <span class="o">=</span> context.get_embeddings_seq(<span class="n">0</span>)
+
+puts <span class="s">&quot;Embedding dimension: </span><span class="i">#{</span>embeddings.size<span class="i">}</span><span class="s">&quot;</span></code></pre>
 <h2><a id="examples" class="anchor" href="#examples">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Examples</h2>
-<p>The <code>examples</code> directory contains sample code demonstrating how to use the library:</p>
-<h3><a id="text-generation" class="anchor" href="#text-generation">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Text Generation</h3>
-<p>A simple example showing how to generate text from a prompt:</p>
-<pre><code class="language-bash">crystal build examples/text_generation.cr --link-flags=&quot;-L/path/to/llama.cpp/build/bin&quot;
-LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./text_generation /path/to/model.gguf &quot;Once upon a time&quot;</code></pre>
-<p>Optional parameters:</p>
+<p>The <code>examples</code> directory contains sample code demonstrating various features:</p>
 <ul>
-<li>Third argument: Maximum number of tokens to generate (default: 128)</li>
-<li>Fourth argument: Temperature (default: 0.8)</li>
-</ul>
-<h3><a id="tokenization" class="anchor" href="#tokenization">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Tokenization</h3>
-<p>An example demonstrating tokenization and vocabulary features:</p>
-<pre><code class="language-bash">crystal build examples/tokenization.cr --link-flags=&quot;-L/path/to/llama.cpp/build/bin&quot;
-LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./tokenization /path/to/model.gguf &quot;Hello, world!&quot;</code></pre>
-<p>This example shows:</p>
-<ul>
-<li>How to tokenize text into token IDs</li>
-<li>How to convert token IDs back to text</li>
-<li>How to access special tokens in the vocabulary</li>
+<li><code>text_generation.cr</code> - Basic text generation</li>
+<li><code>chat.cr</code> - Chat conversations with models</li>
+<li><code>tokenization.cr</code> - Tokenization and vocabulary features</li>
+<li><code>sampling.cr</code> - Custom token sampling</li>
+<li><code>advanced_sampling.cr</code> - Advanced sampling methods</li>
+<li><code>embeddings.cr</code> - Text embeddings</li>
+<li><code>advanced.cr</code> - KV cache and state management</li>
 </ul>
 <h2><a id="api-documentation" class="anchor" href="#api-documentation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>API Documentation</h2>
-<h3><a id="llamamodel" class="anchor" href="#llamamodel">
+<h3><a id="core-classes" class="anchor" href="#core-classes">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Llama::Model</h3>
-<p>The <code>Model</code> class represents a loaded LLaMA model.</p>
-<pre><code class="language-crystal"><span class="c"># Load a model</span>
-model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
-
-<span class="c"># Get model information</span>
-puts model.n_params  <span class="c"># Number of parameters</span>
-puts model.n_embd    <span class="c"># Embedding size</span>
-puts model.n_layer   <span class="c"># Number of layers</span>
-puts model.n_head    <span class="c"># Number of attention heads</span></code></pre>
-<h3><a id="llamacontext" class="anchor" href="#llamacontext">
+</a>Core Classes</h3>
+<ul>
+<li><strong>Llama::Model</strong> - Represents a loaded LLaMA model</li>
+<li><strong>Llama::Context</strong> - Handles inference state for a model</li>
+<li><strong>Llama::Vocab</strong> - Provides access to the model's vocabulary</li>
+<li><strong>Llama::Batch</strong> - Manages batches of tokens for efficient processing</li>
+<li><strong>Llama::KvCache</strong> - Controls the key-value cache for optimized inference</li>
+<li><strong>Llama::State</strong> - Handles saving and loading model state</li>
+<li><strong>Llama::SamplerChain</strong> - Combines multiple sampling methods</li>
+</ul>
+<h3><a id="samplers" class="anchor" href="#samplers">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Llama::Context</h3>
-<p>The <code>Context</code> class handles the inference state for a model.</p>
-<pre><code class="language-crystal"><span class="c"># Create a context</span>
-context <span class="o">=</span> model.context
-
-<span class="c"># Generate text</span>
-response <span class="o">=</span> context.generate(<span class="s">&quot;Hello, I am a&quot;</span>, max_tokens: <span class="n">50</span>, temperature: <span class="n">0.7</span>)</code></pre>
-<h3><a id="llamavocab" class="anchor" href="#llamavocab">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Llama::Vocab</h3>
-<p>The <code>Vocab</code> class provides access to the model's vocabulary.</p>
-<pre><code class="language-crystal"><span class="c"># Get the vocabulary</span>
-vocab <span class="o">=</span> model.vocab
-
-<span class="c"># Tokenize text</span>
-tokens <span class="o">=</span> vocab.tokenize(<span class="s">&quot;Hello, world!&quot;</span>)
-
-<span class="c"># Convert tokens back to text</span>
-text <span class="o">=</span> tokens.map { <span class="o">|</span>token<span class="o">|</span> vocab.token_to_text(token) }.join</code></pre>
+</a>Samplers</h3>
+<ul>
+<li><strong>Llama::TopKSampler</strong> - Keeps only the top K most likely tokens</li>
+<li><strong>Llama::TopPSampler</strong> - Nucleus sampling (keeps tokens until cumulative probability exceeds P)</li>
+<li><strong>Llama::TempSampler</strong> - Applies temperature to logits</li>
+<li><strong>Llama::DistSampler</strong> - Samples from the final probability distribution</li>
+<li><strong>Llama::MinPSampler</strong> - Keeps tokens with probability &gt;= P * max_probability</li>
+<li><strong>Llama::TypicalSampler</strong> - Selects tokens based on their &quot;typicality&quot; (entropy)</li>
+<li><strong>Llama::MirostatSampler</strong> - Dynamically adjusts sampling to maintain target entropy</li>
+<li><strong>Llama::PenaltiesSampler</strong> - Applies penalties to reduce repetition</li>
+</ul>
 <h2><a id="development" class="anchor" href="#development">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>

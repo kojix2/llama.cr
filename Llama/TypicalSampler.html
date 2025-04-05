@@ -195,8 +195,13 @@
     Overview
   </h2>
 
-  <p>Typical sampler
-Locally Typical Sampling implementation described in the paper https://arxiv.org/abs/2202.00666</p>
+  <p>Typical sampler</p>
+<p>The Typical sampler selects tokens based on their &quot;typicality&quot; (entropy).
+It filters out tokens that are either too predictable or too surprising,
+leading to more natural and diverse text generation.</p>
+<p>Based on the paper: https://arxiv.org/abs/2202.00666</p>
+<p>Example:</p>
+<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">TypicalSampler</span>.new(<span class="n">0.95</span>, <span class="n">1</span>) <span class="c"># Keep tokens with typicality &gt;= 0.95</span></code></pre>
 
 
 
@@ -221,7 +226,7 @@ Locally Typical Sampling implementation described in the paper https://arxiv.org
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L164" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L239" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -360,7 +365,7 @@ Locally Typical Sampling implementation described in the paper https://arxiv.org
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L173" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L248" target="_blank">View source</a>]
         
       </div>
     </div>

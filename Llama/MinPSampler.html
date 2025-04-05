@@ -195,8 +195,12 @@
     Overview
   </h2>
 
-  <p>Min-P sampler
-Described in https://github.com/ggml-org/llama.cpp/pull/3841</p>
+  <p>Min-P sampler</p>
+<p>The Min-P sampler keeps tokens with probability &gt;= P * max_probability.
+This is similar to Top-P but uses a minimum probability threshold relative
+to the most likely token, rather than a cumulative probability threshold.</p>
+<p>Example:</p>
+<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">MinPSampler</span>.new(<span class="n">0.05</span>, <span class="n">1</span>) <span class="c"># Keep tokens with prob &gt;= 5% of max prob</span></code></pre>
 
 
 
@@ -221,7 +225,7 @@ Described in https://github.com/ggml-org/llama.cpp/pull/3841</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L147" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L212" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -360,7 +364,7 @@ Described in https://github.com/ggml-org/llama.cpp/pull/3841</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L156" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L221" target="_blank">View source</a>]
         
       </div>
     </div>

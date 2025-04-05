@@ -195,8 +195,15 @@
     Overview
   </h2>
 
-  <p>Mirostat sampler (version 1)
-Mirostat 1.0 algorithm described in the paper https://arxiv.org/abs/2007.14966</p>
+  <p>Mirostat sampler (version 1)</p>
+<p>The Mirostat sampler dynamically adjusts the temperature to maintain
+a target entropy level in the generated text. This helps to produce
+consistent quality output regardless of the context.</p>
+<p>Based on the paper: https://arxiv.org/abs/2007.14966</p>
+<p>Example:</p>
+<pre><code class="language-crystal"><span class="c"># Create a Mirostat sampler with vocabulary size, seed, target entropy,</span>
+<span class="c"># learning rate, and context size</span>
+sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">MirostatSampler</span>.new(<span class="n">32000</span>, <span class="n">42</span>, <span class="n">5.0</span>, <span class="n">0.1</span>, <span class="n">100</span>)</code></pre>
 
 
 
@@ -221,7 +228,7 @@ Mirostat 1.0 algorithm described in the paper https://arxiv.org/abs/2007.14966</
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L181" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L268" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -363,7 +370,7 @@ Mirostat 1.0 algorithm described in the paper https://arxiv.org/abs/2007.14966</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/e57a99e057f566f5b8b8892dd5f05acfab477363/src/llama/sampler.cr#L193" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L280" target="_blank">View source</a>]
         
       </div>
     </div>
