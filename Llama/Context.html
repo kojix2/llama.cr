@@ -67,6 +67,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/DistSampler" data-name="llama::distsampler">
+      <a href="../Llama/DistSampler.html">DistSampler</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
       <a href="../Llama/Error.html">Error</a>
       
@@ -74,6 +79,31 @@
   
   <li class=" " data-id="llama/Llama/Model" data-name="llama::model">
       <a href="../Llama/Model.html">Model</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler" data-name="llama::sampler">
+      <a href="../Llama/Sampler.html">Sampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/SamplerChain" data-name="llama::samplerchain">
+      <a href="../Llama/SamplerChain.html">SamplerChain</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TempSampler" data-name="llama::tempsampler">
+      <a href="../Llama/TempSampler.html">TempSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TopKSampler" data-name="llama::topksampler">
+      <a href="../Llama/TopKSampler.html">TopKSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TopPSampler" data-name="llama::toppsampler">
+      <a href="../Llama/TopPSampler.html">TopPSampler</a>
       
     </li>
   
@@ -140,7 +170,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/2ce53144ab32d438ff80fc01d47fccb15e62a185/src/llama/context.cr#L3" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L3" target="_blank">
         llama/context.cr
       </a>
     
@@ -204,6 +234,13 @@
         <a href="#generate%28prompt%3AString%2Cmax_tokens%3AInt32%3D128%2Ctemperature%3AFloat32%3D0.8%29%3AString-instance-method" class="signature"><strong>#generate</strong>(prompt : String, max_tokens : Int32 = <span class="n">128</span>, temperature : Float32 = <span class="n">0.8</span>) : String</a>
         
           <div class="summary"><p>Generates text from a prompt</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#generate_with_sampler%28prompt%3AString%2Csampler%3ASamplerChain%2Cmax_tokens%3AInt32%3D128%29%3AString-instance-method" class="signature"><strong>#generate_with_sampler</strong>(prompt : String, sampler : SamplerChain, max_tokens : Int32 = <span class="n">128</span>) : String</a>
+        
+          <div class="summary"><p>Generates text using a sampler chain</p></div>
         
       </li>
     
@@ -290,7 +327,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2ce53144ab32d438ff80fc01d47fccb15e62a185/src/llama/context.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -341,7 +378,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2ce53144ab32d438ff80fc01d47fccb15e62a185/src/llama/context.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L97" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -362,7 +399,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2ce53144ab32d438ff80fc01d47fccb15e62a185/src/llama/context.cr#L203" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L269" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -397,7 +434,42 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2ce53144ab32d438ff80fc01d47fccb15e62a185/src/llama/context.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L123" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="generate_with_sampler(prompt:String,sampler:SamplerChain,max_tokens:Int32=128):String-instance-method">
+      <div class="signature">
+        
+        def <strong>generate_with_sampler</strong>(prompt : String, sampler : <a href="../Llama/SamplerChain.html">SamplerChain</a>, max_tokens : Int32 = <span class="n">128</span>) : String
+
+        <a class="method-permalink" href="#generate_with_sampler%28prompt%3AString%2Csampler%3ASamplerChain%2Cmax_tokens%3AInt32%3D128%29%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Generates text using a sampler chain</p>
+<p>Parameters:</p>
+<ul>
+<li>prompt: The input prompt</li>
+<li>sampler: The sampler chain to use</li>
+<li>max_tokens: Maximum number of tokens to generate (must be positive)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The generated text</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if parameters are invalid</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -422,7 +494,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2ce53144ab32d438ff80fc01d47fccb15e62a185/src/llama/context.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L107" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -443,7 +515,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2ce53144ab32d438ff80fc01d47fccb15e62a185/src/llama/context.cr#L198" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L264" target="_blank">View source</a>]
         
       </div>
     </div>
