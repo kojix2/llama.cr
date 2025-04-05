@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.14.0">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="llama">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="llama">
+  <title>Llama::State - llama main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          llama
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="llama/Llama" data-name="llama">
+      <a href="../Llama.html">Llama</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Batch" data-name="llama::batch">
+      <a href="../Llama/Batch.html">Batch</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
+      <a href="../Llama/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Context" data-name="llama::context">
+      <a href="../Llama/Context.html">Context</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/DistSampler" data-name="llama::distsampler">
+      <a href="../Llama/DistSampler.html">DistSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
+      <a href="../Llama/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/KvCache" data-name="llama::kvcache">
+      <a href="../Llama/KvCache.html">KvCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Model" data-name="llama::model">
+      <a href="../Llama/Model.html">Model</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler" data-name="llama::sampler">
+      <a href="../Llama/Sampler.html">Sampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/SamplerChain" data-name="llama::samplerchain">
+      <a href="../Llama/SamplerChain.html">SamplerChain</a>
+      
+    </li>
+  
+  <li class=" current" data-id="llama/Llama/State" data-name="llama::state">
+      <a href="../Llama/State.html">State</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TempSampler" data-name="llama::tempsampler">
+      <a href="../Llama/TempSampler.html">TempSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TopKSampler" data-name="llama::topksampler">
+      <a href="../Llama/TopKSampler.html">TopKSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TopPSampler" data-name="llama::toppsampler">
+      <a href="../Llama/TopPSampler.html">TopPSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Vocab" data-name="llama::vocab">
+      <a href="../Llama/Vocab.html">Vocab</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Llama::<wbr>State
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/State.html">Llama::State</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Wrapper for state management functions in llama.cpp
+Provides methods for saving and loading model state</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L4" target="_blank">
+        llama/state.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28ctx%3AContext%29-class-method" class="signature"><strong>.new</strong>(ctx : Context)</a>
+        
+          <div class="summary"><p>Creates a new State instance</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#get_data%3ABytes-instance-method" class="signature"><strong>#get_data</strong> : Bytes</a>
+        
+          <div class="summary"><p>Gets the current state data</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#load_file%28path%3AString%2Cmax_tokens%3AInt32%3D1024%29%3AArray%28Int32%29-instance-method" class="signature"><strong>#load_file</strong>(path : String, max_tokens : Int32 = <span class="n">1024</span>) : Array(Int32)</a>
+        
+          <div class="summary"><p>Loads state from a file</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#save_file%28path%3AString%2Ctokens%3AArray%28Int32%29%29%3ABool-instance-method" class="signature"><strong>#save_file</strong>(path : String, tokens : Array(Int32)) : Bool</a>
+        
+          <div class="summary"><p>Saves state to a file</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_get_data%28seq_id%3AInt32%29%3ABytes-instance-method" class="signature"><strong>#seq_get_data</strong>(seq_id : Int32) : Bytes</a>
+        
+          <div class="summary"><p>Gets the state data for a specific sequence</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_load_file%28path%3AString%2Cdest_seq_id%3AInt32%2Cmax_tokens%3AInt32%3D1024%29%3AArray%28Int32%29-instance-method" class="signature"><strong>#seq_load_file</strong>(path : String, dest_seq_id : Int32, max_tokens : Int32 = <span class="n">1024</span>) : Array(Int32)</a>
+        
+          <div class="summary"><p>Loads a sequence's state from a file</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_save_file%28path%3AString%2Cseq_id%3AInt32%2Ctokens%3AArray%28Int32%29%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_save_file</strong>(path : String, seq_id : Int32, tokens : Array(Int32)) : LibC::SizeT</a>
+        
+          <div class="summary"><p>Saves a sequence's state to a file</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_set_data%28data%3ABytes%2Cdest_seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_set_data</strong>(data : Bytes, dest_seq_id : Int32) : LibC::SizeT</a>
+        
+          <div class="summary"><p>Sets the state for a specific sequence from data</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_size%28seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_size</strong>(seq_id : Int32) : LibC::SizeT</a>
+        
+          <div class="summary"><p>Gets the size needed to store a specific sequence's state</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#set_data%28data%3ABytes%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#set_data</strong>(data : Bytes) : LibC::SizeT</a>
+        
+          <div class="summary"><p>Sets the state from data</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#size%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#size</strong> : LibC::SizeT</a>
+        
+          <div class="summary"><p>Returns the size in bytes needed to store the current state</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(ctx:Context)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(ctx : <a href="../Llama/Context.html">Context</a>)
+
+        <a class="method-permalink" href="#new%28ctx%3AContext%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new State instance</p>
+<p>Parameters:</p>
+<ul>
+<li>ctx: The Context to manage state for</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="get_data:Bytes-instance-method">
+      <div class="signature">
+        
+        def <strong>get_data</strong> : Bytes
+
+        <a class="method-permalink" href="#get_data%3ABytes-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the current state data</p>
+<p>Returns:</p>
+<ul>
+<li>A Bytes object containing the state data</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L24" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="load_file(path:String,max_tokens:Int32=1024):Array(Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>load_file</strong>(path : String, max_tokens : Int32 = <span class="n">1024</span>) : Array(Int32)
+
+        <a class="method-permalink" href="#load_file%28path%3AString%2Cmax_tokens%3AInt32%3D1024%29%3AArray%28Int32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Loads state from a file</p>
+<p>Parameters:</p>
+<ul>
+<li>path: Path to the session file</li>
+<li>max_tokens: Maximum number of tokens to load (default: 1024)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>An array of tokens loaded from the file</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::Error if the file cannot be loaded</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L60" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="save_file(path:String,tokens:Array(Int32)):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>save_file</strong>(path : String, tokens : Array(Int32)) : Bool
+
+        <a class="method-permalink" href="#save_file%28path%3AString%2Ctokens%3AArray%28Int32%29%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Saves state to a file</p>
+<p>Parameters:</p>
+<ul>
+<li>path: Path to save the session file</li>
+<li>tokens: Array of tokens to save with the state</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>true if successful, false otherwise</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L94" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_get_data(seq_id:Int32):Bytes-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_get_data</strong>(seq_id : Int32) : Bytes
+
+        <a class="method-permalink" href="#seq_get_data%28seq_id%3AInt32%29%3ABytes-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the state data for a specific sequence</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id: The sequence ID</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>A Bytes object containing the sequence state data</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L125" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_load_file(path:String,dest_seq_id:Int32,max_tokens:Int32=1024):Array(Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_load_file</strong>(path : String, dest_seq_id : Int32, max_tokens : Int32 = <span class="n">1024</span>) : Array(Int32)
+
+        <a class="method-permalink" href="#seq_load_file%28path%3AString%2Cdest_seq_id%3AInt32%2Cmax_tokens%3AInt32%3D1024%29%3AArray%28Int32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Loads a sequence's state from a file</p>
+<p>Parameters:</p>
+<ul>
+<li>path: Path to the sequence file</li>
+<li>dest_seq_id: The destination sequence ID</li>
+<li>max_tokens: Maximum number of tokens to load (default: 1024)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>An array of tokens loaded from the file</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::Error if the file cannot be loaded</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L196" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_save_file(path:String,seq_id:Int32,tokens:Array(Int32)):LibC::SizeT-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_save_file</strong>(path : String, seq_id : Int32, tokens : Array(Int32)) : LibC::SizeT
+
+        <a class="method-permalink" href="#seq_save_file%28path%3AString%2Cseq_id%3AInt32%2Ctokens%3AArray%28Int32%29%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Saves a sequence's state to a file</p>
+<p>Parameters:</p>
+<ul>
+<li>path: Path to save the sequence file</li>
+<li>seq_id: The sequence ID to save</li>
+<li>tokens: Array of tokens to save with the state</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The number of bytes written, or 0 if failed</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L170" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_set_data(data:Bytes,dest_seq_id:Int32):LibC::SizeT-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_set_data</strong>(data : Bytes, dest_seq_id : Int32) : LibC::SizeT
+
+        <a class="method-permalink" href="#seq_set_data%28data%3ABytes%2Cdest_seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Sets the state for a specific sequence from data</p>
+<p>Parameters:</p>
+<ul>
+<li>data: The state data to set</li>
+<li>dest_seq_id: The destination sequence ID</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The number of bytes read, or 0 if failed</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L152" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_size(seq_id:Int32):LibC::SizeT-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_size</strong>(seq_id : Int32) : LibC::SizeT
+
+        <a class="method-permalink" href="#seq_size%28seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the size needed to store a specific sequence's state</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id: The sequence ID</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The size in bytes</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L114" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="set_data(data:Bytes):LibC::SizeT-instance-method">
+      <div class="signature">
+        
+        def <strong>set_data</strong>(data : Bytes) : LibC::SizeT
+
+        <a class="method-permalink" href="#set_data%28data%3ABytes%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Sets the state from data</p>
+<p>Parameters:</p>
+<ul>
+<li>data: The state data to set</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The number of bytes read</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L45" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="size:LibC::SizeT-instance-method">
+      <div class="signature">
+        
+        def <strong>size</strong> : LibC::SizeT
+
+        <a class="method-permalink" href="#size%3ALibC%3A%3ASizeT-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the size in bytes needed to store the current state</p>
+<p>Returns:</p>
+<ul>
+<li>The size in bytes</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/state.cr#L16" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.14.0">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="llama">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="llama">
+  <title>Llama::KvCache - llama main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          llama
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="llama/Llama" data-name="llama">
+      <a href="../Llama.html">Llama</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Batch" data-name="llama::batch">
+      <a href="../Llama/Batch.html">Batch</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
+      <a href="../Llama/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Context" data-name="llama::context">
+      <a href="../Llama/Context.html">Context</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/DistSampler" data-name="llama::distsampler">
+      <a href="../Llama/DistSampler.html">DistSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
+      <a href="../Llama/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" current" data-id="llama/Llama/KvCache" data-name="llama::kvcache">
+      <a href="../Llama/KvCache.html">KvCache</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Model" data-name="llama::model">
+      <a href="../Llama/Model.html">Model</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler" data-name="llama::sampler">
+      <a href="../Llama/Sampler.html">Sampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/SamplerChain" data-name="llama::samplerchain">
+      <a href="../Llama/SamplerChain.html">SamplerChain</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/State" data-name="llama::state">
+      <a href="../Llama/State.html">State</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TempSampler" data-name="llama::tempsampler">
+      <a href="../Llama/TempSampler.html">TempSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TopKSampler" data-name="llama::topksampler">
+      <a href="../Llama/TopKSampler.html">TopKSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TopPSampler" data-name="llama::toppsampler">
+      <a href="../Llama/TopPSampler.html">TopPSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Vocab" data-name="llama::vocab">
+      <a href="../Llama/Vocab.html">Vocab</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">class</span> Llama::<wbr>KvCache
+
+</h1>
+
+
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/KvCache.html">Llama::KvCache</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
+
+
+
+  <h2>
+    <a id="overview" class="anchor" href="#overview">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Overview
+  </h2>
+
+  <p>Wrapper for the llama_kv_cache structure
+Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L4" target="_blank">
+        llama/kv_cache.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28handle%3APointer%28LibLlama%3A%3ALlamaKvCache%29%2Cctx%3AContext%29-class-method" class="signature"><strong>.new</strong>(handle : Pointer(LibLlama::LlamaKvCache), ctx : Context)</a>
+        
+          <div class="summary"><p>Creates a new KvCache instance from a raw pointer</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+
+
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#can_shift%3F%3ABool-instance-method" class="signature"><strong>#can_shift?</strong> : Bool</a>
+        
+          <div class="summary"><p>Checks if the context supports KV cache shifting</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#clear-instance-method" class="signature"><strong>#clear</strong></a>
+        
+          <div class="summary"><p>Clears the KV cache This removes all tokens from the cache and resets its state</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#defrag-instance-method" class="signature"><strong>#defrag</strong></a>
+        
+          <div class="summary"><p>Defragments the KV cache This will be applied lazily on next decode or explicitly with update</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#n_tokens%3AInt32-instance-method" class="signature"><strong>#n_tokens</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the number of tokens in the KV cache If a KV cell has multiple sequences assigned to it, it will be counted multiple times</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_add%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cdelta%3AInt32%29-instance-method" class="signature"><strong>#seq_add</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32)</a>
+        
+          <div class="summary"><p>Adds a relative position delta to tokens in a sequence</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_cp%28seq_id_src%3AInt32%2Cseq_id_dst%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29-instance-method" class="signature"><strong>#seq_cp</strong>(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32)</a>
+        
+          <div class="summary"><p>Copies tokens from one sequence to another in the KV cache</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_div%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cd%3AInt32%29-instance-method" class="signature"><strong>#seq_div</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32)</a>
+        
+          <div class="summary"><p>Divides the positions of tokens in a sequence by a factor</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_keep%28seq_id%3AInt32%29-instance-method" class="signature"><strong>#seq_keep</strong>(seq_id : Int32)</a>
+        
+          <div class="summary"><p>Keeps only the specified sequence in the KV cache, removing all others</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_pos_max%28seq_id%3AInt32%29%3AInt32-instance-method" class="signature"><strong>#seq_pos_max</strong>(seq_id : Int32) : Int32</a>
+        
+          <div class="summary"><p>Returns the maximum position in a sequence</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_rm%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29%3ABool-instance-method" class="signature"><strong>#seq_rm</strong>(seq_id : Int32, p0 : Int32, p1 : Int32) : Bool</a>
+        
+          <div class="summary"><p>Removes tokens from a sequence in the KV cache</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaKvCache%29-instance-method" class="signature"><strong>#to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaKvCache)</a>
+        
+          <div class="summary"><p>Returns the raw pointer to the underlying llama_kv_cache structure</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#update-instance-method" class="signature"><strong>#update</strong></a>
+        
+          <div class="summary"><p>Applies pending KV cache updates This includes K-shifts, defragmentation, etc.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#used_cells%3AInt32-instance-method" class="signature"><strong>#used_cells</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the number of used KV cells A cell is considered used if it has at least one sequence assigned to it</p></div>
+        
+      </li>
+    
+  </ul>
+
+
+
+<div class="methods-inherited">
+  
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+  
+</div>
+
+
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(handle:Pointer(LibLlama::LlamaKvCache),ctx:Context)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(handle : Pointer(LibLlama::LlamaKvCache), ctx : <a href="../Llama/Context.html">Context</a>)
+
+        <a class="method-permalink" href="#new%28handle%3APointer%28LibLlama%3A%3ALlamaKvCache%29%2Cctx%3AContext%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new KvCache instance from a raw pointer</p>
+<p>Note: This constructor is intended for internal use.
+Users should obtain KvCache instances through Context#kv_cache.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L9" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+
+
+
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="can_shift?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>can_shift?</strong> : Bool
+
+        <a class="method-permalink" href="#can_shift%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if the context supports KV cache shifting</p>
+<p>Returns:</p>
+<ul>
+<li>true if the context supports KV cache shifting, false otherwise</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L107" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="clear-instance-method">
+      <div class="signature">
+        
+        def <strong>clear</strong>
+
+        <a class="method-permalink" href="#clear-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Clears the KV cache
+This removes all tokens from the cache and resets its state</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L14" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="defrag-instance-method">
+      <div class="signature">
+        
+        def <strong>defrag</strong>
+
+        <a class="method-permalink" href="#defrag-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Defragments the KV cache
+This will be applied lazily on next decode or explicitly with update</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L99" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="n_tokens:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>n_tokens</strong> : Int32
+
+        <a class="method-permalink" href="#n_tokens%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the number of tokens in the KV cache
+If a KV cell has multiple sequences assigned to it, it will be counted multiple times</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L20" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_add(seq_id:Int32,p0:Int32,p1:Int32,delta:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_add</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32)
+
+        <a class="method-permalink" href="#seq_add%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cdelta%3AInt32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Adds a relative position delta to tokens in a sequence</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id: The sequence ID to modify</li>
+<li>p0: Start position (p0 &lt; 0 means start from 0)</li>
+<li>p1: End position (p1 &lt; 0 means end at infinity)</li>
+<li>delta: The position delta to add</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L70" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_cp(seq_id_src:Int32,seq_id_dst:Int32,p0:Int32,p1:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_cp</strong>(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32)
+
+        <a class="method-permalink" href="#seq_cp%28seq_id_src%3AInt32%2Cseq_id_dst%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Copies tokens from one sequence to another in the KV cache</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id_src: Source sequence ID</li>
+<li>seq_id_dst: Destination sequence ID</li>
+<li>p0: Start position (p0 &lt; 0 means start from 0)</li>
+<li>p1: End position (p1 &lt; 0 means end at infinity)</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L51" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_div(seq_id:Int32,p0:Int32,p1:Int32,d:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_div</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32)
+
+        <a class="method-permalink" href="#seq_div%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cd%3AInt32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Divides the positions of tokens in a sequence by a factor</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id: The sequence ID to modify</li>
+<li>p0: Start position (p0 &lt; 0 means start from 0)</li>
+<li>p1: End position (p1 &lt; 0 means end at infinity)</li>
+<li>d: The divisor (must be &gt; 1)</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L81" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_keep(seq_id:Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_keep</strong>(seq_id : Int32)
+
+        <a class="method-permalink" href="#seq_keep%28seq_id%3AInt32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Keeps only the specified sequence in the KV cache, removing all others</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id: The sequence ID to keep</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L59" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_pos_max(seq_id:Int32):Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_pos_max</strong>(seq_id : Int32) : Int32
+
+        <a class="method-permalink" href="#seq_pos_max%28seq_id%3AInt32%29%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the maximum position in a sequence</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id: The sequence ID to query</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The maximum position in the sequence</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L93" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="seq_rm(seq_id:Int32,p0:Int32,p1:Int32):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>seq_rm</strong>(seq_id : Int32, p0 : Int32, p1 : Int32) : Bool
+
+        <a class="method-permalink" href="#seq_rm%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Removes tokens from a sequence in the KV cache</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id: The sequence ID to remove tokens from (seq_id &lt; 0 matches any sequence)</li>
+<li>p0: Start position (p0 &lt; 0 means start from 0)</li>
+<li>p1: End position (p1 &lt; 0 means end at infinity)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>true if successful, false if a partial sequence cannot be removed
+(removing a whole sequence never fails)</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L40" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="to_unsafe:Pointer(Llama::LibLlama::LlamaKvCache)-instance-method">
+      <div class="signature">
+        
+        def <strong>to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaKvCache)
+
+        <a class="method-permalink" href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaKvCache%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the raw pointer to the underlying llama_kv_cache structure</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L118" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="update-instance-method">
+      <div class="signature">
+        
+        def <strong>update</strong>
+
+        <a class="method-permalink" href="#update-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Applies pending KV cache updates
+This includes K-shifts, defragmentation, etc.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L113" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="used_cells:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>used_cells</strong> : Int32
+
+        <a class="method-permalink" href="#used_cells%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the number of used KV cells
+A cell is considered used if it has at least one sequence assigned to it</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/20a628a5a389123eff7ac4f351890a886f43c704/src/llama/kv_cache.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
+
+</div>
+
+</body>
+</html>
