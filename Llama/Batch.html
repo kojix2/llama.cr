@@ -281,7 +281,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L4" target="_blank">
         llama/batch.cr
       </a>
     
@@ -354,6 +354,13 @@ Provides methods for managing batches of tokens for efficient processing</p>
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#add_tokens%28tokens%3AArray%28Int32%29%2Cpos_offset%3AInt32%3D0%2Cseq_id%3AInt32%3D0%2Ccompute_logits%3ABool%3Dtrue%29-instance-method" class="signature"><strong>#add_tokens</strong>(tokens : Array(Int32), pos_offset : Int32 = <span class="n">0</span>, seq_id : Int32 = <span class="n">0</span>, compute_logits : Bool = <span class="n">true</span>)</a>
+        
+          <div class="summary"><p>Adds multiple tokens to the batch</p></div>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#cleanup-instance-method" class="signature"><strong>#cleanup</strong></a>
@@ -471,7 +478,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L399" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L425" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -507,7 +514,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L360" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L386" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -540,7 +547,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -572,7 +579,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -595,7 +602,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -616,6 +623,40 @@ The batch created this way is not owned by this wrapper and will not be freed.</
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="add_tokens(tokens:Array(Int32),pos_offset:Int32=0,seq_id:Int32=0,compute_logits:Bool=true)-instance-method">
+      <div class="signature">
+        
+        def <strong>add_tokens</strong>(tokens : Array(Int32), pos_offset : Int32 = <span class="n">0</span>, seq_id : Int32 = <span class="n">0</span>, compute_logits : Bool = <span class="n">true</span>)
+
+        <a class="method-permalink" href="#add_tokens%28tokens%3AArray%28Int32%29%2Cpos_offset%3AInt32%3D0%2Cseq_id%3AInt32%3D0%2Ccompute_logits%3ABool%3Dtrue%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Adds multiple tokens to the batch</p>
+<p>Parameters:</p>
+<ul>
+<li>tokens: Array of token IDs to add</li>
+<li>pos_offset: Position offset for the tokens (default: 0)</li>
+<li>seq_id: Sequence ID for all tokens (default: 0)</li>
+<li>compute_logits: Whether to compute logits for all tokens (default: true)</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if tokens array is empty</li>
+<li>IndexError if the batch doesn't have enough space</li>
+<li>Llama::BatchError if memory allocation fails</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L233" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="cleanup-instance-method">
       <div class="signature">
         
@@ -633,7 +674,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L445" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L471" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -654,7 +695,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L453" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L479" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -675,7 +716,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L116" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L116" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -710,7 +751,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L300" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L326" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -744,7 +785,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L233" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L259" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -765,7 +806,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46074777d3134c965c39cfc777a3cac69dd11413/src/llama/batch.cr#L439" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/0f80a6e2f8735057f84b7ea875dca84a458fb13e/src/llama/batch.cr#L465" target="_blank">View source</a>]
         
       </div>
     </div>
