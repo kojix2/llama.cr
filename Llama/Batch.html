@@ -246,7 +246,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L4" target="_blank">
         llama/batch.cr
       </a>
     
@@ -266,6 +266,20 @@ Provides methods for managing batches of tokens for efficient processing</p>
     Constructors
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#for_embeddings%28embeddings%3AArray%28Array%28Float32%29%29%2Cseq_id%3AInt32%3D0%29%3ABatch-class-method" class="signature"><strong>.for_embeddings</strong>(embeddings : Array(Array(Float32)), seq_id : Int32 = <span class="n">0</span>) : Batch</a>
+        
+          <div class="summary"><p>Creates a batch for embeddings with optional parameters</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#for_tokens%28tokens%3AArray%28Int32%29%2Ccompute_logits_for_last%3ABool%3Dtrue%2Cseq_id%3AInt32%3D0%29%3ABatch-class-method" class="signature"><strong>.for_tokens</strong>(tokens : Array(Int32), compute_logits_for_last : Bool = <span class="n">true</span>, seq_id : Int32 = <span class="n">0</span>) : Batch</a>
+        
+          <div class="summary"><p>Creates a batch for a sequence of tokens with optional parameters</p></div>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#get_one%28tokens%3AArray%28Int32%29%29%3ABatch-class-method" class="signature"><strong>.get_one</strong>(tokens : Array(Int32)) : Batch</a>
@@ -385,6 +399,67 @@ Provides methods for managing batches of tokens for efficient processing</p>
     Constructor Detail
   </h2>
   
+    <div class="entry-detail" id="for_embeddings(embeddings:Array(Array(Float32)),seq_id:Int32=0):Batch-class-method">
+      <div class="signature">
+        
+        def self.<strong>for_embeddings</strong>(embeddings : Array(Array(Float32)), seq_id : Int32 = <span class="n">0</span>) : <a href="../Llama/Batch.html">Batch</a>
+
+        <a class="method-permalink" href="#for_embeddings%28embeddings%3AArray%28Array%28Float32%29%29%2Cseq_id%3AInt32%3D0%29%3ABatch-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a batch for embeddings with optional parameters</p>
+<p>Parameters:</p>
+<ul>
+<li>embeddings: Array of embedding vectors</li>
+<li>seq_id: Sequence ID to use for all embeddings</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>A new Batch instance configured with the provided embeddings</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L233" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="for_tokens(tokens:Array(Int32),compute_logits_for_last:Bool=true,seq_id:Int32=0):Batch-class-method">
+      <div class="signature">
+        
+        def self.<strong>for_tokens</strong>(tokens : Array(Int32), compute_logits_for_last : Bool = <span class="n">true</span>, seq_id : Int32 = <span class="n">0</span>) : <a href="../Llama/Batch.html">Batch</a>
+
+        <a class="method-permalink" href="#for_tokens%28tokens%3AArray%28Int32%29%2Ccompute_logits_for_last%3ABool%3Dtrue%2Cseq_id%3AInt32%3D0%29%3ABatch-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a batch for a sequence of tokens with optional parameters</p>
+<p>Parameters:</p>
+<ul>
+<li>tokens: Array of token IDs</li>
+<li>compute_logits_for_last: Whether to compute logits only for the last token</li>
+<li>seq_id: Sequence ID to use for all tokens</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>A new Batch instance configured with the provided tokens</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L213" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="get_one(tokens:Array(Int32)):Batch-class-method">
       <div class="signature">
         
@@ -413,7 +488,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L61" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -444,7 +519,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -467,7 +542,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -504,7 +579,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L259" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L252" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -525,7 +600,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L68" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L68" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -559,7 +634,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L171" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L174" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -592,7 +667,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L130" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -613,7 +688,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/batch.cr#L254" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L247" target="_blank">View source</a>]
         
       </div>
     </div>

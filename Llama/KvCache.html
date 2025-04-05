@@ -246,7 +246,7 @@ Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L4" target="_blank">
         llama/kv_cache.cr
       </a>
     
@@ -310,6 +310,13 @@ Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
         <a href="#defrag-instance-method" class="signature"><strong>#defrag</strong></a>
         
           <div class="summary"><p>Defragments the KV cache This will be applied lazily on next decode or explicitly with update</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
+        
+          <div class="summary"><p>Frees the resources associated with this KV cache</p></div>
         
       </li>
     
@@ -440,12 +447,13 @@ Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
           <p>Creates a new KvCache instance from a raw pointer</p>
 <p>Note: This constructor is intended for internal use.
 Users should obtain KvCache instances through Context#kv_cache.</p>
+<p>To avoid circular references, we store the context pointer rather than the context object</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L9" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -486,7 +494,7 @@ Users should obtain KvCache instances through Context#kv_cache.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -508,7 +516,7 @@ This removes all tokens from the cache and resets its state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -530,7 +538,28 @@ This will be applied lazily on next decode or explicitly with update</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L99" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L107" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="finalize-instance-method">
+      <div class="signature">
+        
+        def <strong>finalize</strong>
+
+        <a class="method-permalink" href="#finalize-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Frees the resources associated with this KV cache</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L131" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -552,7 +581,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L28" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -580,7 +609,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L70" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L78" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -608,7 +637,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L59" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -636,7 +665,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L89" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -661,7 +690,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L59" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -690,7 +719,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -722,7 +751,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -743,7 +772,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L118" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L126" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -765,7 +794,7 @@ This includes K-shifts, defragmentation, etc.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L121" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -787,7 +816,7 @@ A cell is considered used if it has at least one sequence assigned to it</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/kv_cache.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/kv_cache.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
