@@ -87,8 +87,18 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/GrammarLazyPatternsSampler" data-name="llama::grammarlazypatternssampler">
+      <a href="../Llama/GrammarLazyPatternsSampler.html">GrammarLazyPatternsSampler</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/GrammarSampler" data-name="llama::grammarsampler">
       <a href="../Llama/GrammarSampler.html">GrammarSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/InfillSampler" data-name="llama::infillsampler">
+      <a href="../Llama/InfillSampler.html">InfillSampler</a>
       
     </li>
   
@@ -137,6 +147,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/TempExtSampler" data-name="llama::tempextsampler">
+      <a href="../Llama/TempExtSampler.html">TempExtSampler</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/TempSampler" data-name="llama::tempsampler">
       <a href="../Llama/TempSampler.html">TempSampler</a>
       
@@ -144,6 +159,11 @@
   
   <li class=" " data-id="llama/Llama/TopKSampler" data-name="llama::topksampler">
       <a href="../Llama/TopKSampler.html">TopKSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TopNSigmaSampler" data-name="llama::topnsigmasampler">
+      <a href="../Llama/TopNSigmaSampler.html">TopNSigmaSampler</a>
       
     </li>
   
@@ -159,6 +179,11 @@
   
   <li class=" " data-id="llama/Llama/Vocab" data-name="llama::vocab">
       <a href="../Llama/Vocab.html">Vocab</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/XtcSampler" data-name="llama::xtcsampler">
+      <a href="../Llama/XtcSampler.html">XtcSampler</a>
       
     </li>
   
@@ -220,7 +245,11 @@ Different sampling methods produce different text characteristics.</p>
     
       <li class="other-type"><a href="../Llama/DistSampler.html">Llama::DistSampler</a></li>
     
+      <li class="other-type"><a href="../Llama/GrammarLazyPatternsSampler.html">Llama::GrammarLazyPatternsSampler</a></li>
+    
       <li class="other-type"><a href="../Llama/GrammarSampler.html">Llama::GrammarSampler</a></li>
+    
+      <li class="other-type"><a href="../Llama/InfillSampler.html">Llama::InfillSampler</a></li>
     
       <li class="other-type"><a href="../Llama/MinPSampler.html">Llama::MinPSampler</a></li>
     
@@ -232,13 +261,19 @@ Different sampling methods produce different text characteristics.</p>
     
       <li class="other-type"><a href="../Llama/SamplerChain.html">Llama::SamplerChain</a></li>
     
+      <li class="other-type"><a href="../Llama/TempExtSampler.html">Llama::TempExtSampler</a></li>
+    
       <li class="other-type"><a href="../Llama/TempSampler.html">Llama::TempSampler</a></li>
     
       <li class="other-type"><a href="../Llama/TopKSampler.html">Llama::TopKSampler</a></li>
     
+      <li class="other-type"><a href="../Llama/TopNSigmaSampler.html">Llama::TopNSigmaSampler</a></li>
+    
       <li class="other-type"><a href="../Llama/TopPSampler.html">Llama::TopPSampler</a></li>
     
       <li class="other-type"><a href="../Llama/TypicalSampler.html">Llama::TypicalSampler</a></li>
+    
+      <li class="other-type"><a href="../Llama/XtcSampler.html">Llama::XtcSampler</a></li>
     
   </ul>
 
@@ -257,7 +292,7 @@ Different sampling methods produce different text characteristics.</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L7" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L7" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -378,7 +413,7 @@ Different sampling methods produce different text characteristics.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L11" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -415,7 +450,7 @@ Different sampling methods produce different text characteristics.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L20" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -436,7 +471,7 @@ Different sampling methods produce different text characteristics.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/sampler.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>

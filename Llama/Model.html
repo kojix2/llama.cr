@@ -87,8 +87,18 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/GrammarLazyPatternsSampler" data-name="llama::grammarlazypatternssampler">
+      <a href="../Llama/GrammarLazyPatternsSampler.html">GrammarLazyPatternsSampler</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/GrammarSampler" data-name="llama::grammarsampler">
       <a href="../Llama/GrammarSampler.html">GrammarSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/InfillSampler" data-name="llama::infillsampler">
+      <a href="../Llama/InfillSampler.html">InfillSampler</a>
       
     </li>
   
@@ -137,6 +147,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/TempExtSampler" data-name="llama::tempextsampler">
+      <a href="../Llama/TempExtSampler.html">TempExtSampler</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/TempSampler" data-name="llama::tempsampler">
       <a href="../Llama/TempSampler.html">TempSampler</a>
       
@@ -144,6 +159,11 @@
   
   <li class=" " data-id="llama/Llama/TopKSampler" data-name="llama::topksampler">
       <a href="../Llama/TopKSampler.html">TopKSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TopNSigmaSampler" data-name="llama::topnsigmasampler">
+      <a href="../Llama/TopNSigmaSampler.html">TopNSigmaSampler</a>
       
     </li>
   
@@ -159,6 +179,11 @@
   
   <li class=" " data-id="llama/Llama/Vocab" data-name="llama::vocab">
       <a href="../Llama/Vocab.html">Vocab</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/XtcSampler" data-name="llama::xtcsampler">
+      <a href="../Llama/XtcSampler.html">XtcSampler</a>
       
     </li>
   
@@ -220,7 +245,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L6" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L6" target="_blank">
         llama/model.cr
       </a>
     
@@ -281,6 +306,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#decoder_start_token%3AInt32-instance-method" class="signature"><strong>#decoder_start_token</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the token that must be provided to the decoder to start generating output For encoder-decoder models, returns the decoder start token For other models, returns -1</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#description%3AString-instance-method" class="signature"><strong>#description</strong> : String</a>
         
           <div class="summary"><p>Gets a string describing the model type</p></div>
@@ -291,6 +323,20 @@
         <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
         
           <div class="summary"><p>Frees the resources associated with this model</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#has_decoder%3F%3ABool-instance-method" class="signature"><strong>#has_decoder?</strong> : Bool</a>
+        
+          <div class="summary"><p>Returns whether the model contains a decoder</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#has_encoder%3F%3ABool-instance-method" class="signature"><strong>#has_encoder?</strong> : Bool</a>
+        
+          <div class="summary"><p>Returns whether the model contains an encoder</p></div>
         
       </li>
     
@@ -354,6 +400,20 @@
         <a href="#n_params%3AUInt64-instance-method" class="signature"><strong>#n_params</strong> : UInt64</a>
         
           <div class="summary"><p>Returns the number of parameters in the model</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#recurrent%3F%3ABool-instance-method" class="signature"><strong>#recurrent?</strong> : Bool</a>
+        
+          <div class="summary"><p>Returns whether the model is recurrent (like Mamba, RWKV, etc.)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#rope_freq_scale_train%3AFloat32-instance-method" class="signature"><strong>#rope_freq_scale_train</strong> : Float32</a>
+        
+          <div class="summary"><p>Returns the model's RoPE frequency scaling factor</p></div>
         
       </li>
     
@@ -439,7 +499,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -484,7 +544,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -505,7 +565,30 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L60" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L87" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="decoder_start_token:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>decoder_start_token</strong> : Int32
+
+        <a class="method-permalink" href="#decoder_start_token%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the token that must be provided to the decoder to start generating output
+For encoder-decoder models, returns the decoder start token
+For other models, returns -1</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -530,7 +613,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L149" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L176" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -551,7 +634,49 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L71" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L98" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="has_decoder?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>has_decoder?</strong> : Bool
+
+        <a class="method-permalink" href="#has_decoder%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns whether the model contains a decoder</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L65" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="has_encoder?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>has_encoder?</strong> : Bool
+
+        <a class="method-permalink" href="#has_encoder%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns whether the model contains an encoder</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -576,7 +701,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L130" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -605,7 +730,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L114" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L141" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -634,7 +759,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L87" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -663,7 +788,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L133" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L160" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -688,7 +813,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L165" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L192" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -709,7 +834,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -730,7 +855,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -751,7 +876,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -772,7 +897,49 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L40" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="recurrent?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>recurrent?</strong> : Bool
+
+        <a class="method-permalink" href="#recurrent%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns whether the model is recurrent (like Mamba, RWKV, etc.)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L70" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="rope_freq_scale_train:Float32-instance-method">
+      <div class="signature">
+        
+        def <strong>rope_freq_scale_train</strong> : Float32
+
+        <a class="method-permalink" href="#rope_freq_scale_train%3AFloat32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the model's RoPE frequency scaling factor</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L75" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -793,7 +960,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L66" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -814,7 +981,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4620dbef33321006b009cd4e2f5c975b3fe9356/src/llama/model.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::Error - llama main</title>
+  <title>Llama::InfillSampler - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -82,7 +82,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/Error" data-name="llama::error">
+  <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
       <a href="../Llama/Error.html">Error</a>
       
     </li>
@@ -97,7 +97,7 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/InfillSampler" data-name="llama::infillsampler">
+  <li class=" current" data-id="llama/Llama/InfillSampler" data-name="llama::infillsampler">
       <a href="../Llama/InfillSampler.html">InfillSampler</a>
       
     </li>
@@ -201,12 +201,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Llama::<wbr>Error
+  <span class="kind">class</span> Llama::<wbr>InfillSampler
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/Error.html">Llama::Error</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/InfillSampler.html">Llama::InfillSampler</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -220,7 +220,11 @@
     Overview
   </h2>
 
-  <p>Represents an error that occurred in the Llama library</p>
+  <p>Infill sampler</p>
+<p>The Infill sampler is designed for fill-in-the-middle (FIM) tasks.
+It helps to generate text that fits naturally between existing content.</p>
+<p>Example:</p>
+<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">InfillSampler</span>.new(model.vocab)</code></pre>
 
 
 
@@ -245,8 +249,8 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/model.cr#L3" target="_blank">
-        llama/model.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L493" target="_blank">
+        llama/sampler.cr
       </a>
     
     <br/>
@@ -256,11 +260,49 @@
 
 
 
+  <h2>
+    <a id="constructors" class="anchor" href="#constructors">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructors
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#new%28vocab%3AVocab%29-class-method" class="signature"><strong>.new</strong>(vocab : Vocab)</a>
+        
+          <div class="summary"><p>Creates a new Infill sampler</p></div>
+        
+      </li>
+    
+  </ul>
 
 
 
 
 
+
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
+        
+          <div class="summary"><p>Overrides the parent class's finalize method to ensure proper cleanup</p></div>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -268,8 +310,31 @@
   
     
 
+  <h3>Instance methods inherited from class <code><a href="../Llama/Sampler.html">Llama::Sampler</a></code></h3>
+  
+  
+    <a href="../Llama/Sampler.html#finalize-instance-method" class="tooltip">
+      <span>finalize</span>
+    finalize</a>, 
+    
+  
+    <a href="../Llama/Sampler.html#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="tooltip">
+      <span>to_unsafe : Pointer(Llama::LibLlama::LlamaSampler)</span>
+    to_unsafe</a>
+    
+  
+
 
     
+
+  <h3>Constructor methods inherited from class <code><a href="../Llama/Sampler.html">Llama::Sampler</a></code></h3>
+  
+  
+    <a href="../Llama/Sampler.html#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method" class="tooltip">
+      <span>new(handle : Pointer(LibLlama::LlamaSampler))</span>
+    new</a>
+    
+  
 
 
     
@@ -308,11 +373,81 @@
 </div>
 
 
+  <h2>
+    <a id="constructor-detail" class="anchor" href="#constructor-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Constructor Detail
+  </h2>
+  
+    <div class="entry-detail" id="new(vocab:Vocab)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(vocab : <a href="../Llama/Vocab.html">Vocab</a>)
+
+        <a class="method-permalink" href="#new%28vocab%3AVocab%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new Infill sampler</p>
+<p>Parameters:</p>
+<ul>
+<li>vocab: The vocabulary to use</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::Error if the sampler cannot be created</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L501" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 
 
 
+
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="finalize-instance-method">
+      <div class="signature">
+        
+        def <strong>finalize</strong>
+
+        <a class="method-permalink" href="#finalize-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Overrides the parent class's finalize method to ensure proper cleanup</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L510" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 </div>

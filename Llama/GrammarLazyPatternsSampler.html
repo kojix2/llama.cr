@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::PenaltiesSampler - llama main</title>
+  <title>Llama::GrammarLazyPatternsSampler - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -87,7 +87,7 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/GrammarLazyPatternsSampler" data-name="llama::grammarlazypatternssampler">
+  <li class=" current" data-id="llama/Llama/GrammarLazyPatternsSampler" data-name="llama::grammarlazypatternssampler">
       <a href="../Llama/GrammarLazyPatternsSampler.html">GrammarLazyPatternsSampler</a>
       
     </li>
@@ -127,7 +127,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/PenaltiesSampler" data-name="llama::penaltiessampler">
+  <li class=" " data-id="llama/Llama/PenaltiesSampler" data-name="llama::penaltiessampler">
       <a href="../Llama/PenaltiesSampler.html">PenaltiesSampler</a>
       
     </li>
@@ -201,12 +201,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Llama::<wbr>PenaltiesSampler
+  <span class="kind">class</span> Llama::<wbr>GrammarLazyPatternsSampler
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/PenaltiesSampler.html">Llama::PenaltiesSampler</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/GrammarLazyPatternsSampler.html">Llama::GrammarLazyPatternsSampler</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -220,13 +220,27 @@
     Overview
   </h2>
 
-  <p>Penalties sampler</p>
-<p>The Penalties sampler applies various penalties to token probabilities
-to reduce repetition and improve diversity in the generated text.
-It can penalize recently used tokens, frequent tokens, and more.</p>
+  <p>Grammar Lazy Patterns sampler</p>
+<p>The Grammar Lazy Patterns sampler is an extension of the Grammar sampler
+that only applies grammar constraints when triggered by specific patterns
+or tokens. This is useful for mixed-format generation where grammar
+constraints should only apply to certain parts of the output.</p>
 <p>Example:</p>
-<pre><code class="language-crystal"><span class="c"># Apply penalties to the last 64 tokens with a repetition penalty of 1.1</span>
-sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">PenaltiesSampler</span>.new(<span class="n">64</span>, <span class="n">1.1</span>, <span class="n">0.0</span>, <span class="n">0.0</span>)</code></pre>
+<pre><code class="language-crystal"><span class="c"># Define a JSON grammar that only activates when the text contains &quot;JSON:&quot;</span>
+grammar <span class="o">=</span> <span class="s">%q{
+  root ::= object
+  object ::= &quot;{&quot; ws (string &quot;:&quot; ws value (&quot;,&quot; ws string &quot;:&quot; ws value)*)? &quot;}&quot; ws
+  array ::= &quot;[&quot; ws (value (&quot;,&quot; ws value)*)? &quot;]&quot; ws
+  value ::= object | array | string | number | &quot;true&quot; | &quot;false&quot; | &quot;null&quot;
+  string ::= &quot;\&quot;&quot; ([^&quot;\\] | &quot;\\&quot; .)* &quot;\&quot;&quot;
+  number ::= &quot;-&quot;? (&quot;0&quot; | [1-9] [0-9]*) (&quot;.&quot; [0-9]+)? ([eE] [-+]? [0-9]+)?
+  ws ::= [ \t\n]*
+}</span>
+
+trigger_patterns <span class="o">=</span> [<span class="s">&quot;JSON:&quot;</span>]
+sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">GrammarLazyPatternsSampler</span>.new(
+  model.vocab, grammar, <span class="s">&quot;root&quot;</span>, trigger_patterns
+)</code></pre>
 
 
 
@@ -251,7 +265,7 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L385" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L547" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -273,9 +287,9 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28penalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)</a>
+        <a href="#new%28vocab%3AVocab%2Cgrammar_str%3AString%2Cgrammar_root%3AString%2Ctrigger_patterns%3AArray%28String%29%3D%5B%5DofString%2Ctrigger_tokens%3AArray%28Int32%29%3D%5B%5DofInt32%29-class-method" class="signature"><strong>.new</strong>(vocab : Vocab, grammar_str : String, grammar_root : String, trigger_patterns : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, trigger_tokens : Array(Int32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span>)</a>
         
-          <div class="summary"><p>Creates a new Penalties sampler</p></div>
+          <div class="summary"><p>Creates a new Grammar Lazy Patterns sampler</p></div>
         
       </li>
     
@@ -286,6 +300,25 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
 
 
 
+
+  <h2>
+    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
+        
+          <div class="summary"><p>Overrides the parent class's finalize method to ensure proper cleanup</p></div>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -365,23 +398,24 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(penalty_last_n:Int32,penalty_repeat:Float32,penalty_freq:Float32,penalty_present:Float32)-class-method">
+    <div class="entry-detail" id="new(vocab:Vocab,grammar_str:String,grammar_root:String,trigger_patterns:Array(String)=[]ofString,trigger_tokens:Array(Int32)=[]ofInt32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)
+        def self.<strong>new</strong>(vocab : <a href="../Llama/Vocab.html">Vocab</a>, grammar_str : String, grammar_root : String, trigger_patterns : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, trigger_tokens : Array(Int32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span>)
 
-        <a class="method-permalink" href="#new%28penalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28vocab%3AVocab%2Cgrammar_str%3AString%2Cgrammar_root%3AString%2Ctrigger_patterns%3AArray%28String%29%3D%5B%5DofString%2Ctrigger_tokens%3AArray%28Int32%29%3D%5B%5DofInt32%29-class-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Creates a new Penalties sampler</p>
+          <p>Creates a new Grammar Lazy Patterns sampler</p>
 <p>Parameters:</p>
 <ul>
-<li>penalty_last_n: Last n tokens to penalize (0 = disable, -1 = context size)</li>
-<li>penalty_repeat: Repetition penalty (1.0 = disabled)</li>
-<li>penalty_freq: Frequency penalty (0.0 = disabled)</li>
-<li>penalty_present: Presence penalty (0.0 = disabled)</li>
+<li>vocab: The vocabulary to use</li>
+<li>grammar_str: The grammar definition string in GBNF format</li>
+<li>grammar_root: The root symbol of the grammar</li>
+<li>trigger_patterns: Array of string patterns that will trigger the grammar</li>
+<li>trigger_tokens: Array of token IDs that will trigger the grammar</li>
 </ul>
 <p>Raises:</p>
 <ul>
@@ -392,7 +426,7 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L396" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L559" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -403,6 +437,37 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
 
 
 
+
+  <h2>
+    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Instance Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="finalize-instance-method">
+      <div class="signature">
+        
+        def <strong>finalize</strong>
+
+        <a class="method-permalink" href="#finalize-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Overrides the parent class's finalize method to ensure proper cleanup</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/207391b48a09c2c73e0845f9cf40b26c88a075c8/src/llama/sampler.cr#L602" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 </div>
