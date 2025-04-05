@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::SamplerChain - llama main</title>
+  <title>Llama::PenaltiesSampler - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -117,7 +117,7 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/PenaltiesSampler" data-name="llama::penaltiessampler">
+  <li class=" current" data-id="llama/Llama/PenaltiesSampler" data-name="llama::penaltiessampler">
       <a href="../Llama/PenaltiesSampler.html">PenaltiesSampler</a>
       
     </li>
@@ -127,7 +127,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/SamplerChain" data-name="llama::samplerchain">
+  <li class=" " data-id="llama/Llama/SamplerChain" data-name="llama::samplerchain">
       <a href="../Llama/SamplerChain.html">SamplerChain</a>
       
     </li>
@@ -176,12 +176,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Llama::<wbr>SamplerChain
+  <span class="kind">class</span> Llama::<wbr>PenaltiesSampler
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/SamplerChain.html">Llama::SamplerChain</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/PenaltiesSampler.html">Llama::PenaltiesSampler</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -195,7 +195,8 @@
     Overview
   </h2>
 
-  <p>Wrapper for a chain of samplers</p>
+  <p>Penalties sampler
+Applies various penalties to token probabilities</p>
 
 
 
@@ -220,7 +221,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/sampler.cr#L24" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/sampler.cr#L230" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -242,52 +243,19 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28params%3Dnil%29-class-method" class="signature"><strong>.new</strong>(params = <span class="n">nil</span>)</a>
+        <a href="#new%28penalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)</a>
         
-          <div class="summary"><p>Creates a new SamplerChain with optional parameters</p></div>
-        
-      </li>
-    
-  </ul>
-
-
-
-
-
-
-
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#accept%28token%3AInt32%29-instance-method" class="signature"><strong>#accept</strong>(token : Int32)</a>
-        
-          <div class="summary"><p>Accepts a token, updating the internal state of the samplers</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#add%28sampler%3ASampler%29-instance-method" class="signature"><strong>#add</strong>(sampler : Sampler)</a>
-        
-          <div class="summary"><p>Adds a sampler to the chain</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#sample%28ctx%3AContext%2Cidx%3AInt32%3D-1%29%3AInt32-instance-method" class="signature"><strong>#sample</strong>(ctx : Context, idx : Int32 = <span class="n">-1</span>) : Int32</a>
-        
-          <div class="summary"><p>Samples a token using the sampler chain</p></div>
+          <div class="summary"><p>Creates a new Penalties sampler</p></div>
         
       </li>
     
   </ul>
+
+
+
+
+
+
 
 
 
@@ -367,31 +335,34 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(params=nil)-class-method">
+    <div class="entry-detail" id="new(penalty_last_n:Int32,penalty_repeat:Float32,penalty_freq:Float32,penalty_present:Float32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(params = <span class="n">nil</span>)
+        def self.<strong>new</strong>(penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)
 
-        <a class="method-permalink" href="#new%28params%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28penalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Creates a new SamplerChain with optional parameters</p>
+          <p>Creates a new Penalties sampler</p>
 <p>Parameters:</p>
 <ul>
-<li>params: Optional sampler chain parameters</li>
+<li>penalty_last_n: Last n tokens to penalize (0 = disable, -1 = context size)</li>
+<li>penalty_repeat: Repetition penalty (1.0 = disabled)</li>
+<li>penalty_freq: Frequency penalty (0.0 = disabled)</li>
+<li>penalty_present: Presence penalty (0.0 = disabled)</li>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::Error if the sampler chain cannot be created</li>
+<li>Llama::Error if the sampler cannot be created</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/sampler.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/sampler.cr#L241" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -402,96 +373,6 @@
 
 
 
-
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="accept(token:Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>accept</strong>(token : Int32)
-
-        <a class="method-permalink" href="#accept%28token%3AInt32%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Accepts a token, updating the internal state of the samplers</p>
-<p>Parameters:</p>
-<ul>
-<li>token: The token to accept</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/sampler.cr#L64" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="add(sampler:Sampler)-instance-method">
-      <div class="signature">
-        
-        def <strong>add</strong>(sampler : <a href="../Llama/Sampler.html">Sampler</a>)
-
-        <a class="method-permalink" href="#add%28sampler%3ASampler%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Adds a sampler to the chain</p>
-<p>Parameters:</p>
-<ul>
-<li>sampler: The sampler to add to the chain</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/sampler.cr#L43" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sample(ctx:Context,idx:Int32=-1):Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>sample</strong>(ctx : <a href="../Llama/Context.html">Context</a>, idx : Int32 = <span class="n">-1</span>) : Int32
-
-        <a class="method-permalink" href="#sample%28ctx%3AContext%2Cidx%3AInt32%3D-1%29%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Samples a token using the sampler chain</p>
-<p>Parameters:</p>
-<ul>
-<li>ctx: The context to sample from</li>
-<li>idx: The index of the logits to sample from (-1 for the last token)</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li>The sampled token</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/sampler.cr#L56" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 </div>

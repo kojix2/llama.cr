@@ -87,13 +87,38 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/GrammarSampler" data-name="llama::grammarsampler">
+      <a href="../Llama/GrammarSampler.html">GrammarSampler</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/KvCache" data-name="llama::kvcache">
       <a href="../Llama/KvCache.html">KvCache</a>
       
     </li>
   
+  <li class=" " data-id="llama/Llama/MinPSampler" data-name="llama::minpsampler">
+      <a href="../Llama/MinPSampler.html">MinPSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/MirostatSampler" data-name="llama::mirostatsampler">
+      <a href="../Llama/MirostatSampler.html">MirostatSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/MirostatV2Sampler" data-name="llama::mirostatv2sampler">
+      <a href="../Llama/MirostatV2Sampler.html">MirostatV2Sampler</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/Model" data-name="llama::model">
       <a href="../Llama/Model.html">Model</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/PenaltiesSampler" data-name="llama::penaltiessampler">
+      <a href="../Llama/PenaltiesSampler.html">PenaltiesSampler</a>
       
     </li>
   
@@ -124,6 +149,11 @@
   
   <li class=" " data-id="llama/Llama/TopPSampler" data-name="llama::toppsampler">
       <a href="../Llama/TopPSampler.html">TopPSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TypicalSampler" data-name="llama::typicalsampler">
+      <a href="../Llama/TypicalSampler.html">TypicalSampler</a>
       
     </li>
   
@@ -190,7 +220,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L3" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L3" target="_blank">
         llama/context.cr
       </a>
     
@@ -221,6 +251,25 @@
   </ul>
 
 
+
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#default_params%3ALibLlama%3A%3ALlamaContextParams-class-method" class="signature"><strong>.default_params</strong> : LibLlama::LlamaContextParams</a>
+        
+          <div class="summary"><p>Returns the default context parameters</p></div>
+        
+      </li>
+    
+  </ul>
 
 
 
@@ -272,6 +321,27 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#get_embeddings%3AArray%28Float32%29%7CNil-instance-method" class="signature"><strong>#get_embeddings</strong> : Array(Float32) | Nil</a>
+        
+          <div class="summary"><p>Gets all output token embeddings Only available when embeddings mode is enabled</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_embeddings_ith%28i%3AInt32%29%3AArray%28Float32%29%7CNil-instance-method" class="signature"><strong>#get_embeddings_ith</strong>(i : Int32) : Array(Float32) | Nil</a>
+        
+          <div class="summary"><p>Gets the embeddings for a specific token</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#get_embeddings_seq%28seq_id%3AInt32%29%3AArray%28Float32%29%7CNil-instance-method" class="signature"><strong>#get_embeddings_seq</strong>(seq_id : Int32) : Array(Float32) | Nil</a>
+        
+          <div class="summary"><p>Gets the embeddings for a specific sequence</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#kv_cache%3AKvCache-instance-method" class="signature"><strong>#kv_cache</strong> : KvCache</a>
         
           <div class="summary"><p>Returns the KV cache for this context</p></div>
@@ -282,6 +352,20 @@
         <a href="#logits%3APointer%28Float32%29-instance-method" class="signature"><strong>#logits</strong> : Pointer(Float32)</a>
         
           <div class="summary"><p>Gets the logits for the last token</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#pooling_type%3ALibLlama%3A%3ALlamaPoolingType-instance-method" class="signature"><strong>#pooling_type</strong> : LibLlama::LlamaPoolingType</a>
+        
+          <div class="summary"><p>Gets the pooling type used for embeddings</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#set_embeddings%28enabled%3ABool%29-instance-method" class="signature"><strong>#set_embeddings</strong>(enabled : Bool)</a>
+        
+          <div class="summary"><p>Sets whether the model is in embeddings mode or not If true, embeddings will be returned but logits will not</p></div>
         
       </li>
     
@@ -368,13 +452,48 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L20" target="_blank">View source</a>]
         
       </div>
     </div>
   
 
 
+
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="default_params:LibLlama::LlamaContextParams-class-method">
+      <div class="signature">
+        
+        def self.<strong>default_params</strong> : LibLlama::LlamaContextParams
+
+        <a class="method-permalink" href="#default_params%3ALibLlama%3A%3ALlamaContextParams-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the default context parameters</p>
+<p>Returns:</p>
+<ul>
+<li>Default context parameters</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L8" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
 
 
 
@@ -421,7 +540,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -456,7 +575,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L158" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L166" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -477,7 +596,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L329" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L337" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -512,7 +631,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L185" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L193" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -547,7 +666,91 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L130" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L138" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_embeddings:Array(Float32)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>get_embeddings</strong> : Array(Float32) | Nil
+
+        <a class="method-permalink" href="#get_embeddings%3AArray%28Float32%29%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets all output token embeddings
+Only available when embeddings mode is enabled</p>
+<p>Returns:</p>
+<ul>
+<li>An array of embeddings, or nil if embeddings are not available</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L365" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_embeddings_ith(i:Int32):Array(Float32)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>get_embeddings_ith</strong>(i : Int32) : Array(Float32) | Nil
+
+        <a class="method-permalink" href="#get_embeddings_ith%28i%3AInt32%29%3AArray%28Float32%29%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the embeddings for a specific token</p>
+<p>Parameters:</p>
+<ul>
+<li>i: The token index (negative indices can be used to access in reverse order)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>An array of embedding values, or nil if not available</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L393" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="get_embeddings_seq(seq_id:Int32):Array(Float32)|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>get_embeddings_seq</strong>(seq_id : Int32) : Array(Float32) | Nil
+
+        <a class="method-permalink" href="#get_embeddings_seq%28seq_id%3AInt32%29%3AArray%28Float32%29%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the embeddings for a specific sequence</p>
+<p>Parameters:</p>
+<ul>
+<li>seq_id: The sequence ID</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>An array of embedding values, or nil if not available</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L416" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -568,7 +771,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -593,7 +796,58 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L169" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L177" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="pooling_type:LibLlama::LlamaPoolingType-instance-method">
+      <div class="signature">
+        
+        def <strong>pooling_type</strong> : LibLlama::LlamaPoolingType
+
+        <a class="method-permalink" href="#pooling_type%3ALibLlama%3A%3ALlamaPoolingType-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the pooling type used for embeddings</p>
+<p>Returns:</p>
+<ul>
+<li>The pooling type as a PoolingType enum</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L356" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="set_embeddings(enabled:Bool)-instance-method">
+      <div class="signature">
+        
+        def <strong>set_embeddings</strong>(enabled : Bool)
+
+        <a class="method-permalink" href="#set_embeddings%28enabled%3ABool%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Sets whether the model is in embeddings mode or not
+If true, embeddings will be returned but logits will not</p>
+<p>Parameters:</p>
+<ul>
+<li>enabled: Whether to enable embeddings mode</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L348" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -614,7 +868,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L29" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L37" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -635,7 +889,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/46ffd402d65e33e56429e466fb53fa0f4cec4f72/src/llama/context.cr#L324" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ddb6f736ee25000264fc7cb6a2095159e56d522b/src/llama/context.cr#L332" target="_blank">View source</a>]
         
       </div>
     </div>
