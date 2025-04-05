@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::Sampler - llama main</title>
+  <title>Llama::SamplingError - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -152,7 +152,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/Sampler" data-name="llama::sampler">
+  <li class=" " data-id="llama/Llama/Sampler" data-name="llama::sampler">
       <a href="../Llama/Sampler.html">Sampler</a>
       
     </li>
@@ -162,7 +162,7 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/SamplingError" data-name="llama::samplingerror">
+  <li class=" current" data-id="llama/Llama/SamplingError" data-name="llama::samplingerror">
       <a href="../Llama/SamplingError.html">SamplingError</a>
       
     </li>
@@ -236,12 +236,12 @@
 <div class="main-content">
 <h1 class="type-name">
 
-  <span class="kind">class</span> Llama::<wbr>Sampler
+  <span class="kind">class</span> Llama::<wbr>SamplingError
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/SamplingError.html">Llama::SamplingError</a></li><li class="superclass"><a href="../Llama/Error.html">Llama::Error</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -255,10 +255,7 @@
     Overview
   </h2>
 
-  <p>Wrapper for the llama_sampler structure</p>
-<p>The Sampler class is the base class for all sampling methods.
-Sampling is the process of selecting the next token during text generation.
-Different sampling methods produce different text characteristics.</p>
+  <p>Errors related to sampling operations</p>
 
 
 
@@ -267,50 +264,6 @@ Different sampling methods produce different text characteristics.</p>
 
 
 
-
-  <h2>
-    <a id="direct-known-subclasses" class="anchor" href="#direct-known-subclasses">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Direct Known Subclasses
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../Llama/DistSampler.html">Llama::DistSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/GrammarLazyPatternsSampler.html">Llama::GrammarLazyPatternsSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/GrammarSampler.html">Llama::GrammarSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/InfillSampler.html">Llama::InfillSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/MinPSampler.html">Llama::MinPSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/MirostatSampler.html">Llama::MirostatSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/MirostatV2Sampler.html">Llama::MirostatV2Sampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/PenaltiesSampler.html">Llama::PenaltiesSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/SamplerChain.html">Llama::SamplerChain</a></li>
-    
-      <li class="other-type"><a href="../Llama/TempExtSampler.html">Llama::TempExtSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TempSampler.html">Llama::TempSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TopKSampler.html">Llama::TopKSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TopNSigmaSampler.html">Llama::TopNSigmaSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TopPSampler.html">Llama::TopPSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TypicalSampler.html">Llama::TypicalSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/XtcSampler.html">Llama::XtcSampler</a></li>
-    
-  </ul>
 
 
 
@@ -327,8 +280,8 @@ Different sampling methods produce different text characteristics.</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/sampler.cr#L7" target="_blank">
-        llama/sampler.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/error.cr#L24" target="_blank">
+        llama/error.cr
       </a>
     
     <br/>
@@ -338,56 +291,11 @@ Different sampling methods produce different text characteristics.</p>
 
 
 
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method" class="signature"><strong>.new</strong>(handle : Pointer(LibLlama::LlamaSampler))</a>
-        
-          <div class="summary"><p>Creates a new Sampler instance from a raw pointer</p></div>
-        
-      </li>
-    
-  </ul>
 
 
 
 
 
-
-
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
-        
-          <div class="summary"><p>Frees the resources associated with this sampler</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="signature"><strong>#to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaSampler)</a>
-        
-          <div class="summary"><p>Returns the raw pointer to the underlying llama_sampler structure</p></div>
-        
-      </li>
-    
-  </ul>
 
 
 
@@ -419,98 +327,40 @@ Different sampling methods produce different text characteristics.</p>
 
 
   
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+  
+    
+
+
+    
+
+
+    
+
+
+    
+
+
+  
 </div>
 
 
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(handle:Pointer(LibLlama::LlamaSampler))-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(handle : Pointer(LibLlama::LlamaSampler))
-
-        <a class="method-permalink" href="#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new Sampler instance from a raw pointer</p>
-<p>Note: This constructor is intended for internal use.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/sampler.cr#L11" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 
 
 
-
-
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="finalize-instance-method">
-      <div class="signature">
-        
-        def <strong>finalize</strong>
-
-        <a class="method-permalink" href="#finalize-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Frees the resources associated with this sampler</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/sampler.cr#L20" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="to_unsafe:Pointer(Llama::LibLlama::LlamaSampler)-instance-method">
-      <div class="signature">
-        
-        def <strong>to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaSampler)
-
-        <a class="method-permalink" href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the raw pointer to the underlying llama_sampler structure</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/sampler.cr#L15" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
 
 
 </div>

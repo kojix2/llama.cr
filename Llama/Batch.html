@@ -67,6 +67,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/BatchError" data-name="llama::batcherror">
+      <a href="../Llama/BatchError.html">BatchError</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
       <a href="../Llama/ChatMessage.html">ChatMessage</a>
       
@@ -74,6 +79,11 @@
   
   <li class=" " data-id="llama/Llama/Context" data-name="llama::context">
       <a href="../Llama/Context.html">Context</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ContextError" data-name="llama::contexterror">
+      <a href="../Llama/ContextError.html">ContextError</a>
       
     </li>
   
@@ -107,6 +117,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/KvCacheError" data-name="llama::kvcacheerror">
+      <a href="../Llama/KvCacheError.html">KvCacheError</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/MinPSampler" data-name="llama::minpsampler">
       <a href="../Llama/MinPSampler.html">MinPSampler</a>
       
@@ -127,6 +142,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/ModelError" data-name="llama::modelerror">
+      <a href="../Llama/ModelError.html">ModelError</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/PenaltiesSampler" data-name="llama::penaltiessampler">
       <a href="../Llama/PenaltiesSampler.html">PenaltiesSampler</a>
       
@@ -142,8 +162,18 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/SamplingError" data-name="llama::samplingerror">
+      <a href="../Llama/SamplingError.html">SamplingError</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/State" data-name="llama::state">
       <a href="../Llama/State.html">State</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/StateError" data-name="llama::stateerror">
+      <a href="../Llama/StateError.html">StateError</a>
       
     </li>
   
@@ -154,6 +184,11 @@
   
   <li class=" " data-id="llama/Llama/TempSampler" data-name="llama::tempsampler">
       <a href="../Llama/TempSampler.html">TempSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TokenizationError" data-name="llama::tokenizationerror">
+      <a href="../Llama/TokenizationError.html">TokenizationError</a>
       
     </li>
   
@@ -246,7 +281,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L4" target="_blank">
         llama/batch.cr
       </a>
     
@@ -419,12 +454,17 @@ Provides methods for managing batches of tokens for efficient processing</p>
 <ul>
 <li>A new Batch instance configured with the provided embeddings</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if embeddings array is empty or contains empty embeddings</li>
+<li>Llama::BatchError if batch creation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L233" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L399" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -450,12 +490,17 @@ Provides methods for managing batches of tokens for efficient processing</p>
 <ul>
 <li>A new Batch instance configured with the provided tokens</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if tokens array is empty</li>
+<li>Llama::BatchError if batch creation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L213" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L360" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -481,14 +526,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::Error if the batch cannot be created</li>
+<li>Llama::BatchError if the batch cannot be created</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L61" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -512,14 +557,15 @@ Provides methods for managing batches of tokens for efficient processing</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::Error if the batch cannot be created</li>
+<li>ArgumentError if parameters are invalid</li>
+<li>Llama::BatchError if the batch cannot be created</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -542,7 +588,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -579,7 +625,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L252" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L444" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -600,7 +646,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L68" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L116" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -628,13 +674,14 @@ The batch created this way is not owned by this wrapper and will not be freed.</
 <ul>
 <li>IndexError if the index is out of bounds</li>
 <li>ArgumentError if the batch is not embedding-based</li>
+<li>Llama::BatchError if memory allocation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L174" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L300" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -661,13 +708,14 @@ The batch created this way is not owned by this wrapper and will not be freed.</
 <p>Raises:</p>
 <ul>
 <li>IndexError if the index is out of bounds</li>
+<li>Llama::BatchError if memory allocation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L130" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L233" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -688,7 +736,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/batch.cr#L247" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/batch.cr#L439" target="_blank">View source</a>]
         
       </div>
     </div>

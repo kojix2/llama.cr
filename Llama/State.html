@@ -67,6 +67,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/BatchError" data-name="llama::batcherror">
+      <a href="../Llama/BatchError.html">BatchError</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
       <a href="../Llama/ChatMessage.html">ChatMessage</a>
       
@@ -74,6 +79,11 @@
   
   <li class=" " data-id="llama/Llama/Context" data-name="llama::context">
       <a href="../Llama/Context.html">Context</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ContextError" data-name="llama::contexterror">
+      <a href="../Llama/ContextError.html">ContextError</a>
       
     </li>
   
@@ -107,6 +117,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/KvCacheError" data-name="llama::kvcacheerror">
+      <a href="../Llama/KvCacheError.html">KvCacheError</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/MinPSampler" data-name="llama::minpsampler">
       <a href="../Llama/MinPSampler.html">MinPSampler</a>
       
@@ -127,6 +142,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/ModelError" data-name="llama::modelerror">
+      <a href="../Llama/ModelError.html">ModelError</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/PenaltiesSampler" data-name="llama::penaltiessampler">
       <a href="../Llama/PenaltiesSampler.html">PenaltiesSampler</a>
       
@@ -142,8 +162,18 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/SamplingError" data-name="llama::samplingerror">
+      <a href="../Llama/SamplingError.html">SamplingError</a>
+      
+    </li>
+  
   <li class=" current" data-id="llama/Llama/State" data-name="llama::state">
       <a href="../Llama/State.html">State</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/StateError" data-name="llama::stateerror">
+      <a href="../Llama/StateError.html">StateError</a>
       
     </li>
   
@@ -154,6 +184,11 @@
   
   <li class=" " data-id="llama/Llama/TempSampler" data-name="llama::tempsampler">
       <a href="../Llama/TempSampler.html">TempSampler</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TokenizationError" data-name="llama::tokenizationerror">
+      <a href="../Llama/TokenizationError.html">TokenizationError</a>
       
     </li>
   
@@ -246,7 +281,7 @@ Provides methods for saving and loading model state</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L4" target="_blank">
         llama/state.cr
       </a>
     
@@ -429,12 +464,16 @@ Provides methods for saving and loading model state</p>
 <li>ctx: The Context to manage state for</li>
 </ul>
 <p>To avoid circular references, we store the context pointer rather than the context object</p>
+<p>Raises:</p>
+<ul>
+<li>Llama::StateError if the context pointer is null</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -471,7 +510,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L232" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L523" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -491,12 +530,16 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>A Bytes object containing the state data</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::StateError if the operation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L81" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -523,14 +566,15 @@ Provides methods for saving and loading model state</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::Error if the file cannot be loaded</li>
+<li>ArgumentError if path is empty or max_tokens is not positive</li>
+<li>Llama::StateError if the file cannot be loaded</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L68" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L168" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -555,12 +599,17 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>true if successful, false otherwise</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if path is empty</li>
+<li>Llama::StateError if the operation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L102" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L232" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -584,12 +633,16 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>A Bytes object containing the sequence state data</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::StateError if the operation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L133" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L317" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -617,14 +670,15 @@ Provides methods for saving and loading model state</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::Error if the file cannot be loaded</li>
+<li>ArgumentError if path is empty or max_tokens is not positive</li>
+<li>Llama::StateError if the file cannot be loaded</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L204" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L469" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -650,12 +704,17 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>The number of bytes written, or 0 if failed</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if path is empty</li>
+<li>Llama::StateError if the operation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L178" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L416" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -680,12 +739,17 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>The number of bytes read, or 0 if failed</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if data is empty</li>
+<li>Llama::StateError if the operation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L160" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L368" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -709,12 +773,16 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>The size in bytes</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::StateError if the operation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L122" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L281" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -738,12 +806,17 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>The number of bytes read</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if data is empty</li>
+<li>Llama::StateError if the operation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L53" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L126" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -763,12 +836,16 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>The size in bytes</li>
 </ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::StateError if the operation fails</li>
+</ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d4c9d1a67201e82f709dba9bdd906b483258c9e9/src/llama/state.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/b17d0c0b8b5c152eadc8991345a375da8445af27/src/llama/state.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
