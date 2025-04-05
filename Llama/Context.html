@@ -62,6 +62,11 @@
       
         <ul>
   
+  <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
+      <a href="../Llama/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
   <li class=" current" data-id="llama/Llama/Context" data-name="llama::context">
       <a href="../Llama/Context.html">Context</a>
       
@@ -170,7 +175,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L3" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L3" target="_blank">
         llama/context.cr
       </a>
     
@@ -215,6 +220,13 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#chat%28messages%3AArray%28ChatMessage%29%2Cmax_tokens%3AInt32%3D128%2Ctemperature%3AFloat32%3D0.8%2Ctemplate%3AString%7CNil%3Dnil%29%3AString-instance-method" class="signature"><strong>#chat</strong>(messages : Array(ChatMessage), max_tokens : Int32 = <span class="n">128</span>, temperature : Float32 = <span class="n">0.8</span>, template : String | Nil = <span class="n">nil</span>) : String</a>
+        
+          <div class="summary"><p>Generates a response in a chat conversation</p></div>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#decode%28batch%3ALibLlama%3A%3ALlamaBatch%29%3AInt32-instance-method" class="signature"><strong>#decode</strong>(batch : LibLlama::LlamaBatch) : Int32</a>
@@ -327,7 +339,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -347,6 +359,43 @@
 </a>
     Instance Method Detail
   </h2>
+  
+    <div class="entry-detail" id="chat(messages:Array(ChatMessage),max_tokens:Int32=128,temperature:Float32=0.8,template:String|Nil=nil):String-instance-method">
+      <div class="signature">
+        
+        def <strong>chat</strong>(messages : Array(<a href="../Llama/ChatMessage.html">ChatMessage</a>), max_tokens : Int32 = <span class="n">128</span>, temperature : Float32 = <span class="n">0.8</span>, template : String | Nil = <span class="n">nil</span>) : String
+
+        <a class="method-permalink" href="#chat%28messages%3AArray%28ChatMessage%29%2Cmax_tokens%3AInt32%3D128%2Ctemperature%3AFloat32%3D0.8%2Ctemplate%3AString%7CNil%3Dnil%29%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Generates a response in a chat conversation</p>
+<p>Parameters:</p>
+<ul>
+<li>messages: Array of chat messages</li>
+<li>max_tokens: Maximum number of tokens to generate</li>
+<li>temperature: Sampling temperature</li>
+<li>template: Optional chat template (nil to use model's default)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The generated response text</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>ArgumentError if parameters are invalid</li>
+<li>Llama::Error if text generation fails</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L33" target="_blank">View source</a>]
+        
+      </div>
+    </div>
   
     <div class="entry-detail" id="decode(batch:LibLlama::LlamaBatch):Int32-instance-method">
       <div class="signature">
@@ -378,7 +427,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L128" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -399,7 +448,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L269" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L300" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -434,7 +483,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L123" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L154" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -469,7 +518,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L31" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L62" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -494,7 +543,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L138" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -515,7 +564,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L264" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L295" target="_blank">View source</a>]
         
       </div>
     </div>

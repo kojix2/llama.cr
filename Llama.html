@@ -62,6 +62,11 @@
       
         <ul>
   
+  <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
+      <a href="Llama/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/Context" data-name="llama::context">
       <a href="Llama/Context.html">Context</a>
       
@@ -157,42 +162,49 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama.cr#L12" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama.cr#L12" target="_blank">
         llama.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/context.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/chat.cr#L1" target="_blank">
+        llama/chat.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/context.cr#L1" target="_blank">
         llama/context.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/lib_llama.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/lib_llama.cr#L1" target="_blank">
         llama/lib_llama.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L1" target="_blank">
         llama/model.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/sampler.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/sampler.cr#L1" target="_blank">
         llama/sampler.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/vocab.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/vocab.cr#L1" target="_blank">
         llama/vocab.cr
       </a>
     
@@ -235,6 +247,20 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#apply_chat_template%28template%3AString%7CNil%2Cmessages%3AArray%28ChatMessage%29%2Cadd_assistant%3ABool%3Dtrue%29%3AString-class-method" class="signature"><strong>.apply_chat_template</strong>(template : String | Nil, messages : Array(ChatMessage), add_assistant : Bool = <span class="n">true</span>) : String</a>
+        
+          <div class="summary"><p>Applies a chat template to a list of messages</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#builtin_chat_templates%3AArray%28String%29-class-method" class="signature"><strong>.builtin_chat_templates</strong> : Array(String)</a>
+        
+          <div class="summary"><p>Gets the list of built-in chat templates</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#generate%28model_path%3AString%2Cprompt%3AString%2Cmax_tokens%3AInt32%3D128%2Ctemperature%3AFloat32%3D0.8%29%3AString-class-method" class="signature"><strong>.generate</strong>(model_path : String, prompt : String, max_tokens : Int32 = <span class="n">128</span>, temperature : Float32 = <span class="n">0.8</span>) : String</a>
         
           <div class="summary"><p>A simple example of text generation</p></div>
@@ -272,6 +298,66 @@
     Class Method Detail
   </h2>
   
+    <div class="entry-detail" id="apply_chat_template(template:String|Nil,messages:Array(ChatMessage),add_assistant:Bool=true):String-class-method">
+      <div class="signature">
+        
+        def self.<strong>apply_chat_template</strong>(template : String | Nil, messages : Array(<a href="Llama/ChatMessage.html">ChatMessage</a>), add_assistant : Bool = <span class="n">true</span>) : String
+
+        <a class="method-permalink" href="#apply_chat_template%28template%3AString%7CNil%2Cmessages%3AArray%28ChatMessage%29%2Cadd_assistant%3ABool%3Dtrue%29%3AString-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Applies a chat template to a list of messages</p>
+<p>Parameters:</p>
+<ul>
+<li>template: The template string (nil to use model's default)</li>
+<li>messages: Array of chat messages</li>
+<li>add_assistant: Whether to end with an assistant message prefix</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The formatted prompt string</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::Error if template application fails</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/chat.cr#L39" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="builtin_chat_templates:Array(String)-class-method">
+      <div class="signature">
+        
+        def self.<strong>builtin_chat_templates</strong> : Array(String)
+
+        <a class="method-permalink" href="#builtin_chat_templates%3AArray%28String%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the list of built-in chat templates</p>
+<p>Returns:</p>
+<ul>
+<li>Array of template names</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/chat.cr#L85" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="generate(model_path:String,prompt:String,max_tokens:Int32=128,temperature:Float32=0.8):String-class-method">
       <div class="signature">
         
@@ -304,7 +390,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -325,7 +411,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>

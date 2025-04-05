@@ -62,6 +62,11 @@
       
         <ul>
   
+  <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
+      <a href="../Llama/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/Context" data-name="llama::context">
       <a href="../Llama/Context.html">Context</a>
       
@@ -170,7 +175,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L6" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L6" target="_blank">
         llama/model.cr
       </a>
     
@@ -215,6 +220,13 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#chat_template%28name%3AString%7CNil%3Dnil%29%3AString%7CNil-instance-method" class="signature"><strong>#chat_template</strong>(name : String | Nil = <span class="n">nil</span>) : String | Nil</a>
+        
+          <div class="summary"><p>Gets the default chat template for this model</p></div>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#context%28params%3Dnil%29%3AContext-instance-method" class="signature"><strong>#context</strong>(params = <span class="n">nil</span>) : Context</a>
@@ -340,7 +352,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -361,6 +373,35 @@
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="chat_template(name:String|Nil=nil):String|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>chat_template</strong>(name : String | Nil = <span class="n">nil</span>) : String | Nil
+
+        <a class="method-permalink" href="#chat_template%28name%3AString%7CNil%3Dnil%29%3AString%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the default chat template for this model</p>
+<p>Parameters:</p>
+<ul>
+<li>name: Optional template name (nil for default)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The chat template string, or nil if not available</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L27" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="context(params=nil):Context-instance-method">
       <div class="signature">
         
@@ -377,7 +418,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -398,7 +439,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L58" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L71" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -419,7 +460,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -440,7 +481,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L42" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -461,7 +502,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -482,7 +523,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L27" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -503,7 +544,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L53" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L66" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -524,7 +565,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/95a9aec54e4e7784900c4d992395a56d82e13b17/src/llama/model.cr#L21" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/bf8bd6d6b7bfb91f56935e6d6022eee3924176ca/src/llama/model.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
