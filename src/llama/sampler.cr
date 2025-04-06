@@ -20,7 +20,6 @@ module Llama
     def finalize
       if @handle && !@handle.null?
         LibLlama.llama_sampler_free(@handle)
-        @handle = Pointer(LibLlama::LlamaSampler).null
       end
     end
 

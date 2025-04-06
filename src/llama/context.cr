@@ -55,7 +55,6 @@ module Llama
       # Free the context handle
       if @handle && !@handle.null?
         LibLlama.llama_free(@handle)
-        @handle = Pointer(LibLlama::LlamaContext).null
       end
 
       # Clear references to KV cache and state

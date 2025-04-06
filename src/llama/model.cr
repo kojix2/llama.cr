@@ -124,7 +124,6 @@ module Llama
     def cleanup
       if @handle && !@handle.null?
         LibLlama.llama_model_free(@handle)
-        @handle = Pointer(LibLlama::LlamaModel).null
       end
     end
 

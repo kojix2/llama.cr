@@ -27,39 +27,16 @@ module Llama
 
       @handle = LibLlama.llama_batch_init(n_tokens, embd, n_seq_max)
 
-      # Check if batch initialization failed
-      if @handle.n_tokens == 0
-        # Initialize fields to avoid null pointer exceptions
-        @handle.token = Pointer(LibLlama::LlamaToken).null
-        @handle.embd = Pointer(Float32).null
-        @handle.pos = Pointer(LibLlama::LlamaPos).null
-        @handle.n_seq_id = Pointer(Int32).null
-        @handle.seq_id = Pointer(Pointer(LibLlama::LlamaSeqId)).null
-        @handle.logits = Pointer(Int8).null
-
-        # Manually allocate memory for the batch
-        @handle.n_tokens = n_tokens
-
-        begin
-          @handle.token = Pointer(LibLlama::LlamaToken).malloc(n_tokens)
-          @handle.pos = Pointer(LibLlama::LlamaPos).malloc(n_tokens)
-
-          if embd > 0
-            @handle.embd = Pointer(Float32).malloc(n_tokens * embd)
-          end
-        rescue ex
-          error_msg = Llama.format_error(
-            "Failed to allocate memory for batch",
-            -2, # Memory allocation error
-            "n_tokens: #{n_tokens}, embd: #{embd}, n_seq_max: #{n_seq_max}"
-          )
-          raise BatchError.new(error_msg)
-        end
-
-        @owned = true
-      else
-        @owned = true
+      if (embd > 0 && @handle.embd.null?) || (embd == 0 && @handle.token.null?) || @handle.pos.null? || @handle.n_seq_id.null? || @handle.seq_id.null? || @handle.logits.null?
+        error_msg = Llama.format_error(
+          "Failed to initialize batch",
+          -2, # Memory allocation error
+          "n_tokens: #{n_tokens}, embd: #{embd}, n_seq_max: #{n_seq_max}"
+        )
+        raise BatchError.new(error_msg)
       end
+
+      @owned = true
     end
 
     # Creates a new Batch instance from a raw llama_batch structure
@@ -117,107 +94,6 @@ module Llama
       @handle.n_tokens
     end
 
-    # Internal helper methods for memory management
-
-    # Ensures the token buffer is allocated
-    private def ensure_token_buffer
-      if @handle.token.null?
-        begin
-          @handle.token = Pointer(LibLlama::LlamaToken).malloc(@handle.n_tokens)
-        rescue ex
-          error_msg = Llama.format_error(
-            "Failed to allocate token buffer",
-            -2, # Memory allocation error
-            "n_tokens: #{@handle.n_tokens}"
-          )
-          raise BatchError.new(error_msg)
-        end
-      end
-    end
-
-    # Ensures the position buffer is allocated
-    private def ensure_pos_buffer
-      if @handle.pos.null?
-        begin
-          @handle.pos = Pointer(LibLlama::LlamaPos).malloc(@handle.n_tokens)
-        rescue ex
-          error_msg = Llama.format_error(
-            "Failed to allocate position buffer",
-            -2, # Memory allocation error
-            "n_tokens: #{@handle.n_tokens}"
-          )
-          raise BatchError.new(error_msg)
-        end
-      end
-    end
-
-    # Ensures the sequence ID buffers are allocated
-    private def ensure_seq_id_buffer(i : Int32)
-      if @handle.n_seq_id.null?
-        begin
-          @handle.n_seq_id = Pointer(Int32).malloc(@handle.n_tokens)
-          @handle.n_tokens.times do |j|
-            @handle.n_seq_id[j] = 0
-          end
-        rescue ex
-          error_msg = Llama.format_error(
-            "Failed to allocate n_seq_id buffer",
-            -2, # Memory allocation error
-            "n_tokens: #{@handle.n_tokens}"
-          )
-          raise BatchError.new(error_msg)
-        end
-      end
-
-      if @handle.seq_id.null?
-        begin
-          @handle.seq_id = Pointer(Pointer(Int32)).malloc(@handle.n_tokens)
-          @handle.n_tokens.times do |j|
-            @handle.seq_id[j] = Pointer(Int32).null
-          end
-        rescue ex
-          error_msg = Llama.format_error(
-            "Failed to allocate seq_id buffer",
-            -2, # Memory allocation error
-            "n_tokens: #{@handle.n_tokens}"
-          )
-          raise BatchError.new(error_msg)
-        end
-      end
-
-      if @handle.seq_id[i].null?
-        begin
-          @handle.seq_id[i] = Pointer(Int32).malloc(1)
-        rescue ex
-          error_msg = Llama.format_error(
-            "Failed to allocate seq_id[#{i}] buffer",
-            -2, # Memory allocation error
-            nil
-          )
-          raise BatchError.new(error_msg)
-        end
-      end
-    end
-
-    # Ensures the logits buffer is allocated
-    private def ensure_logits_buffer
-      if @handle.logits.null?
-        begin
-          @handle.logits = Pointer(Int8).malloc(@handle.n_tokens)
-          @handle.n_tokens.times do |j|
-            @handle.logits[j] = 0_i8
-          end
-        rescue ex
-          error_msg = Llama.format_error(
-            "Failed to allocate logits buffer",
-            -2, # Memory allocation error
-            "n_tokens: #{@handle.n_tokens}"
-          )
-          raise BatchError.new(error_msg)
-        end
-      end
-    end
-
     # Adds multiple tokens to the batch
     #
     # Parameters:
@@ -261,22 +137,6 @@ module Llama
         raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{@handle.n_tokens - 1})")
       end
 
-      # Ensure buffers are allocated
-      begin
-        ensure_token_buffer
-        ensure_pos_buffer
-        ensure_seq_id_buffer(i)
-      rescue ex : BatchError
-        raise ex
-      rescue ex
-        error_msg = Llama.format_error(
-          "Failed to ensure buffers for set_token",
-          -2, # Memory allocation error
-          "index: #{i}, error: #{ex.message}"
-        )
-        raise BatchError.new(error_msg)
-      end
-
       # Set the token
       @handle.token[i] = token
 
@@ -289,24 +149,7 @@ module Llama
 
       # Set the logits flag if provided
       if logits
-        ensure_logits_buffer
         @handle.logits[i] = logits ? 1_i8 : 0_i8
-      end
-    end
-
-    # Ensures the embedding buffer is allocated
-    private def ensure_embd_buffer(embd_size : Int32)
-      if @handle.embd.null?
-        begin
-          @handle.embd = Pointer(Float32).malloc(@handle.n_tokens * embd_size)
-        rescue ex
-          error_msg = Llama.format_error(
-            "Failed to allocate embedding buffer",
-            -2, # Memory allocation error
-            "n_tokens: #{@handle.n_tokens}, embd_size: #{embd_size}"
-          )
-          raise BatchError.new(error_msg)
-        end
       end
     end
 
@@ -332,24 +175,8 @@ module Llama
         raise ArgumentError.new("Embedding array cannot be empty")
       end
 
-      # Ensure buffers are allocated
-      embd_size = embedding.size
-      begin
-        ensure_embd_buffer(embd_size)
-        ensure_pos_buffer
-        ensure_seq_id_buffer(i)
-      rescue ex : BatchError
-        raise ex
-      rescue ex
-        error_msg = Llama.format_error(
-          "Failed to ensure buffers for set_embedding",
-          -2, # Memory allocation error
-          "index: #{i}, embd_size: #{embd_size}, error: #{ex.message}"
-        )
-        raise BatchError.new(error_msg)
-      end
-
       # Copy the embedding values
+      embd_size = embedding.size
       embd_size.times do |j|
         @handle.embd[i * embd_size + j] = embedding[j]
       end
@@ -363,7 +190,6 @@ module Llama
 
       # Set the logits flag if provided
       if logits
-        ensure_logits_buffer
         @handle.logits[i] = logits ? 1_i8 : 0_i8
       end
     end
@@ -469,9 +295,8 @@ module Llama
     # Explicitly clean up resources
     # This can be called manually to release resources before garbage collection
     def cleanup
-      if @owned && @handle
+      if @owned
         LibLlama.llama_batch_free(@handle)
-        @handle = LibLlama::LlamaBatch.new
       end
     end
 
