@@ -90,14 +90,9 @@ tokens = model.vocab.tokenize("Hello")
 puts "Tokenized 'Hello':"
 puts "  - Tokens: #{tokens.inspect}"
 
-# Create a custom batch with the exact number of tokens
+# Create a custom batch with the tokens
 puts "Creating a custom batch..."
-custom_batch = Llama::Batch.new(tokens.size) # Batch with capacity for exactly the number of tokens
-
-# Set tokens in the batch
-tokens.each_with_index do |token, i|
-  custom_batch.set_token(i, token, i, 0, i == tokens.size - 1)
-end
+custom_batch = Llama::Batch.for_tokens(tokens)
 
 puts "Custom batch created with #{custom_batch.n_tokens} tokens"
 
