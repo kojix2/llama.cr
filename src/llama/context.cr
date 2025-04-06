@@ -233,8 +233,10 @@ module Llama
         # For subsequent tokens, just process the last generated token
         # Create a single-token batch with the last generated token
         last_token = all_tokens.last
-        batch = Batch.new(1)
-        batch.set_token(0, last_token, pos - 1, 0, true)
+        # Use Batch.for_tokens to ensure n_tokens is properly set
+        batch = Batch.for_tokens([last_token], true, 0)
+        # Update the position
+        batch.to_unsafe.pos[0] = pos - 1
         batch
       end
     end

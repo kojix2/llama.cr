@@ -62,24 +62,24 @@ puts "Assistant: #{response}"
 puts "\nGeneration took #{(end_time - start_time).total_seconds.round(2)} seconds"
 
 # Check for non-interactive mode
-if ENV["NON_INTERACTIVE"] != "true"
-  # Interactive chat mode
-  puts "\nEnter 'exit' to quit"
-  loop do
-    print "\nYou: "
-    user_input = gets
-    break if user_input.nil? || user_input.downcase == "exit"
+exit if ENV.has_key?("NON_INTERACTIVE") && ENV["NON_INTERACTIVE"] == "true"
 
-    messages << Llama::ChatMessage.new("user", user_input)
+# Exit if in non-interactive mode
+puts "\nEnter 'exit' to quit"
+loop do
+  print "\nYou: "
+  user_input = gets
+  break if user_input.nil? || user_input.downcase == "exit"
 
-    print "Assistant: "
-    start_time = Time.monotonic
-    response = context.chat(messages)
-    end_time = Time.monotonic
+  messages << Llama::ChatMessage.new("user", user_input)
 
-    puts response
-    puts "(Generated in #{(end_time - start_time).total_seconds.round(2)} seconds)"
+  print "Assistant: "
+  start_time = Time.monotonic
+  response = context.chat(messages)
+  end_time = Time.monotonic
 
-    messages << Llama::ChatMessage.new("assistant", response)
-  end
+  puts response
+  puts "(Generated in #{(end_time - start_time).total_seconds.round(2)} seconds)"
+
+  messages << Llama::ChatMessage.new("assistant", response)
 end
