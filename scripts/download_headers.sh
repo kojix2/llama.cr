@@ -1,8 +1,8 @@
 #!/bin/bash
 # Download llama.cpp headers from a specific version
 
-# Get version information
-source "$(dirname "$0")/version.sh"
+# Get version information from LLAMA_VERSION file
+LLAMA_VERSION=$(cat "$(dirname "$0")/../LLAMA_VERSION")
 
 echo "Downloading llama.cpp headers version ${LLAMA_VERSION}..."
 

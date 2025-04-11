@@ -5,7 +5,7 @@
 
 Crystal bindings for [llama.cpp](https://github.com/ggml-org/llama.cpp), a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.
 
-Compatible with llama.cpp version b5054 and newer.
+Please check the [LLAMA_VERSION](LLAMA_VERSION) file for the current compatible version of llama.cpp.
 
 ## Features
 

@@ -37,8 +37,7 @@ jobs:
       # Define llama.cpp version
       - name: Set llama.cpp version
         run: |
-          source ./scripts/version.sh
-          echo "LLAMA_VERSION=${LLAMA_VERSION}" >> $GITHUB_ENV
+          echo "LLAMA_VERSION=$(cat LLAMA_VERSION)" >> $GITHUB_ENV
 
       - name: Install llama.cpp (Ubuntu)
         if: runner.os == 'Linux'

@@ -58,6 +58,7 @@ require "./llama/sampler"
 
 module Llama
   VERSION = "0.1.0"
+  LLAMA_CPP_COMPATIBLE_VERSION = read_file("#{__DIR__}/LLAMA_VERSION").chomp
 
   # Returns the llama.cpp system information
   #
