@@ -60,9 +60,6 @@ jobs:
       - name: Install dependencies
         run: shards install
 
-      - name: Run static analysis
-        run: crystal tool format --check
-
       - name: Build
         run: crystal build --no-codegen src/llama.cr
 
@@ -137,7 +134,6 @@ jobs:
           echo "Running vocab_spec.cr"
           crystal spec spec/vocab_spec.cr || echo "vocab_spec.cr failed"
 
-      # モデルを使用するテスト（各ファイル別）
       - name: Run model tests (model_spec.cr)
         env:
           CRYSTAL_OPTS: --error-trace
@@ -146,3 +142,6 @@ jobs:
         run: |
           echo "Running model_spec.cr"
           crystal spec spec/model_spec.cr || echo "model_spec.cr failed"
+
+      - name: Run static analysis
+        run: crystal tool format --check
