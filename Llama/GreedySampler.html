@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::TopPSampler - llama main</title>
+  <title>Llama::GreedySampler - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -107,7 +107,7 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/GreedySampler" data-name="llama::greedysampler">
+  <li class=" current" data-id="llama/Llama/GreedySampler" data-name="llama::greedysampler">
       <a href="../Llama/GreedySampler.html">GreedySampler</a>
       
     </li>
@@ -207,7 +207,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/TopPSampler" data-name="llama::toppsampler">
+  <li class=" " data-id="llama/Llama/TopPSampler" data-name="llama::toppsampler">
       <a href="../Llama/TopPSampler.html">TopPSampler</a>
       
     </li>
@@ -243,12 +243,12 @@
 
   <span class="kind">
     class
-  </span> Llama::<wbr>TopPSampler
+  </span> Llama::<wbr>GreedySampler
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/TopPSampler.html">Llama::TopPSampler</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/GreedySampler.html">Llama::GreedySampler</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -262,12 +262,11 @@
     Overview
   </h2>
 
-  <p>Top-P (nucleus) sampler</p>
-<p>The Top-P sampler (also known as nucleus sampling) keeps tokens whose
-cumulative probability exceeds the threshold P. This helps to filter out
-the long tail of low-probability tokens.</p>
+  <p>Greedy sampler</p>
+<p>The Greedy sampler always selects the token with the highest probability.
+This is the simplest sampling method and produces deterministic output.</p>
 <p>Example:</p>
-<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">TopPSampler</span>.new(<span class="n">0.95</span>, <span class="n">1</span>) <span class="c"># Keep tokens until 95% probability is covered</span></code></pre>
+<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">GreedySampler</span>.new</code></pre>
 
 
 
@@ -294,7 +293,7 @@ the long tail of low-probability tokens.</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/sampler.cr#L134" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/sampler.cr#L183" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -317,9 +316,9 @@ the long tail of low-probability tokens.</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28p%3AFloat32%2Cmin_keep%3AInt32%3D1%29-class-method" class="signature"><strong>.new</strong>(p : Float32, min_keep : Int32 = <span class="n">1</span>)</a>
+        <a href="#new-class-method" class="signature"><strong>.new</strong></a>
         
-          <div class="summary"><p>Creates a new Top-P sampler</p></div>
+          <div class="summary"><p>Creates a new greedy sampler</p></div>
         
       </li>
     
@@ -409,22 +408,17 @@ the long tail of low-probability tokens.</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(p:Float32,min_keep:Int32=1)-class-method">
+    <div class="entry-detail" id="new-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(p : Float32, min_keep : Int32 = <span class="n">1</span>)
+        def self.<strong>new</strong>
 
-        <a class="method-permalink" href="#new%28p%3AFloat32%2Cmin_keep%3AInt32%3D1%29-class-method">#</a>
+        <a class="method-permalink" href="#new-class-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Creates a new Top-P sampler</p>
-<p>Parameters:</p>
-<ul>
-<li>p: The cumulative probability threshold (0.0 to 1.0)</li>
-<li>min_keep: Minimum number of tokens to keep</li>
-</ul>
+          <p>Creates a new greedy sampler</p>
 <p>Raises:</p>
 <ul>
 <li>Llama::Error if the sampler cannot be created</li>
@@ -434,7 +428,7 @@ the long tail of low-probability tokens.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/sampler.cr#L143" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/sampler.cr#L188" target="_blank">View source</a>]
         
       </div>
     </div>

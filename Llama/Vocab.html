@@ -107,6 +107,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/GreedySampler" data-name="llama::greedysampler">
+      <a href="../Llama/GreedySampler.html">GreedySampler</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/InfillSampler" data-name="llama::infillsampler">
       <a href="../Llama/InfillSampler.html">InfillSampler</a>
       
@@ -284,7 +289,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L3" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L3" target="_blank">
         llama/vocab.cr
       </a>
     
@@ -353,6 +358,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#is_eog%28token%3AInt32%29%3ABool-instance-method" class="signature"><strong>#is_eog</strong>(token : Int32) : Bool</a>
+        
+          <div class="summary"><p>Checks if a token is an end-of-generation token</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#n_tokens%3AInt32-instance-method" class="signature"><strong>#n_tokens</strong> : Int32</a>
         
           <div class="summary"><p>Returns the number of tokens in the vocabulary</p></div>
@@ -377,6 +389,13 @@
         <a href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaVocab%29-instance-method" class="signature"><strong>#to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaVocab)</a>
         
           <div class="summary"><p>Returns the raw pointer to the underlying llama_vocab structure</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#token_to_piece%28token%3AInt32%2Clstrip%3AInt32%3D0%2Cspecial%3ABool%3Dfalse%29%3AString-instance-method" class="signature"><strong>#token_to_piece</strong>(token : Int32, lstrip : Int32 = <span class="n">0</span>, special : Bool = <span class="n">false</span>) : String</a>
+        
+          <div class="summary"><p>Converts a token to a piece of text This is similar to token_to_text but provides more control over the output format</p></div>
         
       </li>
     
@@ -456,7 +475,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -493,7 +512,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L66" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L89" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -514,7 +533,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L71" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -535,7 +554,28 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L76" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L99" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="is_eog(token:Int32):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>is_eog</strong>(token : Int32) : Bool
+
+        <a class="method-permalink" href="#is_eog%28token%3AInt32%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if a token is an end-of-generation token</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L114" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -556,7 +596,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -577,7 +617,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L104" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -598,7 +638,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L86" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L109" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -619,7 +659,39 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L91" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L119" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="token_to_piece(token:Int32,lstrip:Int32=0,special:Bool=false):String-instance-method">
+      <div class="signature">
+        
+        def <strong>token_to_piece</strong>(token : Int32, lstrip : Int32 = <span class="n">0</span>, special : Bool = <span class="n">false</span>) : String
+
+        <a class="method-permalink" href="#token_to_piece%28token%3AInt32%2Clstrip%3AInt32%3D0%2Cspecial%3ABool%3Dfalse%29%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Converts a token to a piece of text
+This is similar to token_to_text but provides more control over the output format</p>
+<p>Parameters:</p>
+<ul>
+<li>token: The token to convert</li>
+<li>lstrip: Whether to strip leading spaces (0 = no, 1 = yes)</li>
+<li>special: Whether to render special tokens</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The text representation of the token</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -640,7 +712,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -661,7 +733,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/55f06ea473618e52179cc122c32bbf3aaee8805d/src/llama/vocab.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/93b7138be9b283884fe28bf8cd61973108269374/src/llama/vocab.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
