@@ -19,6 +19,29 @@ module Llama
       String.new(ptr)
     end
 
+    # Converts a token to a piece of text
+    # This is similar to token_to_text but provides more control over the output format
+    #
+    # Parameters:
+    # - token: The token to convert
+    # - lstrip: Whether to strip leading spaces (0 = no, 1 = yes)
+    # - special: Whether to render special tokens
+    #
+    # Returns:
+    # - The text representation of the token
+    def token_to_piece(token : Int32, lstrip : Int32 = 0, special : Bool = false) : String
+      buf_size = 128
+      buf = Pointer(LibC::Char).malloc(buf_size)
+
+      n = LibLlama.llama_token_to_piece(@handle, token, buf, buf_size, lstrip, special)
+
+      if n < 0
+        raise Error.new("Failed to convert token to piece")
+      end
+
+      String.new(buf, n)
+    end
+
     # Tokenizes a string into an array of token IDs
     def tokenize(text : String, add_special : Bool = true, parse_special : Bool = true) : Array(Int32)
       max_tokens = text.size * 2 # A reasonable upper bound
@@ -85,6 +108,11 @@ module Llama
     # Returns the padding token ID
     def pad : Int32
       LibLlama.llama_vocab_pad(@handle)
+    end
+
+    # Checks if a token is an end-of-generation token
+    def is_eog(token : Int32) : Bool
+      LibLlama.llama_vocab_is_eog(@handle, token)
     end
 
     # Returns the raw pointer to the underlying llama_vocab structure
