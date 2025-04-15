@@ -1,22 +1,37 @@
 module Llama
   # Wrapper for the llama_model structure
   class Model
-    # Creates a new Model instance by loading a model from a file
+    # Creates a new Model instance by loading a model from a file.
     #
     # Parameters:
-    # - path: Path to the model file (.gguf format)
+    # - path: Path to the model file (.gguf format).
+    # - n_gpu_layers: Number of layers to store in VRAM (default: 0).  If 0, all layers are loaded to the CPU.
+    # - use_mmap: Use mmap if possible (default: true).  Reduces memory usage.
+    # - use_mlock: Force the system to keep the model in RAM (default: false).  May improve performance but increases memory usage.
+    # - vocab_only: Only load the vocabulary, no weights (default: false).  Useful for inspecting the vocabulary.
     #
     # Raises:
-    # - Llama::ModelError if the model cannot be loaded
-    def initialize(path : String)
+    # - Llama::ModelError if the model cannot be loaded.
+    def initialize(
+      path : String,
+      n_gpu_layers : Int32 = 0,
+      use_mmap : Bool = true,
+      use_mlock : Bool = false,
+      vocab_only : Bool = false,
+    )
       params = LibLlama.llama_model_default_params
+      params.n_gpu_layers = n_gpu_layers
+      params.use_mmap = use_mmap
+      params.use_mlock = use_mlock
+      params.vocab_only = vocab_only
+
       @handle = LibLlama.llama_model_load_from_file(path, params)
 
       if @handle.null?
         error_msg = Llama.format_error(
           "Failed to load model",
           -5, # Model loading error
-          "path: #{path}"
+          "path: #{path}, n_gpu_layers: #{n_gpu_layers}, use_mmap: #{use_mmap}, use_mlock: #{use_mlock}, vocab_only: #{vocab_only}"
         )
         raise ModelError.new(error_msg)
       end
@@ -111,7 +126,15 @@ module Llama
     # - Llama::ContextError if the context cannot be created
     def context(params = nil) : Context
       params ||= Llama::Context.default_params
-      Context.new(self, params)
+      Context.new(
+        self,
+        n_ctx: params.n_ctx,
+        n_batch: params.n_batch,
+        n_threads: params.n_threads,
+        n_threads_batch: params.n_threads_batch,
+        embeddings: params.embeddings,
+        offload_kqv: params.offload_kqv
+      )
     end
 
     # Returns the raw pointer to the underlying llama_model structure
