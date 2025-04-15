@@ -7,12 +7,11 @@ module Llama
     # Parameters:
     # - n_tokens: Maximum number of tokens this batch can hold
     # - embd: Embedding dimension (0 for token-based batch, >0 for embedding-based batch)
-    # - n_seq_max: Maximum number of sequences per token
-    #
+    # - n_seq_max: Maximum number of sequence IDs per token (default: 8)
     # Raises:
     # - ArgumentError if parameters are invalid
     # - Llama::BatchError if the batch cannot be created
-    def initialize(n_tokens : Int32, embd : Int32 = 0, n_seq_max : Int32 = 1)
+    def initialize(n_tokens : Int32, embd : Int32 = 0, n_seq_max : Int32 = 8)
       if n_tokens <= 0
         raise ArgumentError.new("n_tokens must be positive")
       end
@@ -25,13 +24,15 @@ module Llama
         raise ArgumentError.new("n_seq_max must be positive")
       end
 
+      @n_seq_max = n_seq_max
       @handle = LibLlama.llama_batch_init(n_tokens, embd, n_seq_max)
+      @handle.n_tokens = n_tokens
 
       if (embd > 0 && @handle.embd.null?) || (embd == 0 && @handle.token.null?) || @handle.pos.null? || @handle.n_seq_id.null? || @handle.seq_id.null? || @handle.logits.null?
         error_msg = Llama.format_error(
           "Failed to initialize batch",
           -2, # Memory allocation error
-          "n_tokens: #{n_tokens}, embd: #{embd}, n_seq_max: #{n_seq_max}"
+          "n_tokens: #{n_tokens}, embd: #{embd}"
         )
         raise BatchError.new(error_msg)
       end
@@ -43,7 +44,7 @@ module Llama
     #
     # Note: This constructor is intended for internal use.
     # The batch created this way is not owned by this wrapper and will not be freed.
-    def initialize(@handle : LibLlama::LlamaBatch, @owned = false)
+    def initialize(@handle : LibLlama::LlamaBatch, @owned = false, @n_seq_max : Int32 = 8)
       if @handle.n_tokens < 0
         error_msg = Llama.format_error(
           "Invalid batch handle",
@@ -66,12 +67,11 @@ module Llama
     # - Llama::BatchError if the batch cannot be created
     def self.get_one(tokens : Array(Int32)) : Batch
       if tokens.empty?
-        error_msg = Llama.format_error(
-          "Cannot create batch from empty token array",
-          -3, # Batch processing error
-          nil
-        )
-        raise BatchError.new(error_msg)
+        # For empty token arrays, create a special batch with n_tokens=0
+        # We can't use the normal constructor because it requires n_tokens > 0
+        handle = LibLlama::LlamaBatch.new
+        handle.n_tokens = 0
+        return Batch.new(handle)
       end
 
       tokens_ptr = tokens.to_unsafe
@@ -99,14 +99,14 @@ module Llama
     # Parameters:
     # - tokens: Array of token IDs to add
     # - pos_offset: Position offset for the tokens (default: 0)
-    # - seq_id: Sequence ID for all tokens (default: 0)
+    # - seq_ids: Sequence IDs for all tokens (default: [0])
     # - compute_logits: Whether to compute logits for all tokens (default: true)
     #
     # Raises:
     # - ArgumentError if tokens array is empty
     # - IndexError if the batch doesn't have enough space
     # - Llama::BatchError if memory allocation fails
-    def add_tokens(tokens : Array(Int32), pos_offset : Int32 = 0, seq_id : Int32 = 0, compute_logits : Bool = true)
+    def add_tokens(tokens : Array(Int32), pos_offset : Int32 = 0, seq_ids : Array(Int32)? = nil, compute_logits : Bool = true)
       if tokens.empty?
         raise ArgumentError.new("Tokens array cannot be empty")
       end
@@ -116,7 +116,7 @@ module Llama
       end
 
       tokens.each_with_index do |token, i|
-        set_token(i, token, pos_offset + i, seq_id, compute_logits)
+        set_token(i, token, pos_offset + i, seq_ids, compute_logits)
       end
     end
 
@@ -126,13 +126,13 @@ module Llama
     # - i: Index in the batch
     # - token: Token ID to set
     # - pos: Position of the token in the sequence (nil for auto-position)
-    # - seq_id: Sequence ID (nil for default sequence 0)
+    # - seq_ids: Sequence IDs (nil for default sequence 0)
     # - logits: Whether to compute logits for this token (nil for default)
     #
     # Raises:
     # - IndexError if the index is out of bounds
     # - Llama::BatchError if memory allocation fails
-    def set_token(i : Int32, token : Int32, pos : Int32? = nil, seq_id : Int32? = nil, logits : Bool? = nil)
+    def set_token(i : Int32, token : Int32, pos : Int32? = nil, seq_ids : Array(Int32)? = nil, logits : Bool? = nil)
       if i < 0 || i >= @handle.n_tokens
         raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{@handle.n_tokens - 1})")
       end
@@ -143,9 +143,19 @@ module Llama
       # Set the position
       @handle.pos[i] = pos || i
 
-      # Set the sequence ID
-      @handle.n_seq_id[i] = 1
-      @handle.seq_id[i][0] = seq_id || 0
+      # Set the sequence IDs
+      if seq_ids.nil? || seq_ids.empty?
+        @handle.n_seq_id[i] = 1
+        @handle.seq_id[i][0] = 0
+      else
+        # Limit the number of sequence IDs to n_seq_max
+        num_seq_ids = Math.min(seq_ids.size, @n_seq_max)
+        @handle.n_seq_id[i] = num_seq_ids
+
+        num_seq_ids.times do |j|
+          @handle.seq_id[i][j] = seq_ids[j]
+        end
+      end
 
       # Set the logits flag if provided
       if logits
@@ -159,14 +169,14 @@ module Llama
     # - i: Index in the batch
     # - embedding: Array of embedding values
     # - pos: Position of the embedding in the sequence (nil for auto-position)
-    # - seq_id: Sequence ID (nil for default sequence 0)
+    # - seq_ids: Sequence IDs (nil for default sequence 0)
     # - logits: Whether to compute logits for this embedding (nil for default)
     #
     # Raises:
     # - IndexError if the index is out of bounds
     # - ArgumentError if the batch is not embedding-based
     # - Llama::BatchError if memory allocation fails
-    def set_embedding(i : Int32, embedding : Array(Float32), pos : Int32? = nil, seq_id : Int32? = nil, logits : Bool? = nil)
+    def set_embedding(i : Int32, embedding : Array(Float32), pos : Int32? = nil, seq_ids : Array(Int32)? = nil, logits : Bool? = nil)
       if i < 0 || i >= @handle.n_tokens
         raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{@handle.n_tokens - 1})")
       end
@@ -184,9 +194,19 @@ module Llama
       # Set the position
       @handle.pos[i] = pos || i
 
-      # Set the sequence ID
-      @handle.n_seq_id[i] = 1
-      @handle.seq_id[i][0] = seq_id || 0
+      # Set the sequence IDs
+      if seq_ids.nil? || seq_ids.empty?
+        @handle.n_seq_id[i] = 1
+        @handle.seq_id[i][0] = 0
+      else
+        # Limit the number of sequence IDs to n_seq_max
+        num_seq_ids = Math.min(seq_ids.size, @n_seq_max)
+        @handle.n_seq_id[i] = num_seq_ids
+
+        num_seq_ids.times do |j|
+          @handle.seq_id[i][j] = seq_ids[j]
+        end
+      end
 
       # Set the logits flag if provided
       if logits
@@ -198,8 +218,8 @@ module Llama
 
     # Crystal implementation of llama_batch_get_one that properly allocates memory
     # This is used instead of the C function which doesn't allocate memory for pos, seq_id, etc.
-    private def self.crystal_llama_batch_get_one(tokens : Pointer(Int32), n : Int32) : Tuple(LibLlama::LlamaBatch, Bool)
-      batch = LibLlama.llama_batch_init(n, 0, 1)
+    private def self.crystal_llama_batch_get_one(tokens : Pointer(Int32), n : Int32, n_seq_max : Int32 = 8) : Tuple(LibLlama::LlamaBatch, Bool)
+      batch = LibLlama.llama_batch_init(n, 0, n_seq_max)
 
       # Allocate new memory for tokens and copy the data
       new_tokens = Pointer(Int32).malloc(n)
@@ -217,7 +237,8 @@ module Llama
     # Parameters:
     # - tokens: Array of token IDs
     # - compute_logits_for_last: Whether to compute logits only for the last token
-    # - seq_id: Sequence ID to use for all tokens
+    # - seq_ids: Sequence IDs to use for all tokens (default: nil)
+    # - n_seq_max: Maximum number of sequence IDs per token (default: 8)
     #
     # Returns:
     # - A new Batch instance configured with the provided tokens
@@ -225,14 +246,14 @@ module Llama
     # Raises:
     # - ArgumentError if tokens array is empty
     # - Llama::BatchError if batch creation fails
-    def self.for_tokens(tokens : Array(Int32), compute_logits_for_last : Bool = true, seq_id : Int32 = 0) : Batch
+    def self.for_tokens(tokens : Array(Int32), compute_logits_for_last : Bool = true, seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Batch
       if tokens.empty?
         raise ArgumentError.new("Tokens array cannot be empty")
       end
 
       begin
         # Use custom function to create a batch with memory allocated
-        handle, has_crystal_token = self.crystal_llama_batch_get_one(tokens.to_unsafe, tokens.size)
+        handle, has_crystal_token = self.crystal_llama_batch_get_one(tokens.to_unsafe, tokens.size, n_seq_max)
         # Explicitly set owned=true since we created this batch and need to free it
         batch = Batch.new(handle, owned: true)
         # Set the flag indicating that this batch has Crystal-allocated token memory
@@ -243,9 +264,19 @@ module Llama
           # Set the position
           batch.to_unsafe.pos[i] = i
 
-          # Set the sequence ID
-          batch.to_unsafe.n_seq_id[i] = 1
-          batch.to_unsafe.seq_id[i][0] = seq_id
+          # Set the sequence IDs
+          if seq_ids.nil? || seq_ids.empty?
+            batch.to_unsafe.n_seq_id[i] = 1
+            batch.to_unsafe.seq_id[i][0] = 0
+          else
+            # Limit the number of sequence IDs to n_seq_max
+            num_seq_ids = Math.min(seq_ids.size, n_seq_max)
+            batch.to_unsafe.n_seq_id[i] = num_seq_ids
+
+            num_seq_ids.times do |j|
+              batch.to_unsafe.seq_id[i][j] = seq_ids[j]
+            end
+          end
 
           # Set the logits flag
           needs_logits = compute_logits_for_last ? (i == tokens.size - 1) : true
@@ -269,7 +300,8 @@ module Llama
     #
     # Parameters:
     # - embeddings: Array of embedding vectors
-    # - seq_id: Sequence ID to use for all embeddings
+    # - seq_ids: Sequence IDs to use for all embeddings (default: nil)
+    # - n_seq_max: Maximum number of sequence IDs per token (default: 8)
     #
     # Returns:
     # - A new Batch instance configured with the provided embeddings
@@ -277,7 +309,7 @@ module Llama
     # Raises:
     # - ArgumentError if embeddings array is empty or contains empty embeddings
     # - Llama::BatchError if batch creation fails
-    def self.for_embeddings(embeddings : Array(Array(Float32)), seq_id : Int32 = 0) : Batch
+    def self.for_embeddings(embeddings : Array(Array(Float32)), seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Batch
       if embeddings.empty?
         raise ArgumentError.new("Embeddings array cannot be empty")
       end
@@ -288,7 +320,7 @@ module Llama
 
       begin
         embd_size = embeddings.first.size
-        batch = Batch.new(embeddings.size, embd_size)
+        batch = Batch.new(embeddings.size, embd_size, n_seq_max)
 
         embeddings.each_with_index do |embedding, i|
           if embedding.size != embd_size
@@ -300,7 +332,7 @@ module Llama
             raise BatchError.new(error_msg)
           end
 
-          batch.set_embedding(i, embedding, i, seq_id)
+          batch.set_embedding(i, embedding, i, seq_ids)
         end
 
         batch

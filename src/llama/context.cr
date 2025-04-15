@@ -149,19 +149,20 @@ module Llama
     # Parameters:
     # - tokens: Array of token IDs to process
     # - compute_logits_for_last: Whether to compute logits only for the last token
-    # - seq_id: Sequence ID to use for all tokens
+    # - seq_ids: Sequence IDs to use for all tokens
+    # - n_seq_max: Maximum number of sequence IDs per token (default: 8)
     #
     # Returns:
     # - The result of the decode operation (0 on success)
     #
     # Raises:
     # - Llama::BatchError on error
-    def process_tokens(tokens : Array(Int32), compute_logits_for_last : Bool = true, seq_id : Int32 = 0) : Int32
+    def process_tokens(tokens : Array(Int32), compute_logits_for_last : Bool = true, seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Int32
       if tokens.empty?
         raise ArgumentError.new("tokens array cannot be empty")
       end
 
-      batch = Batch.for_tokens(tokens, compute_logits_for_last, seq_id)
+      batch = Batch.for_tokens(tokens, compute_logits_for_last, seq_ids, n_seq_max)
       decode(batch)
     end
 
@@ -197,7 +198,7 @@ module Llama
             raise TokenizationError.new(error_msg)
           end
 
-          batch = Batch.for_tokens(tokens, true)
+          batch = Batch.for_tokens(tokens, true, nil, 8)
           result = decode(batch)
           results << result
         rescue ex : TokenizationError
@@ -219,19 +220,20 @@ module Llama
     #
     # Parameters:
     # - embeddings: Array of embedding vectors
-    # - seq_id: Sequence ID to use for all embeddings
+    # - seq_ids: Sequence IDs to use for all embeddings
+    # - n_seq_max: Maximum number of sequence IDs per token (default: 8)
     #
     # Returns:
     # - The result of the decode operation (0 on success)
     #
     # Raises:
     # - Llama::BatchError on error
-    def process_embeddings(embeddings : Array(Array(Float32)), seq_id : Int32 = 0) : Int32
+    def process_embeddings(embeddings : Array(Array(Float32)), seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Int32
       if embeddings.empty?
         raise ArgumentError.new("embeddings array cannot be empty")
       end
 
-      batch = Batch.for_embeddings(embeddings, seq_id)
+      batch = Batch.for_embeddings(embeddings, seq_ids, n_seq_max)
       decode(batch)
     end
 
@@ -248,13 +250,13 @@ module Llama
       if pos == input_tokens.size
         # For the first iteration, process all input tokens
         # Create a batch with compute_logits_for_last=true to only compute logits for the last token
-        Batch.for_tokens(input_tokens, true)
+        Batch.for_tokens(input_tokens, true, nil)
       else
         # For subsequent tokens, just process the last generated token
         # Create a single-token batch with the last generated token
         last_token = all_tokens.last
         # Use Batch.for_tokens to ensure n_tokens is properly set
-        batch = Batch.for_tokens([last_token], true, 0)
+        batch = Batch.for_tokens([last_token], true, [0] of Int32)
         # Update the position
         batch.to_unsafe.pos[0] = pos - 1
         batch

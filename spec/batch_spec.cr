@@ -41,9 +41,9 @@ describe Llama::Batch do
       # This test just ensures that set_token doesn't raise an error
       batch.set_token(0, 42)
       batch.set_token(1, 43, 1)
-      batch.set_token(2, 44, 2, 1)
-      batch.set_token(3, 45, 3, 1, true)
-      batch.set_token(4, 46, 4, 1, false)
+      batch.set_token(2, 44, 2, [1] of Int32)
+      batch.set_token(3, 45, 3, [1, 2] of Int32, true)
+      batch.set_token(4, 46, 4, [1, 2, 3] of Int32, false)
     end
 
     it "raises an error with invalid index" do
