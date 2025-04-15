@@ -76,6 +76,70 @@ module Llama
     String.new(LibLlama.llama_print_system_info)
   end
 
+  # Process escape sequences in a string
+  #
+  # This method processes common escape sequences like \n, \t, etc.
+  # in a string, converting them to their actual character representations.
+  #
+  # ```
+  # text = Llama.process_escapes("Hello\\nWorld")
+  # puts text # Prints "Hello" and "World" on separate lines
+  # ```
+  #
+  # Parameters:
+  # - text: The input string containing escape sequences
+  #
+  # Returns:
+  # - A new string with escape sequences processed
+  def self.process_escapes(text : String) : String
+    text.gsub(/\\([nrt\\"])/) do |match|
+      case match[1]
+      when 'n'  then "\n"
+      when 'r'  then "\r"
+      when 't'  then "\t"
+      when '\\' then "\\"
+      when '"'  then "\""
+      else           match
+      end
+    end
+  end
+
+  # Tokenize text and return formatted output
+  #
+  # This is a convenience method that tokenizes text and returns
+  # a formatted string representation of the tokens.
+  #
+  # ```
+  # model = Llama::Model.new("/path/to/model.gguf")
+  # result = Llama.tokenize_and_format(model.vocab, "Hello, world!", ids_only: true)
+  # puts result # Prints "[1, 2, 3, ...]"
+  # ```
+  #
+  # Parameters:
+  # - vocab: The vocabulary to use for tokenization
+  # - text: The text to tokenize
+  # - add_bos: Whether to add BOS token (default: true)
+  # - parse_special: Whether to parse special tokens (default: true)
+  # - ids_only: Whether to return only token IDs (default: false)
+  #
+  # Returns:
+  # - A formatted string representation of the tokens
+  def self.tokenize_and_format(
+    vocab : Vocab,
+    text : String,
+    add_bos : Bool = true,
+    parse_special : Bool = true,
+    ids_only : Bool = false,
+  ) : String
+    tokens = vocab.tokenize(text, add_bos, parse_special)
+
+    if ids_only
+      "[" + tokens.map(&.to_s).join(", ") + "]"
+    else
+      tokens.map { |t| vocab.format_token(t) }.join("\n")
+    end
+  end
+
   # Generates text from a prompt using a model
   #
   # This is a convenience method that loads a model, creates a context,
