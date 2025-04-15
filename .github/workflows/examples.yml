@@ -90,7 +90,7 @@ jobs:
           crystal build examples/model_metadata.cr -o model_metadata_example
 
       - name: Run simple example
-        run: ./simple_example models/tiny_model.gguf
+        run: ./simple_example --model models/tiny_model.gguf
 
       - name: Run chat example
         run: NON_INTERACTIVE=true ./chat_example models/tiny_model.gguf
@@ -102,7 +102,7 @@ jobs:
         run: ./text_generation_example models/tiny_model.gguf "Once upon a time" 50 0.7
 
       - name: Run tokenization example
-        run: ./tokenize_example models/tiny_model.gguf "Hello, world!"
+        run: ./tokenize_example --model models/tiny_model.gguf --prompt "Hello, world!"
 
       - name: Run advanced example
         run: ./advanced_example models/tiny_model.gguf
