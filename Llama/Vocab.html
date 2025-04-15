@@ -289,7 +289,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L3" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L3" target="_blank">
         llama/vocab.cr
       </a>
     
@@ -337,6 +337,20 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
+        <a href="#add_bos%3F%3ABool-instance-method" class="signature"><strong>#add_bos?</strong> : Bool</a>
+        
+          <div class="summary"><p>Returns whether the model adds BOS token by default</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#add_eos%3F%3ABool-instance-method" class="signature"><strong>#add_eos?</strong> : Bool</a>
+        
+          <div class="summary"><p>Returns whether the model adds EOS token by default</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#bos%3AInt32-instance-method" class="signature"><strong>#bos</strong> : Int32</a>
         
           <div class="summary"><p>Returns the beginning-of-sentence token ID</p></div>
@@ -354,6 +368,20 @@
         <a href="#eot%3AInt32-instance-method" class="signature"><strong>#eot</strong> : Int32</a>
         
           <div class="summary"><p>Returns the end-of-turn token ID</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#format_token%28token%3AInt32%2Cshow_id%3ABool%3Dtrue%2Cshow_text%3ABool%3Dtrue%29%3AString-instance-method" class="signature"><strong>#format_token</strong>(token : Int32, show_id : Bool = <span class="n">true</span>, show_text : Bool = <span class="n">true</span>) : String</a>
+        
+          <div class="summary"><p>Format a token for display</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#is_control%28token%3AInt32%29%3ABool-instance-method" class="signature"><strong>#is_control</strong>(token : Int32) : Bool</a>
+        
+          <div class="summary"><p>Checks if a token is a control token</p></div>
         
       </li>
     
@@ -475,7 +503,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -496,6 +524,48 @@ Users should obtain Vocab instances through Model#vocab.</p>
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="add_bos?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>add_bos?</strong> : Bool
+
+        <a class="method-permalink" href="#add_bos%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns whether the model adds BOS token by default</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L109" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="add_eos?:Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>add_eos?</strong> : Bool
+
+        <a class="method-permalink" href="#add_eos%3F%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns whether the model adds EOS token by default</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L114" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="bos:Int32-instance-method">
       <div class="signature">
         
@@ -512,7 +582,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L121" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -533,7 +603,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L126" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -554,7 +624,59 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L99" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L131" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="format_token(token:Int32,show_id:Bool=true,show_text:Bool=true):String-instance-method">
+      <div class="signature">
+        
+        def <strong>format_token</strong>(token : Int32, show_id : Bool = <span class="n">true</span>, show_text : Bool = <span class="n">true</span>) : String
+
+        <a class="method-permalink" href="#format_token%28token%3AInt32%2Cshow_id%3ABool%3Dtrue%2Cshow_text%3ABool%3Dtrue%29%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Format a token for display</p>
+<p>Parameters:</p>
+<ul>
+<li>token: The token to format</li>
+<li>show_id: Whether to show the token ID</li>
+<li>show_text: Whether to show the token text</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>A formatted string representation of the token</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L54" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="is_control(token:Int32):Bool-instance-method">
+      <div class="signature">
+        
+        def <strong>is_control</strong>(token : Int32) : Bool
+
+        <a class="method-permalink" href="#is_control%28token%3AInt32%29%3ABool-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Checks if a token is a control token</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L151" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -575,7 +697,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L114" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L146" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -596,7 +718,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -617,7 +739,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L104" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L136" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -638,7 +760,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L141" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -659,7 +781,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L119" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L156" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -691,7 +813,7 @@ This is similar to token_to_text but provides more control over the output forma
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L32" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -712,7 +834,7 @@ This is similar to token_to_text but provides more control over the output forma
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -733,7 +855,7 @@ This is similar to token_to_text but provides more control over the output forma
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L68" target="_blank">View source</a>]
         
       </div>
     </div>

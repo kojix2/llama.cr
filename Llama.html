@@ -276,77 +276,77 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama.cr#L59" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama.cr#L59" target="_blank">
         llama.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/batch.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/batch.cr#L1" target="_blank">
         llama/batch.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/chat.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/chat.cr#L1" target="_blank">
         llama/chat.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/context.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/context.cr#L1" target="_blank">
         llama/context.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/error.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/error.cr#L1" target="_blank">
         llama/error.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/kv_cache.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/kv_cache.cr#L1" target="_blank">
         llama/kv_cache.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/lib_llama.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/lib_llama.cr#L1" target="_blank">
         llama/lib_llama.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/model.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/model.cr#L1" target="_blank">
         llama/model.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/sampler.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/sampler.cr#L1" target="_blank">
         llama/sampler.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/state.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/state.cr#L1" target="_blank">
         llama/state.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/vocab.cr#L1" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/vocab.cr#L1" target="_blank">
         llama/vocab.cr
       </a>
     
@@ -439,9 +439,23 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#process_escapes%28text%3AString%29%3AString-class-method" class="signature"><strong>.process_escapes</strong>(text : String) : String</a>
+        
+          <div class="summary"><p>Process escape sequences in a string</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#system_info%3AString-class-method" class="signature"><strong>.system_info</strong> : String</a>
         
           <div class="summary"><p>Returns the llama.cpp system information</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#tokenize_and_format%28vocab%3AVocab%2Ctext%3AString%2Cadd_bos%3ABool%3Dtrue%2Cparse_special%3ABool%3Dtrue%2Cids_only%3ABool%3Dfalse%29%3AString-class-method" class="signature"><strong>.tokenize_and_format</strong>(vocab : Vocab, text : String, add_bos : Bool = <span class="n">true</span>, parse_special : Bool = <span class="n">true</span>, ids_only : Bool = <span class="n">false</span>) : String</a>
+        
+          <div class="summary"><p>Tokenize text and return formatted output</p></div>
         
       </li>
     
@@ -499,7 +513,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/chat.cr#L39" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/chat.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -524,7 +538,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/chat.cr#L85" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/chat.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -545,7 +559,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/error.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/error.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -566,7 +580,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama/error.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama/error.cr#L51" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -613,7 +627,40 @@ puts response</code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama.cr#L107" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama.cr#L171" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="process_escapes(text:String):String-class-method">
+      <div class="signature">
+        
+        def self.<strong>process_escapes</strong>(text : String) : String
+
+        <a class="method-permalink" href="#process_escapes%28text%3AString%29%3AString-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Process escape sequences in a string</p>
+<p>This method processes common escape sequences like \n, \t, etc.
+in a string, converting them to their actual character representations.</p>
+<pre><code class="language-crystal">text <span class="o">=</span> <span class="t">Llama</span>.process_escapes(<span class="s">&quot;Hello\\nWorld&quot;</span>)
+puts text <span class="c"># Prints &quot;Hello&quot; and &quot;World&quot; on separate lines</span></code></pre>
+<p>Parameters:</p>
+<ul>
+<li>text: The input string containing escape sequences</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>A new string with escape sequences processed</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -642,7 +689,45 @@ puts info</code></pre>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d5798c14e5411e2dcae300abebb24ccefa56bcf8/src/llama.cr#L75" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama.cr#L75" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="tokenize_and_format(vocab:Vocab,text:String,add_bos:Bool=true,parse_special:Bool=true,ids_only:Bool=false):String-class-method">
+      <div class="signature">
+        
+        def self.<strong>tokenize_and_format</strong>(vocab : <a href="Llama/Vocab.html">Vocab</a>, text : String, add_bos : Bool = <span class="n">true</span>, parse_special : Bool = <span class="n">true</span>, ids_only : Bool = <span class="n">false</span>) : String
+
+        <a class="method-permalink" href="#tokenize_and_format%28vocab%3AVocab%2Ctext%3AString%2Cadd_bos%3ABool%3Dtrue%2Cparse_special%3ABool%3Dtrue%2Cids_only%3ABool%3Dfalse%29%3AString-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Tokenize text and return formatted output</p>
+<p>This is a convenience method that tokenizes text and returns
+a formatted string representation of the tokens.</p>
+<pre><code class="language-crystal">model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+result <span class="o">=</span> <span class="t">Llama</span>.tokenize_and_format(model.vocab, <span class="s">&quot;Hello, world!&quot;</span>, ids_only: <span class="n">true</span>)
+puts result <span class="c"># Prints &quot;[1, 2, 3, ...]&quot;</span></code></pre>
+<p>Parameters:</p>
+<ul>
+<li>vocab: The vocabulary to use for tokenization</li>
+<li>text: The text to tokenize</li>
+<li>add_bos: Whether to add BOS token (default: true)</li>
+<li>parse_special: Whether to parse special tokens (default: true)</li>
+<li>ids_only: Whether to return only token IDs (default: false)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>A formatted string representation of the tokens</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/9b305bf98e53ebb8cfbb05824a62acddb8640bcd/src/llama.cr#L127" target="_blank">View source</a>]
         
       </div>
     </div>
