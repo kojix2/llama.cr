@@ -290,7 +290,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L4" target="_blank">
         llama/batch.cr
       </a>
     
@@ -313,14 +313,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#for_embeddings%28embeddings%3AArray%28Array%28Float32%29%29%2Cseq_id%3AInt32%3D0%29%3ABatch-class-method" class="signature"><strong>.for_embeddings</strong>(embeddings : Array(Array(Float32)), seq_id : Int32 = <span class="n">0</span>) : Batch</a>
+        <a href="#for_embeddings%28embeddings%3AArray%28Array%28Float32%29%29%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Cn_seq_max%3AInt32%3D8%29%3ABatch-class-method" class="signature"><strong>.for_embeddings</strong>(embeddings : Array(Array(Float32)), seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, n_seq_max : Int32 = <span class="n">8</span>) : Batch</a>
         
           <div class="summary"><p>Creates a batch for embeddings with optional parameters</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#for_tokens%28tokens%3AArray%28Int32%29%2Ccompute_logits_for_last%3ABool%3Dtrue%2Cseq_id%3AInt32%3D0%29%3ABatch-class-method" class="signature"><strong>.for_tokens</strong>(tokens : Array(Int32), compute_logits_for_last : Bool = <span class="n">true</span>, seq_id : Int32 = <span class="n">0</span>) : Batch</a>
+        <a href="#for_tokens%28tokens%3AArray%28Int32%29%2Ccompute_logits_for_last%3ABool%3Dtrue%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Cn_seq_max%3AInt32%3D8%29%3ABatch-class-method" class="signature"><strong>.for_tokens</strong>(tokens : Array(Int32), compute_logits_for_last : Bool = <span class="n">true</span>, seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, n_seq_max : Int32 = <span class="n">8</span>) : Batch</a>
         
           <div class="summary"><p>Creates a batch for a sequence of tokens with optional parameters</p></div>
         
@@ -334,14 +334,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#new%28n_tokens%3AInt32%2Cembd%3AInt32%3D0%2Cn_seq_max%3AInt32%3D1%29-class-method" class="signature"><strong>.new</strong>(n_tokens : Int32, embd : Int32 = <span class="n">0</span>, n_seq_max : Int32 = <span class="n">1</span>)</a>
+        <a href="#new%28n_tokens%3AInt32%2Cembd%3AInt32%3D0%2Cn_seq_max%3AInt32%3D8%29-class-method" class="signature"><strong>.new</strong>(n_tokens : Int32, embd : Int32 = <span class="n">0</span>, n_seq_max : Int32 = <span class="n">8</span>)</a>
         
           <div class="summary"><p>Creates a new Batch instance with the specified parameters</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#new%28handle%3ALibLlama%3A%3ALlamaBatch%2Cowned%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(handle : LibLlama::LlamaBatch, owned : Bool = <span class="n">false</span>)</a>
+        <a href="#new%28handle%3ALibLlama%3A%3ALlamaBatch%2Cowned%3ABool%3Dfalse%2Cn_seq_max%3AInt32%3D8%29-class-method" class="signature"><strong>.new</strong>(handle : LibLlama::LlamaBatch, owned : Bool = <span class="n">false</span>, n_seq_max : Int32 = <span class="n">8</span>)</a>
         
           <div class="summary"><p>Creates a new Batch instance from a raw llama_batch structure</p></div>
         
@@ -366,7 +366,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#add_tokens%28tokens%3AArray%28Int32%29%2Cpos_offset%3AInt32%3D0%2Cseq_id%3AInt32%3D0%2Ccompute_logits%3ABool%3Dtrue%29-instance-method" class="signature"><strong>#add_tokens</strong>(tokens : Array(Int32), pos_offset : Int32 = <span class="n">0</span>, seq_id : Int32 = <span class="n">0</span>, compute_logits : Bool = <span class="n">true</span>)</a>
+        <a href="#add_tokens%28tokens%3AArray%28Int32%29%2Cpos_offset%3AInt32%3D0%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Ccompute_logits%3ABool%3Dtrue%29-instance-method" class="signature"><strong>#add_tokens</strong>(tokens : Array(Int32), pos_offset : Int32 = <span class="n">0</span>, seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, compute_logits : Bool = <span class="n">true</span>)</a>
         
           <div class="summary"><p>Adds multiple tokens to the batch</p></div>
         
@@ -401,14 +401,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#set_embedding%28i%3AInt32%2Cembedding%3AArray%28Float32%29%2Cpos%3AInt32%7CNil%3Dnil%2Cseq_id%3AInt32%7CNil%3Dnil%2Clogits%3ABool%7CNil%3Dnil%29-instance-method" class="signature"><strong>#set_embedding</strong>(i : Int32, embedding : Array(Float32), pos : Int32 | Nil = <span class="n">nil</span>, seq_id : Int32 | Nil = <span class="n">nil</span>, logits : Bool | Nil = <span class="n">nil</span>)</a>
+        <a href="#set_embedding%28i%3AInt32%2Cembedding%3AArray%28Float32%29%2Cpos%3AInt32%7CNil%3Dnil%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Clogits%3ABool%7CNil%3Dnil%29-instance-method" class="signature"><strong>#set_embedding</strong>(i : Int32, embedding : Array(Float32), pos : Int32 | Nil = <span class="n">nil</span>, seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, logits : Bool | Nil = <span class="n">nil</span>)</a>
         
           <div class="summary"><p>Sets an embedding at the specified index</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#set_token%28i%3AInt32%2Ctoken%3AInt32%2Cpos%3AInt32%7CNil%3Dnil%2Cseq_id%3AInt32%7CNil%3Dnil%2Clogits%3ABool%7CNil%3Dnil%29-instance-method" class="signature"><strong>#set_token</strong>(i : Int32, token : Int32, pos : Int32 | Nil = <span class="n">nil</span>, seq_id : Int32 | Nil = <span class="n">nil</span>, logits : Bool | Nil = <span class="n">nil</span>)</a>
+        <a href="#set_token%28i%3AInt32%2Ctoken%3AInt32%2Cpos%3AInt32%7CNil%3Dnil%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Clogits%3ABool%7CNil%3Dnil%29-instance-method" class="signature"><strong>#set_token</strong>(i : Int32, token : Int32, pos : Int32 | Nil = <span class="n">nil</span>, seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, logits : Bool | Nil = <span class="n">nil</span>)</a>
         
           <div class="summary"><p>Sets a token at the specified index</p></div>
         
@@ -465,12 +465,12 @@ Provides methods for managing batches of tokens for efficient processing</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="for_embeddings(embeddings:Array(Array(Float32)),seq_id:Int32=0):Batch-class-method">
+    <div class="entry-detail" id="for_embeddings(embeddings:Array(Array(Float32)),seq_ids:Array(Int32)|Nil=nil,n_seq_max:Int32=8):Batch-class-method">
       <div class="signature">
         
-        def self.<strong>for_embeddings</strong>(embeddings : Array(Array(Float32)), seq_id : Int32 = <span class="n">0</span>) : <a href="../Llama/Batch.html">Batch</a>
+        def self.<strong>for_embeddings</strong>(embeddings : Array(Array(Float32)), seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, n_seq_max : Int32 = <span class="n">8</span>) : <a href="../Llama/Batch.html">Batch</a>
 
-        <a class="method-permalink" href="#for_embeddings%28embeddings%3AArray%28Array%28Float32%29%29%2Cseq_id%3AInt32%3D0%29%3ABatch-class-method">#</a>
+        <a class="method-permalink" href="#for_embeddings%28embeddings%3AArray%28Array%28Float32%29%29%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Cn_seq_max%3AInt32%3D8%29%3ABatch-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -479,7 +479,8 @@ Provides methods for managing batches of tokens for efficient processing</p>
 <p>Parameters:</p>
 <ul>
 <li>embeddings: Array of embedding vectors</li>
-<li>seq_id: Sequence ID to use for all embeddings</li>
+<li>seq_ids: Sequence IDs to use for all embeddings (default: nil)</li>
+<li>n_seq_max: Maximum number of sequence IDs per token (default: 8)</li>
 </ul>
 <p>Returns:</p>
 <ul>
@@ -495,17 +496,17 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L280" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L312" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="for_tokens(tokens:Array(Int32),compute_logits_for_last:Bool=true,seq_id:Int32=0):Batch-class-method">
+    <div class="entry-detail" id="for_tokens(tokens:Array(Int32),compute_logits_for_last:Bool=true,seq_ids:Array(Int32)|Nil=nil,n_seq_max:Int32=8):Batch-class-method">
       <div class="signature">
         
-        def self.<strong>for_tokens</strong>(tokens : Array(Int32), compute_logits_for_last : Bool = <span class="n">true</span>, seq_id : Int32 = <span class="n">0</span>) : <a href="../Llama/Batch.html">Batch</a>
+        def self.<strong>for_tokens</strong>(tokens : Array(Int32), compute_logits_for_last : Bool = <span class="n">true</span>, seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, n_seq_max : Int32 = <span class="n">8</span>) : <a href="../Llama/Batch.html">Batch</a>
 
-        <a class="method-permalink" href="#for_tokens%28tokens%3AArray%28Int32%29%2Ccompute_logits_for_last%3ABool%3Dtrue%2Cseq_id%3AInt32%3D0%29%3ABatch-class-method">#</a>
+        <a class="method-permalink" href="#for_tokens%28tokens%3AArray%28Int32%29%2Ccompute_logits_for_last%3ABool%3Dtrue%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Cn_seq_max%3AInt32%3D8%29%3ABatch-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -515,7 +516,8 @@ Provides methods for managing batches of tokens for efficient processing</p>
 <ul>
 <li>tokens: Array of token IDs</li>
 <li>compute_logits_for_last: Whether to compute logits only for the last token</li>
-<li>seq_id: Sequence ID to use for all tokens</li>
+<li>seq_ids: Sequence IDs to use for all tokens (default: nil)</li>
+<li>n_seq_max: Maximum number of sequence IDs per token (default: 8)</li>
 </ul>
 <p>Returns:</p>
 <ul>
@@ -531,7 +533,7 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L228" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L249" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -564,17 +566,17 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L67" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L68" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="new(n_tokens:Int32,embd:Int32=0,n_seq_max:Int32=1)-class-method">
+    <div class="entry-detail" id="new(n_tokens:Int32,embd:Int32=0,n_seq_max:Int32=8)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(n_tokens : Int32, embd : Int32 = <span class="n">0</span>, n_seq_max : Int32 = <span class="n">1</span>)
+        def self.<strong>new</strong>(n_tokens : Int32, embd : Int32 = <span class="n">0</span>, n_seq_max : Int32 = <span class="n">8</span>)
 
-        <a class="method-permalink" href="#new%28n_tokens%3AInt32%2Cembd%3AInt32%3D0%2Cn_seq_max%3AInt32%3D1%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28n_tokens%3AInt32%2Cembd%3AInt32%3D0%2Cn_seq_max%3AInt32%3D8%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -584,10 +586,8 @@ Provides methods for managing batches of tokens for efficient processing</p>
 <ul>
 <li>n_tokens: Maximum number of tokens this batch can hold</li>
 <li>embd: Embedding dimension (0 for token-based batch, &gt;0 for embedding-based batch)</li>
-<li>n_seq_max: Maximum number of sequences per token</li>
-</ul>
-<p>Raises:</p>
-<ul>
+<li>n_seq_max: Maximum number of sequence IDs per token (default: 8)
+Raises:</li>
 <li>ArgumentError if parameters are invalid</li>
 <li>Llama::BatchError if the batch cannot be created</li>
 </ul>
@@ -596,17 +596,17 @@ Provides methods for managing batches of tokens for efficient processing</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="new(handle:LibLlama::LlamaBatch,owned:Bool=false)-class-method">
+    <div class="entry-detail" id="new(handle:LibLlama::LlamaBatch,owned:Bool=false,n_seq_max:Int32=8)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(handle : LibLlama::LlamaBatch, owned : Bool = <span class="n">false</span>)
+        def self.<strong>new</strong>(handle : LibLlama::LlamaBatch, owned : Bool = <span class="n">false</span>, n_seq_max : Int32 = <span class="n">8</span>)
 
-        <a class="method-permalink" href="#new%28handle%3ALibLlama%3A%3ALlamaBatch%2Cowned%3ABool%3Dfalse%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28handle%3ALibLlama%3A%3ALlamaBatch%2Cowned%3ABool%3Dfalse%2Cn_seq_max%3AInt32%3D8%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -619,7 +619,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -640,12 +640,12 @@ The batch created this way is not owned by this wrapper and will not be freed.</
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="add_tokens(tokens:Array(Int32),pos_offset:Int32=0,seq_id:Int32=0,compute_logits:Bool=true)-instance-method">
+    <div class="entry-detail" id="add_tokens(tokens:Array(Int32),pos_offset:Int32=0,seq_ids:Array(Int32)|Nil=nil,compute_logits:Bool=true)-instance-method">
       <div class="signature">
         
-        def <strong>add_tokens</strong>(tokens : Array(Int32), pos_offset : Int32 = <span class="n">0</span>, seq_id : Int32 = <span class="n">0</span>, compute_logits : Bool = <span class="n">true</span>)
+        def <strong>add_tokens</strong>(tokens : Array(Int32), pos_offset : Int32 = <span class="n">0</span>, seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, compute_logits : Bool = <span class="n">true</span>)
 
-        <a class="method-permalink" href="#add_tokens%28tokens%3AArray%28Int32%29%2Cpos_offset%3AInt32%3D0%2Cseq_id%3AInt32%3D0%2Ccompute_logits%3ABool%3Dtrue%29-instance-method">#</a>
+        <a class="method-permalink" href="#add_tokens%28tokens%3AArray%28Int32%29%2Cpos_offset%3AInt32%3D0%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Ccompute_logits%3ABool%3Dtrue%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -655,7 +655,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
 <ul>
 <li>tokens: Array of token IDs to add</li>
 <li>pos_offset: Position offset for the tokens (default: 0)</li>
-<li>seq_id: Sequence ID for all tokens (default: 0)</li>
+<li>seq_ids: Sequence IDs for all tokens (default: [0])</li>
 <li>compute_logits: Whether to compute logits for all tokens (default: true)</li>
 </ul>
 <p>Raises:</p>
@@ -669,7 +669,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L109" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -691,7 +691,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L331" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L363" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -712,7 +712,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L343" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L375" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -733,7 +733,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L325" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L357" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -754,17 +754,17 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="set_embedding(i:Int32,embedding:Array(Float32),pos:Int32|Nil=nil,seq_id:Int32|Nil=nil,logits:Bool|Nil=nil)-instance-method">
+    <div class="entry-detail" id="set_embedding(i:Int32,embedding:Array(Float32),pos:Int32|Nil=nil,seq_ids:Array(Int32)|Nil=nil,logits:Bool|Nil=nil)-instance-method">
       <div class="signature">
         
-        def <strong>set_embedding</strong>(i : Int32, embedding : Array(Float32), pos : Int32 | Nil = <span class="n">nil</span>, seq_id : Int32 | Nil = <span class="n">nil</span>, logits : Bool | Nil = <span class="n">nil</span>)
+        def <strong>set_embedding</strong>(i : Int32, embedding : Array(Float32), pos : Int32 | Nil = <span class="n">nil</span>, seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, logits : Bool | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#set_embedding%28i%3AInt32%2Cembedding%3AArray%28Float32%29%2Cpos%3AInt32%7CNil%3Dnil%2Cseq_id%3AInt32%7CNil%3Dnil%2Clogits%3ABool%7CNil%3Dnil%29-instance-method">#</a>
+        <a class="method-permalink" href="#set_embedding%28i%3AInt32%2Cembedding%3AArray%28Float32%29%2Cpos%3AInt32%7CNil%3Dnil%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Clogits%3ABool%7CNil%3Dnil%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -775,7 +775,7 @@ This can be called manually to release resources before garbage collection</p>
 <li>i: Index in the batch</li>
 <li>embedding: Array of embedding values</li>
 <li>pos: Position of the embedding in the sequence (nil for auto-position)</li>
-<li>seq_id: Sequence ID (nil for default sequence 0)</li>
+<li>seq_ids: Sequence IDs (nil for default sequence 0)</li>
 <li>logits: Whether to compute logits for this embedding (nil for default)</li>
 </ul>
 <p>Raises:</p>
@@ -789,17 +789,17 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L169" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L179" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="set_token(i:Int32,token:Int32,pos:Int32|Nil=nil,seq_id:Int32|Nil=nil,logits:Bool|Nil=nil)-instance-method">
+    <div class="entry-detail" id="set_token(i:Int32,token:Int32,pos:Int32|Nil=nil,seq_ids:Array(Int32)|Nil=nil,logits:Bool|Nil=nil)-instance-method">
       <div class="signature">
         
-        def <strong>set_token</strong>(i : Int32, token : Int32, pos : Int32 | Nil = <span class="n">nil</span>, seq_id : Int32 | Nil = <span class="n">nil</span>, logits : Bool | Nil = <span class="n">nil</span>)
+        def <strong>set_token</strong>(i : Int32, token : Int32, pos : Int32 | Nil = <span class="n">nil</span>, seq_ids : Array(Int32) | Nil = <span class="n">nil</span>, logits : Bool | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#set_token%28i%3AInt32%2Ctoken%3AInt32%2Cpos%3AInt32%7CNil%3Dnil%2Cseq_id%3AInt32%7CNil%3Dnil%2Clogits%3ABool%7CNil%3Dnil%29-instance-method">#</a>
+        <a class="method-permalink" href="#set_token%28i%3AInt32%2Ctoken%3AInt32%2Cpos%3AInt32%7CNil%3Dnil%2Cseq_ids%3AArray%28Int32%29%7CNil%3Dnil%2Clogits%3ABool%7CNil%3Dnil%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -810,7 +810,7 @@ This can be called manually to release resources before garbage collection</p>
 <li>i: Index in the batch</li>
 <li>token: Token ID to set</li>
 <li>pos: Position of the token in the sequence (nil for auto-position)</li>
-<li>seq_id: Sequence ID (nil for default sequence 0)</li>
+<li>seq_ids: Sequence IDs (nil for default sequence 0)</li>
 <li>logits: Whether to compute logits for this token (nil for default)</li>
 </ul>
 <p>Raises:</p>
@@ -823,7 +823,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L135" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -844,7 +844,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/5ac2860e2f46bdd36a504b663a4cc79793e5ddfc/src/llama/batch.cr#L320" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/6533b00d40a50c29db841a2a6ef33acf74be1917/src/llama/batch.cr#L352" target="_blank">View source</a>]
         
       </div>
     </div>
