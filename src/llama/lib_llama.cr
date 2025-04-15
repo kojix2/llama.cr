@@ -59,6 +59,7 @@ module Llama
       keep_split : Bool
       imatrix : Void*
       kv_overrides : Void*
+      tensor_types : Void*
     end
 
     fun llama_model_quantize_default_params : LlamaModelQuantizeParams
