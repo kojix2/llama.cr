@@ -1,18 +1,4 @@
-#!/usr/bin/env crystal
-
-# Simple example using llama.cr
-#
-# This example demonstrates the basic usage of llama.cr with low-level batch processing
-# and a simple greedy sampler. It's a direct port of the C++ example from llama.cpp.
-#
-# Compilation:
-#   crystal build examples/simple.cr --link-flags="-L/path/to/llama.cpp/build/bin"
-#
-# Execution:
-#   LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./simple -m /path/to/model.gguf [-n n_predict] [-ngl n_gpu_layers] [prompt]
-
 require "../src/llama"
-
 require "option_parser"
 
 # Parse command line arguments
@@ -58,39 +44,19 @@ end
 Llama::LibLlama.llama_backend_init
 
 # Load the model
-begin
-  model = Llama::Model.new(model_path, n_gpu_layers: ngl)
-rescue ex
-  STDERR.puts "Error: unable to load model: #{ex.message}"
-  exit(1)
-end
+model = Llama::Model.new(model_path, n_gpu_layers: ngl)
 
 vocab = model.vocab
 
 # Tokenize the prompt
-begin
-  prompt_tokens = vocab.tokenize(prompt)
-rescue ex
-  STDERR.puts "Error: failed to tokenize the prompt: #{ex.message}"
-  exit(1)
-end
-
-if prompt_tokens.empty?
-  STDERR.puts "Error: prompt tokenization resulted in empty token array"
-  exit(1)
-end
+prompt_tokens = vocab.tokenize(prompt)
 
 # Initialize the context
-begin
-  context = Llama::Context.new(
-    model,
-    n_ctx: (prompt_tokens.size + n_predict - 1).to_u32,
-    n_batch: (prompt_tokens.size).to_u32
-  )
-rescue ex
-  STDERR.puts "Error: failed to create the context: #{ex.message}"
-  exit(1)
-end
+context = Llama::Context.new(
+  model,
+  n_ctx: (prompt_tokens.size + n_predict - 1).to_u32,
+  n_batch: (prompt_tokens.size).to_u32
+)
 
 # Initialize the sampler
 sampler = Llama::SamplerChain.new(no_perf: false)
@@ -100,13 +66,8 @@ sampler.add(Llama::GreedySampler.new)
 
 # Print the prompt token-by-token
 prompt_tokens.each do |token|
-  begin
-    piece = vocab.token_to_piece(token, 0, true)
-    print piece
-  rescue ex
-    STDERR.puts "Error: failed to convert token to piece: #{ex.message}"
-    exit(1)
-  end
+  piece = vocab.token_to_piece(token, 0, true)
+  print piece
 end
 
 # Prepare a batch for the prompt
@@ -120,42 +81,27 @@ new_token_id = 0
 n_pos = 0
 while n_pos + batch.n_tokens < prompt_tokens.size + n_predict
   # Evaluate the current batch with the transformer model
-  begin
-    result = context.decode(batch)
-    if result != 0
-      STDERR.puts "Error: failed to eval, return code #{result}"
-      exit(1)
-    end
-  rescue ex
-    STDERR.puts "Error: failed to decode batch: #{ex.message}"
-    exit(1)
-  end
+  result = context.decode(batch)
 
   n_pos += batch.n_tokens
 
-  # Sample the next token
-  begin
-    # Sample the next token using the sampler chain
-    new_token_id = sampler.sample(context)
+  # Sample the next token using the sampler chain
+  new_token_id = sampler.sample(context)
 
-    # Is it an end of generation?
-    if vocab.is_eog(new_token_id)
-      break
-    end
-
-    # Convert the token to text and print it
-    piece = vocab.token_to_piece(new_token_id, 0, true)
-    print piece
-    STDOUT.flush
-
-    # Prepare the next batch with the sampled token
-    batch = Llama::Batch.for_tokens([new_token_id])
-
-    n_decode += 1
-  rescue ex
-    STDERR.puts "Error: sampling failed: #{ex.message}"
-    exit(1)
+  # Is it an end of generation?
+  if vocab.is_eog(new_token_id)
+    break
   end
+
+  # Convert the token to text and print it
+  piece = vocab.token_to_piece(new_token_id, 0, true)
+  print piece
+  STDOUT.flush
+
+  # Prepare the next batch with the sampled token
+  batch = Llama::Batch.for_tokens([new_token_id])
+
+  n_decode += 1
 end
 
 puts
@@ -169,8 +115,3 @@ STDERR.puts
 sampler.print_perf
 context.print_perf
 STDERR.puts
-
-# Resources will be automatically freed by the GC, but we can explicitly clean up
-sampler.finalize
-context.finalize
-model.finalize

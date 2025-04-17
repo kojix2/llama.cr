@@ -1,29 +1,21 @@
-#!/usr/bin/env crystal
-
-# Sampling example using llama.cr
-#
-# Compilation:
-#   crystal build examples/sampling.cr --link-flags="-L/path/to/llama.cpp/build/bin"
-#
-# Execution:
-#   LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./sampling /path/to/model.gguf "Your prompt here"
-
 require "../src/llama"
 
 # Check command line arguments
 if ARGV.size < 2
-  puts "Sampling Example for llama.cr"
-  puts
-  puts "Compilation:"
-  puts "  crystal build examples/sampling.cr --link-flags=\"-L/path/to/llama.cpp/build/bin\""
-  puts
-  puts "Execution:"
-  puts "  LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./sampling /path/to/model.gguf \"Your prompt here\""
-  puts
-  puts "Parameters:"
-  puts "  1. Path to model file (required)"
-  puts "  2. Text prompt (required)"
-  puts "  3. Maximum number of tokens to generate (optional, default: 128)"
+  puts <<-USAGE
+    Sampling Example for llama.cr
+
+    Compilation:
+      crystal build examples/sampling.cr --link-flags="-L/path/to/llama.cpp/build/bin"
+
+    Execution:
+      LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./sampling /path/to/model.gguf "Your prompt here"
+
+    Parameters:
+      1. Path to model file (required)
+      2. Text prompt (required)
+      3. Maximum number of tokens to generate (optional, default: 128)
+  USAGE
   exit 1
 end
 

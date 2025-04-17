@@ -1,16 +1,3 @@
-#!/usr/bin/env crystal
-
-# Tokenization example using llama.cr
-#
-# This example demonstrates how to tokenize text using a model's vocabulary.
-# It's a direct port of the C++ tokenize.cpp example from llama.cpp.
-#
-# Compilation:
-#   crystal build examples/tokenize.cr --link-flags="-L/path/to/llama.cpp/build/bin"
-#
-# Execution:
-#   LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./tokenize [options]
-
 require "../src/llama"
 require "option_parser"
 
