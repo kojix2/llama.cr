@@ -301,7 +301,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L46" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/f620d69479fc62881ce297c5080fc772ee0b65c2/src/llama/sampler.cr#L46" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -324,7 +324,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28params%3Dnil%29-class-method" class="signature"><strong>.new</strong>(params = <span class="n">nil</span>)</a>
+        <a href="#new%28no_perf%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(no_perf : Bool = <span class="n">false</span>)</a>
         
           <div class="summary"><p>Creates a new SamplerChain with optional parameters</p></div>
         
@@ -470,12 +470,12 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(params=nil)-class-method">
+    <div class="entry-detail" id="new(no_perf:Bool=false)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(params = <span class="n">nil</span>)
+        def self.<strong>new</strong>(no_perf : Bool = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#new%28params%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28no_perf%3ABool%3Dfalse%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -483,7 +483,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
           <p>Creates a new SamplerChain with optional parameters</p>
 <p>Parameters:</p>
 <ul>
-<li>params: Optional sampler chain parameters</li>
+<li>no_perf: Whether to disable performance counters (default: false)</li>
 </ul>
 <p>Raises:</p>
 <ul>
@@ -494,7 +494,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f620d69479fc62881ce297c5080fc772ee0b65c2/src/llama/sampler.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -535,7 +535,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L86" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f620d69479fc62881ce297c5080fc772ee0b65c2/src/llama/sampler.cr#L87" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -560,7 +560,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L65" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f620d69479fc62881ce297c5080fc772ee0b65c2/src/llama/sampler.cr#L66" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -582,7 +582,7 @@ Overrides the parent class's finalize method to also clean up the samplers array
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L92" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f620d69479fc62881ce297c5080fc772ee0b65c2/src/llama/sampler.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -605,7 +605,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L102" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f620d69479fc62881ce297c5080fc772ee0b65c2/src/llama/sampler.cr#L103" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -627,7 +627,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f620d69479fc62881ce297c5080fc772ee0b65c2/src/llama/sampler.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -657,7 +657,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L78" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f620d69479fc62881ce297c5080fc772ee0b65c2/src/llama/sampler.cr#L79" target="_blank">View source</a>]
         
       </div>
     </div>
