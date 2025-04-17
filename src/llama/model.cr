@@ -116,25 +116,16 @@ module Llama
 
     # Creates a new Context for this model
     #
-    # Parameters:
-    # - params: Optional context parameters (nil for default)
+    # This method delegates to Context.new, passing self as the model parameter
+    # and forwarding all other arguments.
     #
     # Returns:
     # - A new Context instance
     #
     # Raises:
     # - Llama::ContextError if the context cannot be created
-    def context(params = nil) : Context
-      params ||= Llama::Context.default_params
-      Context.new(
-        self,
-        n_ctx: params.n_ctx,
-        n_batch: params.n_batch,
-        n_threads: params.n_threads,
-        n_threads_batch: params.n_threads_batch,
-        embeddings: params.embeddings,
-        offload_kqv: params.offload_kqv
-      )
+    def context(*args, **options) : Context
+      Context.new(self, *args, **options)
     end
 
     # Returns the raw pointer to the underlying llama_model structure

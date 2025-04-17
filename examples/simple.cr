@@ -84,8 +84,8 @@ end
 begin
   context = Llama::Context.new(
     model,
-    n_ctx: prompt_tokens.size + n_predict - 1,
-    n_batch: prompt_tokens.size
+    n_ctx: (prompt_tokens.size + n_predict - 1).to_u32,
+    n_batch: (prompt_tokens.size).to_u32
   )
 rescue ex
   STDERR.puts "Error: failed to create the context: #{ex.message}"
