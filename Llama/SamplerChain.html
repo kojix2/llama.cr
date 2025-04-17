@@ -301,7 +301,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/78e0a0887d5db54fc1e1c835ce7413746e4ba832/src/llama/sampler.cr#L46" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L46" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -366,6 +366,20 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
         <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
         
           <div class="summary"><p>Frees the resources associated with this sampler chain Overrides the parent class's finalize method to also clean up the samplers array</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#print_perf-instance-method" class="signature"><strong>#print_perf</strong></a>
+        
+          <div class="summary"><p>Print performance information for this sampler chain</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#reset_perf-instance-method" class="signature"><strong>#reset_perf</strong></a>
+        
+          <div class="summary"><p>Reset performance counters for this sampler chain</p></div>
         
       </li>
     
@@ -480,7 +494,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/78e0a0887d5db54fc1e1c835ce7413746e4ba832/src/llama/sampler.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L54" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -521,7 +535,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/78e0a0887d5db54fc1e1c835ce7413746e4ba832/src/llama/sampler.cr#L86" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -546,7 +560,7 @@ result <span class="o">=</span> context.generate_with_sampler(<span class="s">&q
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/78e0a0887d5db54fc1e1c835ce7413746e4ba832/src/llama/sampler.cr#L65" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L65" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -568,7 +582,52 @@ Overrides the parent class's finalize method to also clean up the samplers array
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/78e0a0887d5db54fc1e1c835ce7413746e4ba832/src/llama/sampler.cr#L92" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L92" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="print_perf-instance-method">
+      <div class="signature">
+        
+        def <strong>print_perf</strong>
+
+        <a class="method-permalink" href="#print_perf-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Print performance information for this sampler chain</p>
+<p>This method prints performance statistics about the sampler chain to STDERR.
+It's useful for debugging and performance analysis.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L102" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="reset_perf-instance-method">
+      <div class="signature">
+        
+        def <strong>reset_perf</strong>
+
+        <a class="method-permalink" href="#reset_perf-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Reset performance counters for this sampler chain</p>
+<p>This method resets all performance counters for the sampler chain.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L109" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -598,7 +657,7 @@ Overrides the parent class's finalize method to also clean up the samplers array
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/78e0a0887d5db54fc1e1c835ce7413746e4ba832/src/llama/sampler.cr#L78" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/3ad479c0c81f06a8ab2529254f0b14e4cefe2e2e/src/llama/sampler.cr#L78" target="_blank">View source</a>]
         
       </div>
     </div>
