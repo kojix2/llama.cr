@@ -42,8 +42,7 @@ puts "  - Layers: #{model.n_layer}"
 puts "  - Attention heads: #{model.n_head}"
 
 puts "\nCreating context..."
-params = Llama::Context.default_params
-context = model.context(params)
+context = model.context
 puts "Context created successfully!"
 
 # ===== KV Cache Management Example =====

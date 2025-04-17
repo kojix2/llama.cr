@@ -64,9 +64,7 @@ puts "  - Embedding size: #{model.n_embd}"
 
 # Create a context with embeddings enabled
 puts "\nCreating context with embeddings enabled..."
-params = Llama::Context.default_params
-params.embeddings = true
-context = model.context(params)
+context = model.context(embeddings: true)
 
 # Sample texts to compare
 texts = [

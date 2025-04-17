@@ -143,13 +143,7 @@ end
 vocab = model.vocab
 
 # Create a minimal context (needed for token_to_piece)
-ctx_params = Llama::LibLlama.llama_context_default_params
-begin
-  ctx = model.context(ctx_params)
-rescue ex
-  STDERR.puts "Error: could not create context: #{ex.message}"
-  exit(1)
-end
+ctx = model.context
 
 # Read entire prompt from stdin?
 if stdin_set

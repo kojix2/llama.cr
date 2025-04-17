@@ -1,14 +1,6 @@
 module Llama
   # Wrapper for the llama_context structure
   class Context
-    # Returns the default context parameters
-    #
-    # Returns:
-    # - Default context parameters
-    def self.default_params : LibLlama::LlamaContextParams
-      LibLlama.llama_context_default_params
-    end
-
     # Creates a new Context instance for a model.
     #
     # Parameters:

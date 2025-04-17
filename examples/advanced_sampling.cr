@@ -50,8 +50,7 @@ puts "  - Embedding size: #{model.n_embd}"
 
 # Create a context
 puts "\nCreating context..."
-params = Llama::Context.default_params
-context = model.context(params)
+context = model.context
 
 # ===== Min-P Sampling =====
 puts "\n===== Min-P Sampling ====="
