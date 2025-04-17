@@ -175,8 +175,8 @@ elapsed_time = (t_main_end - t_main_start) / 1_000_000.0
 STDERR.puts "Decoded #{n_decode} tokens in #{elapsed_time.round(2)} s, speed: #{(n_decode / elapsed_time).round(2)} t/s"
 
 STDERR.puts
-Llama::LibLlama.llama_perf_sampler_print(sampler.to_unsafe)
-Llama::LibLlama.llama_perf_context_print(context.to_unsafe)
+sampler.print_perf
+context.print_perf
 STDERR.puts
 
 # Resources will be automatically freed by the GC, but we can explicitly clean up

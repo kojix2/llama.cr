@@ -610,6 +610,21 @@ module Llama
       cleanup
     end
 
+    # Print performance information for this context
+    #
+    # This method prints performance statistics about the context to STDERR.
+    # It's useful for debugging and performance analysis.
+    def print_perf
+      LibLlama.llama_perf_context_print(@handle)
+    end
+
+    # Reset performance counters for this context
+    #
+    # This method resets all performance counters for the context.
+    def reset_perf
+      LibLlama.llama_perf_context_reset(@handle)
+    end
+
     # ===== EMBEDDINGS METHODS =====
 
     # Sets whether the model is in embeddings mode or not

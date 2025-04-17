@@ -95,6 +95,21 @@ module Llama
       super
     end
 
+    # Print performance information for this sampler chain
+    #
+    # This method prints performance statistics about the sampler chain to STDERR.
+    # It's useful for debugging and performance analysis.
+    def print_perf
+      LibLlama.llama_perf_sampler_print(@handle)
+    end
+
+    # Reset performance counters for this sampler chain
+    #
+    # This method resets all performance counters for the sampler chain.
+    def reset_perf
+      LibLlama.llama_perf_sampler_reset(@handle)
+    end
+
     @samplers : Array(Sampler)
   end
 
