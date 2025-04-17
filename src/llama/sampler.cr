@@ -4,7 +4,7 @@ module Llama
   # The Sampler class is the base class for all sampling methods.
   # Sampling is the process of selecting the next token during text generation.
   # Different sampling methods produce different text characteristics.
-  class Sampler
+  abstract class Sampler
     # Creates a new Sampler instance from a raw pointer
     #
     # Note: This constructor is intended for internal use.
