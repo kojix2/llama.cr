@@ -58,11 +58,8 @@ end
 Llama::LibLlama.llama_backend_init
 
 # Load the model
-model_params = Llama::LibLlama.llama_model_default_params
-model_params.n_gpu_layers = ngl
-
 begin
-  model = Llama::Model.new(model_path)
+  model = Llama::Model.new(model_path, n_gpu_layers: ngl)
 rescue ex
   STDERR.puts "Error: unable to load model: #{ex.message}"
   exit(1)
@@ -84,25 +81,19 @@ if prompt_tokens.empty?
 end
 
 # Initialize the context
-ctx_params = Llama::LibLlama.llama_context_default_params
-# n_ctx is the context size
-ctx_params.n_ctx = prompt_tokens.size + n_predict - 1
-# n_batch is the maximum number of tokens that can be processed in a single call to llama_decode
-ctx_params.n_batch = prompt_tokens.size
-# enable performance counters
-ctx_params.no_perf = false
-
 begin
-  context = model.context(ctx_params)
+  context = Llama::Context.new(
+    model,
+    n_ctx: prompt_tokens.size + n_predict - 1,
+    n_batch: prompt_tokens.size
+  )
 rescue ex
   STDERR.puts "Error: failed to create the context: #{ex.message}"
   exit(1)
 end
 
 # Initialize the sampler
-sparams = Llama::LibLlama.llama_sampler_chain_default_params
-sparams.no_perf = false
-sampler = Llama::SamplerChain.new(sparams)
+sampler = Llama::SamplerChain.new(no_perf: false)
 
 # Add a greedy sampler to the chain
 sampler.add(Llama::GreedySampler.new)

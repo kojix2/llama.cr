@@ -47,12 +47,13 @@ module Llama
     # Creates a new SamplerChain with optional parameters
     #
     # Parameters:
-    # - params: Optional sampler chain parameters
+    # - no_perf: Whether to disable performance counters (default: false)
     #
     # Raises:
     # - Llama::Error if the sampler chain cannot be created
-    def initialize(params = nil)
-      params ||= LibLlama.llama_sampler_chain_default_params
+    def initialize(no_perf : Bool = false)
+      params = LibLlama.llama_sampler_chain_default_params
+      params.no_perf = no_perf
       @handle = LibLlama.llama_sampler_chain_init(params)
       raise Error.new("Failed to create sampler chain") if @handle.null?
       @samplers = [] of Sampler
