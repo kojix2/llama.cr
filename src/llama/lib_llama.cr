@@ -494,7 +494,9 @@ module Llama
     # Utility Functions
     fun llama_time_us : Int64
     fun llama_print_system_info : LibC::Char*
-    fun llama_log_set(log_callback : Void*, user_data : Void*) : Void
+    # Define the callback type for logging
+    alias GgmlLogCallback = Proc(Int32, LibC::Char*, Void*, Void)
+    fun llama_log_set(log_callback : GgmlLogCallback, user_data : Void*) : Void
     fun llama_get_kv_self(ctx : LlamaContext*) : LlamaKvCache*
     fun llama_kv_self_clear(ctx : LlamaContext*) : Void
     fun llama_kv_self_n_tokens(ctx : LlamaContext*) : Int32
