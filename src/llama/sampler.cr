@@ -1,3 +1,5 @@
+require "./sampler/error"
+
 module Llama
   module Sampler
   end

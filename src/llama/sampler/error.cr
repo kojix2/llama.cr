@@ -1,9 +1,9 @@
 require "../error"
 
 module Llama
-  class Context
+  module Sampler
     class Error < Llama::Error; end
 
-    class TokenizationError < Llama::Error; end
+    class TokenizationError < Error; end
   end
 end

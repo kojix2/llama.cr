@@ -1,3 +1,5 @@
+require "./batch/error"
+
 module Llama
   # Wrapper for the llama_batch structure
   # Provides methods for managing batches of tokens for efficient processing

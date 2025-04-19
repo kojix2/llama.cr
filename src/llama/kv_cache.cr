@@ -1,3 +1,5 @@
+require "./kv_cache/error"
+
 module Llama
   # Wrapper for the llama_kv_cache structure
   # Provides methods for managing the KV (Key-Value) cache in LLaMA models

@@ -1,3 +1,5 @@
+require "./model/error"
+
 module Llama
   # Wrapper for the llama_model structure
   class Model

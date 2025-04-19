@@ -1,3 +1,5 @@
+require "./state/error"
+
 module Llama
   # Wrapper for state management functions in llama.cpp
   # Provides methods for saving and loading model state

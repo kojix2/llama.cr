@@ -1,3 +1,5 @@
+require "./context/error"
+
 module Llama
   # Wrapper for the llama_context structure
   class Context
@@ -274,7 +276,7 @@ module Llama
     # - ArgumentError if parameters are invalid
     # - Llama::Context::Error if text generation fails
     # - Llama::TokenizationError if the prompt cannot be tokenized
-    # - Llama::SamplingError if sampling fails
+    # - Llama::Sampler::Error if sampling fails
     def generate_with_sampler(prompt : String, sampler : SamplerChain, max_tokens : Int32 = 128) : String
       # Validate parameters
       if max_tokens <= 0
@@ -301,7 +303,7 @@ module Llama
             -9, # Sampling error
             ex.message
           )
-          raise SamplingError.new(error_msg)
+          raise Sampler::Error.new(error_msg)
         end
       end
     end
@@ -445,7 +447,7 @@ module Llama
           -6, # Tokenization error
           ex.message
         )
-        raise TokenizationError.new(error_msg)
+        raise Sampler::TokenizationError.new(error_msg)
       end
 
       # Ensure input tokens are not empty
@@ -455,7 +457,7 @@ module Llama
           -6, # Tokenization error
           "prompt length: #{prompt.size}"
         )
-        raise TokenizationError.new(error_msg)
+        raise Sampler::TokenizationError.new(error_msg)
       end
 
       # Initialize the result string
@@ -518,7 +520,7 @@ module Llama
     # - The sampled token ID
     #
     # Raises:
-    # - Llama::SamplingError if sampling fails
+    # - Llama::Sampler::Error if sampling fails
     private def sample_token(logits : Pointer(Float32), temperature : Float32) : Int32
       begin
         if temperature <= 0.0
@@ -563,7 +565,7 @@ module Llama
               -9, # Sampling error
               "sum of probabilities is zero or negative"
             )
-            raise SamplingError.new(error_msg)
+            raise Sampler::Error.new(error_msg)
           end
 
           n_vocab.times do |i|
@@ -585,7 +587,7 @@ module Llama
 
           token
         end
-      rescue ex : SamplingError
+      rescue ex : Sampler::Error
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -593,7 +595,7 @@ module Llama
           -9, # Sampling error
           "temperature: #{temperature}, error: #{ex.message}"
         )
-        raise SamplingError.new(error_msg)
+        raise Sampler::Error.new(error_msg)
       end
     end
 
