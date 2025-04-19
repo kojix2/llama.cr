@@ -329,14 +329,14 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L5" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L5" target="_blank">
         llama/model.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model/error.cr#L4" target="_blank">
         llama/model/error.cr
       </a>
     
@@ -440,37 +440,44 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#meta_count%3AInt32-instance-method" class="signature"><strong>#meta_count</strong> : Int32</a>
+        <a href="#metadata%3AHash%28String%2CString%29-instance-method" class="signature"><strong>#metadata</strong> : Hash(String, String)</a>
+        
+          <div class="summary"><p>Gets all metadata as a hash</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#metadata_count%3AInt32-instance-method" class="signature"><strong>#metadata_count</strong> : Int32</a>
         
           <div class="summary"><p>Gets the number of metadata key/value pairs</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#meta_key_by_index%28i%3AInt32%29%3AString%7CNil-instance-method" class="signature"><strong>#meta_key_by_index</strong>(i : Int32) : String | Nil</a>
+        <a href="#metadata_key_at%28i%3AInt32%29%3AString%7CNil-instance-method" class="signature"><strong>#metadata_key_at</strong>(i : Int32) : String | Nil</a>
         
           <div class="summary"><p>Gets a metadata key name by index</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#meta_val_str%28key%3AString%29%3AString%7CNil-instance-method" class="signature"><strong>#meta_val_str</strong>(key : String) : String | Nil</a>
+        <a href="#metadata_value%28key%3AString%29%3AString%7CNil-instance-method" class="signature"><strong>#metadata_value</strong>(key : String) : String | Nil</a>
         
           <div class="summary"><p>Gets a metadata value as a string by key name</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#meta_val_str_by_index%28i%3AInt32%29%3AString%7CNil-instance-method" class="signature"><strong>#meta_val_str_by_index</strong>(i : Int32) : String | Nil</a>
+        <a href="#metadata_value_at%28i%3AInt32%29%3AString%7CNil-instance-method" class="signature"><strong>#metadata_value_at</strong>(i : Int32) : String | Nil</a>
         
           <div class="summary"><p>Gets a metadata value as a string by index</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#metadata%3AHash%28String%2CString%29-instance-method" class="signature"><strong>#metadata</strong> : Hash(String, String)</a>
+        <a href="#model_size%3AUInt64-instance-method" class="signature"><strong>#model_size</strong> : UInt64</a>
         
-          <div class="summary"><p>Gets all metadata as a hash</p></div>
+          <div class="summary"><p>Returns the total size of all the tensors in the model in bytes</p></div>
         
       </li>
     
@@ -602,7 +609,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -647,7 +654,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L52" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L52" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -669,7 +676,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L143" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L143" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -700,7 +707,7 @@ and forwarding all other arguments.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L132" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L132" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -723,7 +730,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L118" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L118" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -748,7 +755,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L228" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L228" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -769,7 +776,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L150" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L150" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -790,7 +797,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L101" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -811,119 +818,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L96" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="meta_count:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>meta_count</strong> : Int32
-
-        <a class="method-permalink" href="#meta_count%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Gets the number of metadata key/value pairs</p>
-<p>Returns:</p>
-<ul>
-<li>The number of metadata entries</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L180" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="meta_key_by_index(i:Int32):String|Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>meta_key_by_index</strong>(i : Int32) : String | Nil
-
-        <a class="method-permalink" href="#meta_key_by_index%28i%3AInt32%29%3AString%7CNil-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Gets a metadata key name by index</p>
-<p>Parameters:</p>
-<ul>
-<li>i: The index of the metadata entry</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li>The key name, or nil if the index is out of bounds</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L191" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="meta_val_str(key:String):String|Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>meta_val_str</strong>(key : String) : String | Nil
-
-        <a class="method-permalink" href="#meta_val_str%28key%3AString%29%3AString%7CNil-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Gets a metadata value as a string by key name</p>
-<p>Parameters:</p>
-<ul>
-<li>key: The metadata key to look up</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li>The metadata value as a string, or nil if not found</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L163" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="meta_val_str_by_index(i:Int32):String|Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>meta_val_str_by_index</strong>(i : Int32) : String | Nil
-
-        <a class="method-permalink" href="#meta_val_str_by_index%28i%3AInt32%29%3AString%7CNil-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Gets a metadata value as a string by index</p>
-<p>Parameters:</p>
-<ul>
-<li>i: The index of the metadata entry</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li>The value as a string, or nil if the index is out of bounds</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L211" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L96" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -948,7 +843,144 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L245" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L253" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="metadata_count:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>metadata_count</strong> : Int32
+
+        <a class="method-permalink" href="#metadata_count%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets the number of metadata key/value pairs</p>
+<p>Returns:</p>
+<ul>
+<li>The number of metadata entries</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L180" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="metadata_key_at(i:Int32):String|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>metadata_key_at</strong>(i : Int32) : String | Nil
+
+        <a class="method-permalink" href="#metadata_key_at%28i%3AInt32%29%3AString%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets a metadata key name by index</p>
+<p>Parameters:</p>
+<ul>
+<li>i: The index of the metadata entry</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The key name, or nil if the index is out of bounds</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L191" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="metadata_value(key:String):String|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>metadata_value</strong>(key : String) : String | Nil
+
+        <a class="method-permalink" href="#metadata_value%28key%3AString%29%3AString%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets a metadata value as a string by key name</p>
+<p>Parameters:</p>
+<ul>
+<li>key: The metadata key to look up</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The metadata value as a string, or nil if not found</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L163" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="metadata_value_at(i:Int32):String|Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>metadata_value_at</strong>(i : Int32) : String | Nil
+
+        <a class="method-permalink" href="#metadata_value_at%28i%3AInt32%29%3AString%7CNil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Gets a metadata value as a string by index</p>
+<p>Parameters:</p>
+<ul>
+<li>i: The index of the metadata entry</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The value as a string, or nil if the index is out of bounds</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L211" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="model_size:UInt64-instance-method">
+      <div class="signature">
+        
+        def <strong>model_size</strong> : UInt64
+
+        <a class="method-permalink" href="#model_size%3AUInt64-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the total size of all the tensors in the model in bytes</p>
+<p>Returns:</p>
+<ul>
+<li>The total size of all tensors in the model (in bytes)</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L245" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -969,7 +1001,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L81" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -990,7 +1022,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L91" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L91" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1011,7 +1043,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L86" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1032,7 +1064,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L76" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L76" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1053,7 +1085,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L106" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L106" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1074,7 +1106,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L111" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L111" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1095,7 +1127,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L137" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L137" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1116,7 +1148,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ea367898dfe1f694fd8a3a991119c0cf27b7e230/src/llama/model.cr#L62" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/038f4ed10509841d5e14fe7055fbc1a21dac6a15/src/llama/model.cr#L62" target="_blank">View source</a>]
         
       </div>
     </div>
