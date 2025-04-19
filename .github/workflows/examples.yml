@@ -86,7 +86,7 @@ jobs:
         run: ./simple_example --model models/tiny_model.gguf
 
       - name: Run chat example
-        run: NON_INTERACTIVE=true ./chat_example models/tiny_model.gguf
+        run: ./chat_example --model models/tiny_model.gguf
 
       - name: Run tokenization example
         run: ./tokenize_example --model models/tiny_model.gguf --prompt "Hello, world!"

@@ -59,10 +59,10 @@ context = Llama::Context.new(
 )
 
 # Initialize the sampler
-sampler = Llama::SamplerChain.new(no_perf: false)
+sampler = Llama::Sampler::Chain.new(no_perf: false)
 
 # Add a greedy sampler to the chain
-sampler.add(Llama::GreedySampler.new)
+sampler.add(Llama::Sampler::Greedy.new)
 
 # Print the prompt token-by-token
 prompt_tokens.each do |token|

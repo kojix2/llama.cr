@@ -72,11 +72,11 @@ end
 # Initialize the sampler
 # Use default params to match C++ implementation
 sparams = Llama::LibLlama.llama_sampler_chain_default_params
-smpl = Llama::SamplerChain.new(no_perf: sparams.no_perf)
-smpl.add(Llama::MinPSampler.new(0.05, 1))
-smpl.add(Llama::TempSampler.new(0.8))
+smpl = Llama::Sampler::Chain.new(no_perf: sparams.no_perf)
+smpl.add(Llama::Sampler::MinP.new(0.05, 1))
+smpl.add(Llama::Sampler::Temp.new(0.8))
 # Use LLAMA_DEFAULT_SEED explicitly to match C++ implementation
-smpl.add(Llama::DistSampler.new(Llama::LibLlama::LLAMA_DEFAULT_SEED))
+smpl.add(Llama::Sampler::Dist.new(Llama::LibLlama::LLAMA_DEFAULT_SEED))
 
 # Helper function to evaluate a prompt and generate a response
 def generate(context, vocab, smpl, prompt)
