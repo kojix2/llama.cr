@@ -15,15 +15,15 @@ ngl = 99
 OptionParser.parse do |parser|
   parser.banner = "Usage: #{PROGRAM_NAME} -m MODEL [-c context_size] [-ngl n_gpu_layers]"
 
-  parser.on("-m MODEL", "--model=MODEL", "Path to the model file (required)") do |path|
+  parser.on("-m", "--model=MODEL", "Path to the model file (required)") do |path|
     model_path = path
   end
 
-  parser.on("-c N", "--context=N", "Context size (default: 2048)") do |n|
+  parser.on("-c", "--context=N", "Context size (default: 2048)") do |n|
     n_ctx = n.to_i
   end
 
-  parser.on("-ngl N", "--n-gpu-layers=N", "Number of layers to offload to GPU (default: 99)") do |n|
+  parser.on("-ngl", "--n-gpu-layers=N", "Number of layers to offload to GPU (default: 99)") do |n|
     ngl = n.to_i
   end
 
@@ -39,18 +39,7 @@ if model_path.empty?
   exit(1)
 end
 
-# Only print errors (match C++ behavior)
-Llama::LibLlama.llama_log_set(
-  ->(level : Int32, text : LibC::Char*, user_data : Void*) {
-    if level >= 3 # GGML_LOG_LEVEL_ERROR = 3
-      STDERR.print String.new(text)
-    end
-    nil # Return value for Void
-  },
-  nil
-)
-
-# The backend is automatically initialized by Llama::Model and Llama::Context
+Llama.log_level = Llama::LOG_LEVEL_ERROR
 
 # Load the model
 model = Llama::Model.new(model_path, n_gpu_layers: ngl)

@@ -84,6 +84,72 @@ module Llama
   @@backend_mutex : Mutex = Mutex.new
   @@backend_initialized = false
 
+  # Log level constants (from llama.cpp / ggml)
+  LOG_LEVEL_DEBUG   = 0
+  LOG_LEVEL_INFO    = 1
+  LOG_LEVEL_WARNING = 2
+  LOG_LEVEL_ERROR   = 3
+  LOG_LEVEL_NONE    = 4 # No logging
+
+  # Internal variables
+  @@log_level = LOG_LEVEL_INFO # Default is INFO
+  @@log_box : Pointer(Void)? = nil
+
+  # Set the log level
+  #
+  # Parameters:
+  # - level : Int32 - log level (0=DEBUG, 1=INFO, 2=WARNING, 3=ERROR, 4=NONE)
+  #
+  # Example:
+  #   Llama.log_level = Llama::LOG_LEVEL_ERROR  # Only show errors
+  #   Llama.log_level = Llama::LOG_LEVEL_NONE   # Disable all logging
+  def self.log_level=(level : Int32)
+    @@log_level = level
+    setup_default_logger
+  end
+
+  # Get the current log level
+  #
+  # Returns:
+  # - The current log level
+  def self.log_level
+    @@log_level
+  end
+
+  # Internal method: Set up the default logger
+  private def self.setup_default_logger
+    log_set do |level, message|
+      STDERR.print message if level >= @@log_level && level < LOG_LEVEL_NONE
+    end
+  end
+
+  # Set a custom log callback
+  #
+  # The block receives:
+  # - level : Int32 - log level (0=DEBUG, 1=INFO, 2=WARNING, 3=ERROR)
+  # - message : String - log message
+  #
+  # Example:
+  #   Llama.log_set do |level, message|
+  #     if level >= Llama::LOG_LEVEL_ERROR
+  #       STDERR.print message
+  #     end
+  #   end
+  def self.log_set(&block : Int32, String ->)
+    boxed = Box.box(block)
+    @@log_box = boxed
+
+    LibLlama.llama_log_set(
+      ->(level : Int32, text : LibC::Char*, user_data : Void*) {
+        user_callback = Box(Proc(Int32, String, Nil)).unbox(user_data)
+        msg = String.new(text)
+        user_callback.call(level, msg)
+        nil
+      },
+      boxed
+    )
+  end
+
   # Returns the llama.cpp system information
   #
   # This method provides information about the llama.cpp build,
