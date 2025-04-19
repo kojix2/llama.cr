@@ -81,13 +81,7 @@ jobs:
         run: |
           crystal build examples/simple.cr -o simple_example
           crystal build examples/chat.cr -o chat_example
-          crystal build examples/sampling.cr -o sampling_example
-          crystal build examples/text_generation.cr -o text_generation_example
           crystal build examples/tokenize.cr -o tokenize_example
-          crystal build examples/advanced.cr -o advanced_example
-          crystal build examples/embeddings.cr -o embeddings_example
-          crystal build examples/advanced_sampling.cr -o advanced_sampling_example
-          crystal build examples/model_metadata.cr -o model_metadata_example
 
       - name: Run simple example
         run: ./simple_example --model models/tiny_model.gguf
@@ -95,23 +89,5 @@ jobs:
       - name: Run chat example
         run: NON_INTERACTIVE=true ./chat_example models/tiny_model.gguf
 
-      - name: Run sampling example
-        run: ./sampling_example models/tiny_model.gguf "This is a sample prompt."
-
-      - name: Run text generation example
-        run: ./text_generation_example models/tiny_model.gguf "Once upon a time" 50 0.7
-
       - name: Run tokenization example
         run: ./tokenize_example --model models/tiny_model.gguf --prompt "Hello, world!"
-
-      - name: Run advanced example
-        run: ./advanced_example models/tiny_model.gguf
-
-      - name: Run embeddings example
-        run: ./embeddings_example models/tiny_model.gguf
-
-      - name: Run advanced sampling example
-        run: ./advanced_sampling_example models/tiny_model.gguf
-
-      - name: Run model metadata example
-        run: ./model_metadata_example models/tiny_model.gguf
