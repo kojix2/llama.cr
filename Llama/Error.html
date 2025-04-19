@@ -152,11 +152,6 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/Sampler/Error" data-name="llama::sampler::error">
-      <a href="../Llama/Sampler/Error.html">Error</a>
-      
-    </li>
-  
   <li class=" " data-id="llama/Llama/Sampler/Grammar" data-name="llama::sampler::grammar">
       <a href="../Llama/Sampler/Grammar.html">Grammar</a>
       
@@ -252,18 +247,8 @@
       
     </li>
   
-  <li class="parent " data-id="llama/Llama/Vocab" data-name="llama::vocab">
+  <li class=" " data-id="llama/Llama/Vocab" data-name="llama::vocab">
       <a href="../Llama/Vocab.html">Vocab</a>
-      
-        <ul>
-  
-  <li class=" " data-id="llama/Llama/Vocab/Error" data-name="llama::vocab::error">
-      <a href="../Llama/Vocab/Error.html">Error</a>
-      
-    </li>
-  
-</ul>
-
       
     </li>
   
@@ -293,17 +278,6 @@
 
 
 
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>Base error class for all llama.cr errors</p>
-
 
 
 
@@ -332,11 +306,7 @@
     
       <li class="other-type"><a href="../Llama/Model/Error.html">Llama::Model::Error</a></li>
     
-      <li class="other-type"><a href="../Llama/Sampler/Error.html">Llama::Sampler::Error</a></li>
-    
       <li class="other-type"><a href="../Llama/State/Error.html">Llama::State::Error</a></li>
-    
-      <li class="other-type"><a href="../Llama/Vocab/Error.html">Llama::Vocab::Error</a></li>
     
   </ul>
 
@@ -355,15 +325,8 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d2ed8d7b9df99b470e536766ad18d563100c76d0/src/llama/error/base.cr#L3" target="_blank">
-        llama/error/base.cr
-      </a>
-    
-    <br/>
-  
-    
-      <a href="https://github.com/kojix2/llama.cr/blob/d2ed8d7b9df99b470e536766ad18d563100c76d0/src/llama/error/utils.cr#L2" target="_blank">
-        llama/error/utils.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/error.cr#L2" target="_blank">
+        llama/error.cr
       </a>
     
     <br/>
@@ -387,10 +350,6 @@
         <strong>ERROR_MESSAGES</strong> = <code>{<span class="n">-1</span> <span class="o">=&gt;</span> <span class="s">&quot;General error&quot;</span>, <span class="n">-2</span> <span class="o">=&gt;</span> <span class="s">&quot;Memory allocation error&quot;</span>, <span class="n">-3</span> <span class="o">=&gt;</span> <span class="s">&quot;Batch processing error&quot;</span>, <span class="n">-4</span> <span class="o">=&gt;</span> <span class="s">&quot;Context creation error&quot;</span>, <span class="n">-5</span> <span class="o">=&gt;</span> <span class="s">&quot;Model loading error&quot;</span>, <span class="n">-6</span> <span class="o">=&gt;</span> <span class="s">&quot;Tokenization error&quot;</span>, <span class="n">-7</span> <span class="o">=&gt;</span> <span class="s">&quot;KV cache error&quot;</span>, <span class="n">-8</span> <span class="o">=&gt;</span> <span class="s">&quot;State management error&quot;</span>, <span class="n">-9</span> <span class="o">=&gt;</span> <span class="s">&quot;Sampling error&quot;</span>, <span class="n">-10</span> <span class="o">=&gt;</span> <span class="s">&quot;Invalid parameter error&quot;</span>, <span class="n">-11</span> <span class="o">=&gt;</span> <span class="s">&quot;File I/O error&quot;</span>, <span class="n">-12</span> <span class="o">=&gt;</span> <span class="s">&quot;Network error&quot;</span>, <span class="n">-13</span> <span class="o">=&gt;</span> <span class="s">&quot;GPU error&quot;</span>, <span class="n">-14</span> <span class="o">=&gt;</span> <span class="s">&quot;Timeout error&quot;</span>, <span class="n">-15</span> <span class="o">=&gt;</span> <span class="s">&quot;Unsupported operation error&quot;</span>}</code>
       </dt>
       
-      <dd class="entry-const-doc">
-        <p>Mapping of error codes to error messages</p>
-      </dd>
-      
     
   </dl>
 
@@ -412,14 +371,10 @@
       <li class="entry-summary">
         <a href="#error_message%28code%3AInt32%29%3AString-class-method" class="signature"><strong>.error_message</strong>(code : Int32) : String</a>
         
-          <div class="summary"><p>Get error message from error code</p></div>
-        
       </li>
     
       <li class="entry-summary">
         <a href="#format_error%28message%3AString%2Ccode%3AInt32%7CNil%3Dnil%2Ccontext%3AString%7CNil%3Dnil%29%3AString-class-method" class="signature"><strong>.format_error</strong>(message : String, code : Int32 | Nil = <span class="n">nil</span>, context : String | Nil = <span class="n">nil</span>) : String</a>
-        
-          <div class="summary"><p>Format error message with additional context</p></div>
         
       </li>
     
@@ -494,15 +449,10 @@
         <a class="method-permalink" href="#error_message%28code%3AInt32%29%3AString-class-method">#</a>
       </div>
       
-        <div class="doc">
-          
-          <p>Get error message from error code</p>
-        </div>
-      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d2ed8d7b9df99b470e536766ad18d563100c76d0/src/llama/error/utils.cr#L23" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/error.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -515,15 +465,10 @@
         <a class="method-permalink" href="#format_error%28message%3AString%2Ccode%3AInt32%7CNil%3Dnil%2Ccontext%3AString%7CNil%3Dnil%29%3AString-class-method">#</a>
       </div>
       
-        <div class="doc">
-          
-          <p>Format error message with additional context</p>
-        </div>
-      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d2ed8d7b9df99b470e536766ad18d563100c76d0/src/llama/error/utils.cr#L28" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/error.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
