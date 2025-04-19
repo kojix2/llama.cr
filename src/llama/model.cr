@@ -7,10 +7,10 @@ module Llama
     #
     # Parameters:
     # - path: Path to the model file (.gguf format).
-    # - n_gpu_layers: Number of layers to store in VRAM (default: 0).  If 0, all layers are loaded to the CPU.
-    # - use_mmap: Use mmap if possible (default: true).  Reduces memory usage.
-    # - use_mlock: Force the system to keep the model in RAM (default: false).  May improve performance but increases memory usage.
-    # - vocab_only: Only load the vocabulary, no weights (default: false).  Useful for inspecting the vocabulary.
+    # - n_gpu_layers: Number of layers to store in VRAM (default: 0). If 0, all layers are loaded to the CPU.
+    # - use_mmap: Use mmap if possible (default: true). Reduces memory usage.
+    # - use_mlock: Force the system to keep the model in RAM (default: false). May improve performance but increases memory usage.
+    # - vocab_only: Only load the vocabulary, no weights (default: false). Useful for inspecting the vocabulary.
     #
     # Raises:
     # - Llama::Model::Error if the model cannot be loaded.
@@ -21,6 +21,9 @@ module Llama
       use_mlock : Bool = false,
       vocab_only : Bool = false,
     )
+      # Ensure llama backend is initialized
+      Llama.init
+
       params = LibLlama.llama_model_default_params
       params.n_gpu_layers = n_gpu_layers
       params.use_mmap = use_mmap

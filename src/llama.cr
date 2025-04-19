@@ -1,10 +1,8 @@
-# Crystal bindings for llama.cpp
+# Llama - Crystal bindings for llama.cpp
 #
-# This module provides Crystal bindings for the llama.cpp library,
-# allowing you to use LLaMA models in your Crystal applications.
+# This module provides high-level and low-level APIs for working with LLMs via llama.cpp.
 #
-# ## Features
-#
+# Features:
 # - Low-level bindings to the llama.cpp C API
 # - High-level Crystal wrapper classes for easy usage
 # - Memory management for C resources
@@ -14,37 +12,59 @@
 # - KV cache management for optimized inference
 # - State saving and loading
 #
-# ## Basic Usage
+# Backend Initialization:
+# - Llama.init: Thread-safe, idempotent initialization of the llama.cpp backend.
+#   You do not need to call this manually in most cases; it is called automatically
+#   when you create a Model or Context. However, you may call it explicitly if you
+#   want to initialize the backend before any model/context is created.
 #
-# ```
-# require "llama"
+# - Llama.uninit: Thread-safe, idempotent finalization of the llama.cpp backend.
+#   Call this if you want to explicitly release all backend resources before program exit.
 #
-# # Load a model
-# model = Llama::Model.new("/path/to/model.gguf")
+# Example:
+#   Llama.init         # (optional, usually not needed)
+#   model = Llama::Model.new("model.gguf")
+#   context = Llama::Context.new(model)
+#   # ... use model/context ...
+#   Llama.uninit       # (optional, usually not needed)
 #
-# # Create a context
-# context = model.context
+# The backend is always initialized only once, even if called from multiple threads.
+# All resources are released only once, even if uninit is called multiple times.
 #
-# # Generate text
-# response = context.generate("Once upon a time", max_tokens: 100, temperature: 0.8)
-# puts response
+# Basic Usage:
+#   require "llama"
 #
-# # Or use the convenience method
-# response = Llama.generate("/path/to/model.gguf", "Once upon a time")
-# puts response
-# ```
+#   # Load a model
+#   model = Llama::Model.new("/path/to/model.gguf")
 #
-# ## Advanced Sampling
+#   # Create a context
+#   context = model.context
 #
-# ```
-# chain = Llama::Sampler::Chain.new
-# chain.add(Llama::Sampler::TopK.new(40))
-# chain.add(Llama::Sampler::MinP.new(0.05, 1))
-# chain.add(Llama::Sampler::Temp.new(0.8))
-# chain.add(Llama::Sampler::Dist.new(42))
+#   # Generate text
+#   response = context.generate("Once upon a time", max_tokens: 100, temperature: 0.8)
+#   puts response
 #
-# result = context.generate_with_sampler("Write a poem:", chain, 150)
-# ```
+#   # Or use the convenience method
+#   response = Llama.generate("/path/to/model.gguf", "Once upon a time")
+#   puts response
+#
+# Advanced Sampling:
+#   chain = Llama::Sampler::Chain.new
+#   chain.add(Llama::Sampler::TopK.new(40))
+#   chain.add(Llama::Sampler::MinP.new(0.05, 1))
+#   chain.add(Llama::Sampler::Temp.new(0.8))
+#   chain.add(Llama::Sampler::Dist.new(42))
+#
+#   result = context.generate_with_sampler("Write a poem:", chain, 150)
+#
+# System Info:
+#   info = Llama.system_info
+#   puts info
+#
+# Tokenization Utility:
+#   model = Llama::Model.new("/path/to/model.gguf")
+#   result = Llama.tokenize_and_format(model.vocab, "Hello, world!", ids_only: true)
+#   puts result # Prints "[1, 2, 3, ...]"
 
 require "./llama/lib_llama"
 require "./llama/error"
@@ -59,6 +79,10 @@ require "./llama/sampler"
 module Llama
   VERSION                      = "0.1.0"
   LLAMA_CPP_COMPATIBLE_VERSION = read_file("#{__DIR__}/LLAMA_VERSION").chomp
+
+  # Mutex for backend initialization/finalization (required for type inference)
+  @@backend_mutex : Mutex = Mutex.new
+  @@backend_initialized = false
 
   # Returns the llama.cpp system information
   #
@@ -176,5 +200,27 @@ module Llama
     model = Model.new(model_path)
     context = model.context
     context.generate(prompt, max_tokens, temperature)
+  end
+
+  # Thread-safe, idempotent initialization of the llama.cpp backend.
+  # You do not need to call this manually in most cases.
+  def self.init
+    @@backend_mutex.synchronize do
+      unless @@backend_initialized
+        LibLlama.llama_backend_init
+        @@backend_initialized = true
+      end
+    end
+  end
+
+  # Thread-safe, idempotent finalization of the llama.cpp backend.
+  # Call this if you want to explicitly release all backend resources before program exit.
+  def self.uninit
+    @@backend_mutex.synchronize do
+      if @@backend_initialized
+        LibLlama.llama_backend_free
+        @@backend_initialized = false
+      end
+    end
   end
 end

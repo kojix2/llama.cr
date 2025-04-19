@@ -50,10 +50,9 @@ Llama::LibLlama.llama_log_set(
   nil
 )
 
-# Initialize the backend
-Llama::LibLlama.llama_backend_init
+# The backend is automatically initialized by Llama::Model and Llama::Context
 
-# Initialize the model
+# Load the model
 model = Llama::Model.new(model_path, n_gpu_layers: ngl)
 if model.nil?
   STDERR.puts "Error: Unable to load model"

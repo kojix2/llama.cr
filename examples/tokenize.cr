@@ -117,8 +117,6 @@ if disable_logging
   Llama::LibLlama.llama_log_set(nil, nil)
 end
 
-Llama::LibLlama.llama_backend_init
-
 begin
   # Load the model with vocab_only=true
   model = Llama::Model.new(model_path.not_nil!, vocab_only: true)

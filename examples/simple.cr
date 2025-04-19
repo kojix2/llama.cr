@@ -40,8 +40,7 @@ if model_path.empty?
   exit(1)
 end
 
-# Initialize the backend
-Llama::LibLlama.llama_backend_init
+# The backend is automatically initialized by Llama::Model and Llama::Context
 
 # Load the model
 model = Llama::Model.new(model_path, n_gpu_layers: ngl)

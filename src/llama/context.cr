@@ -25,6 +25,9 @@ module Llama
       embeddings : Bool = false,   # Enable or disable embeddings
       offload_kqv : Bool = false,  # Offload KQV to GPU
     )
+      # Ensure llama backend is initialized
+      Llama.init
+
       params = LibLlama.llama_context_default_params
 
       # Ensure a minimum context size of 512 when n_ctx is 0
