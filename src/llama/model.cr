@@ -140,7 +140,7 @@ module Llama
 
     # Explicitly clean up resources
     # This can be called manually to release resources before garbage collection
-    def cleanup
+    private def cleanup
       if @handle && !@handle.null?
         LibLlama.llama_model_free(@handle)
       end

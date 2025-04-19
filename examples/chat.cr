@@ -213,6 +213,4 @@ loop do
 end
 
 # Free resources
-context.cleanup
-model.cleanup
 Llama::LibLlama.llama_backend_free

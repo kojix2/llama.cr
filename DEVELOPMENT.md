@@ -55,7 +55,7 @@ This document outlines the development guidelines for the llama.cr project, prim
   - Consider providing simplified high-level APIs for common use cases
 
 - **Circular References**: When objects reference each other (e.g., `Context` and `KvCache`):
-  - Implement proper cleanup in `finalize` methods
+  - Implement proper cleanup logic in private methods and call them from `finalize`
   - Consider using weak references where appropriate
   - Document the relationship between objects
 

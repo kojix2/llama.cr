@@ -362,14 +362,10 @@ module Llama
 
     # Explicitly clean up resources
     # This can be called manually to release resources before garbage collection
-    def cleanup
+    private def cleanup
       if @owned
-        # Free the token memory that we allocated in crystal_llama_batch_get_one
-        if @has_crystal_token && !@handle.token.null?
-          @handle.token = nil
-        end
-
-        LibLlama.llama_batch_free(@handle)
+        LibLlama.llama_batch_free(to_unsafe)
+        @owned = false
       end
     end
 
