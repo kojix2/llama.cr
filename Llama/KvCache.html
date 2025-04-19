@@ -315,14 +315,14 @@ Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L4" target="_blank">
         llama/kv_cache.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache/error.cr#L4" target="_blank">
         llama/kv_cache/error.cr
       </a>
     
@@ -527,14 +527,14 @@ Users should obtain KvCache instances through Context#kv_cache.</p>
 <p>To avoid circular references, we store the context pointer rather than the context object</p>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the handle is null</li>
+<li>Llama::KvCache::Error if the handle is null</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -572,14 +572,14 @@ Users should obtain KvCache instances through Context#kv_cache.</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L294" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L294" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -598,14 +598,14 @@ Users should obtain KvCache instances through Context#kv_cache.</p>
 This removes all tokens from the cache and resets its state</p>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L55" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -624,14 +624,14 @@ This removes all tokens from the cache and resets its state</p>
 This will be applied lazily on next decode or explicitly with update</p>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L274" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L274" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -652,7 +652,7 @@ This will be applied lazily on next decode or explicitly with update</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L331" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L331" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -675,14 +675,14 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L76" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L76" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -707,14 +707,14 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L192" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L192" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -739,14 +739,14 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L149" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L149" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -772,14 +772,14 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if the divisor is not greater than 1</li>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L216" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L216" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -801,14 +801,14 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L169" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L169" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -834,14 +834,14 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L243" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L243" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -870,14 +870,14 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L123" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L123" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -898,7 +898,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L326" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L326" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -917,14 +917,14 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
 This includes K-shifts, defragmentation, etc.</p>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L312" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L312" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -947,14 +947,14 @@ A cell is considered used if it has at least one sequence assigned to it</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::KvCacheError if the operation fails</li>
+<li>Llama::KvCache::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/kv_cache.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/kv_cache.cr#L97" target="_blank">View source</a>]
         
       </div>
     </div>

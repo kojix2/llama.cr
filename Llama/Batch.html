@@ -315,14 +315,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L4" target="_blank">
         llama/batch.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch/error.cr#L4" target="_blank">
         llama/batch/error.cr
       </a>
     
@@ -521,14 +521,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if embeddings array is empty or contains empty embeddings</li>
-<li>Llama::BatchError if batch creation fails</li>
+<li>Llama::Batch::Error if batch creation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L312" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L312" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -558,14 +558,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if tokens array is empty</li>
-<li>Llama::BatchError if batch creation fails</li>
+<li>Llama::Batch::Error if batch creation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L249" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L249" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -591,14 +591,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::BatchError if the batch cannot be created</li>
+<li>Llama::Batch::Error if the batch cannot be created</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L68" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L68" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -621,14 +621,14 @@ Provides methods for managing batches of tokens for efficient processing</p>
 <li>n_seq_max: Maximum number of sequence IDs per token (default: 8)
 Raises:</li>
 <li>ArgumentError if parameters are invalid</li>
-<li>Llama::BatchError if the batch cannot be created</li>
+<li>Llama::Batch::Error if the batch cannot be created</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -651,7 +651,7 @@ The batch created this way is not owned by this wrapper and will not be freed.</
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -694,14 +694,14 @@ The batch created this way is not owned by this wrapper and will not be freed.</
 <ul>
 <li>ArgumentError if tokens array is empty</li>
 <li>IndexError if the batch doesn't have enough space</li>
-<li>Llama::BatchError if memory allocation fails</li>
+<li>Llama::Batch::Error if memory allocation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L109" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -723,7 +723,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L363" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L363" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -744,7 +744,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L375" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L375" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -765,7 +765,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L357" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L357" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -786,7 +786,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -814,14 +814,14 @@ This can be called manually to release resources before garbage collection</p>
 <ul>
 <li>IndexError if the index is out of bounds</li>
 <li>ArgumentError if the batch is not embedding-based</li>
-<li>Llama::BatchError if memory allocation fails</li>
+<li>Llama::Batch::Error if memory allocation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L179" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L179" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -848,14 +848,14 @@ This can be called manually to release resources before garbage collection</p>
 <p>Raises:</p>
 <ul>
 <li>IndexError if the index is out of bounds</li>
-<li>Llama::BatchError if memory allocation fails</li>
+<li>Llama::Batch::Error if memory allocation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L135" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L135" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -876,7 +876,7 @@ This can be called manually to release resources before garbage collection</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/batch.cr#L352" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/batch.cr#L352" target="_blank">View source</a>]
         
       </div>
     </div>

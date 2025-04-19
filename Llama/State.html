@@ -315,14 +315,14 @@ Provides methods for saving and loading model state</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L4" target="_blank">
         llama/state.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state/error.cr#L4" target="_blank">
         llama/state/error.cr
       </a>
     
@@ -508,14 +508,14 @@ Provides methods for saving and loading model state</p>
 <p>To avoid circular references, we store the context pointer rather than the context object</p>
 <p>Raises:</p>
 <ul>
-<li>Llama::StateError if the context pointer is null</li>
+<li>Llama::State::Error if the context pointer is null</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -552,7 +552,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L523" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L523" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -574,14 +574,14 @@ Provides methods for saving and loading model state</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::StateError if the operation fails</li>
+<li>Llama::State::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L81" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L81" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -609,14 +609,14 @@ Provides methods for saving and loading model state</p>
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if path is empty or max_tokens is not positive</li>
-<li>Llama::StateError if the file cannot be loaded</li>
+<li>Llama::State::Error if the file cannot be loaded</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L168" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L168" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -644,14 +644,14 @@ Provides methods for saving and loading model state</p>
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if path is empty</li>
-<li>Llama::StateError if the operation fails</li>
+<li>Llama::State::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L232" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L232" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -677,14 +677,14 @@ Provides methods for saving and loading model state</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::StateError if the operation fails</li>
+<li>Llama::State::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L317" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L317" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -713,14 +713,14 @@ Provides methods for saving and loading model state</p>
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if path is empty or max_tokens is not positive</li>
-<li>Llama::StateError if the file cannot be loaded</li>
+<li>Llama::State::Error if the file cannot be loaded</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L469" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L469" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -749,14 +749,14 @@ Provides methods for saving and loading model state</p>
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if path is empty</li>
-<li>Llama::StateError if the operation fails</li>
+<li>Llama::State::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L416" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L416" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -784,14 +784,14 @@ Provides methods for saving and loading model state</p>
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if data is empty</li>
-<li>Llama::StateError if the operation fails</li>
+<li>Llama::State::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L368" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L368" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -817,14 +817,14 @@ Provides methods for saving and loading model state</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::StateError if the operation fails</li>
+<li>Llama::State::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L281" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L281" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -851,14 +851,14 @@ Provides methods for saving and loading model state</p>
 <p>Raises:</p>
 <ul>
 <li>ArgumentError if data is empty</li>
-<li>Llama::StateError if the operation fails</li>
+<li>Llama::State::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L126" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L126" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -880,14 +880,14 @@ Provides methods for saving and loading model state</p>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>Llama::StateError if the operation fails</li>
+<li>Llama::State::Error if the operation fails</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/707377555c7fcee4df2d56e7b895342bc5969053/src/llama/state.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ba1627c777e7eb54a6fc0b9a63555eb4d1a4418d/src/llama/state.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
