@@ -31,15 +31,15 @@ jobs:
         run: |
           brew install cmake
 
-      # Define llama.cpp version
       - name: Set llama.cpp version
+        id: set_version
         run: |
           echo "LLAMA_VERSION=$(cat LLAMA_VERSION)" >> $GITHUB_ENV
 
       - name: Install llama.cpp (Ubuntu)
         if: runner.os == 'Linux'
         run: |
-          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${{ env.LLAMA_VERSION }}/llama-${{ env.LLAMA_VERSION }}-bin-ubuntu-x64.zip -o llama.zip
+          curl -L https://github.com/ggml-org/llama.cpp/releases/download/$LLAMA_VERSION/llama-$LLAMA_VERSION-bin-ubuntu-x65.zip -o llama.zip
           unzip llama.zip
           sudo mkdir -p /usr/local/lib
           sudo cp build/bin/*.so /usr/local/lib/
@@ -48,7 +48,7 @@ jobs:
       - name: Install llama.cpp (macOS)
         if: runner.os == 'macOS'
         run: |
-          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${{ env.LLAMA_VERSION }}/llama-${{ env.LLAMA_VERSION }}-bin-macos-arm64.zip -o llama.zip
+          curl -L https://github.com/ggml-org/llama.cpp/releases/download/$LLAMA_VERSION/llama-$LLAMA_VERSION-bin-macos-arm64.zip -o llama.zip
           unzip llama.zip
           sudo mkdir -p /usr/local/lib
           sudo cp build/bin/*.dylib /usr/local/lib/
