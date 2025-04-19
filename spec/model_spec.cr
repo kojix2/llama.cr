@@ -71,6 +71,37 @@ describe "Llama with model" do
       context.should_not be_nil
     end
 
+    it "returns the model size" do
+      model = Llama::Model.new(model_path)
+      size = model.model_size
+      size.should be > 0
+      puts "  - Model size: #{size} bytes"
+    end
+
+    it "accesses model metadata" do
+      model = Llama::Model.new(model_path)
+      metadata = model.metadata
+      metadata.should be_a(Hash(String, String))
+      metadata_count = model.metadata_count
+      metadata_count.should be >= 0
+      metadata.size.should eq(metadata_count)
+      puts "  - Metadata count: #{metadata_count}"
+      puts "  - Metadata keys: #{metadata.keys.inspect}"
+
+      if metadata_count > 0
+        # Check first key and value accessors
+        key = model.metadata_key_at(0)
+        value = model.metadata_value_at(0)
+        key.should be_a(String)
+        value.should be_a(String)
+        # Check value by key
+        value_by_key = model.metadata_value(key.not_nil!)
+        value_by_key.should eq(value)
+        puts "  - First metadata key: #{key}"
+        puts "  - First metadata value: #{value}"
+      end
+    end
+
     it "generates text" do
       prompt = "Hello, my name is"
       response = Llama.generate(model_path, prompt, max_tokens: 10)
