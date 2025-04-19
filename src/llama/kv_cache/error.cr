@@ -1,4 +1,4 @@
-require "../error/base"
+require "../error"
 
 module Llama
   class KvCache
