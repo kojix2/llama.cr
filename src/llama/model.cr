@@ -160,7 +160,7 @@ module Llama
     #
     # Returns:
     # - The metadata value as a string, or nil if not found
-    def meta_val_str(key : String) : String?
+    def metadata_value(key : String) : String?
       buf_size = 1024
       buf = Pointer(LibC::Char).malloc(buf_size)
       result = LibLlama.llama_model_meta_val_str(@handle, key, buf, buf_size)
@@ -177,7 +177,7 @@ module Llama
     #
     # Returns:
     # - The number of metadata entries
-    def meta_count : Int32
+    def metadata_count : Int32
       LibLlama.llama_model_meta_count(@handle)
     end
 
@@ -188,7 +188,7 @@ module Llama
     #
     # Returns:
     # - The key name, or nil if the index is out of bounds
-    def meta_key_by_index(i : Int32) : String?
+    def metadata_key_at(i : Int32) : String?
       buf_size = 1024
       buf = Pointer(LibC::Char).malloc(buf_size)
       result = LibLlama.llama_model_meta_key_by_index(@handle, i, buf, buf_size)
@@ -208,7 +208,7 @@ module Llama
     #
     # Returns:
     # - The value as a string, or nil if the index is out of bounds
-    def meta_val_str_by_index(i : Int32) : String?
+    def metadata_value_at(i : Int32) : String?
       buf_size = 1024
       buf = Pointer(LibC::Char).malloc(buf_size)
       result = LibLlama.llama_model_meta_val_str_by_index(@handle, i, buf, buf_size)
@@ -238,17 +238,25 @@ module Llama
       end
     end
 
+    # Returns the total size of all the tensors in the model in bytes
+    #
+    # Returns:
+    # - The total size of all tensors in the model (in bytes)
+    def model_size : UInt64
+      LibLlama.llama_model_size(@handle)
+    end
+
     # Gets all metadata as a hash
     #
     # Returns:
     # - A hash mapping metadata keys to values
     def metadata : Hash(String, String)
       result = {} of String => String
-      count = meta_count
+      count = metadata_count
 
       count.times do |i|
-        key = meta_key_by_index(i)
-        val = meta_val_str_by_index(i)
+        key = metadata_key_at(i)
+        val = metadata_value_at(i)
 
         if key && val
           result[key] = val
