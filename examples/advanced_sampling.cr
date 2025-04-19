@@ -61,11 +61,11 @@ prompt = prompts["creative"]
 puts "\nPrompt: #{prompt}"
 
 # Create a sampler chain with Min-P
-chain = Llama::SamplerChain.new
-chain.add(Llama::TopKSampler.new(40))      # First filter with top-k
-chain.add(Llama::MinPSampler.new(0.05, 1)) # Then apply min-p with p=0.05
-chain.add(Llama::TempSampler.new(0.8))     # Apply temperature
-chain.add(Llama::DistSampler.new(42))      # Final distribution sampling
+chain = Llama::Sampler::Chain.new
+chain.add(Llama::Sampler::TopK.new(40))      # First filter with top-k
+chain.add(Llama::Sampler::MinP.new(0.05, 1)) # Then apply min-p with p=0.05
+chain.add(Llama::Sampler::Temp.new(0.8))     # Apply temperature
+chain.add(Llama::Sampler::Dist.new(42))      # Final distribution sampling
 
 # Generate text
 puts "\nGenerating with Min-P sampling..."
@@ -81,11 +81,11 @@ prompt = prompts["factual"]
 puts "\nPrompt: #{prompt}"
 
 # Create a sampler chain with Typical sampling
-chain = Llama::SamplerChain.new
-chain.add(Llama::TopKSampler.new(40))         # First filter with top-k
-chain.add(Llama::TypicalSampler.new(0.95, 1)) # Then apply typical with p=0.95
-chain.add(Llama::TempSampler.new(0.7))        # Apply temperature
-chain.add(Llama::DistSampler.new(42))         # Final distribution sampling
+chain = Llama::Sampler::Chain.new
+chain.add(Llama::Sampler::TopK.new(40))         # First filter with top-k
+chain.add(Llama::Sampler::Typical.new(0.95, 1)) # Then apply typical with p=0.95
+chain.add(Llama::Sampler::Temp.new(0.7))        # Apply temperature
+chain.add(Llama::Sampler::Dist.new(42))         # Final distribution sampling
 
 # Generate text
 puts "\nGenerating with Typical sampling..."
@@ -101,10 +101,10 @@ prompt = prompts["creative"]
 puts "\nPrompt: #{prompt}"
 
 # Create a sampler chain with Mirostat V2
-chain = Llama::SamplerChain.new
-chain.add(Llama::TopKSampler.new(40))                 # First filter with top-k
-chain.add(Llama::MirostatV2Sampler.new(42, 5.0, 0.1)) # Mirostat V2 with tau=5.0, eta=0.1
-chain.add(Llama::DistSampler.new(42))                 # Final distribution sampling
+chain = Llama::Sampler::Chain.new
+chain.add(Llama::Sampler::TopK.new(40))                 # First filter with top-k
+chain.add(Llama::Sampler::MirostatV2.new(42, 5.0, 0.1)) # Mirostat V2 with tau=5.0, eta=0.1
+chain.add(Llama::Sampler::Dist.new(42))                 # Final distribution sampling
 
 # Generate text
 puts "\nGenerating with Mirostat V2 sampling..."
@@ -120,12 +120,12 @@ prompt = prompts["factual"]
 puts "\nPrompt: #{prompt}"
 
 # Create a sampler chain with Penalties
-chain = Llama::SamplerChain.new
-chain.add(Llama::TopKSampler.new(40))                     # First filter with top-k
-chain.add(Llama::TopPSampler.new(0.95, 1))                # Then apply top-p
-chain.add(Llama::PenaltiesSampler.new(64, 1.1, 0.0, 0.0)) # Apply penalties: last_n=64, repeat=1.1
-chain.add(Llama::TempSampler.new(0.8))                    # Apply temperature
-chain.add(Llama::DistSampler.new(42))                     # Final distribution sampling
+chain = Llama::Sampler::Chain.new
+chain.add(Llama::Sampler::TopK.new(40))                     # First filter with top-k
+chain.add(Llama::Sampler::TopP.new(0.95, 1))                # Then apply top-p
+chain.add(Llama::Sampler::Penalties.new(64, 1.1, 0.0, 0.0)) # Apply penalties: last_n=64, repeat=1.1
+chain.add(Llama::Sampler::Temp.new(0.8))                    # Apply temperature
+chain.add(Llama::Sampler::Dist.new(42))                     # Final distribution sampling
 
 # Generate text
 puts "\nGenerating with Penalties sampling..."
@@ -154,11 +154,11 @@ puts "Using grammar for a numbered list"
 puts "\nGenerating with Grammar sampling... (DISABLED - using Top-P instead)"
 
 # Create a sampler chain with Top-P instead of Grammar
-chain = Llama::SamplerChain.new
-chain.add(Llama::TopKSampler.new(40))      # First filter with top-k
-chain.add(Llama::TopPSampler.new(0.95, 1)) # Then apply top-p
-chain.add(Llama::TempSampler.new(0.8))     # Apply temperature
-chain.add(Llama::DistSampler.new(42))      # Final distribution sampling
+chain = Llama::Sampler::Chain.new
+chain.add(Llama::Sampler::TopK.new(40))      # First filter with top-k
+chain.add(Llama::Sampler::TopP.new(0.95, 1)) # Then apply top-p
+chain.add(Llama::Sampler::Temp.new(0.8))     # Apply temperature
+chain.add(Llama::Sampler::Dist.new(42))      # Final distribution sampling
 
 # Generate text
 result = context.generate_with_sampler(prompt, chain, 150)

@@ -32,13 +32,13 @@ context = model.context
 puts "Context created successfully!"
 
 puts "\nCreating sampler chain..."
-sampler = Llama::SamplerChain.new
+sampler = Llama::Sampler::Chain.new
 
 # Add samplers to the chain
-sampler.add(Llama::TopKSampler.new(40))
-sampler.add(Llama::TopPSampler.new(0.95, 1))
-sampler.add(Llama::TempSampler.new(0.8))
-sampler.add(Llama::DistSampler.new)
+sampler.add(Llama::Sampler::TopK.new(40))
+sampler.add(Llama::Sampler::TopP.new(0.95, 1))
+sampler.add(Llama::Sampler::Temp.new(0.8))
+sampler.add(Llama::Sampler::Dist.new)
 
 puts "\nGenerating text from prompt: '#{prompt}'"
 puts "Parameters:"

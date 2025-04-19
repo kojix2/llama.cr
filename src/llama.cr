@@ -37,11 +37,11 @@
 # ## Advanced Sampling
 #
 # ```
-# chain = Llama::SamplerChain.new
-# chain.add(Llama::TopKSampler.new(40))
-# chain.add(Llama::MinPSampler.new(0.05, 1))
-# chain.add(Llama::TempSampler.new(0.8))
-# chain.add(Llama::DistSampler.new(42))
+# chain = Llama::Sampler::Chain.new
+# chain.add(Llama::Sampler::TopK.new(40))
+# chain.add(Llama::Sampler::MinP.new(0.05, 1))
+# chain.add(Llama::Sampler::Temp.new(0.8))
+# chain.add(Llama::Sampler::Dist.new(42))
 #
 # result = context.generate_with_sampler("Write a poem:", chain, 150)
 # ```

@@ -1,11 +1,11 @@
 require "./spec_helper"
 require "../src/llama"
 
-describe Llama::Sampler do
+describe Llama::Sampler::Base do
   it "can create and free a sampler" do
     # Test creation and finalization of a sampler
     # This test just ensures that the sampler can be created and freed without errors
-    sampler = Llama::TopKSampler.new(40)
+    sampler = Llama::Sampler::TopK.new(40)
     sampler.should_not be_nil
   end
 
@@ -13,15 +13,15 @@ describe Llama::Sampler do
     # Test creation of the new sampler types
 
     # Extended Temperature sampler
-    temp_ext = Llama::TempExtSampler.new(0.8_f32, 0.5_f32, 1.0_f32)
+    temp_ext = Llama::Sampler::TempExt.new(0.8_f32, 0.5_f32, 1.0_f32)
     temp_ext.should_not be_nil
 
     # Top-N Sigma sampler
-    top_n_sigma = Llama::TopNSigmaSampler.new(2.0_f32)
+    top_n_sigma = Llama::Sampler::TopNSigma.new(2.0_f32)
     top_n_sigma.should_not be_nil
 
     # XTC sampler
-    xtc = Llama::XtcSampler.new(0.3_f32, 0.8_f32, 1)
+    xtc = Llama::Sampler::Xtc.new(0.3_f32, 0.8_f32, 1)
     xtc.should_not be_nil
 
     # These tests require a vocabulary, so we'll skip them if we don't have a model
@@ -32,7 +32,7 @@ describe Llama::Sampler do
       vocab = model.vocab
 
       # Infill sampler
-      infill = Llama::InfillSampler.new(vocab)
+      infill = Llama::Sampler::Infill.new(vocab)
       infill.should_not be_nil
 
       # Grammar Lazy Patterns sampler
@@ -40,7 +40,7 @@ describe Llama::Sampler do
         root ::= "test"
       }
       trigger_patterns = ["JSON:"]
-      grammar_lazy = Llama::GrammarLazyPatternsSampler.new(
+      grammar_lazy = Llama::Sampler::GrammarLazyPatterns.new(
         vocab, grammar, "root", trigger_patterns
       )
       grammar_lazy.should_not be_nil
@@ -50,20 +50,20 @@ describe Llama::Sampler do
   end
 end
 
-describe Llama::SamplerChain do
+describe Llama::Sampler::Chain do
   it "can create a sampler chain" do
     # Test creation of a sampler chain
-    chain = Llama::SamplerChain.new
+    chain = Llama::Sampler::Chain.new
     chain.should_not be_nil
   end
 
   it "can add samplers to the chain" do
     # Test adding various samplers to the chain
-    chain = Llama::SamplerChain.new
-    chain.add(Llama::TopKSampler.new(40))
-    chain.add(Llama::TopPSampler.new(0.95, 1))
-    chain.add(Llama::TempSampler.new(0.8))
-    chain.add(Llama::DistSampler.new)
+    chain = Llama::Sampler::Chain.new
+    chain.add(Llama::Sampler::TopK.new(40))
+    chain.add(Llama::Sampler::TopP.new(0.95, 1))
+    chain.add(Llama::Sampler::Temp.new(0.8))
+    chain.add(Llama::Sampler::Dist.new)
     # If we get here without errors, the test passes
   end
 
@@ -79,11 +79,11 @@ describe Llama::SamplerChain do
     model = Llama::Model.new(model_path)
     context = model.context
 
-    chain = Llama::SamplerChain.new
-    chain.add(Llama::TopKSampler.new(40))
-    chain.add(Llama::TopPSampler.new(0.95, 1))
-    chain.add(Llama::TempSampler.new(0.8))
-    chain.add(Llama::DistSampler.new)
+    chain = Llama::Sampler::Chain.new
+    chain.add(Llama::Sampler::TopK.new(40))
+    chain.add(Llama::Sampler::TopP.new(0.95, 1))
+    chain.add(Llama::Sampler::Temp.new(0.8))
+    chain.add(Llama::Sampler::Dist.new)
 
     # Process a simple prompt
     prompt = "Hello"
