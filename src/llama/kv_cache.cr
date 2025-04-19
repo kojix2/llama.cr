@@ -10,7 +10,7 @@ module Llama
     # To avoid circular references, we store the context pointer rather than the context object
     #
     # Raises:
-    # - Llama::KvCacheError if the handle is null
+    # - Llama::KvCache::Error if the handle is null
     def initialize(@handle : LibLlama::LlamaKvCache*, ctx : Context)
       if @handle.null?
         error_msg = Llama.format_error(
@@ -18,7 +18,7 @@ module Llama
           -7, # KV cache error
           "handle is null"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
 
       @ctx_ptr = ctx.to_unsafe
@@ -29,7 +29,7 @@ module Llama
           -7, # KV cache error
           "context pointer is null"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -41,7 +41,7 @@ module Llama
           -7, # KV cache error
           "context pointer is null"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
 
       @ctx_ptr
@@ -51,7 +51,7 @@ module Llama
     # This removes all tokens from the cache and resets its state
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def clear
       begin
         LibLlama.llama_kv_self_clear(ctx_ptr)
@@ -61,7 +61,7 @@ module Llama
           -7, # KV cache error
           ex.message
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -72,7 +72,7 @@ module Llama
     # - The number of tokens in the KV cache
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def n_tokens : Int32
       begin
         LibLlama.llama_kv_self_n_tokens(ctx_ptr)
@@ -82,7 +82,7 @@ module Llama
           -7, # KV cache error
           ex.message
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -93,7 +93,7 @@ module Llama
     # - The number of used KV cells
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def used_cells : Int32
       begin
         LibLlama.llama_kv_self_used_cells(ctx_ptr)
@@ -103,7 +103,7 @@ module Llama
           -7, # KV cache error
           ex.message
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -119,7 +119,7 @@ module Llama
     #   (removing a whole sequence never fails)
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def seq_rm(seq_id : Int32, p0 : Int32, p1 : Int32) : Bool
       begin
         result = LibLlama.llama_kv_self_seq_rm(ctx_ptr, seq_id, p0, p1)
@@ -132,7 +132,7 @@ module Llama
           -7, # KV cache error
           "seq_id: #{seq_id}, p0: #{p0}, p1: #{p1}, error: #{ex.message}"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -145,7 +145,7 @@ module Llama
     # - p1: End position (p1 < 0 means end at infinity)
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def seq_cp(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32)
       begin
         LibLlama.llama_kv_self_seq_cp(ctx_ptr, seq_id_src, seq_id_dst, p0, p1)
@@ -155,7 +155,7 @@ module Llama
           -7, # KV cache error
           "seq_id_src: #{seq_id_src}, seq_id_dst: #{seq_id_dst}, p0: #{p0}, p1: #{p1}, error: #{ex.message}"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -165,7 +165,7 @@ module Llama
     # - seq_id: The sequence ID to keep
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def seq_keep(seq_id : Int32)
       begin
         LibLlama.llama_kv_self_seq_keep(ctx_ptr, seq_id)
@@ -175,7 +175,7 @@ module Llama
           -7, # KV cache error
           "seq_id: #{seq_id}, error: #{ex.message}"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -188,7 +188,7 @@ module Llama
     # - delta: The position delta to add
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def seq_add(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32)
       begin
         LibLlama.llama_kv_self_seq_add(ctx_ptr, seq_id, p0, p1, delta)
@@ -198,7 +198,7 @@ module Llama
           -7, # KV cache error
           "seq_id: #{seq_id}, p0: #{p0}, p1: #{p1}, delta: #{delta}, error: #{ex.message}"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -212,7 +212,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if the divisor is not greater than 1
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def seq_div(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32)
       if d <= 1
         raise ArgumentError.new("Divisor must be greater than 1")
@@ -226,7 +226,7 @@ module Llama
           -7, # KV cache error
           "seq_id: #{seq_id}, p0: #{p0}, p1: #{p1}, d: #{d}, error: #{ex.message}"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -239,7 +239,7 @@ module Llama
     # - The maximum position in the sequence
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def seq_pos_max(seq_id : Int32) : Int32
       begin
         result = LibLlama.llama_kv_self_seq_pos_max(ctx_ptr, seq_id)
@@ -250,11 +250,11 @@ module Llama
             -7, # KV cache error
             "seq_id: #{seq_id}, result: #{result}"
           )
-          raise KvCacheError.new(error_msg)
+          raise KvCache::Error.new(error_msg)
         end
 
         result
-      rescue ex : KvCacheError
+      rescue ex : KvCache::Error
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -262,7 +262,7 @@ module Llama
           -7, # KV cache error
           "seq_id: #{seq_id}, error: #{ex.message}"
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -270,7 +270,7 @@ module Llama
     # This will be applied lazily on next decode or explicitly with update
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def defrag
       begin
         LibLlama.llama_kv_self_defrag(ctx_ptr)
@@ -280,7 +280,7 @@ module Llama
           -7, # KV cache error
           ex.message
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -290,7 +290,7 @@ module Llama
     # - true if the context supports KV cache shifting, false otherwise
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def can_shift? : Bool
       begin
         LibLlama.llama_kv_self_can_shift(ctx_ptr)
@@ -300,7 +300,7 @@ module Llama
           -7, # KV cache error
           ex.message
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 
@@ -308,7 +308,7 @@ module Llama
     # This includes K-shifts, defragmentation, etc.
     #
     # Raises:
-    # - Llama::KvCacheError if the operation fails
+    # - Llama::KvCache::Error if the operation fails
     def update
       begin
         LibLlama.llama_kv_self_update(ctx_ptr)
@@ -318,7 +318,7 @@ module Llama
           -7, # KV cache error
           ex.message
         )
-        raise KvCacheError.new(error_msg)
+        raise KvCache::Error.new(error_msg)
       end
     end
 

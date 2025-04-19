@@ -10,7 +10,7 @@ module Llama
     # - n_seq_max: Maximum number of sequence IDs per token (default: 8)
     # Raises:
     # - ArgumentError if parameters are invalid
-    # - Llama::BatchError if the batch cannot be created
+    # - Llama::Batch::Error if the batch cannot be created
     def initialize(n_tokens : Int32, embd : Int32 = 0, n_seq_max : Int32 = 8)
       if n_tokens <= 0
         raise ArgumentError.new("n_tokens must be positive")
@@ -34,7 +34,7 @@ module Llama
           -2, # Memory allocation error
           "n_tokens: #{n_tokens}, embd: #{embd}"
         )
-        raise BatchError.new(error_msg)
+        raise Batch::Error.new(error_msg)
       end
 
       @owned = true
@@ -51,7 +51,7 @@ module Llama
           -3, # Batch processing error
           "n_tokens: #{@handle.n_tokens}"
         )
-        raise BatchError.new(error_msg)
+        raise Batch::Error.new(error_msg)
       end
     end
 
@@ -64,7 +64,7 @@ module Llama
     # - A new Batch instance
     #
     # Raises:
-    # - Llama::BatchError if the batch cannot be created
+    # - Llama::Batch::Error if the batch cannot be created
     def self.get_one(tokens : Array(Int32)) : Batch
       if tokens.empty?
         # For empty token arrays, create a special batch with n_tokens=0
@@ -83,7 +83,7 @@ module Llama
           -3, # Batch processing error
           "tokens size: #{tokens.size}"
         )
-        raise BatchError.new(error_msg)
+        raise Batch::Error.new(error_msg)
       end
 
       Batch.new(handle)
@@ -105,7 +105,7 @@ module Llama
     # Raises:
     # - ArgumentError if tokens array is empty
     # - IndexError if the batch doesn't have enough space
-    # - Llama::BatchError if memory allocation fails
+    # - Llama::Batch::Error if memory allocation fails
     def add_tokens(tokens : Array(Int32), pos_offset : Int32 = 0, seq_ids : Array(Int32)? = nil, compute_logits : Bool = true)
       if tokens.empty?
         raise ArgumentError.new("Tokens array cannot be empty")
@@ -131,7 +131,7 @@ module Llama
     #
     # Raises:
     # - IndexError if the index is out of bounds
-    # - Llama::BatchError if memory allocation fails
+    # - Llama::Batch::Error if memory allocation fails
     def set_token(i : Int32, token : Int32, pos : Int32? = nil, seq_ids : Array(Int32)? = nil, logits : Bool? = nil)
       if i < 0 || i >= @handle.n_tokens
         raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{@handle.n_tokens - 1})")
@@ -175,7 +175,7 @@ module Llama
     # Raises:
     # - IndexError if the index is out of bounds
     # - ArgumentError if the batch is not embedding-based
-    # - Llama::BatchError if memory allocation fails
+    # - Llama::Batch::Error if memory allocation fails
     def set_embedding(i : Int32, embedding : Array(Float32), pos : Int32? = nil, seq_ids : Array(Int32)? = nil, logits : Bool? = nil)
       if i < 0 || i >= @handle.n_tokens
         raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{@handle.n_tokens - 1})")
@@ -245,7 +245,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if tokens array is empty
-    # - Llama::BatchError if batch creation fails
+    # - Llama::Batch::Error if batch creation fails
     def self.for_tokens(tokens : Array(Int32), compute_logits_for_last : Bool = true, seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Batch
       if tokens.empty?
         raise ArgumentError.new("Tokens array cannot be empty")
@@ -284,7 +284,7 @@ module Llama
         end
 
         batch
-      rescue ex : BatchError | ArgumentError | IndexError
+      rescue ex : Batch::Error | ArgumentError | IndexError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -292,7 +292,7 @@ module Llama
           -3, # Batch processing error
           "tokens size: #{tokens.size}, error: #{ex.message}"
         )
-        raise BatchError.new(error_msg)
+        raise Batch::Error.new(error_msg)
       end
     end
 
@@ -308,7 +308,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if embeddings array is empty or contains empty embeddings
-    # - Llama::BatchError if batch creation fails
+    # - Llama::Batch::Error if batch creation fails
     def self.for_embeddings(embeddings : Array(Array(Float32)), seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Batch
       if embeddings.empty?
         raise ArgumentError.new("Embeddings array cannot be empty")
@@ -329,14 +329,14 @@ module Llama
               nil,
               "expected: #{embd_size}, got: #{embedding.size} at index #{i}"
             )
-            raise BatchError.new(error_msg)
+            raise Batch::Error.new(error_msg)
           end
 
           batch.set_embedding(i, embedding, i, seq_ids)
         end
 
         batch
-      rescue ex : BatchError | ArgumentError | IndexError
+      rescue ex : Batch::Error | ArgumentError | IndexError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -344,7 +344,7 @@ module Llama
           -3, # Batch processing error
           "embeddings size: #{embeddings.size}, embd_size: #{embeddings.first.size}, error: #{ex.message}"
         )
-        raise BatchError.new(error_msg)
+        raise Batch::Error.new(error_msg)
       end
     end
 

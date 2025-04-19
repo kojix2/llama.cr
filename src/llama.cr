@@ -166,8 +166,8 @@ module Llama
   #
   # Raises:
   # - ArgumentError if parameters are invalid
-  # - Llama::ModelError if model loading fails
-  # - Llama::ContextError if text generation fails
+  # - Llama::Model::Error if model loading fails
+  # - Llama::Context::Error if text generation fails
   def self.generate(model_path : String, prompt : String, max_tokens : Int32 = 128, temperature : Float32 = 0.8) : String
     # Validate parameters
     raise ArgumentError.new("max_tokens must be positive") if max_tokens <= 0

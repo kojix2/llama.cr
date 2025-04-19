@@ -13,7 +13,7 @@ module Llama
     # - offload_kqv: Whether to offload the KQV ops (including the KV cache) to GPU (default: false). Requires a GPU build of llama.cpp.
     #
     # Raises:
-    # - Llama::ContextError if the context cannot be created.
+    # - Llama::Context::Error if the context cannot be created.
     def initialize(
       model : Model,
       n_ctx : UInt32 = 0,          # The maximum context size (0 = use minimum of 512)
@@ -44,7 +44,7 @@ module Llama
           -4, # Context creation error
           "n_ctx: #{actual_n_ctx}, n_batch: #{n_batch}, n_threads: #{n_threads}, n_threads_batch: #{n_threads_batch}, embeddings: #{embeddings}, offload_kqv: #{offload_kqv}"
         )
-        raise ContextError.new(error_msg)
+        raise Context::Error.new(error_msg)
       end
 
       @model = model
@@ -92,7 +92,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if parameters are invalid
-    # - Llama::ContextError if text generation fails
+    # - Llama::Context::Error if text generation fails
     # - Llama::TokenizationError if the prompt cannot be tokenized
     def chat(
       messages : Array(ChatMessage),
@@ -121,7 +121,7 @@ module Llama
           nil,
           "model does not provide a default chat template and none was specified"
         )
-        raise ContextError.new(error_msg)
+        raise Context::Error.new(error_msg)
       end
 
       begin
@@ -132,7 +132,7 @@ module Llama
           nil,
           ex.message
         )
-        raise ContextError.new(error_msg)
+        raise Context::Error.new(error_msg)
       end
 
       # Generate text using the prompt
@@ -153,7 +153,7 @@ module Llama
     # - The result of the decode operation (0 on success)
     #
     # Raises:
-    # - Llama::BatchError on error
+    # - Llama::Batch::Error on error
     def process_tokens(tokens : Array(Int32), compute_logits_for_last : Bool = true, seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Int32
       if tokens.empty?
         raise ArgumentError.new("tokens array cannot be empty")
@@ -173,7 +173,7 @@ module Llama
     # - Array of decode operation results (0 on success)
     #
     # Raises:
-    # - Llama::BatchError on error
+    # - Llama::Batch::Error on error
     # - Llama::TokenizationError if a prompt cannot be tokenized
     def process_prompts(prompts : Array(String)) : Array(Int32)
       if prompts.empty?
@@ -206,7 +206,7 @@ module Llama
             -3, # Batch processing error
             "prompt index: #{i}, error: #{ex.message}"
           )
-          raise BatchError.new(error_msg)
+          raise Batch::Error.new(error_msg)
         end
       end
 
@@ -224,7 +224,7 @@ module Llama
     # - The result of the decode operation (0 on success)
     #
     # Raises:
-    # - Llama::BatchError on error
+    # - Llama::Batch::Error on error
     def process_embeddings(embeddings : Array(Array(Float32)), seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Int32
       if embeddings.empty?
         raise ArgumentError.new("embeddings array cannot be empty")
@@ -272,7 +272,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if parameters are invalid
-    # - Llama::ContextError if text generation fails
+    # - Llama::Context::Error if text generation fails
     # - Llama::TokenizationError if the prompt cannot be tokenized
     # - Llama::SamplingError if sampling fails
     def generate_with_sampler(prompt : String, sampler : SamplerChain, max_tokens : Int32 = 128) : String
@@ -319,7 +319,7 @@ module Llama
     # - < 0 on error
     #
     # Raises:
-    # - Llama::BatchError on error
+    # - Llama::Batch::Error on error
     def encode(batch : LibLlama::LlamaBatch | Batch) : Int32
       batch_ptr = batch.is_a?(Batch) ? batch.to_unsafe : batch
       result = LibLlama.llama_encode(@handle, batch_ptr)
@@ -330,7 +330,7 @@ module Llama
           result,
           "batch size: #{batch_ptr.n_tokens}"
         )
-        raise BatchError.new(error_msg)
+        raise Batch::Error.new(error_msg)
       end
 
       result
@@ -347,7 +347,7 @@ module Llama
     # - < 0 on error
     #
     # Raises:
-    # - Llama::BatchError on error
+    # - Llama::Batch::Error on error
     def decode(batch : LibLlama::LlamaBatch | Batch) : Int32
       batch_ptr = batch.is_a?(Batch) ? batch.to_unsafe : batch
       result = LibLlama.llama_decode(@handle, batch_ptr)
@@ -358,7 +358,7 @@ module Llama
           result,
           "batch size: #{batch_ptr.n_tokens}"
         )
-        raise BatchError.new(error_msg)
+        raise Batch::Error.new(error_msg)
       end
 
       result
@@ -377,7 +377,7 @@ module Llama
           nil,
           "logits pointer is null"
         )
-        raise ContextError.new(error_msg)
+        raise Context::Error.new(error_msg)
       end
 
       ptr
@@ -395,7 +395,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if parameters are invalid
-    # - Llama::ContextError if text generation fails
+    # - Llama::Context::Error if text generation fails
     # - Llama::TokenizationError if the prompt cannot be tokenized
     def generate(prompt : String, max_tokens : Int32 = 128, temperature : Float32 = 0.8) : String
       # Validate parameters
@@ -433,8 +433,8 @@ module Llama
     # Raises:
     # - ArgumentError if input tokens are empty
     # - Llama::TokenizationError if the prompt cannot be tokenized
-    # - Llama::BatchError if batch processing fails
-    # - Llama::ContextError if text generation fails
+    # - Llama::Batch::Error if batch processing fails
+    # - Llama::Context::Error if text generation fails
     private def generate_internal(prompt : String, max_tokens : Int32, &token_sampler : Pointer(Float32) -> Int32) : String
       # Tokenize the prompt
       begin
@@ -493,7 +493,7 @@ module Llama
           # Add the token to our list and increment position
           all_tokens << next_token
           pos += 1
-        rescue ex : BatchError | TokenizationError
+        rescue ex : Batch::Error | TokenizationError
           raise ex
         rescue ex
           error_msg = Llama.format_error(
@@ -501,7 +501,7 @@ module Llama
             nil,
             "at token position: #{pos}, error: #{ex.message}"
           )
-          raise ContextError.new(error_msg)
+          raise Context::Error.new(error_msg)
         end
       end
 
@@ -648,7 +648,7 @@ module Llama
     # - An array of embeddings, or nil if embeddings are not available
     #
     # Raises:
-    # - Llama::ContextError if embeddings mode is not enabled
+    # - Llama::Context::Error if embeddings mode is not enabled
     def get_embeddings : Array(Float32)?
       ptr = LibLlama.llama_get_embeddings(@handle)
       return nil if ptr.null?
@@ -679,7 +679,7 @@ module Llama
     # - An array of embedding values, or nil if not available
     #
     # Raises:
-    # - Llama::ContextError if embeddings mode is not enabled
+    # - Llama::Context::Error if embeddings mode is not enabled
     def get_embeddings_ith(i : Int32) : Array(Float32)?
       ptr = LibLlama.llama_get_embeddings_ith(@handle, i)
       return nil if ptr.null?
@@ -705,7 +705,7 @@ module Llama
     # - An array of embedding values, or nil if not available
     #
     # Raises:
-    # - Llama::ContextError if embeddings mode is not enabled
+    # - Llama::Context::Error if embeddings mode is not enabled
     def get_embeddings_seq(seq_id : Int32) : Array(Float32)?
       ptr = LibLlama.llama_get_embeddings_seq(@handle, seq_id)
       return nil if ptr.null?

@@ -10,7 +10,7 @@ module Llama
     # To avoid circular references, we store the context pointer rather than the context object
     #
     # Raises:
-    # - Llama::StateError if the context pointer is null
+    # - Llama::State::Error if the context pointer is null
     def initialize(ctx : Context)
       @ctx_ptr = ctx.to_unsafe
 
@@ -20,7 +20,7 @@ module Llama
           -8, # State management error
           "context pointer is null"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -32,7 +32,7 @@ module Llama
           -8, # State management error
           "context pointer is null"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
 
       @ctx_ptr
@@ -44,7 +44,7 @@ module Llama
     # - The size in bytes
     #
     # Raises:
-    # - Llama::StateError if the operation fails
+    # - Llama::State::Error if the operation fails
     def size : LibC::SizeT
       begin
         result = LibLlama.llama_state_get_size(ctx_ptr)
@@ -55,11 +55,11 @@ module Llama
             -8, # State management error
             "returned size is 0"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         result
-      rescue ex : StateError
+      rescue ex : State::Error
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -67,7 +67,7 @@ module Llama
           -8, # State management error
           ex.message
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -77,7 +77,7 @@ module Llama
     # - A Bytes object containing the state data
     #
     # Raises:
-    # - Llama::StateError if the operation fails
+    # - Llama::State::Error if the operation fails
     def get_data : Bytes
       begin
         # Get the size needed
@@ -95,12 +95,12 @@ module Llama
             -8, # State management error
             "no bytes were copied"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         # Return the buffer (potentially truncated if bytes_copied < state_size)
         buffer[0, bytes_copied]
-      rescue ex : StateError
+      rescue ex : State::Error
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -108,7 +108,7 @@ module Llama
           -8, # State management error
           ex.message
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -122,7 +122,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if data is empty
-    # - Llama::StateError if the operation fails
+    # - Llama::State::Error if the operation fails
     def set_data(data : Bytes) : LibC::SizeT
       if data.empty?
         raise ArgumentError.new("State data cannot be empty")
@@ -137,11 +137,11 @@ module Llama
             -8, # State management error
             "no bytes were read"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         result
-      rescue ex : StateError | ArgumentError
+      rescue ex : State::Error | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -149,7 +149,7 @@ module Llama
           -8, # State management error
           ex.message
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -164,7 +164,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if path is empty or max_tokens is not positive
-    # - Llama::StateError if the file cannot be loaded
+    # - Llama::State::Error if the file cannot be loaded
     def load_file(path : String, max_tokens : Int32 = 1024) : Array(Int32)
       if path.empty?
         raise ArgumentError.new("Path cannot be empty")
@@ -195,7 +195,7 @@ module Llama
             -8, # State management error
             "path: #{path}"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         # Convert to Crystal array
@@ -205,7 +205,7 @@ module Llama
         end
 
         result
-      rescue ex : StateError | ArgumentError
+      rescue ex : State::Error | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -213,7 +213,7 @@ module Llama
           -8, # State management error
           "path: #{path}, error: #{ex.message}"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -228,7 +228,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if path is empty
-    # - Llama::StateError if the operation fails
+    # - Llama::State::Error if the operation fails
     def save_file(path : String, tokens : Array(Int32)) : Bool
       if path.empty?
         raise ArgumentError.new("Path cannot be empty")
@@ -252,11 +252,11 @@ module Llama
             -8, # State management error
             "path: #{path}"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         result
-      rescue ex : StateError | ArgumentError
+      rescue ex : State::Error | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -264,7 +264,7 @@ module Llama
           -8, # State management error
           "path: #{path}, error: #{ex.message}"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -277,7 +277,7 @@ module Llama
     # - The size in bytes
     #
     # Raises:
-    # - Llama::StateError if the operation fails
+    # - Llama::State::Error if the operation fails
     def seq_size(seq_id : Int32) : LibC::SizeT
       begin
         result = LibLlama.llama_state_seq_get_size(ctx_ptr, seq_id)
@@ -288,11 +288,11 @@ module Llama
             -8, # State management error
             "seq_id: #{seq_id}, returned size is 0"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         result
-      rescue ex : StateError
+      rescue ex : State::Error
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -300,7 +300,7 @@ module Llama
           -8, # State management error
           "seq_id: #{seq_id}, error: #{ex.message}"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -313,7 +313,7 @@ module Llama
     # - A Bytes object containing the sequence state data
     #
     # Raises:
-    # - Llama::StateError if the operation fails
+    # - Llama::State::Error if the operation fails
     def seq_get_data(seq_id : Int32) : Bytes
       begin
         # Get the size needed
@@ -336,12 +336,12 @@ module Llama
             -8, # State management error
             "seq_id: #{seq_id}, no bytes were copied"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         # Return the buffer (potentially truncated if bytes_copied < state_size)
         buffer[0, bytes_copied]
-      rescue ex : StateError
+      rescue ex : State::Error
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -349,7 +349,7 @@ module Llama
           -8, # State management error
           "seq_id: #{seq_id}, error: #{ex.message}"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -364,7 +364,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if data is empty
-    # - Llama::StateError if the operation fails
+    # - Llama::State::Error if the operation fails
     def seq_set_data(data : Bytes, dest_seq_id : Int32) : LibC::SizeT
       if data.empty?
         raise ArgumentError.new("State data cannot be empty")
@@ -384,11 +384,11 @@ module Llama
             -8, # State management error
             "dest_seq_id: #{dest_seq_id}, no bytes were read"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         result
-      rescue ex : StateError | ArgumentError
+      rescue ex : State::Error | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -396,7 +396,7 @@ module Llama
           -8, # State management error
           "dest_seq_id: #{dest_seq_id}, error: #{ex.message}"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -412,7 +412,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if path is empty
-    # - Llama::StateError if the operation fails
+    # - Llama::State::Error if the operation fails
     def seq_save_file(path : String, seq_id : Int32, tokens : Array(Int32)) : LibC::SizeT
       if path.empty?
         raise ArgumentError.new("Path cannot be empty")
@@ -437,11 +437,11 @@ module Llama
             -8, # State management error
             "path: #{path}, seq_id: #{seq_id}"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         result
-      rescue ex : StateError | ArgumentError
+      rescue ex : State::Error | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -449,7 +449,7 @@ module Llama
           -8, # State management error
           "path: #{path}, seq_id: #{seq_id}, error: #{ex.message}"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 
@@ -465,7 +465,7 @@ module Llama
     #
     # Raises:
     # - ArgumentError if path is empty or max_tokens is not positive
-    # - Llama::StateError if the file cannot be loaded
+    # - Llama::State::Error if the file cannot be loaded
     def seq_load_file(path : String, dest_seq_id : Int32, max_tokens : Int32 = 1024) : Array(Int32)
       if path.empty?
         raise ArgumentError.new("Path cannot be empty")
@@ -497,7 +497,7 @@ module Llama
             -8, # State management error
             "path: #{path}, dest_seq_id: #{dest_seq_id}"
           )
-          raise StateError.new(error_msg)
+          raise State::Error.new(error_msg)
         end
 
         # Convert to Crystal array
@@ -507,7 +507,7 @@ module Llama
         end
 
         result
-      rescue ex : StateError | ArgumentError
+      rescue ex : State::Error | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -515,7 +515,7 @@ module Llama
           -8, # State management error
           "path: #{path}, dest_seq_id: #{dest_seq_id}, error: #{ex.message}"
         )
-        raise StateError.new(error_msg)
+        raise State::Error.new(error_msg)
       end
     end
 

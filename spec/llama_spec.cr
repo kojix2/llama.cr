@@ -12,7 +12,7 @@ describe Llama do
 
   describe "Error handling" do
     it "raises an error when loading a non-existent model" do
-      expect_raises(Llama::ModelError, /Failed to load model/) do
+      expect_raises(Llama::Model::Error, /Failed to load model/) do
         Llama::Model.new("non_existent_model.gguf")
       end
     end

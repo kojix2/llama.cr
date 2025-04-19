@@ -11,7 +11,7 @@ module Llama
     # - vocab_only: Only load the vocabulary, no weights (default: false).  Useful for inspecting the vocabulary.
     #
     # Raises:
-    # - Llama::ModelError if the model cannot be loaded.
+    # - Llama::Model::Error if the model cannot be loaded.
     def initialize(
       path : String,
       n_gpu_layers : Int32 = 0,
@@ -33,7 +33,7 @@ module Llama
           -5, # Model loading error
           "path: #{path}, n_gpu_layers: #{n_gpu_layers}, use_mmap: #{use_mmap}, use_mlock: #{use_mlock}, vocab_only: #{vocab_only}"
         )
-        raise ModelError.new(error_msg)
+        raise Model::Error.new(error_msg)
       end
     end
 
@@ -62,7 +62,7 @@ module Llama
           -5, # Model error
           "model may be corrupted"
         )
-        raise ModelError.new(error_msg)
+        raise Model::Error.new(error_msg)
       end
       Vocab.new(vocab_ptr)
     end
@@ -123,7 +123,7 @@ module Llama
     # - A new Context instance
     #
     # Raises:
-    # - Llama::ContextError if the context cannot be created
+    # - Llama::Context::Error if the context cannot be created
     def context(*args, **options) : Context
       Context.new(self, *args, **options)
     end
