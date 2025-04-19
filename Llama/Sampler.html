@@ -157,8 +157,103 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/Sampler" data-name="llama::sampler">
+  <li class="parent open current" data-id="llama/Llama/Sampler" data-name="llama::sampler">
       <a href="../Llama/Sampler.html">Sampler</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Base" data-name="llama::sampler::base">
+      <a href="../Llama/Sampler/Base.html">Base</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Chain" data-name="llama::sampler::chain">
+      <a href="../Llama/Sampler/Chain.html">Chain</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Dist" data-name="llama::sampler::dist">
+      <a href="../Llama/Sampler/Dist.html">Dist</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Grammar" data-name="llama::sampler::grammar">
+      <a href="../Llama/Sampler/Grammar.html">Grammar</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/GrammarLazyPatterns" data-name="llama::sampler::grammarlazypatterns">
+      <a href="../Llama/Sampler/GrammarLazyPatterns.html">GrammarLazyPatterns</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Greedy" data-name="llama::sampler::greedy">
+      <a href="../Llama/Sampler/Greedy.html">Greedy</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Infill" data-name="llama::sampler::infill">
+      <a href="../Llama/Sampler/Infill.html">Infill</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/MinP" data-name="llama::sampler::minp">
+      <a href="../Llama/Sampler/MinP.html">MinP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Mirostat" data-name="llama::sampler::mirostat">
+      <a href="../Llama/Sampler/Mirostat.html">Mirostat</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/MirostatV2" data-name="llama::sampler::mirostatv2">
+      <a href="../Llama/Sampler/MirostatV2.html">MirostatV2</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Penalties" data-name="llama::sampler::penalties">
+      <a href="../Llama/Sampler/Penalties.html">Penalties</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Temp" data-name="llama::sampler::temp">
+      <a href="../Llama/Sampler/Temp.html">Temp</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TempExt" data-name="llama::sampler::tempext">
+      <a href="../Llama/Sampler/TempExt.html">TempExt</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopK" data-name="llama::sampler::topk">
+      <a href="../Llama/Sampler/TopK.html">TopK</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopNSigma" data-name="llama::sampler::topnsigma">
+      <a href="../Llama/Sampler/TopNSigma.html">TopNSigma</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopP" data-name="llama::sampler::topp">
+      <a href="../Llama/Sampler/TopP.html">TopP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Typical" data-name="llama::sampler::typical">
+      <a href="../Llama/Sampler/Typical.html">Typical</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Xtc" data-name="llama::sampler::xtc">
+      <a href="../Llama/Sampler/Xtc.html">Xtc</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -242,30 +337,12 @@
 <h1 class="type-name">
 
   <span class="kind">
-    abstract class
+    module
   </span> Llama::<wbr>Sampler
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
-
-
-
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>Wrapper for the llama_sampler structure</p>
-<p>The Sampler class is the base class for all sampling methods.
-Sampling is the process of selecting the next token during text generation.
-Different sampling methods produce different text characteristics.</p>
 
 
 
@@ -277,51 +354,7 @@ Different sampling methods produce different text characteristics.</p>
 
 
 
-  <h2>
-    <a id="direct-known-subclasses" class="anchor" href="#direct-known-subclasses">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Direct Known Subclasses
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type"><a href="../Llama/DistSampler.html">Llama::DistSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/GrammarLazyPatternsSampler.html">Llama::GrammarLazyPatternsSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/GrammarSampler.html">Llama::GrammarSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/GreedySampler.html">Llama::GreedySampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/InfillSampler.html">Llama::InfillSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/MinPSampler.html">Llama::MinPSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/MirostatSampler.html">Llama::MirostatSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/MirostatV2Sampler.html">Llama::MirostatV2Sampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/PenaltiesSampler.html">Llama::PenaltiesSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/SamplerChain.html">Llama::SamplerChain</a></li>
-    
-      <li class="other-type"><a href="../Llama/TempExtSampler.html">Llama::TempExtSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TempSampler.html">Llama::TempSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TopKSampler.html">Llama::TopKSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TopNSigmaSampler.html">Llama::TopNSigmaSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TopPSampler.html">Llama::TopPSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/TypicalSampler.html">Llama::TypicalSampler</a></li>
-    
-      <li class="other-type"><a href="../Llama/XtcSampler.html">Llama::XtcSampler</a></li>
-    
-  </ul>
+
 
 
 
@@ -338,8 +371,134 @@ Different sampling methods produce different text characteristics.</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L7" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler.cr#L2" target="_blank">
         llama/sampler.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/base.cr#L2" target="_blank">
+        llama/sampler/base.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/chain.cr#L2" target="_blank">
+        llama/sampler/chain.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/dist.cr#L2" target="_blank">
+        llama/sampler/dist.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/grammar.cr#L2" target="_blank">
+        llama/sampler/grammar.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/grammar_lazy_patterns.cr#L2" target="_blank">
+        llama/sampler/grammar_lazy_patterns.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/greedy.cr#L2" target="_blank">
+        llama/sampler/greedy.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/infill.cr#L2" target="_blank">
+        llama/sampler/infill.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/min_p.cr#L2" target="_blank">
+        llama/sampler/min_p.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/mirostat.cr#L2" target="_blank">
+        llama/sampler/mirostat.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/mirostat_v2.cr#L2" target="_blank">
+        llama/sampler/mirostat_v2.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/penalties.cr#L2" target="_blank">
+        llama/sampler/penalties.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/temp.cr#L2" target="_blank">
+        llama/sampler/temp.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/temp_ext.cr#L2" target="_blank">
+        llama/sampler/temp_ext.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/top_k.cr#L2" target="_blank">
+        llama/sampler/top_k.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/top_n_sigma.cr#L2" target="_blank">
+        llama/sampler/top_n_sigma.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/top_p.cr#L2" target="_blank">
+        llama/sampler/top_p.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/typical.cr#L2" target="_blank">
+        llama/sampler/typical.cr
+      </a>
+    
+    <br/>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler/xtc.cr#L2" target="_blank">
+        llama/sampler/xtc.cr
       </a>
     
     <br/>
@@ -350,180 +509,25 @@ Different sampling methods produce different text characteristics.</p>
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method" class="signature"><strong>.new</strong>(handle : Pointer(LibLlama::LlamaSampler))</a>
-        
-          <div class="summary"><p>Creates a new Sampler instance from a raw pointer</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
   
 
   
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
-        
-          <div class="summary"><p>Frees the resources associated with this sampler</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="signature"><strong>#to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaSampler)</a>
-        
-          <div class="summary"><p>Returns the raw pointer to the underlying llama_sampler structure</p></div>
-        
-      </li>
-    
-  </ul>
-
 
 
   <div class="methods-inherited">
     
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(handle:Pointer(LibLlama::LlamaSampler))-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(handle : Pointer(LibLlama::LlamaSampler))
-
-        <a class="method-permalink" href="#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new Sampler instance from a raw pointer</p>
-<p>Note: This constructor is intended for internal use.</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L11" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
   
 
   
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="finalize-instance-method">
-      <div class="signature">
-        
-        def <strong>finalize</strong>
-
-        <a class="method-permalink" href="#finalize-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Frees the resources associated with this sampler</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L20" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="to_unsafe:Pointer(Llama::LibLlama::LlamaSampler)-instance-method">
-      <div class="signature">
-        
-        def <strong>to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaSampler)
-
-        <a class="method-permalink" href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the raw pointer to the underlying llama_sampler structure</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L15" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
 
 </div>

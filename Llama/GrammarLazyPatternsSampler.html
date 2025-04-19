@@ -157,8 +157,103 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/Sampler" data-name="llama::sampler">
+  <li class="parent " data-id="llama/Llama/Sampler" data-name="llama::sampler">
       <a href="../Llama/Sampler.html">Sampler</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Base" data-name="llama::sampler::base">
+      <a href="../Llama/Sampler/Base.html">Base</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Chain" data-name="llama::sampler::chain">
+      <a href="../Llama/Sampler/Chain.html">Chain</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Dist" data-name="llama::sampler::dist">
+      <a href="../Llama/Sampler/Dist.html">Dist</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Grammar" data-name="llama::sampler::grammar">
+      <a href="../Llama/Sampler/Grammar.html">Grammar</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/GrammarLazyPatterns" data-name="llama::sampler::grammarlazypatterns">
+      <a href="../Llama/Sampler/GrammarLazyPatterns.html">GrammarLazyPatterns</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Greedy" data-name="llama::sampler::greedy">
+      <a href="../Llama/Sampler/Greedy.html">Greedy</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Infill" data-name="llama::sampler::infill">
+      <a href="../Llama/Sampler/Infill.html">Infill</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/MinP" data-name="llama::sampler::minp">
+      <a href="../Llama/Sampler/MinP.html">MinP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Mirostat" data-name="llama::sampler::mirostat">
+      <a href="../Llama/Sampler/Mirostat.html">Mirostat</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/MirostatV2" data-name="llama::sampler::mirostatv2">
+      <a href="../Llama/Sampler/MirostatV2.html">MirostatV2</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Penalties" data-name="llama::sampler::penalties">
+      <a href="../Llama/Sampler/Penalties.html">Penalties</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Temp" data-name="llama::sampler::temp">
+      <a href="../Llama/Sampler/Temp.html">Temp</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TempExt" data-name="llama::sampler::tempext">
+      <a href="../Llama/Sampler/TempExt.html">TempExt</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopK" data-name="llama::sampler::topk">
+      <a href="../Llama/Sampler/TopK.html">TopK</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopNSigma" data-name="llama::sampler::topnsigma">
+      <a href="../Llama/Sampler/TopNSigma.html">TopNSigma</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopP" data-name="llama::sampler::topp">
+      <a href="../Llama/Sampler/TopP.html">TopP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Typical" data-name="llama::sampler::typical">
+      <a href="../Llama/Sampler/Typical.html">Typical</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Xtc" data-name="llama::sampler::xtc">
+      <a href="../Llama/Sampler/Xtc.html">Xtc</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -242,49 +337,26 @@
 <h1 class="type-name">
 
   <span class="kind">
-    class
+    alias
   </span> Llama::<wbr>GrammarLazyPatternsSampler
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/GrammarLazyPatternsSampler.html">Llama::GrammarLazyPatternsSampler</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
 
 
 
 
   <h2>
-    <a id="overview" class="anchor" href="#overview">
+    <a id="alias-definition" class="anchor" href="#alias-definition">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Overview
+    Alias Definition
   </h2>
-
-  <p>Grammar Lazy Patterns sampler</p>
-<p>The Grammar Lazy Patterns sampler is an extension of the Grammar sampler
-that only applies grammar constraints when triggered by specific patterns
-or tokens. This is useful for mixed-format generation where grammar
-constraints should only apply to certain parts of the output.</p>
-<p>Example:</p>
-<pre><code class="language-crystal"><span class="c"># Define a JSON grammar that only activates when the text contains &quot;JSON:&quot;</span>
-grammar <span class="o">=</span> <span class="s">%q{
-  root ::= object
-  object ::= &quot;{&quot; ws (string &quot;:&quot; ws value (&quot;,&quot; ws string &quot;:&quot; ws value)*)? &quot;}&quot; ws
-  array ::= &quot;[&quot; ws (value (&quot;,&quot; ws value)*)? &quot;]&quot; ws
-  value ::= object | array | string | number | &quot;true&quot; | &quot;false&quot; | &quot;null&quot;
-  string ::= &quot;\&quot;&quot; ([^&quot;\\] | &quot;\\&quot; .)* &quot;\&quot;&quot;
-  number ::= &quot;-&quot;? (&quot;0&quot; | [1-9] [0-9]*) (&quot;.&quot; [0-9]+)? ([eE] [-+]? [0-9]+)?
-  ws ::= [ \t\n]*
-}</span>
-
-trigger_patterns <span class="o">=</span> [<span class="s">&quot;JSON:&quot;</span>]
-sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">GrammarLazyPatternsSampler</span>.new(
-  model.vocab, grammar, <span class="s">&quot;root&quot;</span>, trigger_patterns
-)</code></pre>
-
-
+  <code><a href="../Llama/Sampler/GrammarLazyPatterns.html">Llama::Sampler::GrammarLazyPatterns</a></code>
 
 
 
@@ -309,7 +381,7 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L582" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler.cr#L44" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -321,199 +393,25 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28vocab%3AVocab%2Cgrammar_str%3AString%2Cgrammar_root%3AString%2Ctrigger_patterns%3AArray%28String%29%3D%5B%5DofString%2Ctrigger_tokens%3AArray%28Int32%29%3D%5B%5DofInt32%29-class-method" class="signature"><strong>.new</strong>(vocab : Vocab, grammar_str : String, grammar_root : String, trigger_patterns : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, trigger_tokens : Array(Int32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span>)</a>
-        
-          <div class="summary"><p>Creates a new Grammar Lazy Patterns sampler</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
   
 
   
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
-        
-          <div class="summary"><p>Overrides the parent class's finalize method to ensure proper cleanup</p></div>
-        
-      </li>
-    
-  </ul>
-
 
 
   <div class="methods-inherited">
     
-      
-
-  <h3>Instance methods inherited from class <code><a href="../Llama/Sampler.html">Llama::Sampler</a></code></h3>
-  
-  
-    <a href="../Llama/Sampler.html#finalize-instance-method" class="tooltip">
-      <span>finalize</span>
-    finalize</a>, 
-    
-  
-    <a href="../Llama/Sampler.html#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="tooltip">
-      <span>to_unsafe : Pointer(Llama::LibLlama::LlamaSampler)</span>
-    to_unsafe</a>
-    
-  
-
-
-      
-
-  <h3>Constructor methods inherited from class <code><a href="../Llama/Sampler.html">Llama::Sampler</a></code></h3>
-  
-  
-    <a href="../Llama/Sampler.html#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method" class="tooltip">
-      <span>new(handle : Pointer(LibLlama::LlamaSampler))</span>
-    new</a>
-    
-  
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(vocab:Vocab,grammar_str:String,grammar_root:String,trigger_patterns:Array(String)=[]ofString,trigger_tokens:Array(Int32)=[]ofInt32)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(vocab : <a href="../Llama/Vocab.html">Vocab</a>, grammar_str : String, grammar_root : String, trigger_patterns : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, trigger_tokens : Array(Int32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span>)
-
-        <a class="method-permalink" href="#new%28vocab%3AVocab%2Cgrammar_str%3AString%2Cgrammar_root%3AString%2Ctrigger_patterns%3AArray%28String%29%3D%5B%5DofString%2Ctrigger_tokens%3AArray%28Int32%29%3D%5B%5DofInt32%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new Grammar Lazy Patterns sampler</p>
-<p>Parameters:</p>
-<ul>
-<li>vocab: The vocabulary to use</li>
-<li>grammar_str: The grammar definition string in GBNF format</li>
-<li>grammar_root: The root symbol of the grammar</li>
-<li>trigger_patterns: Array of string patterns that will trigger the grammar</li>
-<li>trigger_tokens: Array of token IDs that will trigger the grammar</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::Error if the sampler cannot be created</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L594" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
   
 
   
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="finalize-instance-method">
-      <div class="signature">
-        
-        def <strong>finalize</strong>
-
-        <a class="method-permalink" href="#finalize-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Overrides the parent class's finalize method to ensure proper cleanup</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L637" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
 
 </div>

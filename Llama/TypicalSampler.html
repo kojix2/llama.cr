@@ -157,8 +157,103 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/Sampler" data-name="llama::sampler">
+  <li class="parent " data-id="llama/Llama/Sampler" data-name="llama::sampler">
       <a href="../Llama/Sampler.html">Sampler</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Base" data-name="llama::sampler::base">
+      <a href="../Llama/Sampler/Base.html">Base</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Chain" data-name="llama::sampler::chain">
+      <a href="../Llama/Sampler/Chain.html">Chain</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Dist" data-name="llama::sampler::dist">
+      <a href="../Llama/Sampler/Dist.html">Dist</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Grammar" data-name="llama::sampler::grammar">
+      <a href="../Llama/Sampler/Grammar.html">Grammar</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/GrammarLazyPatterns" data-name="llama::sampler::grammarlazypatterns">
+      <a href="../Llama/Sampler/GrammarLazyPatterns.html">GrammarLazyPatterns</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Greedy" data-name="llama::sampler::greedy">
+      <a href="../Llama/Sampler/Greedy.html">Greedy</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Infill" data-name="llama::sampler::infill">
+      <a href="../Llama/Sampler/Infill.html">Infill</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/MinP" data-name="llama::sampler::minp">
+      <a href="../Llama/Sampler/MinP.html">MinP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Mirostat" data-name="llama::sampler::mirostat">
+      <a href="../Llama/Sampler/Mirostat.html">Mirostat</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/MirostatV2" data-name="llama::sampler::mirostatv2">
+      <a href="../Llama/Sampler/MirostatV2.html">MirostatV2</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Penalties" data-name="llama::sampler::penalties">
+      <a href="../Llama/Sampler/Penalties.html">Penalties</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Temp" data-name="llama::sampler::temp">
+      <a href="../Llama/Sampler/Temp.html">Temp</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TempExt" data-name="llama::sampler::tempext">
+      <a href="../Llama/Sampler/TempExt.html">TempExt</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopK" data-name="llama::sampler::topk">
+      <a href="../Llama/Sampler/TopK.html">TopK</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopNSigma" data-name="llama::sampler::topnsigma">
+      <a href="../Llama/Sampler/TopNSigma.html">TopNSigma</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopP" data-name="llama::sampler::topp">
+      <a href="../Llama/Sampler/TopP.html">TopP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Typical" data-name="llama::sampler::typical">
+      <a href="../Llama/Sampler/Typical.html">Typical</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Xtc" data-name="llama::sampler::xtc">
+      <a href="../Llama/Sampler/Xtc.html">Xtc</a>
+      
+    </li>
+  
+</ul>
+
       
     </li>
   
@@ -242,35 +337,26 @@
 <h1 class="type-name">
 
   <span class="kind">
-    class
+    alias
   </span> Llama::<wbr>TypicalSampler
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/TypicalSampler.html">Llama::TypicalSampler</a></li><li class="superclass"><a href="../Llama/Sampler.html">Llama::Sampler</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+
 
 
 
 
   <h2>
-    <a id="overview" class="anchor" href="#overview">
+    <a id="alias-definition" class="anchor" href="#alias-definition">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>
-    Overview
+    Alias Definition
   </h2>
-
-  <p>Typical sampler</p>
-<p>The Typical sampler selects tokens based on their &quot;typicality&quot; (entropy).
-It filters out tokens that are either too predictable or too surprising,
-leading to more natural and diverse text generation.</p>
-<p>Based on the paper: https://arxiv.org/abs/2202.00666</p>
-<p>Example:</p>
-<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">TypicalSampler</span>.new(<span class="n">0.95</span>, <span class="n">1</span>) <span class="c"># Keep tokens with typicality &gt;= 0.95</span></code></pre>
-
-
+  <code><a href="../Llama/Sampler/Typical.html">Llama::Sampler::Typical</a></code>
 
 
 
@@ -295,7 +381,7 @@ leading to more natural and diverse text generation.</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L274" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/7590726900dcf792c09b82233583de7a14f973e5/src/llama/sampler.cr#L35" target="_blank">
         llama/sampler.cr
       </a>
     
@@ -307,25 +393,6 @@ leading to more natural and diverse text generation.</p>
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28p%3AFloat32%2Cmin_keep%3AInt32%3D1%29-class-method" class="signature"><strong>.new</strong>(p : Float32, min_keep : Int32 = <span class="n">1</span>)</a>
-        
-          <div class="summary"><p>Creates a new Typical sampler</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
@@ -336,111 +403,9 @@ leading to more natural and diverse text generation.</p>
 
   <div class="methods-inherited">
     
-      
-
-  <h3>Instance methods inherited from class <code><a href="../Llama/Sampler.html">Llama::Sampler</a></code></h3>
-  
-  
-    <a href="../Llama/Sampler.html#finalize-instance-method" class="tooltip">
-      <span>finalize</span>
-    finalize</a>, 
-    
-  
-    <a href="../Llama/Sampler.html#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="tooltip">
-      <span>to_unsafe : Pointer(Llama::LibLlama::LlamaSampler)</span>
-    to_unsafe</a>
-    
-  
-
-
-      
-
-  <h3>Constructor methods inherited from class <code><a href="../Llama/Sampler.html">Llama::Sampler</a></code></h3>
-  
-  
-    <a href="../Llama/Sampler.html#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method" class="tooltip">
-      <span>new(handle : Pointer(LibLlama::LlamaSampler))</span>
-    new</a>
-    
-  
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(p:Float32,min_keep:Int32=1)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(p : Float32, min_keep : Int32 = <span class="n">1</span>)
-
-        <a class="method-permalink" href="#new%28p%3AFloat32%2Cmin_keep%3AInt32%3D1%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new Typical sampler</p>
-<p>Parameters:</p>
-<ul>
-<li>p: The typicality threshold (0.0 to 1.0)</li>
-<li>min_keep: Minimum number of tokens to keep</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::Error if the sampler cannot be created</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/d526b2ced49bfcc4dacc5511f9eb612bb7b0abc1/src/llama/sampler.cr#L283" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
