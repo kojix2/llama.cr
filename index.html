@@ -147,11 +147,6 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/Sampler/Chain" data-name="llama::sampler::chain">
-      <a href="Llama/Sampler/Chain.html">Chain</a>
-      
-    </li>
-  
   <li class=" " data-id="llama/Llama/Sampler/Dist" data-name="llama::sampler::dist">
       <a href="Llama/Sampler/Dist.html">Dist</a>
       
@@ -244,6 +239,11 @@
   
 </ul>
 
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/SamplerChain" data-name="llama::samplerchain">
+      <a href="Llama/SamplerChain.html">SamplerChain</a>
       
     </li>
   
@@ -400,7 +400,7 @@ model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</s
 context <span class="o">=</span> model.context
 
 <span class="c"># Create a sampler chain with multiple sampling methods</span>
-chain <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">Chain</span>.new
+chain <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">SamplerChain</span>.new
 chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">TopK</span>.new(<span class="n">40</span>))
 chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">MinP</span>.new(<span class="n">0.05</span>, <span class="n">1</span>))
 chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">Temp</span>.new(<span class="n">0.8</span>))
@@ -502,7 +502,7 @@ puts <span class="t">Llama</span>.tokenize_and_format(model.vocab, <span class="
 <li><strong>Llama::Batch</strong> - Manages batches of tokens for efficient processing</li>
 <li><strong>Llama::KvCache</strong> - Controls the key-value cache for optimized inference</li>
 <li><strong>Llama::State</strong> - Handles saving and loading model state</li>
-<li><strong>Llama::Sampler::Chain</strong> - Combines multiple sampling methods</li>
+<li><strong>Llama::SamplerChain</strong> - Combines multiple sampling methods</li>
 </ul>
 <h3><a id="samplers" class="anchor" href="#samplers">
   <svg class="octicon-link" aria-hidden="true">
