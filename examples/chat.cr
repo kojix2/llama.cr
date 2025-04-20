@@ -34,6 +34,7 @@ abort "Error: Model path is required. Use -m or --model option.\nRun with --help
 Llama.log_level = Llama::LOG_LEVEL_ERROR
 
 # Initialize model, context, and sampler
+# Llama.init will be called automatically
 model = Llama::Model.new(model_path, n_gpu_layers: ngl) || abort "Error: Unable to load model"
 vocab = model.vocab
 context = model.context(n_ctx: n_ctx.to_u32, n_batch: n_ctx.to_u32) || abort "Error: Failed to create the context"

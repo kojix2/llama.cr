@@ -23,3 +23,5 @@ result = Llama.generate(model_path, prompt, max_tokens: max_tokens)
 puts
 puts prompt
 puts result
+
+# Llama.uninit

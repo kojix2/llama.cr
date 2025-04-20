@@ -43,6 +43,7 @@ end
 # The backend is automatically initialized by Llama::Model and Llama::Context
 
 # Load the model
+# Llama.init will be called automatically
 model = Llama::Model.new(model_path, n_gpu_layers: ngl)
 
 vocab = model.vocab
@@ -115,3 +116,5 @@ STDERR.puts
 sampler.print_perf
 context.print_perf
 STDERR.puts
+
+Llama.uninit
