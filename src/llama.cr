@@ -80,6 +80,15 @@ module Llama
   VERSION                      = "0.1.0"
   LLAMA_CPP_COMPATIBLE_VERSION = read_file("#{__DIR__}/LLAMA_VERSION").chomp
 
+  # ==== Native constants (wrapped for user convenience) ====
+  DEFAULT_SEED    = LibLlama::LLAMA_DEFAULT_SEED
+  TOKEN_NULL      = LibLlama::LLAMA_TOKEN_NULL
+  FILE_MAGIC_GGLA = LibLlama::LLAMA_FILE_MAGIC_GGLA
+  FILE_MAGIC_GGSN = LibLlama::LLAMA_FILE_MAGIC_GGSN
+  FILE_MAGIC_GGSQ = LibLlama::LLAMA_FILE_MAGIC_GGSQ
+  SESSION_MAGIC   = LibLlama::LLAMA_SESSION_MAGIC
+  SESSION_VERSION = LibLlama::LLAMA_SESSION_VERSION
+
   # Mutex for backend initialization/finalization (required for type inference)
   @@backend_mutex : Mutex = Mutex.new
   @@backend_initialized = false

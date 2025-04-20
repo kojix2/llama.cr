@@ -65,6 +65,36 @@ module Llama
       @kv_cache ||= KvCache.new(LibLlama.llama_get_kv_self(@handle), self)
     end
 
+    # Returns the context window size (n_ctx)
+    def n_ctx : UInt32
+      LibLlama.llama_n_ctx(@handle)
+    end
+
+    # Returns the logical batch size (n_batch)
+    def n_batch : UInt32
+      LibLlama.llama_n_batch(@handle)
+    end
+
+    # Returns the micro-batch size (n_ubatch)
+    def n_ubatch : UInt32
+      LibLlama.llama_n_ubatch(@handle)
+    end
+
+    # Returns the maximum number of sequence IDs per token (n_seq_max)
+    def n_seq_max : UInt32
+      LibLlama.llama_n_seq_max(@handle)
+    end
+
+    # Returns the number of threads used for generation
+    def n_threads : Int32
+      LibLlama.llama_n_threads(@handle)
+    end
+
+    # Returns the number of threads used for batch processing
+    def n_threads_batch : Int32
+      LibLlama.llama_n_threads_batch(@handle)
+    end
+
     # Returns the state manager for this context
     # Lazily initializes the state if it doesn't exist yet
     def state : State
@@ -725,6 +755,44 @@ module Llama
       end
 
       result
+    end
+
+    # Applies the chat template to the given messages and returns the formatted prompt.
+    #
+    # Parameters:
+    # - messages: Array of ChatMessage (user/assistant/system)
+    # - add_assistant: Whether to add assistant role (default: true)
+    # - template: Optional template string (default: model's template)
+    #
+    # Returns:
+    # - The formatted prompt string.
+    def apply_chat_template(messages : Array(ChatMessage), add_assistant : Bool = true, template : String? = nil) : String
+      tmpl = template || @model.chat_template || ""
+      c_messages = messages.map(&.to_unsafe)
+      # First call: get required buffer size
+      new_len = LibLlama.llama_chat_apply_template(
+        tmpl.to_unsafe,
+        c_messages.to_unsafe,
+        messages.size,
+        add_assistant,
+        nil,
+        0
+      )
+      raise "llama_chat_apply_template failed to get buffer size" if new_len < 0
+
+      # Second call: allocate buffer and get the result
+      buffer = Pointer(LibC::Char).malloc(new_len)
+      written = LibLlama.llama_chat_apply_template(
+        tmpl.to_unsafe,
+        c_messages.to_unsafe,
+        messages.size,
+        add_assistant,
+        buffer,
+        new_len
+      )
+      raise "llama_chat_apply_template failed to write buffer" if written < 0
+
+      String.new(buffer, written)
     end
 
     @handle : LibLlama::LlamaContext*
