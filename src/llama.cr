@@ -298,4 +298,56 @@ module Llama
       end
     end
   end
+
+  # Returns the current time in microseconds since the Unix epoch (llama.cpp compatible).
+  #
+  # This is a high-level wrapper for LibLlama.llama_time_us.
+  #
+  # ```
+  # t0 = Llama.time_us
+  # # ... some processing ...
+  # t1 = Llama.time_us
+  # elapsed_ms = (t1 - t0) / 1000.0
+  # puts "Elapsed: #{elapsed_ms} ms"
+  # ```
+  #
+  # Returns:
+  # - Int64: microseconds since epoch
+  def self.time_us : Int64
+    LibLlama.llama_time_us
+  end
+
+  # Returns the current time in milliseconds since the Unix epoch (llama.cpp compatible).
+  #
+  # ```
+  # t0 = Llama.time_ms
+  # # ... some processing ...
+  # t1 = Llama.time_ms
+  # elapsed = t1 - t0
+  # puts "Elapsed: #{elapsed} ms"
+  # ```
+  #
+  # Returns:
+  # - Int64: milliseconds since epoch
+  def self.time_ms : Int64
+    LibLlama.llama_time_us // 1000
+  end
+
+  # Measures elapsed time in milliseconds for a block using llama.cpp's clock.
+  #
+  # ```
+  # elapsed = Llama.measure_ms do
+  #   # ... code to measure ...
+  # end
+  # puts "Elapsed: #{elapsed} ms"
+  # ```
+  #
+  # Returns:
+  # - Float64: elapsed milliseconds
+  def self.measure_ms(&)
+    t0 = time_us
+    yield
+    t1 = time_us
+    (t1 - t0) / 1000.0
+  end
 end

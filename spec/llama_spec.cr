@@ -10,6 +10,25 @@ describe Llama do
     end
   end
 
+  describe "time API" do
+    it "returns increasing microseconds and milliseconds" do
+      t0_us = Llama.time_us
+      t0_ms = Llama.time_ms
+      sleep 0.01
+      t1_us = Llama.time_us
+      t1_ms = Llama.time_ms
+      (t1_us > t0_us).should be_true
+      (t1_ms > t0_ms).should be_true
+      ((t1_us - t0_us) / 1000).should be_close(t1_ms - t0_ms, 2)
+    end
+
+    it "measures elapsed time in ms for a block" do
+      elapsed = Llama.measure_ms { sleep 0.02 }
+      elapsed.should be > 0.0
+      # Do not check the exact value due to possible environment delays
+    end
+  end
+
   describe "Error handling" do
     it "raises an error when loading a non-existent model" do
       expect_raises(Llama::Model::Error, /Failed to load model/) do
