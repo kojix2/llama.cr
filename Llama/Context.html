@@ -329,14 +329,14 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L5" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L5" target="_blank">
         llama/context.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context/error.cr#L4" target="_blank">
         llama/context/error.cr
       </a>
     
@@ -382,6 +382,13 @@
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#apply_chat_template%28messages%3AArray%28ChatMessage%29%2Cadd_assistant%3ABool%3Dtrue%2Ctemplate%3AString%7CNil%3Dnil%29%3AString-instance-method" class="signature"><strong>#apply_chat_template</strong>(messages : Array(ChatMessage), add_assistant : Bool = <span class="n">true</span>, template : String | Nil = <span class="n">nil</span>) : String</a>
+        
+          <div class="summary"><p>Applies the chat template to the given messages and returns the formatted prompt.</p></div>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#chat%28messages%3AArray%28ChatMessage%29%2Cmax_tokens%3AInt32%3D128%2Ctemperature%3AFloat32%3D0.8%2Ctemplate%3AString%7CNil%3Dnil%29%3AString-instance-method" class="signature"><strong>#chat</strong>(messages : Array(ChatMessage), max_tokens : Int32 = <span class="n">128</span>, temperature : Float32 = <span class="n">0.8</span>, template : String | Nil = <span class="n">nil</span>) : String</a>
@@ -457,6 +464,48 @@
         <a href="#logits%3APointer%28Float32%29-instance-method" class="signature"><strong>#logits</strong> : Pointer(Float32)</a>
         
           <div class="summary"><p>Gets the logits for the last token</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#n_batch%3AUInt32-instance-method" class="signature"><strong>#n_batch</strong> : UInt32</a>
+        
+          <div class="summary"><p>Returns the logical batch size (n_batch)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#n_ctx%3AUInt32-instance-method" class="signature"><strong>#n_ctx</strong> : UInt32</a>
+        
+          <div class="summary"><p>Returns the context window size (n_ctx)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#n_seq_max%3AUInt32-instance-method" class="signature"><strong>#n_seq_max</strong> : UInt32</a>
+        
+          <div class="summary"><p>Returns the maximum number of sequence IDs per token (n_seq_max)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#n_threads%3AInt32-instance-method" class="signature"><strong>#n_threads</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the number of threads used for generation</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#n_threads_batch%3AInt32-instance-method" class="signature"><strong>#n_threads_batch</strong> : Int32</a>
+        
+          <div class="summary"><p>Returns the number of threads used for batch processing</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#n_ubatch%3AUInt32-instance-method" class="signature"><strong>#n_ubatch</strong> : UInt32</a>
+        
+          <div class="summary"><p>Returns the micro-batch size (n_ubatch)</p></div>
         
       </li>
     
@@ -597,7 +646,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -617,6 +666,37 @@
 </a>
     Instance Method Detail
   </h2>
+  
+    <div class="entry-detail" id="apply_chat_template(messages:Array(ChatMessage),add_assistant:Bool=true,template:String|Nil=nil):String-instance-method">
+      <div class="signature">
+        
+        def <strong>apply_chat_template</strong>(messages : Array(<a href="../Llama/ChatMessage.html">ChatMessage</a>), add_assistant : Bool = <span class="n">true</span>, template : String | Nil = <span class="n">nil</span>) : String
+
+        <a class="method-permalink" href="#apply_chat_template%28messages%3AArray%28ChatMessage%29%2Cadd_assistant%3ABool%3Dtrue%2Ctemplate%3AString%7CNil%3Dnil%29%3AString-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Applies the chat template to the given messages and returns the formatted prompt.</p>
+<p>Parameters:</p>
+<ul>
+<li>messages: Array of ChatMessage (user/assistant/system)</li>
+<li>add_assistant: Whether to add assistant role (default: true)</li>
+<li>template: Optional template string (default: model's template)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The formatted prompt string.</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L769" target="_blank">View source</a>]
+        
+      </div>
+    </div>
   
     <div class="entry-detail" id="chat(messages:Array(ChatMessage),max_tokens:Int32=128,temperature:Float32=0.8,template:String|Nil=nil):String-instance-method">
       <div class="signature">
@@ -651,7 +731,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L102" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L132" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -686,7 +766,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L356" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L386" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -722,7 +802,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L328" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L358" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -743,7 +823,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L611" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L641" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -780,7 +860,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L405" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L435" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -818,7 +898,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L283" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L313" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -848,7 +928,7 @@ Only available when embeddings mode is enabled</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L657" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L687" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -881,7 +961,7 @@ Only available when embeddings mode is enabled</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L688" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L718" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -914,7 +994,7 @@ Only available when embeddings mode is enabled</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L714" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L744" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -936,7 +1016,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L64" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -961,7 +1041,133 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L376" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L406" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="n_batch:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>n_batch</strong> : UInt32
+
+        <a class="method-permalink" href="#n_batch%3AUInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the logical batch size (n_batch)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L74" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="n_ctx:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>n_ctx</strong> : UInt32
+
+        <a class="method-permalink" href="#n_ctx%3AUInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the context window size (n_ctx)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L69" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="n_seq_max:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>n_seq_max</strong> : UInt32
+
+        <a class="method-permalink" href="#n_seq_max%3AUInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the maximum number of sequence IDs per token (n_seq_max)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L84" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="n_threads:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>n_threads</strong> : Int32
+
+        <a class="method-permalink" href="#n_threads%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the number of threads used for generation</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L89" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="n_threads_batch:Int32-instance-method">
+      <div class="signature">
+        
+        def <strong>n_threads_batch</strong> : Int32
+
+        <a class="method-permalink" href="#n_threads_batch%3AInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the number of threads used for batch processing</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L94" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="n_ubatch:UInt32-instance-method">
+      <div class="signature">
+        
+        def <strong>n_ubatch</strong> : UInt32
+
+        <a class="method-permalink" href="#n_ubatch%3AUInt32-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the micro-batch size (n_ubatch)</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L79" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -986,7 +1192,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L645" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L675" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1009,7 +1215,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L619" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L649" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1044,7 +1250,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L233" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L263" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1079,7 +1285,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L183" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L213" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1115,7 +1321,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L162" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L192" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1137,7 +1343,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L626" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L656" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1163,7 +1369,7 @@ If true, embeddings will be returned but logits will not</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L637" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L667" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1185,7 +1391,7 @@ Lazily initializes the state if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L70" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1206,7 +1412,7 @@ Lazily initializes the state if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/530b68394eb7fed7eb43ca805e1125c953cf37e8/src/llama/context.cr#L606" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/2934510f8ce1c34fbdc015720f7fa63fce5c629b/src/llama/context.cr#L636" target="_blank">View source</a>]
         
       </div>
     </div>
