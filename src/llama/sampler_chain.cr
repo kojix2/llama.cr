@@ -23,9 +23,24 @@ module Llama
     # - sampler: The sampler to add to the chain
     def add(sampler : Sampler::Base)
       LibLlama.llama_sampler_chain_add(@handle, sampler.to_unsafe)
-      sampler.mark_owned_by_chain
+      sampler.set_owned_by_chain(true)
       # Ownership is transferred to the C side; do not free sampler separately.
       @samplers << sampler # Keep reference to prevent GC
+    end
+
+    # Removes a sampler from the chain at the given index.
+    # Returns the original Sampler::Base instance with ownership restored.
+    def remove(index : Int)
+      # Remove from C chain and get the C pointer
+      removed_ptr = LibLlama.llama_sampler_chain_remove(@handle, index)
+      raise Error.new("Failed to remove sampler at index #{index}") if removed_ptr.null?
+      # Find the matching Sampler::Base instance in @samplers
+      sampler = @samplers.delete_at(index)
+      # Update the handle in case the C API returned a different pointer
+      sampler.set_handle(removed_ptr)
+      # Restore ownership to the caller
+      sampler.set_owned_by_chain(false)
+      sampler
     end
 
     # Samples a token using the sampler chain

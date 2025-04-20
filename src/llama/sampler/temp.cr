@@ -20,8 +20,9 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(temp : Float32)
-        @handle = LibLlama.llama_sampler_init_temp(temp)
-        raise Error.new("Failed to create temperature sampler") if @handle.null?
+        handle = LibLlama.llama_sampler_init_temp(temp)
+        raise Error.new("Failed to create temperature sampler") if handle.null?
+        super(handle)
       end
     end
   end

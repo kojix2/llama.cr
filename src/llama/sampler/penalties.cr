@@ -23,13 +23,14 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)
-        @handle = LibLlama.llama_sampler_init_penalties(
+        handle = LibLlama.llama_sampler_init_penalties(
           penalty_last_n,
           penalty_repeat,
           penalty_freq,
           penalty_present
         )
-        raise Error.new("Failed to create Penalties sampler") if @handle.null?
+        raise Error.new("Failed to create Penalties sampler") if handle.null?
+        super(handle)
       end
     end
   end

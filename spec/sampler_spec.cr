@@ -60,10 +60,36 @@ describe Llama::SamplerChain do
   it "can add samplers to the chain" do
     # Test adding various samplers to the chain
     chain = Llama::SamplerChain.new
-    chain.add(Llama::Sampler::TopK.new(40))
-    chain.add(Llama::Sampler::TopP.new(0.95, 1))
-    chain.add(Llama::Sampler::Temp.new(0.8))
-    chain.add(Llama::Sampler::Dist.new)
+    k = Llama::Sampler::TopK.new(40)
+    p = Llama::Sampler::TopP.new(0.95, 1)
+    t = Llama::Sampler::Temp.new(0.8)
+    d = Llama::Sampler::Dist.new
+    chain.add(k)
+    chain.add(p)
+    chain.add(t)
+    chain.add(d)
+    # If we get here without errors, the test passes
+  end
+
+  it "can remove samplers from the chain and restore ownership" do
+    chain = Llama::SamplerChain.new
+    k = Llama::Sampler::TopK.new(40)
+    p = Llama::Sampler::TopP.new(0.95, 1)
+    t = Llama::Sampler::Temp.new(0.8)
+    d = Llama::Sampler::Dist.new
+    chain.add(k)
+    chain.add(p)
+    chain.add(t)
+    chain.add(d)
+    # Remove the second sampler (TopP)
+    removed = chain.remove(1)
+    removed.should be(p)
+    # Ownership should be restored, so it can be added to another chain
+    chain2 = Llama::SamplerChain.new
+    chain2.add(removed)
+    # Remove again from the new chain
+    removed2 = chain2.remove(0)
+    removed2.should be(removed)
     # If we get here without errors, the test passes
   end
 

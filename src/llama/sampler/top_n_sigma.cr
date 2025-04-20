@@ -19,8 +19,9 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(n : Float32)
-        @handle = LibLlama.llama_sampler_init_top_n_sigma(n)
-        raise Error.new("Failed to create Top-N Sigma sampler") if @handle.null?
+        handle = LibLlama.llama_sampler_init_top_n_sigma(n)
+        raise Error.new("Failed to create top-n-sigma sampler") if handle.null?
+        super(handle)
       end
     end
   end

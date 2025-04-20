@@ -20,8 +20,9 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(seed : UInt32 = LibLlama::LLAMA_DEFAULT_SEED)
-        @handle = LibLlama.llama_sampler_init_dist(seed)
-        raise Error.new("Failed to create distribution sampler") if @handle.null?
+        handle = LibLlama.llama_sampler_init_dist(seed)
+        raise Error.new("Failed to create distribution sampler") if handle.null?
+        super(handle)
       end
     end
   end

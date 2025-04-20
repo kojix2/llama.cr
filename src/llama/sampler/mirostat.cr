@@ -25,8 +25,9 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(n_vocab : Int32, seed : UInt32, tau : Float32, eta : Float32, m : Int32)
-        @handle = LibLlama.llama_sampler_init_mirostat(n_vocab, seed, tau, eta, m)
-        raise Error.new("Failed to create Mirostat sampler") if @handle.null?
+        handle = LibLlama.llama_sampler_init_mirostat(n_vocab, seed, tau, eta, m)
+        raise Error.new("Failed to create mirostat sampler") if handle.null?
+        super(handle)
       end
     end
   end

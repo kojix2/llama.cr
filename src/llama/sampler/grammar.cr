@@ -30,13 +30,13 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(vocab : Vocab, grammar_str : String, grammar_root : String)
-        @handle = LibLlama.llama_sampler_init_grammar(
+        handle = LibLlama.llama_sampler_init_grammar(
           vocab.to_unsafe,
           grammar_str,
           grammar_root
         )
-        raise Error.new("Failed to create Grammar sampler") if @handle.null?
-
+        raise Error.new("Failed to create Grammar sampler") if handle.null?
+        super(handle)
         # Store references to prevent GC
         @vocab = vocab
         @grammar_str = grammar_str

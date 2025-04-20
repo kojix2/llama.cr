@@ -22,8 +22,9 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(p : Float32, min_keep : Int32 = 1)
-        @handle = LibLlama.llama_sampler_init_typical(p, min_keep)
-        raise Error.new("Failed to create Typical sampler") if @handle.null?
+        handle = LibLlama.llama_sampler_init_typical(p, min_keep)
+        raise Error.new("Failed to create typical sampler") if handle.null?
+        super(handle)
       end
     end
   end

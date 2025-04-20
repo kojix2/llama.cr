@@ -16,12 +16,21 @@ module Llama
         @handle
       end
 
+      # :nodoc:
       # Mark this sampler as owned by a SamplerChain (prevents double free)
       # Do not call this method directly.
-      def mark_owned_by_chain
-        @owned_by_chain = true
+      protected def set_owned_by_chain(v : Bool = true)
+        @owned_by_chain = v
       end
 
+      # :nodoc:
+      # Sets the handle to a new pointer.
+      # This is used when a sampler is removed from a chain and needs to be
+      protected def set_handle(ptr : LibLlama::LlamaSampler*)
+        @handle = ptr
+      end
+
+      # :nodoc:
       # Frees the resources associated with this sampler.
       def finalize
         if !@owned_by_chain && @handle && !@handle.null?

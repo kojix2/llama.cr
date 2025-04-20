@@ -21,8 +21,9 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(p : Float32, t : Float32, min_keep : Int32, seed : UInt32 = LibLlama::LLAMA_DEFAULT_SEED)
-        @handle = LibLlama.llama_sampler_init_xtc(p, t, min_keep, seed)
-        raise Error.new("Failed to create XTC sampler") if @handle.null?
+        handle = LibLlama.llama_sampler_init_xtc(p, t, min_keep, seed)
+        raise Error.new("Failed to create xtc sampler") if handle.null?
+        super(handle)
       end
     end
   end

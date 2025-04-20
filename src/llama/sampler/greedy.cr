@@ -13,8 +13,9 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize
-        @handle = LibLlama.llama_sampler_init_greedy
-        raise Error.new("Failed to create greedy sampler") if @handle.null?
+        handle = LibLlama.llama_sampler_init_greedy
+        raise Error.new("Failed to create greedy sampler") if handle.null?
+        super(handle)
       end
     end
   end

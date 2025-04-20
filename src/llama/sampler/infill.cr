@@ -18,9 +18,9 @@ module Llama
       # Raises:
       # - Llama::Error if the sampler cannot be created
       def initialize(vocab : Vocab)
-        @handle = LibLlama.llama_sampler_init_infill(vocab.to_unsafe)
-        raise Error.new("Failed to create Infill sampler") if @handle.null?
-
+        handle = LibLlama.llama_sampler_init_infill(vocab.to_unsafe)
+        raise Error.new("Failed to create Infill sampler") if handle.null?
+        super(handle)
         # Store reference to prevent GC
         @vocab = vocab
       end

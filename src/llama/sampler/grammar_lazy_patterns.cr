@@ -60,7 +60,7 @@ module Llama
           end
         end
 
-        @handle = LibLlama.llama_sampler_init_grammar_lazy_patterns(
+        handle = LibLlama.llama_sampler_init_grammar_lazy_patterns(
           vocab.to_unsafe,
           grammar_str,
           grammar_root,
@@ -69,8 +69,8 @@ module Llama
           tokens_ptr,
           trigger_tokens.size
         )
-        raise Error.new("Failed to create Grammar Lazy Patterns sampler") if @handle.null?
-
+        raise Error.new("Failed to create Grammar Lazy Patterns sampler") if handle.null?
+        super(handle)
         # Store references to prevent GC
         @vocab = vocab
         @grammar_str = grammar_str
