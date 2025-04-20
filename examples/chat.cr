@@ -1,10 +1,7 @@
 require "../src/llama"
 require "../src/llama/chat"
 require "option_parser"
-
-USER_COLOR      = "\033[32m"
-ASSISTANT_COLOR = "\033[33m"
-RESET_COLOR     = "\033[0m"
+require "colorize"
 
 # Parse command line arguments
 model_path = ""
@@ -68,7 +65,7 @@ def generate(context, vocab, sampler, prompt) : String
     n_ctx = context.n_ctx
     n_ctx_used = context.kv_cache.used_cells
     if n_ctx_used + batch.n_tokens > n_ctx
-      puts "#{RESET_COLOR}"
+      puts
       abort "Context size exceeded"
     end
 
@@ -94,16 +91,16 @@ end
 messages = [] of Llama::ChatMessage
 
 loop do
-  print "#{USER_COLOR}> #{RESET_COLOR}"
+  print "> ".colorize(:green)
   user_input = gets
   break if user_input.nil? || user_input.empty?
 
   messages << Llama::ChatMessage.new("user", user_input)
   prompt = context.apply_chat_template(messages, true, tmpl)
 
-  print "#{ASSISTANT_COLOR}"
+  print "".colorize(:yellow)
   response = generate(context, vocab, sampler, prompt)
-  puts "\n#{RESET_COLOR}"
+  puts
 
   messages << Llama::ChatMessage.new("assistant", response)
 end
