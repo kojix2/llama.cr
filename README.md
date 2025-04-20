@@ -25,11 +25,38 @@ This project is under active development and may change rapidly.
 
 ### Prerequisites
 
-You need to have llama.cpp compiled and installed on your system:
+You need the llama.cpp shared library (libllama) available on your system.
+
+#### 1. Download Prebuilt Binary (Recommended)
+
+You can download a prebuilt binary matching the required version automatically:
+
+**Linux/macOS (bash):**
+
+```sh
+LLAMA_VERSION=$(cat LLAMA_VERSION)
+wget "https://github.com/ggerganov/llama.cpp/releases/download/v${LLAMA_VERSION}/llama-linux-x64.zip"
+unzip "llama-linux-x64.zip"
+# Move libllama.so to ./lib or set LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH
+```
+
+You can also specify the library location without installing:
+
+```bash
+crystal build examples/simple.cr --link-flags="-L/path/to/lib"
+LD_LIBRARY_PATH=/path/to/lib ./simple /path/to/model.gguf "Your prompt here"
+```
+
+<details>
+<summary>Build from source (advanced users)</summary>
+
+You can build llama.cpp from source if you prefer:
 
 ```bash
 git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
+git checkout v$(cat ../LLAMA_VERSION)
 mkdir build && cd build
 cmake ..
 cmake --build . --config Release
@@ -37,12 +64,7 @@ sudo cmake --install .
 sudo ldconfig
 ```
 
-Alternatively, you can specify the library location without installing:
-
-```bash
-crystal build examples/simple.cr --link-flags="-L/path/to/llama.cpp/build/bin"
-LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./simple /path/to/model.gguf "Your prompt here"
-```
+</details>
 
 ### Obtaining GGUF Model Files
 
@@ -50,8 +72,8 @@ You'll need a model file in GGUF format. For testing, smaller quantized models (
 
 Popular options:
 
-- [TinyLlama 1.1B](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF)
-- [Llama 3 8B Instruct](https://huggingface.co/TheBloke/Llama-3-8B-Instruct-GGUF)
+- [TinyLlama 1.1B](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF) [[raw]](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf)
+- [Llama 3 8B Instruct](https://huggingface.co/mmnga/Meta-Llama-3-70B-Instruct-gguf)
 - [Mistral 7B Instruct v0.2](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF)
 
 ### Adding to Your Project
