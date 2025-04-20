@@ -314,17 +314,34 @@
     <use href="#octicon-link"/>
   </svg>
 </a>Prerequisites</h3>
-<p>You need to have llama.cpp compiled and installed on your system:</p>
+<p>You need the llama.cpp shared library (libllama) available on your system.</p>
+<h4><a id="1.-download-prebuilt-binary-recommended" class="anchor" href="#1.-download-prebuilt-binary-recommended">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>1. Download Prebuilt Binary (Recommended)</h4>
+<p>You can download a prebuilt binary matching the required version automatically:</p>
+<p><strong>Linux/macOS (bash):</strong></p>
+<pre><code class="language-sh">LLAMA_VERSION=$(cat LLAMA_VERSION)
+wget &quot;https://github.com/ggerganov/llama.cpp/releases/download/v${LLAMA_VERSION}/llama-linux-x64.zip&quot;
+unzip &quot;llama-linux-x64.zip&quot;
+# Move libllama.so to ./lib or set LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH</code></pre>
+<p>You can also specify the library location without installing:</p>
+<pre><code class="language-bash">crystal build examples/simple.cr --link-flags=&quot;-L/path/to/lib&quot;
+LD_LIBRARY_PATH=/path/to/lib ./simple /path/to/model.gguf &quot;Your prompt here&quot;</code></pre>
+<details>
+<summary>Build from source (advanced users)</summary>
+<p>You can build llama.cpp from source if you prefer:</p>
 <pre><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
+git checkout v$(cat ../LLAMA_VERSION)
 mkdir build &amp;&amp; cd build
 cmake ..
 cmake --build . --config Release
 sudo cmake --install .
 sudo ldconfig</code></pre>
-<p>Alternatively, you can specify the library location without installing:</p>
-<pre><code class="language-bash">crystal build examples/simple.cr --link-flags=&quot;-L/path/to/llama.cpp/build/bin&quot;
-LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./simple /path/to/model.gguf &quot;Your prompt here&quot;</code></pre>
+</details>
 <h3><a id="obtaining-gguf-model-files" class="anchor" href="#obtaining-gguf-model-files">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -333,8 +350,8 @@ LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./simple /path/to/model.gguf &quot;
 <p>You'll need a model file in GGUF format. For testing, smaller quantized models (1-3B parameters) with Q4_K_M quantization are recommended.</p>
 <p>Popular options:</p>
 <ul>
-<li><a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF">TinyLlama 1.1B</a></li>
-<li><a href="https://huggingface.co/TheBloke/Llama-3-8B-Instruct-GGUF">Llama 3 8B Instruct</a></li>
+<li><a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF">TinyLlama 1.1B</a> <a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf">[raw]</a></li>
+<li><a href="https://huggingface.co/mmnga/Meta-Llama-3-70B-Instruct-gguf">Llama 3 8B Instruct</a></li>
 <li><a href="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF">Mistral 7B Instruct v0.2</a></li>
 </ul>
 <h3><a id="adding-to-your-project" class="anchor" href="#adding-to-your-project">
