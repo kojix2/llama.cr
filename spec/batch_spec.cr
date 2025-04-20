@@ -19,6 +19,22 @@ describe Llama::Batch do
     end
   end
 
+  describe "#clone_dup" do
+    it "raises NotImplementedError when clone is called" do
+      batch = Llama::Batch.new(10)
+      expect_raises(NotImplementedError, "clone is not supported for Llama::Batch") do
+        batch.clone
+      end
+    end
+
+    it "raises NotImplementedError when dup is called" do
+      batch = Llama::Batch.new(10)
+      expect_raises(NotImplementedError, "dup is not supported for Llama::Batch") do
+        batch.dup
+      end
+    end
+  end
+
   describe ".get_one" do
     it "creates a batch from an array of tokens" do
       tokens = [1, 2, 3, 4, 5]
@@ -63,18 +79,19 @@ describe Llama::Batch do
 
   if model_path.nil?
     pending "Skipping model-dependent batch tests (no model provided)"
-  else
-    it "works with a real model context" do
-      model = Llama::Model.new(model_path)
-      context = model.context
+    next
+  end
 
-      # Create a batch with a simple token sequence
-      tokens = model.vocab.tokenize("Hello, world!")
-      batch = Llama::Batch.get_one(tokens)
+  it "works with a real model context" do
+    model = Llama::Model.new(model_path)
+    context = model.context
 
-      # Process the batch
-      result = context.decode(batch)
-      result.should be >= 0
-    end
+    # Create a batch with a simple token sequence
+    tokens = model.vocab.tokenize("Hello, world!")
+    batch = Llama::Batch.get_one(tokens)
+
+    # Process the batch
+    result = context.decode(batch)
+    result.should be >= 0
   end
 end

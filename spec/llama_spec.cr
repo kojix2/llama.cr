@@ -50,29 +50,30 @@ describe Llama do
 
   if model_path.nil?
     pending "Skipping model-dependent tests (no model provided)"
-  else
-    describe ".generate" do
-      it "generates text from a prompt" do
-        prompt = "Once upon a time"
-        response = Llama.generate(model_path, prompt, max_tokens: 10)
-        response.should be_a(String)
-        response.should_not be_empty
-        puts "  - Generated: '#{response}'"
-      end
+    next
+  end
 
-      it "handles empty prompts" do
-        response = Llama.generate(model_path, "", max_tokens: 5)
-        response.should be_a(String)
-        puts "  - Generated from empty prompt: '#{response}'"
-      end
+  describe ".generate" do
+    it "generates text from a prompt" do
+      prompt = "Once upon a time"
+      response = Llama.generate(model_path, prompt, max_tokens: 10)
+      response.should be_a(String)
+      response.should_not be_empty
+      puts "  - Generated: '#{response}'"
+    end
 
-      it "handles special characters in prompts" do
-        prompt = "Hello! 你好! こんにちは! 안녕하세요!"
-        response = Llama.generate(model_path, prompt, max_tokens: 5)
-        response.should be_a(String)
-        puts "  - Prompt with special chars: '#{prompt}'"
-        puts "  - Generated: '#{response}'"
-      end
+    it "handles empty prompts" do
+      response = Llama.generate(model_path, "", max_tokens: 5)
+      response.should be_a(String)
+      puts "  - Generated from empty prompt: '#{response}'"
+    end
+
+    it "handles special characters in prompts" do
+      prompt = "Hello! 你好! こんにちは! 안녕하세요!"
+      response = Llama.generate(model_path, prompt, max_tokens: 5)
+      response.should be_a(String)
+      puts "  - Prompt with special chars: '#{prompt}'"
+      puts "  - Generated: '#{response}'"
     end
   end
 end

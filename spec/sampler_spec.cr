@@ -9,6 +9,20 @@ describe Llama::Sampler::Base do
     sampler.should_not be_nil
   end
 
+  it "raises NotImplementedError when clone is called" do
+    sampler = Llama::Sampler::TopK.new(40)
+    expect_raises(NotImplementedError, "clone is not supported for Llama::Sampler::TopK") do
+      sampler.clone
+    end
+  end
+
+  it "raises NotImplementedError when dup is called" do
+    sampler = Llama::Sampler::TopK.new(40)
+    expect_raises(NotImplementedError, "dup is not supported for Llama::Sampler::TopK") do
+      sampler.dup
+    end
+  end
+
   it "can create advanced samplers" do
     # Test creation of the new sampler types
 
@@ -55,6 +69,20 @@ describe Llama::SamplerChain do
     # Test creation of a sampler chain
     chain = Llama::SamplerChain.new
     chain.should_not be_nil
+  end
+
+  it "raises NotImplementedError when clone is called" do
+    chain = Llama::SamplerChain.new
+    expect_raises(NotImplementedError, "clone is not supported for Llama::SamplerChain") do
+      chain.clone
+    end
+  end
+
+  it "raises NotImplementedError when dup is called" do
+    chain = Llama::SamplerChain.new
+    expect_raises(NotImplementedError, "dup is not supported for Llama::SamplerChain") do
+      chain.dup
+    end
   end
 
   it "can add samplers to the chain" do

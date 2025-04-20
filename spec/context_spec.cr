@@ -13,6 +13,24 @@ describe Llama::Context do
     next
   end
 
+  describe "#clone_dup" do
+    it "raises NotImplementedError when clone is called" do
+      model = Llama::Model.new(model_path)
+      context = model.context
+      expect_raises(NotImplementedError, "clone is not supported for Llama::Context") do
+        context.clone
+      end
+    end
+
+    it "raises NotImplementedError when dup is called" do
+      model = Llama::Model.new(model_path)
+      context = model.context
+      expect_raises(NotImplementedError, "dup is not supported for Llama::Context") do
+        context.dup
+      end
+    end
+  end
+
   describe "#attributes" do
     it "returns valid context attributes" do
       model = Llama::Model.new(model_path)
