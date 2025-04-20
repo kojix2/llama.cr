@@ -50,16 +50,16 @@ describe Llama::Sampler::Base do
   end
 end
 
-describe Llama::Sampler::Chain do
+describe Llama::SamplerChain do
   it "can create a sampler chain" do
     # Test creation of a sampler chain
-    chain = Llama::Sampler::Chain.new
+    chain = Llama::SamplerChain.new
     chain.should_not be_nil
   end
 
   it "can add samplers to the chain" do
     # Test adding various samplers to the chain
-    chain = Llama::Sampler::Chain.new
+    chain = Llama::SamplerChain.new
     chain.add(Llama::Sampler::TopK.new(40))
     chain.add(Llama::Sampler::TopP.new(0.95, 1))
     chain.add(Llama::Sampler::Temp.new(0.8))
@@ -79,7 +79,7 @@ describe Llama::Sampler::Chain do
     model = Llama::Model.new(model_path)
     context = model.context
 
-    chain = Llama::Sampler::Chain.new
+    chain = Llama::SamplerChain.new
     chain.add(Llama::Sampler::TopK.new(40))
     chain.add(Llama::Sampler::TopP.new(0.95, 1))
     chain.add(Llama::Sampler::Temp.new(0.8))

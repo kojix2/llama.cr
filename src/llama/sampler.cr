@@ -1,4 +1,5 @@
 require "./sampler/error"
+require "./sampler_chain"
 
 module Llama
   module Sampler
@@ -6,7 +7,6 @@ module Llama
 end
 
 require "./sampler/base"
-require "./sampler/chain"
 require "./sampler/greedy"
 require "./sampler/top_k"
 require "./sampler/top_p"

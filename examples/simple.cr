@@ -59,7 +59,7 @@ context = Llama::Context.new(
 )
 
 # Initialize the sampler
-sampler = Llama::Sampler::Chain.new(no_perf: false)
+sampler = Llama::SamplerChain.new(no_perf: false)
 
 # Add a greedy sampler to the chain
 sampler.add(Llama::Sampler::Greedy.new)

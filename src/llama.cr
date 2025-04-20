@@ -49,7 +49,7 @@
 #   puts response
 #
 # Advanced Sampling:
-#   chain = Llama::Sampler::Chain.new
+#   chain = Llama::SamplerChain.new
 #   chain.add(Llama::Sampler::TopK.new(40))
 #   chain.add(Llama::Sampler::MinP.new(0.05, 1))
 #   chain.add(Llama::Sampler::Temp.new(0.8))

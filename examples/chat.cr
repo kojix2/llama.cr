@@ -39,7 +39,7 @@ model = Llama::Model.new(model_path, n_gpu_layers: ngl) || abort "Error: Unable 
 vocab = model.vocab
 context = model.context(n_ctx: n_ctx.to_u32, n_batch: n_ctx.to_u32) || abort "Error: Failed to create the context"
 
-sampler = Llama::Sampler::Chain.new
+sampler = Llama::SamplerChain.new
 sampler.add(Llama::Sampler::MinP.new(0.05, 1))
 sampler.add(Llama::Sampler::Temp.new(0.8))
 sampler.add(Llama::Sampler::Dist.new(Llama::DEFAULT_SEED))

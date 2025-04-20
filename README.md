@@ -119,7 +119,7 @@ model = Llama::Model.new("/path/to/model.gguf")
 context = model.context
 
 # Create a sampler chain with multiple sampling methods
-chain = Llama::Sampler::Chain.new
+chain = Llama::SamplerChain.new
 chain.add(Llama::Sampler::TopK.new(40))
 chain.add(Llama::Sampler::MinP.new(0.05, 1))
 chain.add(Llama::Sampler::Temp.new(0.8))
@@ -211,7 +211,7 @@ See [kojix2.github.io/llama.cr](https://kojix2.github.io/llama.cr) for full API 
 - **Llama::Batch** - Manages batches of tokens for efficient processing
 - **Llama::KvCache** - Controls the key-value cache for optimized inference
 - **Llama::State** - Handles saving and loading model state
-- **Llama::Sampler::Chain** - Combines multiple sampling methods
+- **Llama::SamplerChain** - Combines multiple sampling methods
 
 ### Samplers
 
