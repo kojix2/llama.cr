@@ -77,7 +77,7 @@ batch = Llama::Batch.for_tokens(prompt_tokens)
 n_decode = 0
 new_token_id = 0
 
-t_start = Time.utc.epoch_microseconds
+t_start = Time.monotonic
 
 n_pos = 0
 while n_pos + batch.n_tokens < prompt_tokens.size + n_predict
@@ -107,10 +107,9 @@ end
 
 puts
 
-t_end = Time.utc.epoch_microseconds
-elapsed_time = (t_end - t_start) / 1_000_000.0
+elapsed = Time.monotonic - t_start
 
-STDERR.puts "Decoded #{n_decode} tokens in #{elapsed_time.round(2)} s, speed: #{(n_decode / elapsed_time).round(2)} t/s"
+STDERR.puts "Decoded #{n_decode} tokens in #{elapsed.total_seconds.round(2)} s, speed: #{(n_decode / elapsed.total_seconds).round(2)} t/s"
 
 STDERR.puts
 sampler.print_perf
