@@ -11,15 +11,15 @@ ngl = 99
 OptionParser.parse do |parser|
   parser.banner = "Usage: #{PROGRAM_NAME} -m MODEL [-c context_size] [-ngl n_gpu_layers]"
 
-  parser.on("-m", "--model=MODEL", "Path to the model file (required)") do |path|
+  parser.on("-m", "--model MODEL", "Path to the model file (required)") do |path|
     model_path = path
   end
 
-  parser.on("-c", "--context=N", "Context size (default: 2048)") do |n|
+  parser.on("-c", "--context N", "Context size (default: 2048)") do |n|
     n_ctx = n.to_i
   end
 
-  parser.on("-ngl", "--n-gpu-layers=N", "Number of layers to offload to GPU (default: 99)") do |n|
+  parser.on("-g", "--gpu-layers N", "Number of layers to offload to GPU (default: 99)") do |n|
     ngl = n.to_i
   end
 
