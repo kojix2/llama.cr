@@ -86,5 +86,15 @@ module Llama
 
     @handle : LibLlama::LlamaSampler*
     @samplers : Array(Sampler::Base)
+
+    # :nodoc:
+    def clone
+      raise NotImplementedError.new("clone is not supported for #{self.class}")
+    end
+
+    # :nodoc:
+    def dup
+      raise NotImplementedError.new("dup is not supported for #{self.class}")
+    end
   end
 end

@@ -377,5 +377,15 @@ module Llama
     @handle : LibLlama::LlamaBatch
     @owned : Bool
     @has_crystal_token : Bool = false # Flag to indicate if token memory was allocated by Crystal
+
+    # :nodoc:
+    def clone
+      raise NotImplementedError.new("clone is not supported for #{self.class}")
+    end
+
+    # :nodoc:
+    def dup
+      raise NotImplementedError.new("dup is not supported for #{self.class}")
+    end
   end
 end
