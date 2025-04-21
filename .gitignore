@@ -9,5 +9,9 @@
 /shard.lock
 
 /build
+/examples/bin
+/examples/lib
+/examples/models
+/examples/shards.lock
 
 *.gguf
