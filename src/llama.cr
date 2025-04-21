@@ -77,7 +77,7 @@ require "./llama/context"
 require "./llama/sampler"
 
 module Llama
-  VERSION                      = "0.1.0"
+  VERSION                      = {{ `shards version #{__DIR__}`.chomp.stringify }}
   LLAMA_CPP_COMPATIBLE_VERSION = read_file("#{__DIR__}/LLAMA_VERSION").chomp
 
   # ==== Native constants (wrapped for user convenience) ====
