@@ -113,6 +113,7 @@ module Llama
       TRILLION       = 31
       BAILINGMOE     = 32
       LLAMA4         = 33
+      PIXTRAL        = 34
     end
 
     enum LlamaTokenType
