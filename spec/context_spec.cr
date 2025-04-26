@@ -5,17 +5,9 @@ require "./spec_helper"
 # Or set the MODEL_PATH environment variable
 
 describe Llama::Context do
-  # Get model path from command line arguments or environment variable
-  model_path = ENV["MODEL_PATH"]? || ARGV.find { |arg| arg.starts_with?("--model=") }.try &.split("=")[1]?
-
-  if model_path.nil?
-    pending "Skipping context tests (no model provided)"
-    next
-  end
-
   describe "#clone_dup" do
     it "raises NotImplementedError when clone is called" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       expect_raises(NotImplementedError, "clone is not supported for Llama::Context") do
         context.clone
@@ -23,7 +15,7 @@ describe Llama::Context do
     end
 
     it "raises NotImplementedError when dup is called" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       expect_raises(NotImplementedError, "dup is not supported for Llama::Context") do
         context.dup
@@ -33,7 +25,7 @@ describe Llama::Context do
 
   describe "#attributes" do
     it "returns valid context attributes" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
 
       context.n_ctx.should be_a(UInt32)
@@ -60,7 +52,7 @@ describe Llama::Context do
 
   describe "#encode" do
     it "encodes input for encoder-decoder models" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
 
       # Skip this test if the model doesn't have an encoder
@@ -92,7 +84,7 @@ describe Llama::Context do
 
   describe "#generate" do
     it "generates multiple tokens" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
 
       prompt = "Once upon a time"
@@ -113,7 +105,7 @@ describe Llama::Context do
     end
 
     it "respects the max_tokens parameter" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
 
       prompt = "Count to ten:"
@@ -132,7 +124,7 @@ describe Llama::Context do
     end
 
     it "produces different outputs with different temperatures" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
 
       prompt = "Creative writing:"
@@ -166,7 +158,7 @@ describe Llama::Context do
     end
 
     it "handles different temperature values correctly" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
 
       prompt = "The weather today is"

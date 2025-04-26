@@ -1,17 +1,9 @@
 require "./spec_helper"
 
 describe Llama::KvCache do
-  # KvCache tests require a model
-  model_path = ENV["MODEL_PATH"]? || ARGV.find { |arg| arg.starts_with?("--model=") }.try &.split("=")[1]?
-
-  if model_path.nil?
-    pending "Skipping KvCache tests (no model provided)"
-    next
-  end
-
   describe "#clone_dup" do
     it "raises NotImplementedError when clone is called" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       kv_cache = context.kv_cache
       expect_raises(NotImplementedError, "clone is not supported for Llama::KvCache") do
@@ -20,7 +12,7 @@ describe Llama::KvCache do
     end
 
     it "raises NotImplementedError when dup is called" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       kv_cache = context.kv_cache
       expect_raises(NotImplementedError, "dup is not supported for Llama::KvCache") do
@@ -31,7 +23,7 @@ describe Llama::KvCache do
 
   describe "basic operations" do
     it "can access KV cache from context" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       kv_cache = context.kv_cache
 
@@ -41,7 +33,7 @@ describe Llama::KvCache do
     end
 
     it "can clear the KV cache" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       kv_cache = context.kv_cache
 
@@ -64,7 +56,7 @@ describe Llama::KvCache do
 
   describe "sequence operations" do
     it "can get the maximum position in a sequence" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       kv_cache = context.kv_cache
 
@@ -80,7 +72,7 @@ describe Llama::KvCache do
     end
 
     it "can check if the context supports KV cache shifting" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       kv_cache = context.kv_cache
 
@@ -90,7 +82,7 @@ describe Llama::KvCache do
     end
 
     it "can update the KV cache" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       kv_cache = context.kv_cache
 

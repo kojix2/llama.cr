@@ -74,16 +74,8 @@ describe Llama::Batch do
     end
   end
 
-  # Model-dependent tests
-  model_path = ENV["MODEL_PATH"]? || ARGV.find { |arg| arg.starts_with?("--model=") }.try &.split("=")[1]?
-
-  if model_path.nil?
-    pending "Skipping model-dependent batch tests (no model provided)"
-    next
-  end
-
   it "works with a real model context" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     context = model.context
 
     # Create a batch with a simple token sequence

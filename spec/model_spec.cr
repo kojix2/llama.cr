@@ -4,16 +4,8 @@ require "./spec_helper"
 # Run with: crystal spec spec/model_spec.cr -- --model=/path/to/model.gguf
 
 describe "Llama with model" do
-  # Get model path from command line arguments or environment variable
-  model_path = ENV["MODEL_PATH"]? || ARGV.find { |arg| arg.starts_with?("--model=") }.try &.split("=")[1]?
-
-  if model_path.nil?
-    pending "Skipping model tests (no model provided)"
-    next
-  end
-
   it "loads the model" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     model.should_not be_nil
     model.n_params.should be > 0
     puts "  - Model parameters: #{model.n_params}"
@@ -23,21 +15,21 @@ describe "Llama with model" do
   end
 
   it "raises NotImplementedError when clone is called" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     expect_raises(NotImplementedError, "clone is not supported for Llama::Model") do
       model.clone
     end
   end
 
   it "raises NotImplementedError when dup is called" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     expect_raises(NotImplementedError, "dup is not supported for Llama::Model") do
       model.dup
     end
   end
 
   it "checks model architecture properties" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
 
     # Test encoder/decoder properties
     puts "  - Has encoder: #{model.has_encoder?}"
@@ -63,7 +55,7 @@ describe "Llama with model" do
   end
 
   it "accesses the vocabulary" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     vocab = model.vocab
     vocab.should_not be_nil
     vocab.n_tokens.should be > 0
@@ -71,7 +63,7 @@ describe "Llama with model" do
   end
 
   it "tokenizes text" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     vocab = model.vocab
 
     text = "Hello, world!"
@@ -82,20 +74,20 @@ describe "Llama with model" do
   end
 
   it "creates a context" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     context = model.context
     context.should_not be_nil
   end
 
   it "returns the model size" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     size = model.model_size
     size.should be > 0
     puts "  - Model size: #{size} bytes"
   end
 
   it "accesses model metadata" do
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     metadata = model.metadata
     metadata.should be_a(Hash(String, String))
     metadata_count = model.metadata_count
@@ -120,7 +112,7 @@ describe "Llama with model" do
 
   it "generates text" do
     prompt = "Hello, my name is"
-    response = Llama.generate(model_path, prompt, max_tokens: 10)
+    response = Llama.generate(MODEL_PATH, prompt, max_tokens: 10)
     response.should be_a(String)
     response.should_not be_empty
     puts "  - Prompt: '#{prompt}'"

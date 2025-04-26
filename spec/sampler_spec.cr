@@ -38,29 +38,22 @@ describe Llama::Sampler::Base do
     xtc = Llama::Sampler::Xtc.new(0.3_f32, 0.8_f32, 1)
     xtc.should_not be_nil
 
-    # These tests require a vocabulary, so we'll skip them if we don't have a model
-    model_path = ENV["MODEL_PATH"]? || ARGV.find { |arg| arg.starts_with?("--model=") }.try &.split("=")[1]?
+    model = Llama::Model.new(MODEL_PATH)
+    vocab = model.vocab
 
-    if model_path
-      model = Llama::Model.new(model_path)
-      vocab = model.vocab
+    # Infill sampler
+    infill = Llama::Sampler::Infill.new(vocab)
+    infill.should_not be_nil
 
-      # Infill sampler
-      infill = Llama::Sampler::Infill.new(vocab)
-      infill.should_not be_nil
-
-      # Grammar Lazy Patterns sampler
-      grammar = %q{
+    # Grammar Lazy Patterns sampler
+    grammar = %q{
         root ::= "test"
       }
-      trigger_patterns = ["JSON:"]
-      grammar_lazy = Llama::Sampler::GrammarLazyPatterns.new(
-        vocab, grammar, "root", trigger_patterns
-      )
-      grammar_lazy.should_not be_nil
-    else
-      puts "Skipping tests that require a model"
-    end
+    trigger_patterns = ["JSON:"]
+    grammar_lazy = Llama::Sampler::GrammarLazyPatterns.new(
+      vocab, grammar, "root", trigger_patterns
+    )
+    grammar_lazy.should_not be_nil
   end
 end
 
@@ -123,14 +116,8 @@ describe Llama::SamplerChain do
 
   it "can sample tokens" do
     # Test sampling tokens from a context using the sampler chain
-    # This test requires a model, so we'll skip it if the model file doesn't exist
-    model_path = ENV["LLAMA_TEST_MODEL"]? || "spec/test_model.gguf"
-    unless File.exists?(model_path)
-      puts "Test model not available"
-      next
-    end
 
-    model = Llama::Model.new(model_path)
+    model = Llama::Model.new(MODEL_PATH)
     context = model.context
 
     chain = Llama::SamplerChain.new

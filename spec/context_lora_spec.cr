@@ -1,12 +1,11 @@
 require "./spec_helper"
 
 describe Llama::Context do
-  model_path = ENV["LLAMA_TEST_MODEL"]? || "models/tinyllama.gguf"
   adapter_path = ENV["LLAMA_TEST_ADAPTER"]? || "models/dummy_adapter.bin"
 
   it "can attach and detach a LoRA adapter" do
-    pending! "Test model or adapter file not found" unless File.exists?(model_path) && File.exists?(adapter_path)
-    model = Llama::Model.new(model_path)
+    pending! "Test model or adapter file not found" unless File.exists?(MODEL_PATH) && File.exists?(adapter_path)
+    model = Llama::Model.new(MODEL_PATH)
     context = Llama::Context.new(model)
     adapter = Llama::AdapterLora.new(model, adapter_path)
 
@@ -15,8 +14,8 @@ describe Llama::Context do
   end
 
   it "can clear all LoRA adapters" do
-    pending! "Test model or adapter file not found" unless File.exists?(model_path) && File.exists?(adapter_path)
-    model = Llama::Model.new(model_path)
+    pending! "Test model or adapter file not found" unless File.exists?(MODEL_PATH) && File.exists?(adapter_path)
+    model = Llama::Model.new(MODEL_PATH)
     context = Llama::Context.new(model)
     adapter = Llama::AdapterLora.new(model, adapter_path)
 
@@ -26,8 +25,8 @@ describe Llama::Context do
   end
 
   it "can apply a dummy control vector" do
-    pending! "Test model or adapter file not found" unless File.exists?(model_path) && File.exists?(adapter_path)
-    model = Llama::Model.new(model_path)
+    pending! "Test model or adapter file not found" unless File.exists?(MODEL_PATH) && File.exists?(adapter_path)
+    model = Llama::Model.new(MODEL_PATH)
     context = Llama::Context.new(model)
     adapter = Llama::AdapterLora.new(model, adapter_path)
     context.attach_adapter_lora(adapter).should eq 0

@@ -1,17 +1,9 @@
 require "./spec_helper"
 
 describe Llama::Vocab do
-  # Vocab tests require a model
-  model_path = ENV["MODEL_PATH"]? || ARGV.find { |arg| arg.starts_with?("--model=") }.try &.split("=")[1]?
-
-  if model_path.nil?
-    pending "Skipping Vocab tests (no model provided)"
-    next
-  end
-
   describe "basic properties" do
     it "can access vocabulary from model" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       vocab.should_not be_nil
@@ -20,7 +12,7 @@ describe Llama::Vocab do
     end
 
     it "can access special tokens" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       # Test special token accessors
@@ -44,7 +36,7 @@ describe Llama::Vocab do
 
   describe "#tokenize" do
     it "tokenizes simple text" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       text = "Hello, world!"
@@ -56,7 +48,7 @@ describe Llama::Vocab do
     end
 
     it "tokenizes empty text" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       text = ""
@@ -67,7 +59,7 @@ describe Llama::Vocab do
     end
 
     it "tokenizes text with special characters" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       text = "Hello! 你好! こんにちは! 안녕하세요!"
@@ -79,7 +71,7 @@ describe Llama::Vocab do
     end
 
     it "tokenizes with different special token options" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       text = "Hello, world!"
@@ -112,7 +104,7 @@ describe Llama::Vocab do
 
   describe "#token_to_text" do
     it "converts tokens to text" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       # Tokenize some text
@@ -131,7 +123,7 @@ describe Llama::Vocab do
     end
 
     it "handles special tokens" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       # Try to convert special tokens to text
@@ -149,7 +141,7 @@ describe Llama::Vocab do
 
   describe "roundtrip conversion" do
     it "can roundtrip text -> tokens -> text" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       vocab = model.vocab
 
       # Simple ASCII text should roundtrip well

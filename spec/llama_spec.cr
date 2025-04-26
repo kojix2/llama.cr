@@ -44,33 +44,24 @@ describe Llama do
     end
   end
 
-  # Model-dependent tests
-  # These tests use the MODEL_PATH environment variable or --model= command line argument
-  model_path = ENV["MODEL_PATH"]? || ARGV.find { |arg| arg.starts_with?("--model=") }.try &.split("=")[1]?
-
-  if model_path.nil?
-    pending "Skipping model-dependent tests (no model provided)"
-    next
-  end
-
   describe ".generate" do
     it "generates text from a prompt" do
       prompt = "Once upon a time"
-      response = Llama.generate(model_path, prompt, max_tokens: 10)
+      response = Llama.generate(MODEL_PATH, prompt, max_tokens: 10)
       response.should be_a(String)
       response.should_not be_empty
       puts "  - Generated: '#{response}'"
     end
 
     it "handles empty prompts" do
-      response = Llama.generate(model_path, "", max_tokens: 5)
+      response = Llama.generate(MODEL_PATH, "", max_tokens: 5)
       response.should be_a(String)
       puts "  - Generated from empty prompt: '#{response}'"
     end
 
     it "handles special characters in prompts" do
       prompt = "Hello! 你好! こんにちは! 안녕하세요!"
-      response = Llama.generate(model_path, prompt, max_tokens: 5)
+      response = Llama.generate(MODEL_PATH, prompt, max_tokens: 5)
       response.should be_a(String)
       puts "  - Prompt with special chars: '#{prompt}'"
       puts "  - Generated: '#{response}'"

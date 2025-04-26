@@ -2,17 +2,9 @@ require "./spec_helper"
 require "file_utils"
 
 describe Llama::State do
-  # State tests require a model
-  model_path = ENV["MODEL_PATH"]? || ARGV.find { |arg| arg.starts_with?("--model=") }.try &.split("=")[1]?
-
-  if model_path.nil?
-    pending "Skipping State tests (no model provided)"
-    next
-  end
-
   describe "#clone_dup" do
     it "raises NotImplementedError when clone is called" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
       expect_raises(NotImplementedError, "clone is not supported for Llama::State") do
@@ -21,7 +13,7 @@ describe Llama::State do
     end
 
     it "raises NotImplementedError when dup is called" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
       expect_raises(NotImplementedError, "dup is not supported for Llama::State") do
@@ -32,7 +24,7 @@ describe Llama::State do
 
   describe "basic operations" do
     it "can access state from context" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
 
@@ -40,7 +32,7 @@ describe Llama::State do
     end
 
     it "can get state size" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
 
@@ -56,7 +48,7 @@ describe Llama::State do
     end
 
     it "can get and set state data" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
 
@@ -90,7 +82,7 @@ describe Llama::State do
     end
 
     it "can save and load state to/from a file" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
 
@@ -115,7 +107,7 @@ describe Llama::State do
     end
 
     it "raises an error when loading from a non-existent file" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
 
@@ -135,7 +127,7 @@ describe Llama::State do
     end
 
     it "can get sequence state size" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
 
@@ -151,7 +143,7 @@ describe Llama::State do
     end
 
     it "can get and set sequence state data" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
 
@@ -175,7 +167,7 @@ describe Llama::State do
     end
 
     it "can save and load sequence state to/from a file" do
-      model = Llama::Model.new(model_path)
+      model = Llama::Model.new(MODEL_PATH)
       context = model.context
       state = context.state
 
