@@ -288,8 +288,9 @@ post "/api/chat" do |env|
       end
     end
   end
-  prompt = context.apply_chat_template(messages, true, tmpl)
-  words = generate_words(context, vocab, sampler, prompt)
+  local_context = model.context(n_ctx: n_ctx.to_u32, n_batch: n_ctx.to_u32) || abort "Error: Failed to create the context"
+  prompt = local_context.apply_chat_template(messages, true, tmpl)
+  words = generate_words(local_context, vocab, sampler, prompt)
   {words: words}.to_json
 end
 
