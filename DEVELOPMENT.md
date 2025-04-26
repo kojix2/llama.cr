@@ -51,7 +51,12 @@ This document outlines the development guidelines for the llama.cr project, prim
 - **Batch Processing**: When implementing batch processing functionality:
 
   - Centralize memory allocation logic in helper methods
-  - Clearly document the ownership of memory resources
+  - All memory for C batch structures and their token arrays must be allocated using the C allocator (`LibC.malloc`) to ensure compatibility with `llama_batch_free`.
+  - Never mix Crystal's `Pointer.malloc` and C's `malloc` for the same resource.
+  - Always release batch memory using `llama_batch_free` (never manually free token arrays from Crystal).
+  - Clearly document the ownership of memory resources and ensure that only one owner is responsible for freeing each resource.
+  - The `Batch` class should use an `owned` flag to indicate whether it is responsible for freeing the underlying C resource.
+  - The `finalize` method must call `llama_batch_free` if and only if `owned` is true.
   - Consider providing simplified high-level APIs for common use cases
 
 - **Circular References**: When objects reference each other (e.g., `Context` and `KvCache`):
