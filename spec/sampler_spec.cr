@@ -131,8 +131,7 @@ describe Llama::SamplerChain do
     input_tokens = model.vocab.tokenize(prompt)
 
     # Create a batch with the input tokens
-    batch = Llama::LibLlama::LlamaBatch.new
-    # Set up batch...
+    batch = Llama::Batch.for_tokens(input_tokens, true)
 
     # Process the batch
     context.decode(batch)
