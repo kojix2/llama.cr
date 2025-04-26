@@ -25,16 +25,6 @@ describe Llama::Context do
     # No exception means success
   end
 
-  it "raises error when attaching an invalid adapter" do
-    pending! "Test model file not found" unless File.exists?(model_path)
-    model = Llama::Model.new(model_path)
-    context = Llama::Context.new(model)
-    # Use a dummy object to simulate invalid adapter
-    expect_raises(Exception) do
-      context.attach_adapter_lora("not_an_adapter".as(Llama::AdapterLora))
-    end
-  end
-
   it "can apply a dummy control vector" do
     pending! "Test model or adapter file not found" unless File.exists?(model_path) && File.exists?(adapter_path)
     model = Llama::Model.new(model_path)

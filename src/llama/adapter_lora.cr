@@ -31,7 +31,7 @@ module Llama
     private def cleanup
       if @handle && !@handle.null?
         LibLlama.llama_adapter_lora_free(@handle)
-        @handle = Pointer(Void).null
+        @handle = Pointer(LibLlama::LlamaAdapterLora).null
       end
     end
 
