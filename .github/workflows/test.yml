@@ -11,6 +11,17 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
+        spec_file:
+          - spec/llama_spec.cr
+          - spec/context_spec.cr
+          - spec/kv_cache_spec.cr
+          - spec/state_spec.cr
+          - spec/batch_spec.cr
+          - spec/sampler_spec.cr
+          - spec/vocab_spec.cr
+          - spec/model_spec.cr
+          - spec/adapter_lora_spec.cr
+          - spec/context_lora_spec.cr
 
     runs-on: ${{ matrix.os }}
 
@@ -76,72 +87,14 @@ jobs:
           mkdir -p models
           curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
 
-      - name: Run basic tests (llama_spec.cr)
-        run: |
-          crystal spec spec/llama_spec.cr
-
-      - name: Run context tests (context_spec.cr)
+      - name: Run spec file ${{ matrix.spec_file }}
         env:
           CRYSTAL_OPTS: --error-trace
           MODEL_PATH: models/tiny_model.gguf
           GC_DEBUG: "1"
         run: |
-          echo "Running context_spec.cr"
-          crystal spec spec/context_spec.cr || echo "context_spec.cr failed"
-
-      - name: Run kv_cache tests (kv_cache_spec.cr)
-        env:
-          CRYSTAL_OPTS: --error-trace
-          MODEL_PATH: models/tiny_model.gguf
-          GC_DEBUG: "1"
-        run: |
-          echo "Running kv_cache_spec.cr"
-          crystal spec spec/kv_cache_spec.cr || echo "kv_cache_spec.cr failed"
-
-      - name: Run state tests (state_spec.cr)
-        env:
-          CRYSTAL_OPTS: --error-trace
-          MODEL_PATH: models/tiny_model.gguf
-          GC_DEBUG: "1"
-        run: |
-          echo "Running state_spec.cr"
-          crystal spec spec/state_spec.cr || echo "state_spec.cr failed"
-
-      - name: Run batch tests (batch_spec.cr)
-        env:
-          CRYSTAL_OPTS: --error-trace
-          MODEL_PATH: models/tiny_model.gguf
-          GC_DEBUG: "1"
-        run: |
-          echo "Running batch_spec.cr"
-          crystal spec spec/batch_spec.cr || echo "batch_spec.cr failed"
-
-      - name: Run sampler tests (sampler_spec.cr)
-        env:
-          CRYSTAL_OPTS: --error-trace
-          MODEL_PATH: models/tiny_model.gguf
-          GC_DEBUG: "1"
-        run: |
-          echo "Running sampler_spec.cr"
-          crystal spec spec/sampler_spec.cr || echo "sampler_spec.cr failed"
-
-      - name: Run vocab tests (vocab_spec.cr)
-        env:
-          CRYSTAL_OPTS: --error-trace
-          MODEL_PATH: models/tiny_model.gguf
-          GC_DEBUG: "1"
-        run: |
-          echo "Running vocab_spec.cr"
-          crystal spec spec/vocab_spec.cr || echo "vocab_spec.cr failed"
-
-      - name: Run model tests (model_spec.cr)
-        env:
-          CRYSTAL_OPTS: --error-trace
-          MODEL_PATH: models/tiny_model.gguf
-          GC_DEBUG: "1"
-        run: |
-          echo "Running model_spec.cr"
-          crystal spec spec/model_spec.cr || echo "model_spec.cr failed"
+          echo "Running ${{ matrix.spec_file }}"
+          crystal spec "${{ matrix.spec_file }}"
 
       - name: Run static analysis
         run: crystal tool format --check
