@@ -1,25 +1,24 @@
-# spec/context_lora_spec.cr
-require "../src/llama"
+require "./spec_helper"
 
 describe Llama::Context do
-  MODEL_PATH   = ENV["LLAMA_TEST_MODEL"]? || "models/tinyllama.gguf"
-  ADAPTER_PATH = ENV["LLAMA_TEST_ADAPTER"]? || "models/dummy_adapter.bin"
+  model_path = ENV["LLAMA_TEST_MODEL"]? || "models/tinyllama.gguf"
+  adapter_path = ENV["LLAMA_TEST_ADAPTER"]? || "models/dummy_adapter.bin"
 
   it "can attach and detach a LoRA adapter" do
-    skip "Test model or adapter file not found" unless File.exists?(MODEL_PATH) && File.exists?(ADAPTER_PATH)
-    model = Llama::Model.new(MODEL_PATH)
+    pending! "Test model or adapter file not found" unless File.exists?(model_path) && File.exists?(adapter_path)
+    model = Llama::Model.new(model_path)
     context = Llama::Context.new(model)
-    adapter = Llama::AdapterLora.new(model, ADAPTER_PATH)
+    adapter = Llama::AdapterLora.new(model, adapter_path)
 
     context.attach_adapter_lora(adapter).should eq 0
     context.detach_adapter_lora(adapter).should eq 0
   end
 
   it "can clear all LoRA adapters" do
-    skip "Test model or adapter file not found" unless File.exists?(MODEL_PATH) && File.exists?(ADAPTER_PATH)
-    model = Llama::Model.new(MODEL_PATH)
+    pending! "Test model or adapter file not found" unless File.exists?(model_path) && File.exists?(adapter_path)
+    model = Llama::Model.new(model_path)
     context = Llama::Context.new(model)
-    adapter = Llama::AdapterLora.new(model, ADAPTER_PATH)
+    adapter = Llama::AdapterLora.new(model, adapter_path)
 
     context.attach_adapter_lora(adapter).should eq 0
     context.clear_adapters_lora
@@ -27,8 +26,8 @@ describe Llama::Context do
   end
 
   it "raises error when attaching an invalid adapter" do
-    skip "Test model file not found" unless File.exists?(MODEL_PATH)
-    model = Llama::Model.new(MODEL_PATH)
+    pending! "Test model file not found" unless File.exists?(model_path)
+    model = Llama::Model.new(model_path)
     context = Llama::Context.new(model)
     # Use a dummy object to simulate invalid adapter
     expect_raises(Exception) do
@@ -37,10 +36,10 @@ describe Llama::Context do
   end
 
   it "can apply a dummy control vector" do
-    skip "Test model or adapter file not found" unless File.exists?(MODEL_PATH) && File.exists?(ADAPTER_PATH)
-    model = Llama::Model.new(MODEL_PATH)
+    pending! "Test model or adapter file not found" unless File.exists?(model_path) && File.exists?(adapter_path)
+    model = Llama::Model.new(model_path)
     context = Llama::Context.new(model)
-    adapter = Llama::AdapterLora.new(model, ADAPTER_PATH)
+    adapter = Llama::AdapterLora.new(model, adapter_path)
     context.attach_adapter_lora(adapter).should eq 0
 
     n_embd = model.n_embd

@@ -1,5 +1,4 @@
-# spec/adapter_lora_spec.cr
-require "../src/llama"
+require "./spec_helper"
 
 describe "Llama::AdapterLora" do
   model_path = ENV["MODEL_PATH"]
