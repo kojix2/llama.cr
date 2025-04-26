@@ -53,10 +53,12 @@ def generate_words(context, vocab, sampler, prompt) : Array(String)
   end
 
   batch = Llama::Batch.get_one(prompt_tokens)
+  context_limit_reached = false
   loop do
     n_ctx = context.n_ctx
     n_ctx_used = context.kv_cache.used_cells
     if n_ctx_used + batch.n_tokens > n_ctx
+      context_limit_reached = true
       break
     end
 
@@ -76,6 +78,9 @@ def generate_words(context, vocab, sampler, prompt) : Array(String)
     end
 
     batch = Llama::Batch.get_one([new_token_id])
+  end
+  if context_limit_reached
+    words << " [Context length limit reached!]"
   end
   words
 end
