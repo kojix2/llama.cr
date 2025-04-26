@@ -73,7 +73,7 @@ module Llama
         # We can't use the normal constructor because it requires n_tokens > 0
         handle = LibLlama::LlamaBatch.new
         handle.n_tokens = 0
-        return Batch.new(handle)
+        return Batch.new(handle, owned: true)
       end
 
       tokens_ptr = tokens.to_unsafe
@@ -88,7 +88,7 @@ module Llama
         raise Batch::Error.new(error_msg)
       end
 
-      Batch.new(handle)
+      Batch.new(handle, owned: false)
     end
 
     # Returns the number of tokens in this batch
@@ -223,8 +223,8 @@ module Llama
     private def self.crystal_llama_batch_get_one(tokens : Pointer(Int32), n : Int32, n_seq_max : Int32 = 8) : Tuple(LibLlama::LlamaBatch, Bool)
       batch = LibLlama.llama_batch_init(n, 0, n_seq_max)
 
-      # Allocate new memory for tokens and copy the data
-      new_tokens = Pointer(Int32).malloc(n)
+      # Allocate new memory for tokens using C allocator and copy the data
+      new_tokens = Pointer(Int32).new(LibC.malloc(n * sizeof(Int32)).address)
       new_tokens.copy_from(tokens, n)
 
       batch.token = new_tokens
@@ -256,8 +256,8 @@ module Llama
       begin
         # Use custom function to create a batch with memory allocated
         handle, has_crystal_token = self.crystal_llama_batch_get_one(tokens.to_unsafe, tokens.size, n_seq_max)
-        # Explicitly set owned=true since we created this batch and need to free it
-        batch = Batch.new(handle, owned: true)
+        # If has_crystal_token=true then owned: true, otherwise owned: false
+        batch = Batch.new(handle, owned: has_crystal_token)
         # Set the flag indicating that this batch has Crystal-allocated token memory
         batch.has_crystal_token = has_crystal_token
 
