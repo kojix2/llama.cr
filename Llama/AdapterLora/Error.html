@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::Sampler::TopNSigma - llama main</title>
+  <title>Llama::AdapterLora::Error - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -62,12 +62,12 @@
       
         <ul>
   
-  <li class="parent " data-id="llama/Llama/AdapterLora" data-name="llama::adapterlora">
+  <li class="parent open current" data-id="llama/Llama/AdapterLora" data-name="llama::adapterlora">
       <a href="../../Llama/AdapterLora.html">AdapterLora</a>
       
         <ul>
   
-  <li class=" " data-id="llama/Llama/AdapterLora/Error" data-name="llama::adapterlora::error">
+  <li class=" current" data-id="llama/Llama/AdapterLora/Error" data-name="llama::adapterlora::error">
       <a href="../../Llama/AdapterLora/Error.html">Error</a>
       
     </li>
@@ -152,7 +152,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="llama/Llama/Sampler" data-name="llama::sampler">
+  <li class="parent " data-id="llama/Llama/Sampler" data-name="llama::sampler">
       <a href="../../Llama/Sampler.html">Sampler</a>
       
         <ul>
@@ -232,7 +232,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/Sampler/TopNSigma" data-name="llama::sampler::topnsigma">
+  <li class=" " data-id="llama/Llama/Sampler/TopNSigma" data-name="llama::sampler::topnsigma">
       <a href="../../Llama/Sampler/TopNSigma.html">TopNSigma</a>
       
     </li>
@@ -298,31 +298,15 @@
 
   <span class="kind">
     class
-  </span> Llama::<wbr>Sampler::<wbr>TopNSigma
+  </span> Llama::<wbr>AdapterLora::<wbr>Error
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Llama/Sampler/TopNSigma.html">Llama::Sampler::TopNSigma</a></li><li class="superclass"><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Llama/AdapterLora/Error.html">Llama::AdapterLora::Error</a></li><li class="superclass"><a href="../../Llama/Error.html">Llama::Error</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
-
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>Top-N Sigma sampler</p>
-<p>The Top-N Sigma sampler selects tokens based on their distance from the mean
-in terms of standard deviations. This is based on the paper &quot;Top-nσ: Not All Logits Are You Need&quot;
-(https://arxiv.org/pdf/2411.07641).</p>
-<p>Example:</p>
-<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">TopNSigma</span>.new(<span class="n">2.0</span>) <span class="c"># Keep tokens within 2 standard deviations</span></code></pre>
 
 
 
@@ -349,8 +333,8 @@ in terms of standard deviations. This is based on the paper &quot;Top-nσ: Not A
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/b6fe39619ed86b2beb572119d75417777995b0b6/src/llama/sampler/top_n_sigma.cr#L13" target="_blank">
-        llama/sampler/top_n_sigma.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/b6fe39619ed86b2beb572119d75417777995b0b6/src/llama/adapter_lora/error.cr#L3" target="_blank">
+        llama/adapter_lora/error.cr
       </a>
     
     <br/>
@@ -361,25 +345,6 @@ in terms of standard deviations. This is based on the paper &quot;Top-nσ: Not A
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28n%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(n : Float32)</a>
-        
-          <div class="summary"><p>Creates a new Top-N Sigma sampler</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
@@ -392,26 +357,35 @@ in terms of standard deviations. This is based on the paper &quot;Top-nσ: Not A
     
       
 
-  <h3>Instance methods inherited from class <code><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></code></h3>
+
+      
+
+
+      
+
+  <h3>Class methods inherited from class <code><a href="../../Llama/Error.html">Llama::Error</a></code></h3>
   
   
-    <a href="../../Llama/Sampler/Base.html#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="tooltip">
-      <span>to_unsafe : Pointer(Llama::LibLlama::LlamaSampler)</span>
-    to_unsafe</a>
+    <a href="../../Llama/Error.html#error_message%28code%3AInt32%29%3AString-class-method" class="tooltip">
+      <span>error_message(code : Int32) : String</span>
+    error_message</a>, 
+    
+  
+    <a href="../../Llama/Error.html#format_error%28message%3AString%2Ccode%3AInt32%7CNil%3Dnil%2Ccontext%3AString%7CNil%3Dnil%29%3AString-class-method" class="tooltip">
+      <span>format_error(message : String, code : Int32 | Nil = <span class="n">nil</span>, context : String | Nil = <span class="n">nil</span>) : String</span>
+    format_error</a>
     
   
 
 
       
 
-  <h3>Constructor methods inherited from class <code><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></code></h3>
-  
-  
-    <a href="../../Llama/Sampler/Base.html#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method" class="tooltip">
-      <span>new(handle : Pointer(LibLlama::LlamaSampler))</span>
-    new</a>
+
     
-  
+      
+
+
+      
 
 
       
@@ -450,45 +424,6 @@ in terms of standard deviations. This is based on the paper &quot;Top-nσ: Not A
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(n:Float32)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(n : Float32)
-
-        <a class="method-permalink" href="#new%28n%3AFloat32%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new Top-N Sigma sampler</p>
-<p>Parameters:</p>
-<ul>
-<li>n: Number of standard deviations to keep</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::Error if the sampler cannot be created</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/b6fe39619ed86b2beb572119d75417777995b0b6/src/llama/sampler/top_n_sigma.cr#L21" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
