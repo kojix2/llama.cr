@@ -71,7 +71,7 @@ prompt_tokens.each do |token|
 end
 
 # Prepare a batch for the prompt
-batch = Llama::Batch.for_tokens(prompt_tokens)
+batch = Llama::Batch.from_tokens(prompt_tokens)
 
 # Main loop
 n_decode = 0
@@ -100,7 +100,7 @@ while n_pos + batch.n_tokens < prompt_tokens.size + n_predict
   STDOUT.flush
 
   # Prepare the next batch with the sampled token
-  batch = Llama::Batch.for_tokens([new_token_id])
+  batch = Llama::Batch.from_tokens([new_token_id])
 
   n_decode += 1
 end

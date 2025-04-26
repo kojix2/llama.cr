@@ -194,7 +194,7 @@ module Llama
         raise ArgumentError.new("tokens array cannot be empty")
       end
 
-      batch = Batch.for_tokens(tokens, compute_logits_for_last, seq_ids, n_seq_max)
+      batch = Batch.from_tokens(tokens, compute_logits_for_last, seq_ids, n_seq_max)
       decode(batch)
     end
 
@@ -230,7 +230,7 @@ module Llama
             raise TokenizationError.new(error_msg)
           end
 
-          batch = Batch.for_tokens(tokens, true, nil, 8)
+          batch = Batch.from_tokens(tokens, true, nil, 8)
           result = decode(batch)
           results << result
         rescue ex : TokenizationError
@@ -282,13 +282,13 @@ module Llama
       if pos == input_tokens.size
         # For the first iteration, process all input tokens
         # Create a batch with compute_logits_for_last=true to only compute logits for the last token
-        Batch.for_tokens(input_tokens, true, nil)
+        Batch.from_tokens(input_tokens, true, nil)
       else
         # For subsequent tokens, just process the last generated token
         # Create a single-token batch with the last generated token
         last_token = all_tokens.last
-        # Use Batch.for_tokens to ensure n_tokens is properly set
-        batch = Batch.for_tokens([last_token], true, [0] of Int32)
+        # Use Batch.from_tokens to ensure n_tokens is properly set
+        batch = Batch.from_tokens([last_token], true, [0] of Int32)
         # Update the position
         batch.to_unsafe.pos[0] = pos - 1
         batch

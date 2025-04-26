@@ -248,7 +248,7 @@ module Llama
     # Raises:
     # - ArgumentError if tokens array is empty
     # - Llama::Batch::Error if batch creation fails
-    def self.for_tokens(tokens : Array(Int32), compute_logits_for_last : Bool = true, seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Batch
+    def self.from_tokens(tokens : Array(Int32), compute_logits_for_last : Bool = true, seq_ids : Array(Int32)? = nil, n_seq_max : Int32 = 8) : Batch
       if tokens.empty?
         raise ArgumentError.new("Tokens array cannot be empty")
       end
