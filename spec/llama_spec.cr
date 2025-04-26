@@ -14,7 +14,7 @@ describe Llama do
     it "returns increasing microseconds and milliseconds" do
       t0_us = Llama.time_us
       t0_ms = Llama.time_ms
-      sleep 0.01
+      sleep Time::Span.new(nanoseconds: 10_000_000) # sleep 0.01 seconds
       t1_us = Llama.time_us
       t1_ms = Llama.time_ms
       (t1_us > t0_us).should be_true
