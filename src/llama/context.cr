@@ -657,7 +657,89 @@ module Llama
       LibLlama.llama_perf_context_reset(@handle)
     end
 
-    # ===== EMBEDDINGS METHODS =====
+    # Attaches a LoRA adapter to this context
+    #
+    # Parameters:
+    # - adapter: The LoRA adapter to attach
+    # - scale: Scaling factor for the adapter (default: 1.0)
+    #
+    # Returns:
+    # - 0 on success, non-zero on error
+    #
+    # Raises:
+    # - Llama::Context::Error if the adapter cannot be attached
+    def attach_adapter_lora(adapter : AdapterLora, scale : Float32 = 1.0) : Int32
+      result = LibLlama.llama_set_adapter_lora(@handle, adapter.to_unsafe, scale)
+
+      if result < 0
+        error_msg = Llama.format_error(
+          "Failed to attach LoRA adapter",
+          result,
+          "scale: #{scale}"
+        )
+        raise Context::Error.new(error_msg)
+      end
+
+      result
+    end
+
+    # Detaches a LoRA adapter from this context
+    #
+    # Parameters:
+    # - adapter: The LoRA adapter to detach
+    #
+    # Returns:
+    # - 0 on success, non-zero on error
+    #
+    # Raises:
+    # - Llama::Context::Error if the adapter cannot be detached
+    def detach_adapter_lora(adapter : AdapterLora) : Int32
+      result = LibLlama.llama_rm_adapter_lora(@handle, adapter.to_unsafe)
+
+      if result < 0
+        error_msg = Llama.format_error(
+          "Failed to detach LoRA adapter",
+          result,
+          nil
+        )
+        raise Context::Error.new(error_msg)
+      end
+
+      result
+    end
+
+    # Clears all LoRA adapters from this context
+    def clear_adapters_lora
+      LibLlama.llama_clear_adapter_lora(@handle)
+    end
+
+    # Applies a control vector to the LoRA adapter
+    #
+    # Parameters:
+    # - data: The control vector data
+    # - n_embd: Embedding dimension per layer
+    # - il_start: Start layer index (inclusive, 1-based)
+    # - il_end: End layer index (inclusive, 1-based)
+    #
+    # Returns:
+    # - 0 on success, non-zero on error
+    #
+    # Raises:
+    # - Llama::Context::Error if the control vector cannot be applied
+    def apply_adapter_cvec(data : Slice(Float32), n_embd : Int32, il_start : Int32, il_end : Int32) : Int32
+      result = LibLlama.llama_apply_adapter_cvec(@handle, data, data.size, n_embd, il_start, il_end)
+
+      if result < 0
+        error_msg = Llama.format_error(
+          "Failed to apply LoRA control vector",
+          result,
+          "n_embd: #{n_embd}, il_start: #{il_start}, il_end: #{il_end}, data size: #{data.size}"
+        )
+        raise Context::Error.new(error_msg)
+      end
+
+      result
+    end
 
     # Sets whether the model is in embeddings mode or not
     # If true, embeddings will be returned but logits will not

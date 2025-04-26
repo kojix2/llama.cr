@@ -73,6 +73,7 @@ require "./llama/model"
 require "./llama/kv_cache"
 require "./llama/batch"
 require "./llama/state"
+require "./llama/adapter_lora"
 require "./llama/context"
 require "./llama/sampler"
 
