@@ -23,7 +23,7 @@ describe Llama do
     end
 
     it "measures elapsed time in ms for a block" do
-      elapsed = Llama.measure_ms { sleep 0.02 }
+      elapsed = Llama.measure_ms { sleep Time::Span.new(nanoseconds: 20_000_000) }
       elapsed.should be > 0.0
       # Do not check the exact value due to possible environment delays
     end
