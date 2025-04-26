@@ -316,10 +316,6 @@ module Llama
         raise ArgumentError.new("max_tokens must be positive")
       end
 
-      if prompt.empty?
-        raise ArgumentError.new("prompt cannot be empty")
-      end
-
       # Use the internal generation method with a custom token sampler
       generate_internal(prompt, max_tokens) do |logits|
         begin
@@ -442,9 +438,7 @@ module Llama
         raise ArgumentError.new("temperature must be non-negative")
       end
 
-      if prompt.empty?
-        raise ArgumentError.new("prompt cannot be empty")
-      end
+      # 空プロンプトも許可する
 
       # Use the internal generation method with temperature sampling
       generate_internal(prompt, max_tokens) do |logits|
