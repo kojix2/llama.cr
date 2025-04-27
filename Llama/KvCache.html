@@ -345,14 +345,14 @@ Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L6" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L6" target="_blank">
         llama/kv_cache.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache/error.cr#L4" target="_blank">
         llama/kv_cache/error.cr
       </a>
     
@@ -407,14 +407,14 @@ Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#clear-instance-method" class="signature"><strong>#clear</strong></a>
+        <a href="#clear%3Aself-instance-method" class="signature"><strong>#clear</strong> : <span class="k">self</span></a>
         
           <div class="summary"><p>Clears the KV cache This removes all tokens from the cache and resets its state</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#defrag-instance-method" class="signature"><strong>#defrag</strong></a>
+        <a href="#defrag%3Aself-instance-method" class="signature"><strong>#defrag</strong> : <span class="k">self</span></a>
         
           <div class="summary"><p>Defragments the KV cache This will be applied lazily on next decode or explicitly with update</p></div>
         
@@ -435,28 +435,28 @@ Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_add%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cdelta%3AInt32%29-instance-method" class="signature"><strong>#seq_add</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32)</a>
+        <a href="#seq_add%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cdelta%3AInt32%29%3Aself-instance-method" class="signature"><strong>#seq_add</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32) : <span class="k">self</span></a>
         
           <div class="summary"><p>Adds a relative position delta to tokens in a sequence</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_cp%28seq_id_src%3AInt32%2Cseq_id_dst%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29-instance-method" class="signature"><strong>#seq_cp</strong>(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32)</a>
+        <a href="#seq_cp%28seq_id_src%3AInt32%2Cseq_id_dst%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29%3Aself-instance-method" class="signature"><strong>#seq_cp</strong>(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32) : <span class="k">self</span></a>
         
           <div class="summary"><p>Copies tokens from one sequence to another in the KV cache</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_div%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cd%3AInt32%29-instance-method" class="signature"><strong>#seq_div</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32)</a>
+        <a href="#seq_div%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cd%3AInt32%29%3Aself-instance-method" class="signature"><strong>#seq_div</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32) : <span class="k">self</span></a>
         
           <div class="summary"><p>Divides the positions of tokens in a sequence by a factor</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_keep%28seq_id%3AInt32%29-instance-method" class="signature"><strong>#seq_keep</strong>(seq_id : Int32)</a>
+        <a href="#seq_keep%28seq_id%3AInt32%29%3Aself-instance-method" class="signature"><strong>#seq_keep</strong>(seq_id : Int32) : <span class="k">self</span></a>
         
           <div class="summary"><p>Keeps only the specified sequence in the KV cache, removing all others</p></div>
         
@@ -484,7 +484,7 @@ Provides methods for managing the KV (Key-Value) cache in LLaMA models</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#update-instance-method" class="signature"><strong>#update</strong></a>
+        <a href="#update%3Aself-instance-method" class="signature"><strong>#update</strong> : <span class="k">self</span></a>
         
           <div class="summary"><p>Applies pending KV cache updates This includes K-shifts, defragmentation, etc.</p></div>
         
@@ -564,7 +564,7 @@ Users should obtain KvCache instances through Context#kv_cache.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -609,17 +609,17 @@ Users should obtain KvCache instances through Context#kv_cache.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L320" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L320" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="clear-instance-method">
+    <div class="entry-detail" id="clear:self-instance-method">
       <div class="signature">
         
-        def <strong>clear</strong>
+        def <strong>clear</strong> : <span class="k">self</span>
 
-        <a class="method-permalink" href="#clear-instance-method">#</a>
+        <a class="method-permalink" href="#clear%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -639,17 +639,17 @@ This removes all tokens from the cache and resets its state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L60" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L60" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="defrag-instance-method">
+    <div class="entry-detail" id="defrag:self-instance-method">
       <div class="signature">
         
-        def <strong>defrag</strong>
+        def <strong>defrag</strong> : <span class="k">self</span>
 
-        <a class="method-permalink" href="#defrag-instance-method">#</a>
+        <a class="method-permalink" href="#defrag%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -669,7 +669,7 @@ This will be applied lazily on next decode or explicitly with update</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L299" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L299" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -690,7 +690,7 @@ This will be applied lazily on next decode or explicitly with update</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L361" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L361" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -720,17 +720,17 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L82" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L82" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_add(seq_id:Int32,p0:Int32,p1:Int32,delta:Int32)-instance-method">
+    <div class="entry-detail" id="seq_add(seq_id:Int32,p0:Int32,p1:Int32,delta:Int32):self-instance-method">
       <div class="signature">
         
-        def <strong>seq_add</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32)
+        def <strong>seq_add</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#seq_add%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cdelta%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#seq_add%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cdelta%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -756,17 +756,17 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L209" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L209" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_cp(seq_id_src:Int32,seq_id_dst:Int32,p0:Int32,p1:Int32)-instance-method">
+    <div class="entry-detail" id="seq_cp(seq_id_src:Int32,seq_id_dst:Int32,p0:Int32,p1:Int32):self-instance-method">
       <div class="signature">
         
-        def <strong>seq_cp</strong>(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32)
+        def <strong>seq_cp</strong>(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#seq_cp%28seq_id_src%3AInt32%2Cseq_id_dst%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#seq_cp%28seq_id_src%3AInt32%2Cseq_id_dst%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -792,17 +792,17 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L158" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L158" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_div(seq_id:Int32,p0:Int32,p1:Int32,d:Int32)-instance-method">
+    <div class="entry-detail" id="seq_div(seq_id:Int32,p0:Int32,p1:Int32,d:Int32):self-instance-method">
       <div class="signature">
         
-        def <strong>seq_div</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32)
+        def <strong>seq_div</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#seq_div%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cd%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#seq_div%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cd%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -829,17 +829,17 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L237" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L237" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_keep(seq_id:Int32)-instance-method">
+    <div class="entry-detail" id="seq_keep(seq_id:Int32):self-instance-method">
       <div class="signature">
         
-        def <strong>seq_keep</strong>(seq_id : Int32)
+        def <strong>seq_keep</strong>(seq_id : Int32) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#seq_keep%28seq_id%3AInt32%29-instance-method">#</a>
+        <a class="method-permalink" href="#seq_keep%28seq_id%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -862,7 +862,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L182" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L182" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -895,7 +895,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L265" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L265" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -931,7 +931,7 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L129" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L129" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -952,17 +952,17 @@ If a KV cell has multiple sequences assigned to it, it will be counted multiple 
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L356" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L356" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="update-instance-method">
+    <div class="entry-detail" id="update:self-instance-method">
       <div class="signature">
         
-        def <strong>update</strong>
+        def <strong>update</strong> : <span class="k">self</span>
 
-        <a class="method-permalink" href="#update-instance-method">#</a>
+        <a class="method-permalink" href="#update%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -982,7 +982,7 @@ This includes K-shifts, defragmentation, etc.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L341" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L341" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1012,7 +1012,7 @@ A cell is considered used if it has at least one sequence assigned to it</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/9f0611e5026746a48ca34e6742836fe14003e36d/src/llama/kv_cache.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/kv_cache.cr#L103" target="_blank">View source</a>]
         
       </div>
     </div>
