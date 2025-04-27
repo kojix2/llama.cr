@@ -52,11 +52,15 @@ module Llama
     # Clears the KV cache
     # This removes all tokens from the cache and resets its state
     #
+    # Returns:
+    # - self for method chaining
+    #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
     def clear
       begin
         LibLlama.llama_kv_self_clear(ctx_ptr)
+        self
       rescue ex
         error_msg = Llama.format_error(
           "Failed to clear KV cache",
@@ -146,11 +150,15 @@ module Llama
     # - p0: Start position (p0 < 0 means start from 0)
     # - p1: End position (p1 < 0 means end at infinity)
     #
+    # Returns:
+    # - self for method chaining
+    #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
     def seq_cp(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32)
       begin
         LibLlama.llama_kv_self_seq_cp(ctx_ptr, seq_id_src, seq_id_dst, p0, p1)
+        self
       rescue ex
         error_msg = Llama.format_error(
           "Failed to copy sequence in KV cache",
@@ -166,11 +174,15 @@ module Llama
     # Parameters:
     # - seq_id: The sequence ID to keep
     #
+    # Returns:
+    # - self for method chaining
+    #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
     def seq_keep(seq_id : Int32)
       begin
         LibLlama.llama_kv_self_seq_keep(ctx_ptr, seq_id)
+        self
       rescue ex
         error_msg = Llama.format_error(
           "Failed to keep sequence in KV cache",
@@ -189,11 +201,15 @@ module Llama
     # - p1: End position (p1 < 0 means end at infinity)
     # - delta: The position delta to add
     #
+    # Returns:
+    # - self for method chaining
+    #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
     def seq_add(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32)
       begin
         LibLlama.llama_kv_self_seq_add(ctx_ptr, seq_id, p0, p1, delta)
+        self
       rescue ex
         error_msg = Llama.format_error(
           "Failed to add position delta to sequence in KV cache",
@@ -212,6 +228,9 @@ module Llama
     # - p1: End position (p1 < 0 means end at infinity)
     # - d: The divisor (must be > 1)
     #
+    # Returns:
+    # - self for method chaining
+    #
     # Raises:
     # - ArgumentError if the divisor is not greater than 1
     # - Llama::KvCache::Error if the operation fails
@@ -222,6 +241,7 @@ module Llama
 
       begin
         LibLlama.llama_kv_self_seq_div(ctx_ptr, seq_id, p0, p1, d)
+        self
       rescue ex
         error_msg = Llama.format_error(
           "Failed to divide positions in sequence in KV cache",
@@ -271,11 +291,15 @@ module Llama
     # Defragments the KV cache
     # This will be applied lazily on next decode or explicitly with update
     #
+    # Returns:
+    # - self for method chaining
+    #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
     def defrag
       begin
         LibLlama.llama_kv_self_defrag(ctx_ptr)
+        self
       rescue ex
         error_msg = Llama.format_error(
           "Failed to defragment KV cache",
@@ -309,11 +333,15 @@ module Llama
     # Applies pending KV cache updates
     # This includes K-shifts, defragmentation, etc.
     #
+    # Returns:
+    # - self for method chaining
+    #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
     def update
       begin
         LibLlama.llama_kv_self_update(ctx_ptr)
+        self
       rescue ex
         error_msg = Llama.format_error(
           "Failed to update KV cache",
