@@ -57,7 +57,7 @@ module Llama
     #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
-    def clear
+    def clear : self
       begin
         LibLlama.llama_kv_self_clear(ctx_ptr)
         self
@@ -155,7 +155,7 @@ module Llama
     #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
-    def seq_cp(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32)
+    def seq_cp(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32) : self
       begin
         LibLlama.llama_kv_self_seq_cp(ctx_ptr, seq_id_src, seq_id_dst, p0, p1)
         self
@@ -179,7 +179,7 @@ module Llama
     #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
-    def seq_keep(seq_id : Int32)
+    def seq_keep(seq_id : Int32) : self
       begin
         LibLlama.llama_kv_self_seq_keep(ctx_ptr, seq_id)
         self
@@ -206,7 +206,7 @@ module Llama
     #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
-    def seq_add(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32)
+    def seq_add(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32) : self
       begin
         LibLlama.llama_kv_self_seq_add(ctx_ptr, seq_id, p0, p1, delta)
         self
@@ -234,7 +234,7 @@ module Llama
     # Raises:
     # - ArgumentError if the divisor is not greater than 1
     # - Llama::KvCache::Error if the operation fails
-    def seq_div(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32)
+    def seq_div(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32) : self
       if d <= 1
         raise ArgumentError.new("Divisor must be greater than 1")
       end
@@ -296,7 +296,7 @@ module Llama
     #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
-    def defrag
+    def defrag : self
       begin
         LibLlama.llama_kv_self_defrag(ctx_ptr)
         self
@@ -338,7 +338,7 @@ module Llama
     #
     # Raises:
     # - Llama::KvCache::Error if the operation fails
-    def update
+    def update : self
       begin
         LibLlama.llama_kv_self_update(ctx_ptr)
         self
