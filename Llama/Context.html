@@ -137,6 +137,26 @@
       
     </li>
   
+  <li class="parent " data-id="llama/Llama/KvCacheView" data-name="llama::kvcacheview">
+      <a href="../Llama/KvCacheView.html">KvCacheView</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/KvCacheView/Error" data-name="llama::kvcacheview::error">
+      <a href="../Llama/KvCacheView/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/KvCacheViewCell" data-name="llama::kvcacheviewcell">
+      <a href="../Llama/KvCacheViewCell.html">KvCacheViewCell</a>
+      
+    </li>
+  
   <li class="parent " data-id="llama/Llama/Model" data-name="llama::model">
       <a href="../Llama/Model.html">Model</a>
       
@@ -344,14 +364,14 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L5" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L5" target="_blank">
         llama/context.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context/error.cr#L4" target="_blank">
         llama/context/error.cr
       </a>
     
@@ -500,6 +520,20 @@
         <a href="#kv_cache%3AKvCache-instance-method" class="signature"><strong>#kv_cache</strong> : KvCache</a>
         
           <div class="summary"><p>Returns the KV cache for this context Lazily initializes the KV cache if it doesn't exist yet</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#kv_cache_view%28n_seq_max%3AInt32%3D4%29%3AKvCacheView-instance-method" class="signature"><strong>#kv_cache_view</strong>(n_seq_max : Int32 = <span class="n">4</span>) : KvCacheView</a>
+        
+          <div class="summary"><p>Creates a KV cache view for this context</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#kv_cache_view%28n_seq_max%3AInt32%3D4%2C%26%29%3AKvCacheView-instance-method" class="signature"><strong>#kv_cache_view</strong>(n_seq_max : Int32 = <span class="n">4</span>, &) : KvCacheView</a>
+        
+          <div class="summary"><p>Creates a KV cache view for this context with a block</p></div>
         
       </li>
     
@@ -689,7 +723,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -741,7 +775,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L723" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L756" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -772,7 +806,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L845" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L878" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -806,7 +840,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L665" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L698" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -844,7 +878,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L132" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L165" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -865,7 +899,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L706" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L739" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -900,7 +934,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L382" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L415" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -933,7 +967,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L690" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L723" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -969,7 +1003,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L354" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L387" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -990,7 +1024,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L635" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L668" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1027,7 +1061,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L431" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L464" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1065,7 +1099,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L313" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L346" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1095,7 +1129,7 @@ Only available when embeddings mode is enabled</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L763" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L796" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1128,7 +1162,7 @@ Only available when embeddings mode is enabled</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L794" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L827" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1161,7 +1195,7 @@ Only available when embeddings mode is enabled</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L820" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L853" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1183,7 +1217,75 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L64" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="kv_cache_view(n_seq_max:Int32=4):KvCacheView-instance-method">
+      <div class="signature">
+        
+        def <strong>kv_cache_view</strong>(n_seq_max : Int32 = <span class="n">4</span>) : <a href="../Llama/KvCacheView.html">KvCacheView</a>
+
+        <a class="method-permalink" href="#kv_cache_view%28n_seq_max%3AInt32%3D4%29%3AKvCacheView-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a KV cache view for this context</p>
+<p>Parameters:</p>
+<ul>
+<li>n_seq_max: Maximum number of sequences per cell to track (default: 4)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>A new KvCacheView instance</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::KvCacheView::Error if the view cannot be created</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L78" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="kv_cache_view(n_seq_max:Int32=4,&amp;):KvCacheView-instance-method">
+      <div class="signature">
+        
+        def <strong>kv_cache_view</strong>(n_seq_max : Int32 = <span class="n">4</span>, &) : <a href="../Llama/KvCacheView.html">KvCacheView</a>
+
+        <a class="method-permalink" href="#kv_cache_view%28n_seq_max%3AInt32%3D4%2C%26%29%3AKvCacheView-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a KV cache view for this context with a block</p>
+<p>Parameters:</p>
+<ul>
+<li>n_seq_max: Maximum number of sequences per cell to track (default: 4)</li>
+<li>block: The block to execute with the view</li>
+</ul>
+<p>The view will be automatically freed after the block execution</p>
+<p>Returns:</p>
+<ul>
+<li>A new KvCacheView instance</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::KvCacheView::Error if the view cannot be created</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L95" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1208,7 +1310,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L402" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L435" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1229,7 +1331,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L74" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L107" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1250,7 +1352,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L102" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1271,7 +1373,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L84" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L117" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1292,7 +1394,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L89" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L122" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1313,7 +1415,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L127" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1334,7 +1436,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L79" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L112" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1359,7 +1461,7 @@ Lazily initializes the KV cache if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L751" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L784" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1382,7 +1484,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L643" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L676" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1417,7 +1519,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L263" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L296" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1452,7 +1554,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L213" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L246" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1488,7 +1590,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L192" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L225" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1510,7 +1612,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L650" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L683" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1536,7 +1638,7 @@ If true, embeddings will be returned but logits will not</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L743" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L776" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1558,7 +1660,7 @@ Lazily initializes the state if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L100" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L133" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1579,7 +1681,7 @@ Lazily initializes the state if it doesn't exist yet</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6dd158a189ae3bd89c879863c942231df2b5601/src/llama/context.cr#L630" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/371dc7806cdc8f9d636cddd4c4c1e0c3782d6f4b/src/llama/context.cr#L663" target="_blank">View source</a>]
         
       </div>
     </div>
