@@ -228,6 +228,11 @@ See [kojix2.github.io/llama.cr](https://kojix2.github.io/llama.cr) for full API 
 
 See [DEVELOPMENT.md](DEVELOPMENT.md) for development guidelines.
 
+Do you need commit rights?
+
+- If you need commit rights to my repository or want to get admin rights and take over the project, please feel free to contact @kojix2.
+- Many OSS projects become abandoned because only the founder has commit rights to the original repository.
+
 ## Contributing
 
 1. Fork it (<https://github.com/kojix2/llama.cr/fork>)
