@@ -56,8 +56,7 @@ module Llama
 
       @model = model
 
-      # Lazy initialization for KV cache and state to avoid circular references
-      @kv_cache = nil
+      # Lazy initialization for state to avoid circular references
       @state = nil
     end
 
@@ -73,14 +72,6 @@ module Llama
     # - A Memory instance
     def memory : Memory
       @memory ||= Memory.new(self)
-    end
-
-    # Returns the KV cache for this context (legacy API)
-    # Lazily initializes the KV cache if it doesn't exist yet
-    #
-    # Note: This is the legacy API. Consider using `memory` for new code.
-    def kv_cache : KvCache
-      @kv_cache ||= KvCache.new(LibLlama.llama_get_kv_self(@handle), self)
     end
 
     # Creates a KV cache view for this context
@@ -160,8 +151,7 @@ module Llama
         LibLlama.llama_free(@handle)
       end
 
-      # Clear references to KV cache and state
-      @kv_cache = nil
+      # Clear references to state
       @state = nil
     end
 
@@ -925,7 +915,6 @@ module Llama
     @handle : LibLlama::LlamaContext*
     @model : Model
     @memory : Memory?
-    @kv_cache : KvCache?
     @state : State?
 
     # :nodoc:
