@@ -46,11 +46,8 @@ jobs:
           unzip llama.zip
           sudo mkdir -p /usr/local/lib
           sudo cp build/bin/*.so /usr/local/lib/ || true
-          # Also copy any backend libraries that might be in subdirectories
           find build -name "*.so" -exec sudo cp {} /usr/local/lib/ \; || true
           sudo ldconfig
-          # List installed libraries for debugging
-          ls -la /usr/local/lib/libllama* /usr/local/lib/libggml* || true
       - name: Install llama.cpp (macOS)
         if: runner.os == 'macOS'
         run: |
@@ -58,10 +55,7 @@ jobs:
           unzip llama.zip
           sudo mkdir -p /usr/local/lib
           sudo cp build/bin/*.dylib /usr/local/lib/ || true
-          # Also copy any backend libraries that might be in subdirectories
           find build -name "*.dylib" -exec sudo cp {} /usr/local/lib/ \; || true
-          # List installed libraries for debugging
-          ls -la /usr/local/lib/libllama* /usr/local/lib/libggml* || true
 
       # Set the DYLD_LIBRARY_PATH for macOS to include the installed library path
       - name: Set library path (macOS)
@@ -95,17 +89,14 @@ jobs:
       - name: Run simple example
         env:
           LLAMA_CPP_DIR: ${{ github.workspace }}
-          LLAMA_DEBUG: "1"
         run: ./simple_example --model models/tiny_model.gguf
 
       - name: Run chat example
         env:
           LLAMA_CPP_DIR: ${{ github.workspace }}
-          LLAMA_DEBUG: "1"
         run: ./chat_example --model models/tiny_model.gguf
 
       - name: Run tokenization example
         env:
           LLAMA_CPP_DIR: ${{ github.workspace }}
-          LLAMA_DEBUG: "1"
         run: ./tokenize_example --model models/tiny_model.gguf --prompt "Hello, world!"

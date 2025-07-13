@@ -302,6 +302,7 @@ module Llama
           end
         else
           # Try to load backends from standard locations
+          ENV["GGML_BACKEND_PATH"] = "/usr/local/lib"
           LibLlama.ggml_backend_load_all
         end
 
@@ -313,8 +314,6 @@ module Llama
           STDERR.puts "llama.cr: Successfully loaded #{backend_count} backend(s)" if ENV["LLAMA_DEBUG"]?
         else
           STDERR.puts "llama.cr: Warning - No backends loaded! Model loading may fail."
-          # In CI environments, this might still work with basic CPU backend
-          STDERR.puts "llama.cr: Continuing anyway - basic functionality may still work."
         end
 
         @@backend_initialized = true
