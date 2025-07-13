@@ -285,6 +285,9 @@ module Llama
   def self.init
     @@backend_mutex.synchronize do
       unless @@backend_initialized
+        # Initialize the backend first
+        LibLlama.llama_backend_init
+        
         # Set environment variable to help backend loading find libraries
         if ENV["LLAMA_CPP_DIR"]?
           backend_path = File.join(ENV["LLAMA_CPP_DIR"], "build", "bin")
@@ -292,14 +295,13 @@ module Llama
           # Also change working directory to the build/bin directory
           original_dir = Dir.current
           begin
-            Dir.cd(backend_path)
-            LibLlama.llama_backend_init
+            Dir.cd(backend_path) if Dir.exists?(backend_path)
             LibLlama.ggml_backend_load_all
           ensure
             Dir.cd(original_dir)
           end
         else
-          LibLlama.llama_backend_init
+          # Try to load backends from standard locations
           LibLlama.ggml_backend_load_all
         end
 
@@ -311,6 +313,8 @@ module Llama
           STDERR.puts "llama.cr: Successfully loaded #{backend_count} backend(s)" if ENV["LLAMA_DEBUG"]?
         else
           STDERR.puts "llama.cr: Warning - No backends loaded! Model loading may fail."
+          # In CI environments, this might still work with basic CPU backend
+          STDERR.puts "llama.cr: Continuing anyway - basic functionality may still work."
         end
 
         @@backend_initialized = true
