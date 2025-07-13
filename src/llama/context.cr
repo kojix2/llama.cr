@@ -40,7 +40,8 @@ module Llama
       params.n_threads_batch = n_threads_batch
       params.embeddings = embeddings
       params.offload_kqv = offload_kqv
-
+      params.op_offload = false
+      params.swa_full = true
       @handle = LibLlama.llama_init_from_model(model.to_unsafe, params)
 
       if @handle.null?
