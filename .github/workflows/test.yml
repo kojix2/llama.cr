@@ -73,26 +73,25 @@ jobs:
       - name: Build
         run: crystal build --no-codegen src/llama.cr
 
-      - name: Cache model files
-        id: cache-models
-        uses: actions/cache@v4
-        with:
-          path: models
-          key: ${{ runner.os }}-models-tinyllama-v1
-
-      - name: Download test model (if not cached)
-        if: steps.cache-models.outputs.cache-hit != 'true'
+      - name: Download test model
         run: |
           mkdir -p models
           curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
+          # Verify the model file was downloaded correctly
+          ls -la models/
+          echo "Model file size: $(stat -c%s models/tiny_model.gguf 2>/dev/null || stat -f%z models/tiny_model.gguf) bytes"
 
       - name: Run spec file ${{ matrix.spec_file }}
         env:
           CRYSTAL_OPTS: --error-trace
           MODEL_PATH: models/tiny_model.gguf
+          LLAMA_CPP_DIR: ${{ github.workspace }}
           GC_DEBUG: "1"
         run: |
           echo "Running ${{ matrix.spec_file }}"
+          echo "Model path: $MODEL_PATH"
+          echo "LLAMA_CPP_DIR: $LLAMA_CPP_DIR"
+          echo "Working directory: $(pwd)"
           crystal spec "${{ matrix.spec_file }}"
 
       - name: Run static analysis
