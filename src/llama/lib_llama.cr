@@ -6,17 +6,6 @@ module Llama
     @[Link("ggml")]
   {% end %}
   lib LibLlama
-    # Note: The following functions marked as DEPRECATED in llama.cpp have been removed
-    # - llama_load_model_from_file → replaced with llama_model_load_from_file
-    # - llama_free_model → replaced with llama_model_free
-    # - llama_new_context_with_model → replaced with llama_init_from_model
-    # - llama_n_ctx_train, llama_n_embd, llama_n_layer, llama_n_head → replaced with llama_model_* functions
-    # - llama_n_vocab → replaced with llama_vocab_n_tokens
-    # - llama_token_* functions → replaced with llama_vocab_* functions
-    # - llama_kv_cache_* functions → replaced with llama_kv_self_* functions
-    # - llama_get_state_size, llama_copy_state_data, llama_set_state_data → replaced with llama_state_* functions
-    # - llama_load_session_file, llama_save_session_file → replaced with llama_state_load_file, llama_state_save_file
-
     # Constants
     LLAMA_DEFAULT_SEED      = 0xFFFFFFFF_u32
     LLAMA_TOKEN_NULL        =             -1
