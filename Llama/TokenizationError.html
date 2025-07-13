@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::AdapterLora - llama main</title>
+  <title>Llama::TokenizationError - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -62,7 +62,7 @@
       
         <ul>
   
-  <li class="parent open current" data-id="llama/Llama/AdapterLora" data-name="llama::adapterlora">
+  <li class="parent " data-id="llama/Llama/AdapterLora" data-name="llama::adapterlora">
       <a href="../Llama/AdapterLora.html">AdapterLora</a>
       
         <ul>
@@ -277,7 +277,7 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/TokenizationError" data-name="llama::tokenizationerror">
+  <li class=" current" data-id="llama/Llama/TokenizationError" data-name="llama::tokenizationerror">
       <a href="../Llama/TokenizationError.html">TokenizationError</a>
       
     </li>
@@ -303,12 +303,12 @@
 
   <span class="kind">
     class
-  </span> Llama::<wbr>AdapterLora
+  </span> Llama::<wbr>TokenizationError
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/AdapterLora.html">Llama::AdapterLora</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/TokenizationError.html">Llama::TokenizationError</a></li><li class="superclass"><a href="../Llama/Error.html">Llama::Error</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -322,9 +322,7 @@
     Overview
   </h2>
 
-  <p>Wrapper for the llama_adapter_lora structure</p>
-<p>This class represents a LoRA (Low-Rank Adaptation) adapter that can be
-applied to a model to modify its behavior without changing the original weights.</p>
+  <p>Specific error class for tokenization errors</p>
 
 
 
@@ -351,15 +349,8 @@ applied to a model to modify its behavior without changing the original weights.
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/4f37c95422f0018567ee57d9f7c4b432adff5901/src/llama/adapter_lora.cr#L8" target="_blank">
-        llama/adapter_lora.cr
-      </a>
-    
-    <br/>
-  
-    
-      <a href="https://github.com/kojix2/llama.cr/blob/4f37c95422f0018567ee57d9f7c4b432adff5901/src/llama/adapter_lora/error.cr#L2" target="_blank">
-        llama/adapter_lora/error.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/4f37c95422f0018567ee57d9f7c4b432adff5901/src/llama/error.cr#L47" target="_blank">
+        llama/error.cr
       </a>
     
     <br/>
@@ -370,60 +361,55 @@ applied to a model to modify its behavior without changing the original weights.
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28model%3AModel%2Cpath%3AString%29-class-method" class="signature"><strong>.new</strong>(model : Model, path : String)</a>
-        
-          <div class="summary"><p>Creates a new LoRA adapter from a file</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
   
 
   
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
-        
-          <div class="summary"><p>Frees the resources associated with this adapter</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaAdapterLora%29-instance-method" class="signature"><strong>#to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaAdapterLora)</a>
-        
-          <div class="summary"><p>Returns the raw pointer to the underlying llama_adapter_lora structure</p></div>
-        
-      </li>
-    
-  </ul>
-
 
 
   <div class="methods-inherited">
+    
+      
+
+
+      
+
+
+      
+
+  <h3>Class methods inherited from class <code><a href="../Llama/Error.html">Llama::Error</a></code></h3>
+  
+  
+    <a href="../Llama/Error.html#error_message%28code%3AInt32%29%3AString-class-method" class="tooltip">
+      <span>error_message(code : Int32) : String</span>
+    error_message</a>, 
+    
+  
+    <a href="../Llama/Error.html#format_error%28message%3AString%2Ccode%3AInt32%7CNil%3Dnil%2Ccontext%3AString%7CNil%3Dnil%29%3AString-class-method" class="tooltip">
+      <span>format_error(message : String, code : Int32 | Nil = <span class="n">nil</span>, context : String | Nil = <span class="n">nil</span>) : String</span>
+    format_error</a>
+    
+  
+
+
+      
+
+
+    
+      
+
+
+      
+
+
+      
+
+
+      
+
+
     
       
 
@@ -454,104 +440,12 @@ applied to a model to modify its behavior without changing the original weights.
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(model:Model,path:String)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(model : <a href="../Llama/Model.html">Model</a>, path : String)
-
-        <a class="method-permalink" href="#new%28model%3AModel%2Cpath%3AString%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new LoRA adapter from a file</p>
-<p>Parameters:</p>
-<ul>
-<li>model: The Model to load the adapter for</li>
-<li>path: Path to the LoRA adapter file</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::AdapterLora::Error if the adapter cannot be loaded</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/4f37c95422f0018567ee57d9f7c4b432adff5901/src/llama/adapter_lora.cr#L17" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
   
 
   
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="finalize-instance-method">
-      <div class="signature">
-        
-        def <strong>finalize</strong>
-
-        <a class="method-permalink" href="#finalize-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Frees the resources associated with this adapter</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/4f37c95422f0018567ee57d9f7c4b432adff5901/src/llama/adapter_lora.cr#L44" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="to_unsafe:Pointer(Llama::LibLlama::LlamaAdapterLora)-instance-method">
-      <div class="signature">
-        
-        def <strong>to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaAdapterLora)
-
-        <a class="method-permalink" href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaAdapterLora%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the raw pointer to the underlying llama_adapter_lora structure</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/4f37c95422f0018567ee57d9f7c4b432adff5901/src/llama/adapter_lora.cr#L39" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
 
 </div>
