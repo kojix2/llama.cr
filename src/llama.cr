@@ -173,6 +173,8 @@ module Llama
   # Returns:
   # - A string containing system information
   def self.system_info : String
+    # Ensure backend is initialized before getting system info
+    init
     String.new(LibLlama.llama_print_system_info)
   end
 
