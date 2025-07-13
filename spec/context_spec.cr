@@ -106,15 +106,16 @@ describe Llama::Context do
 
     it "respects the max_tokens parameter" do
       model = Llama::Model.new(MODEL_PATH)
-      context = model.context
 
       prompt = "Count to ten:"
 
-      # Generate with very limited tokens
-      short_response = context.generate(prompt, max_tokens: 5, temperature: 0.0)
+      # Generate with very limited tokens using separate contexts
+      context1 = model.context
+      short_response = context1.generate(prompt, max_tokens: 5, temperature: 0.0)
 
-      # Generate with more tokens
-      long_response = context.generate(prompt, max_tokens: 20, temperature: 0.0)
+      # Generate with more tokens using a new context
+      context2 = model.context
+      long_response = context2.generate(prompt, max_tokens: 20, temperature: 0.0)
 
       # The longer generation should contain more characters
       short_response.size.should be < long_response.size
@@ -160,13 +161,13 @@ describe Llama::Context do
 
     it "handles different temperature values correctly" do
       model = Llama::Model.new(MODEL_PATH)
-      context = model.context
 
       prompt = "The weather today is"
 
-      # Test with various temperature values
+      # Test with various temperature values using separate contexts
       temperatures = [0.0, 0.5, 1.0]
       responses = temperatures.map do |temp|
+        context = model.context
         response = context.generate(prompt, max_tokens: 10, temperature: temp.to_f32)
         puts "  - Temperature #{temp}: '#{response}'"
         response
