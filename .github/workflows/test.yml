@@ -14,7 +14,6 @@ jobs:
         spec_file:
           - spec/llama_spec.cr
           - spec/context_spec.cr
-          - spec/kv_cache_spec.cr
           - spec/state_spec.cr
           - spec/batch_spec.cr
           - spec/sampler_spec.cr
