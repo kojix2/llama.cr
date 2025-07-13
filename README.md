@@ -1,6 +1,7 @@
 # llama.cr
 
 [![test](https://github.com/kojix2/llama.cr/actions/workflows/test.yml/badge.svg)](https://github.com/kojix2/llama.cr/actions/workflows/test.yml)
+[![examples](https://github.com/kojix2/llama.cr/actions/workflows/examples.yml/badge.svg)](https://github.com/kojix2/llama.cr/actions/workflows/examples.yml)
 [![docs](https://img.shields.io/badge/docs-latest-blue.svg)](https://kojix2.github.io/llama.cr)
 [![Lines of Code](https://img.shields.io/endpoint?url=https%3A%2F%2Ftokei.kojix2.net%2Fbadge%2Fgithub%2Fkojix2%2Fllama.cr%2Flines)](https://tokei.kojix2.net/github/kojix2/llama.cr)
 
@@ -29,39 +30,36 @@ You need the llama.cpp shared library (libllama) available on your system.
 
 #### 1. Download Prebuilt Binary (Recommended)
 
-You can download a prebuilt binary matching the required version automatically:
-
-**Linux/macOS (bash):**
-
 ```sh
 LLAMA_VERSION=$(cat LLAMA_VERSION)
-wget "https://github.com/ggerganov/llama.cpp/releases/download/v${LLAMA_VERSION}/llama-linux-x64.zip"
-unzip "llama-linux-x64.zip"
-# Move libllama.so to ./lib or set LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH
+curl -L "https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.zip" -o llama.zip
+unzip llama.zip
+sudo cp build/bin/*.so /usr/local/lib/
+sudo ldconfig
 ```
 
-You can also specify the library location without installing:
+For macOS, replace `ubuntu-x64` with `macos-arm64` and `*.so` with `*.dylib`.
 
-```bash
-crystal build examples/simple.cr --link-flags="-L/path/to/lib"
-LD_LIBRARY_PATH=/path/to/lib ./simple /path/to/model.gguf "Your prompt here"
+**Alternative: Using LLAMA_CPP_DIR**
+
+If you prefer not to install system-wide, you can set the `LLAMA_CPP_DIR` environment variable:
+
+```sh
+export LLAMA_CPP_DIR=/path/to/llama.cpp
+crystal build examples/simple.cr
+LLAMA_CPP_DIR=/path/to/llama.cpp ./simple_example --model models/tiny_model.gguf
 ```
 
 <details>
 <summary>Build from source (advanced users)</summary>
 
-You can build llama.cpp from source if you prefer:
-
 ```bash
 git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
-git checkout v$(cat ../LLAMA_VERSION)
+git checkout $(cat ../LLAMA_VERSION)
 mkdir build && cd build
-cmake ..
-cmake --build . --config Release
-sudo cmake --install .
-sudo ldconfig
+cmake .. && cmake --build . --config Release
+sudo cmake --install . && sudo ldconfig
 ```
 
 </details>
