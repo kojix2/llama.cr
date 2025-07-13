@@ -129,14 +129,14 @@ describe Llama::Context do
 
       prompt = "Creative writing:"
 
-      # Clear KV cache to make each generation independent
-      context.kv_cache.clear
+      # Clear memory to make each generation independent
+      context.memory.clear
       deterministic1 = context.generate(prompt, max_tokens: 15, temperature: 0.0)
 
-      context.kv_cache.clear
+      context.memory.clear
       deterministic2 = context.generate(prompt, max_tokens: 15, temperature: 0.0)
 
-      context.kv_cache.clear
+      context.memory.clear
       random = context.generate(prompt, max_tokens: 15, temperature: 1.0)
 
       # Deterministic generations (temperature=0.0) should be identical
