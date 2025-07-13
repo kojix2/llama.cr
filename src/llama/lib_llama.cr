@@ -388,7 +388,14 @@ module Llama
     fun llama_model_meta_val_str_by_index(model : LlamaModel*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
     fun llama_model_desc(model : LlamaModel*, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
 
-    # State Sequence Functions
+    # State Functions (current API)
+    fun llama_state_get_size(ctx : LlamaContext*) : LibC::SizeT
+    fun llama_state_get_data(ctx : LlamaContext*, dst : UInt8*, size : LibC::SizeT) : LibC::SizeT
+    fun llama_state_set_data(ctx : LlamaContext*, src : UInt8*, size : LibC::SizeT) : LibC::SizeT
+    fun llama_state_load_file(ctx : LlamaContext*, path_session : LibC::Char*, tokens_out : LlamaToken*, n_token_capacity : LibC::SizeT, n_token_count_out : LibC::SizeT*) : Bool
+    fun llama_state_save_file(ctx : LlamaContext*, path_session : LibC::Char*, tokens : LlamaToken*, n_token_count : LibC::SizeT) : Bool
+
+    # State Sequence Functions (additional API for specific sequences)
     fun llama_state_seq_get_size(ctx : LlamaContext*, seq_id : LlamaSeqId) : LibC::SizeT
     fun llama_state_seq_get_data(ctx : LlamaContext*, dst : UInt8*, size : LibC::SizeT, seq_id : LlamaSeqId) : LibC::SizeT
     fun llama_state_seq_set_data(ctx : LlamaContext*, src : UInt8*, size : LibC::SizeT, dest_seq_id : LlamaSeqId) : LibC::SizeT
