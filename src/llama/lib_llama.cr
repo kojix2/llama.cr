@@ -333,7 +333,7 @@ module Llama
     # Backend verification
     fun ggml_backend_reg_count : LibC::SizeT
 
-    # Memory API (replaces deprecated KV cache API)
+    # Memory API (modern replacement for deprecated KV cache API)
     alias LlamaMemoryT = Void*
     fun llama_get_memory(ctx : LlamaContext*) : LlamaMemoryT
     fun llama_memory_clear(mem : LlamaMemoryT, data : Bool) : Void

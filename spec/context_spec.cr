@@ -129,15 +129,16 @@ describe Llama::Context do
 
       prompt = "Creative writing:"
 
-      # Clear memory to make each generation independent
-      context.memory.clear
+      # Generate with deterministic settings (temperature=0.0)
       deterministic1 = context.generate(prompt, max_tokens: 15, temperature: 0.0)
 
-      context.memory.clear
-      deterministic2 = context.generate(prompt, max_tokens: 15, temperature: 0.0)
+      # Create a new context for independent generation
+      context2 = model.context
+      deterministic2 = context2.generate(prompt, max_tokens: 15, temperature: 0.0)
 
-      context.memory.clear
-      random = context.generate(prompt, max_tokens: 15, temperature: 1.0)
+      # Create another new context for random generation
+      context3 = model.context
+      random = context3.generate(prompt, max_tokens: 15, temperature: 1.0)
 
       # Deterministic generations (temperature=0.0) should be identical
       begin

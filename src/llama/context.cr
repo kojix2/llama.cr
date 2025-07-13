@@ -1,5 +1,4 @@
 require "./context/error"
-require "./memory"
 
 module Llama
   # Wrapper for the llama_context structure
