@@ -136,20 +136,6 @@ module Llama
       bias : Float32
     end
 
-    struct LlamaKvCacheViewCell
-      pos : LlamaPos
-    end
-
-    struct LlamaKvCacheView
-      n_cells : Int32
-      n_seq_max : Int32
-      token_count : Int32
-      used_cells : Int32
-      max_contiguous : Int32
-      max_contiguous_idx : Int32
-      cells : LlamaKvCacheViewCell*
-      cells_sequences : LlamaSeqId*
-    end
 
     # Enum Definitions
     enum LlamaFtype
@@ -278,10 +264,6 @@ module Llama
     fun llama_clear_adapter_lora(ctx : LlamaContext*) : Void
     fun llama_apply_adapter_cvec(ctx : LlamaContext*, data : Float32*, len : LibC::SizeT, n_embd : Int32, il_start : Int32, il_end : Int32) : Int32
 
-    # KV Cache View Functions
-    fun llama_kv_cache_view_init(ctx : LlamaContext*, n_seq_max : Int32) : LlamaKvCacheView
-    fun llama_kv_cache_view_free(view : LlamaKvCacheView*) : Void
-    fun llama_kv_cache_view_update(ctx : LlamaContext*, view : LlamaKvCacheView*) : Void
 
     # Chat Functions
     fun llama_chat_apply_template(
@@ -337,13 +319,14 @@ module Llama
       cb_eval_user_data : Void*
       type_k : Int32
       type_v : Int32
-      logits_all : Bool
+      abort_callback : Void*
+      abort_callback_data : Void*
       embeddings : Bool
       offload_kqv : Bool
       flash_attn : Bool
       no_perf : Bool
-      abort_callback : Void*
-      abort_callback_data : Void*
+      op_offload : Bool
+      swa_full : Bool
     end
 
     fun llama_model_default_params : LlamaModelParams
