@@ -68,7 +68,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: models
-          key: ${{ runner.os }}-models-tinyllama-v1
+          key: ${{ runner.os }}-models-tinyllama-v2
 
       - name: Download test model (if not cached)
         if: steps.cache-models.outputs.cache-hit != 'true'
