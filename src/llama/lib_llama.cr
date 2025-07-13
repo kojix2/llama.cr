@@ -35,7 +35,6 @@ module Llama
     type LlamaVocab = Void*
     type LlamaModel = Void*
     type LlamaContext = Void*
-    type LlamaKvCache = Void*
     type LlamaSampler = Void*
     type LlamaAdapterLora = Void*
 
@@ -499,27 +498,9 @@ module Llama
     # Define the callback type for logging
     alias GgmlLogCallback = Proc(Int32, LibC::Char*, Void*, Void)
     fun llama_log_set(log_callback : GgmlLogCallback, user_data : Void*) : Void
-    fun llama_get_kv_self(ctx : LlamaContext*) : LlamaKvCache*
-    fun llama_kv_self_clear(ctx : LlamaContext*) : Void
-    fun llama_kv_self_n_tokens(ctx : LlamaContext*) : Int32
-    fun llama_kv_self_used_cells(ctx : LlamaContext*) : Int32
-    fun llama_kv_self_seq_rm(ctx : LlamaContext*, seq_id : LlamaSeqId, p0 : LlamaPos, p1 : LlamaPos) : Bool
-    fun llama_kv_self_seq_cp(ctx : LlamaContext*, seq_id_src : LlamaSeqId, seq_id_dst : LlamaSeqId, p0 : LlamaPos, p1 : LlamaPos) : Void
-    fun llama_kv_self_seq_keep(ctx : LlamaContext*, seq_id : LlamaSeqId) : Void
-    fun llama_kv_self_seq_add(ctx : LlamaContext*, seq_id : LlamaSeqId, p0 : LlamaPos, p1 : LlamaPos, delta : LlamaPos) : Void
-    fun llama_kv_self_seq_div(ctx : LlamaContext*, seq_id : LlamaSeqId, p0 : LlamaPos, p1 : LlamaPos, d : Int32) : Void
-    fun llama_kv_self_seq_pos_max(ctx : LlamaContext*, seq_id : LlamaSeqId) : LlamaPos
-    fun llama_kv_self_defrag(ctx : LlamaContext*) : Void
-    fun llama_kv_self_can_shift(ctx : LlamaContext*) : Bool
-    fun llama_kv_self_update(ctx : LlamaContext*) : Void
     fun llama_batch_get_one(tokens : LlamaToken*, n_tokens : Int32) : LlamaBatch
     fun llama_batch_init(n_tokens : Int32, embd : Int32, n_seq_max : Int32) : LlamaBatch
     fun llama_batch_free(batch : LlamaBatch) : Void
-    fun llama_state_get_size(ctx : LlamaContext*) : LibC::SizeT
-    fun llama_state_get_data(ctx : LlamaContext*, dst : UInt8*, size : LibC::SizeT) : LibC::SizeT
-    fun llama_state_set_data(ctx : LlamaContext*, src : UInt8*, size : LibC::SizeT) : LibC::SizeT
-    fun llama_state_load_file(ctx : LlamaContext*, path_session : LibC::Char*, tokens_out : LlamaToken*, n_token_capacity : LibC::SizeT, n_token_count_out : LibC::SizeT*) : Bool
-    fun llama_state_save_file(ctx : LlamaContext*, path_session : LibC::Char*, tokens : LlamaToken*, n_token_count : LibC::SizeT) : Bool
 
     # Split path functions
     fun llama_split_path(split_path : LibC::Char*, maxlen : LibC::SizeT, path_prefix : LibC::Char*, split_no : Int32, split_count : Int32) : Int32
