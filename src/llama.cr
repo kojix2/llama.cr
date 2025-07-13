@@ -287,7 +287,7 @@ module Llama
       unless @@backend_initialized
         # Initialize the backend first
         LibLlama.llama_backend_init
-        
+
         # Set environment variable to help backend loading find libraries
         if ENV["LLAMA_CPP_DIR"]?
           backend_path = File.join(ENV["LLAMA_CPP_DIR"], "build", "bin")
