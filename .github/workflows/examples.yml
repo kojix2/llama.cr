@@ -45,15 +45,23 @@ jobs:
           curl -L https://github.com/ggml-org/llama.cpp/releases/download/${{ env.LLAMA_VERSION }}/llama-${{ env.LLAMA_VERSION }}-bin-ubuntu-x64.zip -o llama.zip
           unzip llama.zip
           sudo mkdir -p /usr/local/lib
-          sudo cp build/bin/*.so /usr/local/lib/
+          sudo cp build/bin/*.so /usr/local/lib/ || true
+          # Also copy any backend libraries that might be in subdirectories
+          find build -name "*.so" -exec sudo cp {} /usr/local/lib/ \; || true
           sudo ldconfig
+          # List installed libraries for debugging
+          ls -la /usr/local/lib/libllama* /usr/local/lib/libggml* || true
       - name: Install llama.cpp (macOS)
         if: runner.os == 'macOS'
         run: |
           curl -L https://github.com/ggml-org/llama.cpp/releases/download/${{ env.LLAMA_VERSION }}/llama-${{ env.LLAMA_VERSION }}-bin-macos-arm64.zip -o llama.zip
           unzip llama.zip
           sudo mkdir -p /usr/local/lib
-          sudo cp build/bin/*.dylib /usr/local/lib/
+          sudo cp build/bin/*.dylib /usr/local/lib/ || true
+          # Also copy any backend libraries that might be in subdirectories
+          find build -name "*.dylib" -exec sudo cp {} /usr/local/lib/ \; || true
+          # List installed libraries for debugging
+          ls -la /usr/local/lib/libllama* /usr/local/lib/libggml* || true
 
       # Set the DYLD_LIBRARY_PATH for macOS to include the installed library path
       - name: Set library path (macOS)
@@ -77,16 +85,27 @@ jobs:
           curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
 
       - name: Build examples
+        env:
+          LLAMA_CPP_DIR: ${{ github.workspace }}
         run: |
           crystal build examples/simple.cr -o simple_example
           crystal build examples/chat.cr -o chat_example
           crystal build examples/tokenize.cr -o tokenize_example
 
       - name: Run simple example
+        env:
+          LLAMA_CPP_DIR: ${{ github.workspace }}
+          LLAMA_DEBUG: "1"
         run: ./simple_example --model models/tiny_model.gguf
 
       - name: Run chat example
+        env:
+          LLAMA_CPP_DIR: ${{ github.workspace }}
+          LLAMA_DEBUG: "1"
         run: ./chat_example --model models/tiny_model.gguf
 
       - name: Run tokenization example
+        env:
+          LLAMA_CPP_DIR: ${{ github.workspace }}
+          LLAMA_DEBUG: "1"
         run: ./tokenize_example --model models/tiny_model.gguf --prompt "Hello, world!"
