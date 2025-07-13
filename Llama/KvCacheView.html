@@ -157,6 +157,21 @@
       
     </li>
   
+  <li class="parent " data-id="llama/Llama/Memory" data-name="llama::memory">
+      <a href="../Llama/Memory.html">Memory</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Memory/Error" data-name="llama::memory::error">
+      <a href="../Llama/Memory/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class="parent " data-id="llama/Llama/Model" data-name="llama::model">
       <a href="../Llama/Model.html">Model</a>
       
@@ -328,37 +343,11 @@
 
 
 
-  <h2>
-    <a id="overview" class="anchor" href="#overview">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Overview
-  </h2>
-
-  <p>Wrapper for the llama_kv_cache_view structure
-Provides methods for visualizing and debugging the KV cache state</p>
 
 
 
 
 
-
-
-  <h2>
-    <a id="included-modules" class="anchor" href="#included-modules">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Included Modules
-  </h2>
-  <ul class="other-types-list">
-    
-      <li class="other-type">Enumerable(<a href="../Llama/KvCacheViewCell.html">Llama::KvCacheViewCell</a>)</li>
-    
-  </ul>
 
 
 
@@ -379,14 +368,14 @@ Provides methods for visualizing and debugging the KV cache state</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L43" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view.cr#L30" target="_blank">
         llama/kv_cache_view.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view/error.cr#L4" target="_blank">
         llama/kv_cache_view/error.cr
       </a>
     
@@ -411,15 +400,11 @@ Provides methods for visualizing and debugging the KV cache state</p>
       <li class="entry-summary">
         <a href="#new%28ctx%3AContext%2Cn_seq_max%3AInt32%3D4%29-class-method" class="signature"><strong>.new</strong>(ctx : Context, n_seq_max : Int32 = <span class="n">4</span>)</a>
         
-          <div class="summary"><p>Creates a new KvCacheView instance</p></div>
-        
       </li>
     
       <li class="entry-summary">
         <a href="#new%28ctx%3AContext%2Cn_seq_max%3AInt32%3D4%2C%26%29-class-method" class="signature"><strong>.new</strong>(ctx : Context, n_seq_max : Int32 = <span class="n">4</span>, &)</a>
         
-          <div class="summary"><p>Creates a new KvCacheView instance with a block</p></div>
-        
       </li>
     
   </ul>
@@ -430,167 +415,9 @@ Provides methods for visualizing and debugging the KV cache state</p>
   
 
   
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#%5B%5D%28index%3AInt32%29%3AKvCacheViewCell-instance-method" class="signature"><strong>#[]</strong>(index : Int32) : KvCacheViewCell</a>
-        
-          <div class="summary"><p>Returns the cell at the specified index</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#capacity%3AInt32-instance-method" class="signature"><strong>#capacity</strong> : Int32</a>
-        
-          <div class="summary"><p>Alias for n_cells</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#each%28%26%29-instance-method" class="signature"><strong>#each</strong>(&)</a>
-        
-          <div class="summary"><p>Implements Enumerable interface Yields each cell in the KV cache</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#empty%3F%3ABool-instance-method" class="signature"><strong>#empty?</strong> : Bool</a>
-        
-          <div class="summary"><p>Returns whether the KV cache is empty</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
-        
-          <div class="summary"><p>Frees the resources associated with this view</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#free%3Aself-instance-method" class="signature"><strong>#free</strong> : <span class="k">self</span></a>
-        
-          <div class="summary"><p>Frees the resources associated with this view</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#freed%3F%3ABool-instance-method" class="signature"><strong>#freed?</strong> : Bool</a>
-        
-          <div class="summary"><p>Returns whether the view has been freed</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#full%3F%3ABool-instance-method" class="signature"><strong>#full?</strong> : Bool</a>
-        
-          <div class="summary"><p>Returns whether the KV cache is full</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#inspect%28io%3AIO%29%3ANil-instance-method" class="signature"><strong>#inspect</strong>(io : IO) : Nil</a>
-        
-          <div class="summary"><p>Returns a detailed string representation of the KV cache view</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#max_contiguous%3AInt32-instance-method" class="signature"><strong>#max_contiguous</strong> : Int32</a>
-        
-          <div class="summary"><p>Returns the maximum number of contiguous empty slots</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#max_contiguous_idx%3AInt32-instance-method" class="signature"><strong>#max_contiguous_idx</strong> : Int32</a>
-        
-          <div class="summary"><p>Returns the index to the start of the max_contiguous slot range</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#n_cells%3AInt32-instance-method" class="signature"><strong>#n_cells</strong> : Int32</a>
-        
-          <div class="summary"><p>Returns the number of cells in the KV cache</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#n_seq_max%3AInt32-instance-method" class="signature"><strong>#n_seq_max</strong> : Int32</a>
-        
-          <div class="summary"><p>Returns the maximum number of sequences per cell</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#sequences%28index%3AInt32%29%3AArray%28Int32%29-instance-method" class="signature"><strong>#sequences</strong>(index : Int32) : Array(Int32)</a>
-        
-          <div class="summary"><p>Returns the sequences for the cell at the specified index</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#size%3AInt32-instance-method" class="signature"><strong>#size</strong> : Int32</a>
-        
-          <div class="summary"><p>Alias for token_count</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#to_s%28io%3AIO%29%3ANil-instance-method" class="signature"><strong>#to_s</strong>(io : IO) : Nil</a>
-        
-          <div class="summary"><p>Returns a string representation of the KV cache view</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#token_count%3AInt32-instance-method" class="signature"><strong>#token_count</strong> : Int32</a>
-        
-          <div class="summary"><p>Returns the total number of tokens in the KV cache</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#update%3Aself-instance-method" class="signature"><strong>#update</strong> : <span class="k">self</span></a>
-        
-          <div class="summary"><p>Updates the view with the current state of the KV cache</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#used_cells%3AInt32-instance-method" class="signature"><strong>#used_cells</strong> : Int32</a>
-        
-          <div class="summary"><p>Returns the number of used cells in the KV cache</p></div>
-        
-      </li>
-    
-  </ul>
-
 
 
   <div class="methods-inherited">
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
     
       
 
@@ -638,24 +465,10 @@ Provides methods for visualizing and debugging the KV cache state</p>
         <a class="method-permalink" href="#new%28ctx%3AContext%2Cn_seq_max%3AInt32%3D4%29-class-method">#</a>
       </div>
       
-        <div class="doc">
-          
-          <p>Creates a new KvCacheView instance</p>
-<p>Parameters:</p>
-<ul>
-<li>ctx: The context to create the view for</li>
-<li>n_seq_max: Maximum number of sequences per cell to track (default: 4)</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view cannot be created</li>
-</ul>
-        </div>
-      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L54" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -668,26 +481,10 @@ Provides methods for visualizing and debugging the KV cache state</p>
         <a class="method-permalink" href="#new%28ctx%3AContext%2Cn_seq_max%3AInt32%3D4%2C%26%29-class-method">#</a>
       </div>
       
-        <div class="doc">
-          
-          <p>Creates a new KvCacheView instance with a block</p>
-<p>Parameters:</p>
-<ul>
-<li>ctx: The context to create the view for</li>
-<li>n_seq_max: Maximum number of sequences per cell to track (default: 4)</li>
-<li>block: The block to execute with the view</li>
-</ul>
-<p>The view will be automatically freed after the block execution</p>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view cannot be created</li>
-</ul>
-        </div>
-      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view.cr#L35" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -699,538 +496,6 @@ Provides methods for visualizing and debugging the KV cache state</p>
   
 
   
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="[](index:Int32):KvCacheViewCell-instance-method">
-      <div class="signature">
-        
-        def <strong>[]</strong>(index : Int32) : <a href="../Llama/KvCacheViewCell.html">KvCacheViewCell</a>
-
-        <a class="method-permalink" href="#%5B%5D%28index%3AInt32%29%3AKvCacheViewCell-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the cell at the specified index</p>
-<p>Parameters:</p>
-<ul>
-<li>index: The index of the cell to get</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li>The cell at the specified index</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>IndexError if the index is out of bounds</li>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L277" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="capacity:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>capacity</strong> : Int32
-
-        <a class="method-permalink" href="#capacity%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Alias for n_cells</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L249" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="each(&amp;)-instance-method">
-      <div class="signature">
-        
-        def <strong>each</strong>(&)
-
-        <a class="method-permalink" href="#each%28%26%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Implements Enumerable interface
-Yields each cell in the KV cache</p>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L258" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="empty?:Bool-instance-method">
-      <div class="signature">
-        
-        def <strong>empty?</strong> : Bool
-
-        <a class="method-permalink" href="#empty%3F%3ABool-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns whether the KV cache is empty</p>
-<p>Returns:</p>
-<ul>
-<li>true if the KV cache is empty, false otherwise</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L226" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="finalize-instance-method">
-      <div class="signature">
-        
-        def <strong>finalize</strong>
-
-        <a class="method-permalink" href="#finalize-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Frees the resources associated with this view</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L362" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="free:self-instance-method">
-      <div class="signature">
-        
-        def <strong>free</strong> : <span class="k">self</span>
-
-        <a class="method-permalink" href="#free%3Aself-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Frees the resources associated with this view</p>
-<p>Returns:</p>
-<ul>
-<li>self for method chaining</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the free operation fails</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L130" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="freed?:Bool-instance-method">
-      <div class="signature">
-        
-        def <strong>freed?</strong> : Bool
-
-        <a class="method-permalink" href="#freed%3F%3ABool-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns whether the view has been freed</p>
-<p>Returns:</p>
-<ul>
-<li>true if the view has been freed, false otherwise</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L96" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="full?:Bool-instance-method">
-      <div class="signature">
-        
-        def <strong>full?</strong> : Bool
-
-        <a class="method-permalink" href="#full%3F%3ABool-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns whether the KV cache is full</p>
-<p>Returns:</p>
-<ul>
-<li>true if the KV cache is full, false otherwise</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L238" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="inspect(io:IO):Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>inspect</strong>(io : IO) : Nil
-
-        <a class="method-permalink" href="#inspect%28io%3AIO%29%3ANil-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns a detailed string representation of the KV cache view</p>
-<p>Returns:</p>
-<ul>
-<li>A detailed string representation of the KV cache view</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L335" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="max_contiguous:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>max_contiguous</strong> : Int32
-
-        <a class="method-permalink" href="#max_contiguous%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the maximum number of contiguous empty slots</p>
-<p>Returns:</p>
-<ul>
-<li>The maximum number of contiguous empty slots</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L202" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="max_contiguous_idx:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>max_contiguous_idx</strong> : Int32
-
-        <a class="method-permalink" href="#max_contiguous_idx%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the index to the start of the max_contiguous slot range</p>
-<p>Returns:</p>
-<ul>
-<li>The index to the start of the max_contiguous slot range</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L214" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="n_cells:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>n_cells</strong> : Int32
-
-        <a class="method-permalink" href="#n_cells%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the number of cells in the KV cache</p>
-<p>Returns:</p>
-<ul>
-<li>The number of cells</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L154" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="n_seq_max:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>n_seq_max</strong> : Int32
-
-        <a class="method-permalink" href="#n_seq_max%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the maximum number of sequences per cell</p>
-<p>Returns:</p>
-<ul>
-<li>The maximum number of sequences per cell</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L166" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sequences(index:Int32):Array(Int32)-instance-method">
-      <div class="signature">
-        
-        def <strong>sequences</strong>(index : Int32) : Array(Int32)
-
-        <a class="method-permalink" href="#sequences%28index%3AInt32%29%3AArray%28Int32%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the sequences for the cell at the specified index</p>
-<p>Parameters:</p>
-<ul>
-<li>index: The index of the cell to get sequences for</li>
-</ul>
-<p>Returns:</p>
-<ul>
-<li>An array of sequence IDs for the cell</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>IndexError if the index is out of bounds</li>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L298" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="size:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>size</strong> : Int32
-
-        <a class="method-permalink" href="#size%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Alias for token_count</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L244" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="to_s(io:IO):Nil-instance-method">
-      <div class="signature">
-        
-        def <strong>to_s</strong>(io : IO) : Nil
-
-        <a class="method-permalink" href="#to_s%28io%3AIO%29%3ANil-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns a string representation of the KV cache view</p>
-<p>Returns:</p>
-<ul>
-<li>A string representation of the KV cache view</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L323" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="token_count:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>token_count</strong> : Int32
-
-        <a class="method-permalink" href="#token_count%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the total number of tokens in the KV cache</p>
-<p>Returns:</p>
-<ul>
-<li>The number of tokens</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L178" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="update:self-instance-method">
-      <div class="signature">
-        
-        def <strong>update</strong> : <span class="k">self</span>
-
-        <a class="method-permalink" href="#update%3Aself-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Updates the view with the current state of the KV cache</p>
-<p>Returns:</p>
-<ul>
-<li>self for method chaining</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the update fails</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L107" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="used_cells:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>used_cells</strong> : Int32
-
-        <a class="method-permalink" href="#used_cells%3AInt32-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Returns the number of used cells in the KV cache</p>
-<p>Returns:</p>
-<ul>
-<li>The number of used cells</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::KvCacheView::Error if the view has been freed</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L190" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
 
 </div>

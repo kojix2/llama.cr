@@ -157,6 +157,21 @@
       
     </li>
   
+  <li class="parent " data-id="llama/Llama/Memory" data-name="llama::memory">
+      <a href="../Llama/Memory.html">Memory</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Memory/Error" data-name="llama::memory::error">
+      <a href="../Llama/Memory/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
   <li class="parent " data-id="llama/Llama/Model" data-name="llama::model">
       <a href="../Llama/Model.html">Model</a>
       
@@ -337,8 +352,7 @@
     Overview
   </h2>
 
-  <p>Wrapper for the llama_kv_cache_view_cell structure
-Represents a single cell in the KV cache</p>
+  <p>Placeholder classes to maintain API compatibility</p>
 
 
 
@@ -365,7 +379,7 @@ Represents a single cell in the KV cache</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L6" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view.cr#L13" target="_blank">
         llama/kv_cache_view.cr
       </a>
     
@@ -388,9 +402,7 @@ Represents a single cell in the KV cache</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28cell%3ALibLlama%3A%3ALlamaKvCacheViewCell%29-class-method" class="signature"><strong>.new</strong>(cell : LibLlama::LlamaKvCacheViewCell)</a>
-        
-          <div class="summary"><p>Creates a new KvCacheViewCell instance</p></div>
+        <a href="#new%28pos%3AInt32%3D-1%29-class-method" class="signature"><strong>.new</strong>(pos : Int32 = <span class="n">-1</span>)</a>
         
       </li>
     
@@ -415,21 +427,19 @@ Represents a single cell in the KV cache</p>
       <li class="entry-summary">
         <a href="#inspect%28io%3AIO%29%3ANil-instance-method" class="signature"><strong>#inspect</strong>(io : IO) : Nil</a>
         
-          <div class="summary"><p>Returns a detailed string representation of the cell</p></div>
+          <div class="summary"><p>Appends a String representation of this object which includes its class name, its object address and the values of all instance variables.</p></div>
         
       </li>
     
       <li class="entry-summary">
         <a href="#pos%3AInt32-instance-method" class="signature"><strong>#pos</strong> : Int32</a>
         
-          <div class="summary"><p>Returns the position for this cell</p></div>
-        
       </li>
     
       <li class="entry-summary">
         <a href="#to_s%28io%3AIO%29%3ANil-instance-method" class="signature"><strong>#to_s</strong>(io : IO) : Nil</a>
         
-          <div class="summary"><p>Returns a string representation of the cell</p></div>
+          <div class="summary"><p>Appends a short String representation of this object which includes its class name and its object address.</p></div>
         
       </li>
     
@@ -477,27 +487,18 @@ Represents a single cell in the KV cache</p>
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(cell:LibLlama::LlamaKvCacheViewCell)-class-method">
+    <div class="entry-detail" id="new(pos:Int32=-1)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(cell : LibLlama::LlamaKvCacheViewCell)
+        def self.<strong>new</strong>(pos : Int32 = <span class="n">-1</span>)
 
-        <a class="method-permalink" href="#new%28cell%3ALibLlama%3A%3ALlamaKvCacheViewCell%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28pos%3AInt32%3D-1%29-class-method">#</a>
       </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new KvCacheViewCell instance</p>
-<p>Parameters:</p>
-<ul>
-<li>cell: The raw llama_kv_cache_view_cell structure</li>
-</ul>
-        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L11" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -528,17 +529,25 @@ Represents a single cell in the KV cache</p>
       
         <div class="doc">
           
-          <p>Returns a detailed string representation of the cell</p>
-<p>Returns:</p>
-<ul>
-<li>A detailed string representation of the cell</li>
-</ul>
+            <div class="doc-inherited">
+              Description copied from class Reference
+            </div>
+          
+          <p>Appends a String representation of this object
+which includes its class name, its object address
+and the values of all instance variables.</p>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Person</span>
+  <span class="k">def</span> <span class="m">initialize</span>(@name : <span class="t">String</span>, @age : <span class="t">Int32</span>)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="t">Person</span>.new(<span class="s">&quot;John&quot;</span>, <span class="n">32</span>).inspect <span class="c"># =&gt; #&lt;Person:0x10fd31f20 @name=&quot;John&quot;, @age=32&gt;</span></code></pre>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view.cr#L25" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -551,19 +560,10 @@ Represents a single cell in the KV cache</p>
         <a class="method-permalink" href="#pos%3AInt32-instance-method">#</a>
       </div>
       
-        <div class="doc">
-          
-          <p>Returns the position for this cell</p>
-<p>Returns:</p>
-<ul>
-<li>The position for this cell</li>
-</ul>
-        </div>
-      
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L18" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -578,17 +578,24 @@ Represents a single cell in the KV cache</p>
       
         <div class="doc">
           
-          <p>Returns a string representation of the cell</p>
-<p>Returns:</p>
-<ul>
-<li>A string representation of the cell</li>
-</ul>
+            <div class="doc-inherited">
+              Description copied from class Reference
+            </div>
+          
+          <p>Appends a short String representation of this object
+which includes its class name and its object address.</p>
+<pre><code class="language-crystal"><span class="k">class</span> <span class="t">Person</span>
+  <span class="k">def</span> <span class="m">initialize</span>(@name : <span class="t">String</span>, @age : <span class="t">Int32</span>)
+  <span class="k">end</span>
+<span class="k">end</span>
+
+<span class="t">Person</span>.new(<span class="s">&quot;John&quot;</span>, <span class="n">32</span>).to_s <span class="c"># =&gt; #&lt;Person:0x10a199f20&gt;</span></code></pre>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a6851799f04859aaf9a51a2aacfc8d06c7e48092/src/llama/kv_cache_view.cr#L26" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/kv_cache_view.cr#L21" target="_blank">View source</a>]
         
       </div>
     </div>

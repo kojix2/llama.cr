@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::State - llama main</title>
+  <title>Llama::Memory - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -157,7 +157,7 @@
       
     </li>
   
-  <li class="parent " data-id="llama/Llama/Memory" data-name="llama::memory">
+  <li class="parent open current" data-id="llama/Llama/Memory" data-name="llama::memory">
       <a href="../Llama/Memory.html">Memory</a>
       
         <ul>
@@ -297,7 +297,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="llama/Llama/State" data-name="llama::state">
+  <li class="parent " data-id="llama/Llama/State" data-name="llama::state">
       <a href="../Llama/State.html">State</a>
       
         <ul>
@@ -333,12 +333,12 @@
 
   <span class="kind">
     class
-  </span> Llama::<wbr>State
+  </span> Llama::<wbr>Memory
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/State.html">Llama::State</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/Memory.html">Llama::Memory</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -352,8 +352,16 @@
     Overview
   </h2>
 
-  <p>Wrapper for state management functions in llama.cpp
-Provides methods for saving and loading model state</p>
+  <p>Modern memory management for llama.cpp contexts</p>
+<p>This class provides a unified interface to various memory types:</p>
+<ul>
+<li>Standard KV cache (llama_kv_cache_unified)</li>
+<li>SWA (Sliding Window Attention) cache (llama_kv_cache_unified_iswa)</li>
+<li>Recurrent layer memory (llama_memory_recurrent)</li>
+<li>Hybrid attention/recurrent models (llama_memory_hybrid)</li>
+</ul>
+<p>The Memory API replaces the deprecated KV cache API and provides
+better support for modern model architectures.</p>
 
 
 
@@ -380,15 +388,15 @@ Provides methods for saving and loading model state</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L6" target="_blank">
-        llama/state.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L14" target="_blank">
+        llama/memory.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state/error.cr#L4" target="_blank">
-        llama/state/error.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory/error.cr#L2" target="_blank">
+        llama/memory/error.cr
       </a>
     
     <br/>
@@ -412,7 +420,7 @@ Provides methods for saving and loading model state</p>
       <li class="entry-summary">
         <a href="#new%28ctx%3AContext%29-class-method" class="signature"><strong>.new</strong>(ctx : Context)</a>
         
-          <div class="summary"><p>Creates a new State instance</p></div>
+          <div class="summary"><p>Creates a new Memory instance from a context</p></div>
         
       </li>
     
@@ -435,79 +443,72 @@ Provides methods for saving and loading model state</p>
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
+        <a href="#can_shift%3F%3ABool-instance-method" class="signature"><strong>#can_shift?</strong> : Bool</a>
         
-          <div class="summary"><p>Frees the resources associated with this state</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#get_data%3ABytes-instance-method" class="signature"><strong>#get_data</strong> : Bytes</a>
-        
-          <div class="summary"><p>Gets the current state data</p></div>
+          <div class="summary"><p>Check if memory supports shifting</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#load_file%28path%3AString%2Cmax_tokens%3AInt32%3D1024%29%3AArray%28Int32%29-instance-method" class="signature"><strong>#load_file</strong>(path : String, max_tokens : Int32 = <span class="n">1024</span>) : Array(Int32)</a>
+        <a href="#clear%28data%3ABool%3Dfalse%29%3Aself-instance-method" class="signature"><strong>#clear</strong>(data : Bool = <span class="n">false</span>) : <span class="k">self</span></a>
         
-          <div class="summary"><p>Loads state from a file</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#save_file%28path%3AString%2Ctokens%3AArray%28Int32%29%29%3ABool-instance-method" class="signature"><strong>#save_file</strong>(path : String, tokens : Array(Int32)) : Bool</a>
-        
-          <div class="summary"><p>Saves state to a file</p></div>
+          <div class="summary"><p>Clear memory contents</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_get_data%28seq_id%3AInt32%29%3ABytes-instance-method" class="signature"><strong>#seq_get_data</strong>(seq_id : Int32) : Bytes</a>
+        <a href="#seq_add%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cdelta%3AInt32%29%3Aself-instance-method" class="signature"><strong>#seq_add</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32) : <span class="k">self</span></a>
         
-          <div class="summary"><p>Gets the state data for a specific sequence</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#seq_load_file%28path%3AString%2Cdest_seq_id%3AInt32%2Cmax_tokens%3AInt32%3D1024%29%3AArray%28Int32%29-instance-method" class="signature"><strong>#seq_load_file</strong>(path : String, dest_seq_id : Int32, max_tokens : Int32 = <span class="n">1024</span>) : Array(Int32)</a>
-        
-          <div class="summary"><p>Loads a sequence's state from a file</p></div>
+          <div class="summary"><p>Add relative position delta to tokens in sequence</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_save_file%28path%3AString%2Cseq_id%3AInt32%2Ctokens%3AArray%28Int32%29%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_save_file</strong>(path : String, seq_id : Int32, tokens : Array(Int32)) : LibC::SizeT</a>
+        <a href="#seq_cp%28seq_id_src%3AInt32%2Cseq_id_dst%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29%3Aself-instance-method" class="signature"><strong>#seq_cp</strong>(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32) : <span class="k">self</span></a>
         
-          <div class="summary"><p>Saves a sequence's state to a file</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#seq_set_data%28data%3ABytes%2Cdest_seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_set_data</strong>(data : Bytes, dest_seq_id : Int32) : LibC::SizeT</a>
-        
-          <div class="summary"><p>Sets the state for a specific sequence from data</p></div>
+          <div class="summary"><p>Copy tokens from one sequence to another</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_size%28seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_size</strong>(seq_id : Int32) : LibC::SizeT</a>
+        <a href="#seq_div%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cd%3AInt32%29%3Aself-instance-method" class="signature"><strong>#seq_div</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32) : <span class="k">self</span></a>
         
-          <div class="summary"><p>Gets the size needed to store a specific sequence's state</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#set_data%28data%3ABytes%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#set_data</strong>(data : Bytes) : LibC::SizeT</a>
-        
-          <div class="summary"><p>Sets the state from data</p></div>
+          <div class="summary"><p>Divide positions of tokens in sequence by factor</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#size%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#size</strong> : LibC::SizeT</a>
+        <a href="#seq_keep%28seq_id%3AInt32%29%3Aself-instance-method" class="signature"><strong>#seq_keep</strong>(seq_id : Int32) : <span class="k">self</span></a>
         
-          <div class="summary"><p>Returns the size in bytes needed to store the current state</p></div>
+          <div class="summary"><p>Keep only specified sequence, remove all others</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_pos_max%28seq_id%3AInt32%29%3AInt32-instance-method" class="signature"><strong>#seq_pos_max</strong>(seq_id : Int32) : Int32</a>
+        
+          <div class="summary"><p>Get maximum position in sequence</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_pos_min%28seq_id%3AInt32%29%3AInt32-instance-method" class="signature"><strong>#seq_pos_min</strong>(seq_id : Int32) : Int32</a>
+        
+          <div class="summary"><p>Get minimum position in sequence</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#seq_rm%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29%3ABool-instance-method" class="signature"><strong>#seq_rm</strong>(seq_id : Int32, p0 : Int32, p1 : Int32) : Bool</a>
+        
+          <div class="summary"><p>Remove tokens from sequence in specified position range</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#to_unsafe%3APointer%28Void%29-instance-method" class="signature"><strong>#to_unsafe</strong> : Pointer(Void)</a>
+        
+          <div class="summary"><p>Get raw pointer for internal use</p></div>
         
       </li>
     
@@ -565,22 +566,21 @@ Provides methods for saving and loading model state</p>
       
         <div class="doc">
           
-          <p>Creates a new State instance</p>
+          <p>Creates a new Memory instance from a context</p>
 <p>Parameters:</p>
 <ul>
-<li>ctx: The Context to manage state for</li>
+<li>ctx: The context to get memory from</li>
 </ul>
-<p>To avoid circular references, we store the context pointer rather than the context object</p>
 <p>Raises:</p>
 <ul>
-<li>Llama::State::Error if the context pointer is null</li>
+<li>Memory::Error if memory handle cannot be obtained</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L22" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -601,358 +601,303 @@ Provides methods for saving and loading model state</p>
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="finalize-instance-method">
+    <div class="entry-detail" id="can_shift?:Bool-instance-method">
       <div class="signature">
         
-        def <strong>finalize</strong>
+        def <strong>can_shift?</strong> : Bool
 
-        <a class="method-permalink" href="#finalize-instance-method">#</a>
+        <a class="method-permalink" href="#can_shift%3F%3ABool-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Frees the resources associated with this state</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L525" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="get_data:Bytes-instance-method">
-      <div class="signature">
-        
-        def <strong>get_data</strong> : Bytes
-
-        <a class="method-permalink" href="#get_data%3ABytes-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Gets the current state data</p>
+          <p>Check if memory supports shifting</p>
 <p>Returns:</p>
 <ul>
-<li>A Bytes object containing the state data</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::State::Error if the operation fails</li>
+<li>true if shifting is supported, false otherwise</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L228" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="load_file(path:String,max_tokens:Int32=1024):Array(Int32)-instance-method">
+    <div class="entry-detail" id="clear(data:Bool=false):self-instance-method">
       <div class="signature">
         
-        def <strong>load_file</strong>(path : String, max_tokens : Int32 = <span class="n">1024</span>) : Array(Int32)
+        def <strong>clear</strong>(data : Bool = <span class="n">false</span>) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#load_file%28path%3AString%2Cmax_tokens%3AInt32%3D1024%29%3AArray%28Int32%29-instance-method">#</a>
+        <a class="method-permalink" href="#clear%28data%3ABool%3Dfalse%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Loads state from a file</p>
+          <p>Clear memory contents</p>
 <p>Parameters:</p>
 <ul>
-<li>path: Path to the session file</li>
-<li>max_tokens: Maximum number of tokens to load (default: 1024)</li>
+<li>data: If true, data buffers will also be cleared together with metadata (default: false)</li>
 </ul>
 <p>Returns:</p>
 <ul>
-<li>An array of tokens loaded from the file</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>ArgumentError if path is empty or max_tokens is not positive</li>
-<li>Llama::State::Error if the file cannot be loaded</li>
+<li>self for method chaining</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L170" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="save_file(path:String,tokens:Array(Int32)):Bool-instance-method">
+    <div class="entry-detail" id="seq_add(seq_id:Int32,p0:Int32,p1:Int32,delta:Int32):self-instance-method">
       <div class="signature">
         
-        def <strong>save_file</strong>(path : String, tokens : Array(Int32)) : Bool
+        def <strong>seq_add</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#save_file%28path%3AString%2Ctokens%3AArray%28Int32%29%29%3ABool-instance-method">#</a>
+        <a class="method-permalink" href="#seq_add%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cdelta%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Saves state to a file</p>
+          <p>Add relative position delta to tokens in sequence</p>
 <p>Parameters:</p>
 <ul>
-<li>path: Path to save the session file</li>
-<li>tokens: Array of tokens to save with the state</li>
+<li>seq_id: Sequence ID</li>
+<li>p0: Start position (&lt; 0 for [0, p1])</li>
+<li>p1: End position (&lt; 0 for [p0, inf))</li>
+<li>delta: Position delta to add</li>
 </ul>
 <p>Returns:</p>
 <ul>
-<li>true if successful, false otherwise</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>ArgumentError if path is empty</li>
-<li>Llama::State::Error if the operation fails</li>
+<li>self for method chaining</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L234" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L134" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_get_data(seq_id:Int32):Bytes-instance-method">
+    <div class="entry-detail" id="seq_cp(seq_id_src:Int32,seq_id_dst:Int32,p0:Int32,p1:Int32):self-instance-method">
       <div class="signature">
         
-        def <strong>seq_get_data</strong>(seq_id : Int32) : Bytes
+        def <strong>seq_cp</strong>(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#seq_get_data%28seq_id%3AInt32%29%3ABytes-instance-method">#</a>
+        <a class="method-permalink" href="#seq_cp%28seq_id_src%3AInt32%2Cseq_id_dst%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Gets the state data for a specific sequence</p>
+          <p>Copy tokens from one sequence to another</p>
 <p>Parameters:</p>
 <ul>
-<li>seq_id: The sequence ID</li>
+<li>seq_id_src: Source sequence ID</li>
+<li>seq_id_dst: Destination sequence ID</li>
+<li>p0: Start position (&lt; 0 for [0, p1])</li>
+<li>p1: End position (&lt; 0 for [p0, inf))</li>
 </ul>
 <p>Returns:</p>
 <ul>
-<li>A Bytes object containing the sequence state data</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::State::Error if the operation fails</li>
+<li>self for method chaining</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L319" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L89" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_load_file(path:String,dest_seq_id:Int32,max_tokens:Int32=1024):Array(Int32)-instance-method">
+    <div class="entry-detail" id="seq_div(seq_id:Int32,p0:Int32,p1:Int32,d:Int32):self-instance-method">
       <div class="signature">
         
-        def <strong>seq_load_file</strong>(path : String, dest_seq_id : Int32, max_tokens : Int32 = <span class="n">1024</span>) : Array(Int32)
+        def <strong>seq_div</strong>(seq_id : Int32, p0 : Int32, p1 : Int32, d : Int32) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#seq_load_file%28path%3AString%2Cdest_seq_id%3AInt32%2Cmax_tokens%3AInt32%3D1024%29%3AArray%28Int32%29-instance-method">#</a>
+        <a class="method-permalink" href="#seq_div%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%2Cd%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Loads a sequence's state from a file</p>
+          <p>Divide positions of tokens in sequence by factor</p>
 <p>Parameters:</p>
 <ul>
-<li>path: Path to the sequence file</li>
-<li>dest_seq_id: The destination sequence ID</li>
-<li>max_tokens: Maximum number of tokens to load (default: 1024)</li>
+<li>seq_id: Sequence ID</li>
+<li>p0: Start position (&lt; 0 for [0, p1])</li>
+<li>p1: End position (&lt; 0 for [p0, inf))</li>
+<li>d: Divisor (must be &gt; 1)</li>
 </ul>
 <p>Returns:</p>
 <ul>
-<li>An array of tokens loaded from the file</li>
+<li>self for method chaining</li>
 </ul>
 <p>Raises:</p>
 <ul>
-<li>ArgumentError if path is empty or max_tokens is not positive</li>
-<li>Llama::State::Error if the file cannot be loaded</li>
+<li>ArgumentError if divisor is &lt;= 1</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L471" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L161" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_save_file(path:String,seq_id:Int32,tokens:Array(Int32)):LibC::SizeT-instance-method">
+    <div class="entry-detail" id="seq_keep(seq_id:Int32):self-instance-method">
       <div class="signature">
         
-        def <strong>seq_save_file</strong>(path : String, seq_id : Int32, tokens : Array(Int32)) : LibC::SizeT
+        def <strong>seq_keep</strong>(seq_id : Int32) : <span class="k">self</span>
 
-        <a class="method-permalink" href="#seq_save_file%28path%3AString%2Cseq_id%3AInt32%2Ctokens%3AArray%28Int32%29%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+        <a class="method-permalink" href="#seq_keep%28seq_id%3AInt32%29%3Aself-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Saves a sequence's state to a file</p>
+          <p>Keep only specified sequence, remove all others</p>
 <p>Parameters:</p>
 <ul>
-<li>path: Path to save the sequence file</li>
-<li>seq_id: The sequence ID to save</li>
-<li>tokens: Array of tokens to save with the state</li>
+<li>seq_id: Sequence ID to keep</li>
 </ul>
 <p>Returns:</p>
 <ul>
-<li>The number of bytes written, or 0 if failed</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>ArgumentError if path is empty</li>
-<li>Llama::State::Error if the operation fails</li>
+<li>self for method chaining</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L418" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_set_data(data:Bytes,dest_seq_id:Int32):LibC::SizeT-instance-method">
+    <div class="entry-detail" id="seq_pos_max(seq_id:Int32):Int32-instance-method">
       <div class="signature">
         
-        def <strong>seq_set_data</strong>(data : Bytes, dest_seq_id : Int32) : LibC::SizeT
+        def <strong>seq_pos_max</strong>(seq_id : Int32) : Int32
 
-        <a class="method-permalink" href="#seq_set_data%28data%3ABytes%2Cdest_seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+        <a class="method-permalink" href="#seq_pos_max%28seq_id%3AInt32%29%3AInt32-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Sets the state for a specific sequence from data</p>
+          <p>Get maximum position in sequence</p>
+<p>All positions in the range [pos_min, pos_max] are guaranteed to be present.</p>
 <p>Parameters:</p>
 <ul>
-<li>data: The state data to set</li>
-<li>dest_seq_id: The destination sequence ID</li>
+<li>seq_id: Sequence ID</li>
 </ul>
 <p>Returns:</p>
 <ul>
-<li>The number of bytes read, or 0 if failed</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>ArgumentError if data is empty</li>
-<li>Llama::State::Error if the operation fails</li>
+<li>Maximum position, or -1 if sequence is empty</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L370" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L211" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_size(seq_id:Int32):LibC::SizeT-instance-method">
+    <div class="entry-detail" id="seq_pos_min(seq_id:Int32):Int32-instance-method">
       <div class="signature">
         
-        def <strong>seq_size</strong>(seq_id : Int32) : LibC::SizeT
+        def <strong>seq_pos_min</strong>(seq_id : Int32) : Int32
 
-        <a class="method-permalink" href="#seq_size%28seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+        <a class="method-permalink" href="#seq_pos_min%28seq_id%3AInt32%29%3AInt32-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Gets the size needed to store a specific sequence's state</p>
+          <p>Get minimum position in sequence</p>
+<p>This is typically non-zero only for SWA (Sliding Window Attention) caches.
+All positions in the range [pos_min, pos_max] are guaranteed to be present.</p>
 <p>Parameters:</p>
 <ul>
-<li>seq_id: The sequence ID</li>
+<li>seq_id: Sequence ID</li>
 </ul>
 <p>Returns:</p>
 <ul>
-<li>The size in bytes</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::State::Error if the operation fails</li>
+<li>Minimum position, or -1 if sequence is empty</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L283" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L189" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="set_data(data:Bytes):LibC::SizeT-instance-method">
+    <div class="entry-detail" id="seq_rm(seq_id:Int32,p0:Int32,p1:Int32):Bool-instance-method">
       <div class="signature">
         
-        def <strong>set_data</strong>(data : Bytes) : LibC::SizeT
+        def <strong>seq_rm</strong>(seq_id : Int32, p0 : Int32, p1 : Int32) : Bool
 
-        <a class="method-permalink" href="#set_data%28data%3ABytes%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+        <a class="method-permalink" href="#seq_rm%28seq_id%3AInt32%2Cp0%3AInt32%2Cp1%3AInt32%29%3ABool-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Sets the state from data</p>
+          <p>Remove tokens from sequence in specified position range</p>
 <p>Parameters:</p>
 <ul>
-<li>data: The state data to set</li>
+<li>seq_id: Sequence ID (&lt; 0 to match any sequence)</li>
+<li>p0: Start position (&lt; 0 for [0, p1])</li>
+<li>p1: End position (&lt; 0 for [p0, inf))</li>
 </ul>
 <p>Returns:</p>
 <ul>
-<li>The number of bytes read</li>
+<li>true if successful, false if partial sequence cannot be removed</li>
 </ul>
-<p>Raises:</p>
-<ul>
-<li>ArgumentError if data is empty</li>
-<li>Llama::State::Error if the operation fails</li>
-</ul>
+<p>Note: Removing a whole sequence never fails</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L128" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L66" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="size:LibC::SizeT-instance-method">
+    <div class="entry-detail" id="to_unsafe:Pointer(Void)-instance-method">
       <div class="signature">
         
-        def <strong>size</strong> : LibC::SizeT
+        def <strong>to_unsafe</strong> : Pointer(Void)
 
-        <a class="method-permalink" href="#size%3ALibC%3A%3ASizeT-instance-method">#</a>
+        <a class="method-permalink" href="#to_unsafe%3APointer%28Void%29-instance-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Returns the size in bytes needed to store the current state</p>
+          <p>Get raw pointer for internal use</p>
 <p>Returns:</p>
 <ul>
-<li>The size in bytes</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::State::Error if the operation fails</li>
+<li>Raw memory handle pointer</li>
 </ul>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/state.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory.cr#L245" target="_blank">View source</a>]
         
       </div>
     </div>

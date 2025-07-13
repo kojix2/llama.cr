@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::Sampler::MinP - llama main</title>
+  <title>Llama::Memory::Error - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -157,12 +157,12 @@
       
     </li>
   
-  <li class="parent " data-id="llama/Llama/Memory" data-name="llama::memory">
+  <li class="parent open current" data-id="llama/Llama/Memory" data-name="llama::memory">
       <a href="../../Llama/Memory.html">Memory</a>
       
         <ul>
   
-  <li class=" " data-id="llama/Llama/Memory/Error" data-name="llama::memory::error">
+  <li class=" current" data-id="llama/Llama/Memory/Error" data-name="llama::memory::error">
       <a href="../../Llama/Memory/Error.html">Error</a>
       
     </li>
@@ -187,7 +187,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="llama/Llama/Sampler" data-name="llama::sampler">
+  <li class="parent " data-id="llama/Llama/Sampler" data-name="llama::sampler">
       <a href="../../Llama/Sampler.html">Sampler</a>
       
         <ul>
@@ -227,7 +227,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/Sampler/MinP" data-name="llama::sampler::minp">
+  <li class=" " data-id="llama/Llama/Sampler/MinP" data-name="llama::sampler::minp">
       <a href="../../Llama/Sampler/MinP.html">MinP</a>
       
     </li>
@@ -333,12 +333,12 @@
 
   <span class="kind">
     class
-  </span> Llama::<wbr>Sampler::<wbr>MinP
+  </span> Llama::<wbr>Memory::<wbr>Error
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Llama/Sampler/MinP.html">Llama::Sampler::MinP</a></li><li class="superclass"><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Llama/Memory/Error.html">Llama::Memory::Error</a></li><li class="superclass"><a href="../../Llama/Error.html">Llama::Error</a></li><li class="superclass">Exception</li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -352,12 +352,7 @@
     Overview
   </h2>
 
-  <p>Min-P sampler</p>
-<p>The Min-P sampler keeps tokens with probability &gt;= P * max_probability.
-This is similar to Top-P but uses a minimum probability threshold relative
-to the most likely token, rather than a cumulative probability threshold.</p>
-<p>Example:</p>
-<pre><code class="language-crystal">sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">MinP</span>.new(<span class="n">0.05</span>, <span class="n">1</span>) <span class="c"># Keep tokens with prob &gt;= 5% of max prob</span></code></pre>
+  <p>Error class for Memory-related operations</p>
 
 
 
@@ -384,8 +379,8 @@ to the most likely token, rather than a cumulative probability threshold.</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/sampler/min_p.cr#L13" target="_blank">
-        llama/sampler/min_p.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/memory/error.cr#L4" target="_blank">
+        llama/memory/error.cr
       </a>
     
     <br/>
@@ -396,25 +391,6 @@ to the most likely token, rather than a cumulative probability threshold.</p>
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28p%3AFloat32%2Cmin_keep%3AInt32%3D1%29-class-method" class="signature"><strong>.new</strong>(p : Float32, min_keep : Int32 = <span class="n">1</span>)</a>
-        
-          <div class="summary"><p>Creates a new Min-P sampler</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
@@ -427,26 +403,35 @@ to the most likely token, rather than a cumulative probability threshold.</p>
     
       
 
-  <h3>Instance methods inherited from class <code><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></code></h3>
+
+      
+
+
+      
+
+  <h3>Class methods inherited from class <code><a href="../../Llama/Error.html">Llama::Error</a></code></h3>
   
   
-    <a href="../../Llama/Sampler/Base.html#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="tooltip">
-      <span>to_unsafe : Pointer(Llama::LibLlama::LlamaSampler)</span>
-    to_unsafe</a>
+    <a href="../../Llama/Error.html#error_message%28code%3AInt32%29%3AString-class-method" class="tooltip">
+      <span>error_message(code : Int32) : String</span>
+    error_message</a>, 
+    
+  
+    <a href="../../Llama/Error.html#format_error%28message%3AString%2Ccode%3AInt32%7CNil%3Dnil%2Ccontext%3AString%7CNil%3Dnil%29%3AString-class-method" class="tooltip">
+      <span>format_error(message : String, code : Int32 | Nil = <span class="n">nil</span>, context : String | Nil = <span class="n">nil</span>) : String</span>
+    format_error</a>
     
   
 
 
       
 
-  <h3>Constructor methods inherited from class <code><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></code></h3>
-  
-  
-    <a href="../../Llama/Sampler/Base.html#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method" class="tooltip">
-      <span>new(handle : Pointer(LibLlama::LlamaSampler))</span>
-    new</a>
+
     
-  
+      
+
+
+      
 
 
       
@@ -485,46 +470,6 @@ to the most likely token, rather than a cumulative probability threshold.</p>
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(p:Float32,min_keep:Int32=1)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(p : Float32, min_keep : Int32 = <span class="n">1</span>)
-
-        <a class="method-permalink" href="#new%28p%3AFloat32%2Cmin_keep%3AInt32%3D1%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new Min-P sampler</p>
-<p>Parameters:</p>
-<ul>
-<li>p: The minimum probability threshold (0.0 to 1.0)</li>
-<li>min_keep: Minimum number of tokens to keep</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::Error if the sampler cannot be created</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/ff4a0d85043c805a09d2d3c15f77a7c53ebd9e38/src/llama/sampler/min_p.cr#L22" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
