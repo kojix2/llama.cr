@@ -119,6 +119,32 @@ module Llama
       LibLlama.llama_model_decoder_start_token(@handle)
     end
 
+    # Returns the number of classifier outputs (only valid for classifier models)
+    # Returns 0 for non-classifier models
+    def n_cls_out : UInt32
+      LibLlama.llama_model_n_cls_out(@handle)
+    end
+
+    # Returns the classifier label by index
+    #
+    # Parameters:
+    # - i: Index of the classifier output (must be < n_cls_out)
+    #
+    # Returns:
+    # - The classifier label, or nil if index is out of bounds or no label is provided
+    def cls_label(i : UInt32) : String?
+      ptr = LibLlama.llama_model_cls_label(@handle, i)
+      ptr.null? ? nil : String.new(ptr)
+    end
+
+    # Returns whether this model is a classifier model
+    #
+    # Returns:
+    # - true if the model has classifier outputs, false otherwise
+    def classifier? : Bool
+      n_cls_out > 0
+    end
+
     # Creates a new Context for this model
     #
     # This method delegates to Context.new, passing self as the model parameter

@@ -1,3 +1,5 @@
+require "./error"
+
 module Llama
   # Wrapper for the llama_vocab structure
   class Vocab
@@ -79,6 +81,16 @@ module Llama
         parse_special
       )
 
+      # Check for overflow (new in latest llama.cpp)
+      if n_tokens == Int32::MIN
+        error_msg = Llama.format_error(
+          "Tokenization overflow",
+          -6, # Tokenization error
+          "text length: #{text.size}, result exceeds Int32 limit"
+        )
+        raise TokenizationError.new(error_msg)
+      end
+
       if n_tokens < 0
         # If n_tokens is negative, it indicates the required buffer size
         max_tokens = -n_tokens
@@ -113,6 +125,11 @@ module Llama
     # Returns whether the model adds EOS token by default
     def add_eos? : Bool
       LibLlama.llama_vocab_get_add_eos(@handle)
+    end
+
+    # Returns whether the model adds SEP token by default
+    def add_sep? : Bool
+      LibLlama.llama_vocab_get_add_sep(@handle)
     end
 
     # Special token methods

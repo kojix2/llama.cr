@@ -42,4 +42,8 @@ module Llama
   def self.format_error(message : String, code : Int32? = nil, context : String? = nil) : String
     Error.format_error(message, code, context)
   end
+
+  # Specific error class for tokenization errors
+  class TokenizationError < Error
+  end
 end

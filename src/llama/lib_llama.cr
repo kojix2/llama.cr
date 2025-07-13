@@ -349,6 +349,7 @@ module Llama
     # Model Functions
     fun llama_model_load_from_file(path_model : LibC::Char*, params : LlamaModelParams) : LlamaModel*
     fun llama_model_load_from_splits(paths : LibC::Char**, n_paths : LibC::SizeT, params : LlamaModelParams) : LlamaModel*
+    fun llama_model_save_to_file(model : LlamaModel*, path_model : LibC::Char*) : Void
     fun llama_model_free(model : LlamaModel*) : Void
     fun llama_max_devices : LibC::SizeT
     fun llama_model_n_params(model : LlamaModel*) : UInt64
@@ -368,6 +369,8 @@ module Llama
     fun llama_model_is_recurrent(model : LlamaModel*) : Bool
     fun llama_model_rope_freq_scale_train(model : LlamaModel*) : Float32
     fun llama_model_decoder_start_token(model : LlamaModel*) : LlamaToken
+    fun llama_model_n_cls_out(model : LlamaModel*) : UInt32
+    fun llama_model_cls_label(model : LlamaModel*, i : UInt32) : LibC::Char*
     fun llama_model_get_vocab(model : LlamaModel*) : LlamaVocab*
 
     # Model Metadata Functions
@@ -478,6 +481,7 @@ module Llama
     fun llama_vocab_pad(vocab : LlamaVocab*) : LlamaToken
     fun llama_vocab_get_add_bos(vocab : LlamaVocab*) : Bool
     fun llama_vocab_get_add_eos(vocab : LlamaVocab*) : Bool
+    fun llama_vocab_get_add_sep(vocab : LlamaVocab*) : Bool
     fun llama_vocab_fim_pre(vocab : LlamaVocab*) : LlamaToken
     fun llama_vocab_fim_suf(vocab : LlamaVocab*) : LlamaToken
     fun llama_vocab_fim_mid(vocab : LlamaVocab*) : LlamaToken
