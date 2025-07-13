@@ -73,13 +73,18 @@ jobs:
       - name: Build
         run: crystal build --no-codegen src/llama.cr
 
-      - name: Download test model
+      - name: Cache model files
+        id: cache-models
+        uses: actions/cache@v4
+        with:
+          path: models
+          key: ${{ runner.os }}-models-tinyllama-v2
+
+      - name: Download test model (if not cached)
+        if: steps.cache-models.outputs.cache-hit != 'true'
         run: |
           mkdir -p models
           curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
-          # Verify the model file was downloaded correctly
-          ls -la models/
-          echo "Model file size: $(stat -c%s models/tiny_model.gguf 2>/dev/null || stat -f%z models/tiny_model.gguf) bytes"
 
       - name: Run spec file ${{ matrix.spec_file }}
         env:
