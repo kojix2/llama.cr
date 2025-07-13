@@ -1,8 +1,9 @@
 module Llama
   {% if env("LLAMA_CPP_DIR") %}
-    @[Link(ldflags: "-L `echo $LLAMA_CPP_DIR/build/bin` -lllama -Wl,-rpath,`echo $LLAMA_CPP_DIR/build/bin`")]
+    @[Link(ldflags: "-L `echo $LLAMA_CPP_DIR/build/bin` -lllama -lggml -Wl,-rpath,`echo $LLAMA_CPP_DIR/build/bin`")]
   {% else %}
     @[Link("llama")]
+    @[Link("ggml")]
   {% end %}
   lib LibLlama
     # Note: The following functions marked as DEPRECATED in llama.cpp have been removed
@@ -136,7 +137,6 @@ module Llama
       bias : Float32
     end
 
-
     # Enum Definitions
     enum LlamaFtype
       ALL_F32        =    0
@@ -264,7 +264,6 @@ module Llama
     fun llama_clear_adapter_lora(ctx : LlamaContext*) : Void
     fun llama_apply_adapter_cvec(ctx : LlamaContext*, data : Float32*, len : LibC::SizeT, n_embd : Int32, il_start : Int32, il_end : Int32) : Int32
 
-
     # Chat Functions
     fun llama_chat_apply_template(
       tmpl : LibC::Char*,
@@ -339,6 +338,25 @@ module Llama
     fun llama_numa_init(numa : Int32) : Void
     fun llama_attach_threadpool(ctx : LlamaContext*, threadpool : Void*, threadpool_batch : Void*) : Void
     fun llama_detach_threadpool(ctx : LlamaContext*) : Void
+
+    # Backend loading (required for newer llama.cpp versions)
+    fun ggml_backend_load_all : Void
+
+    # Backend verification
+    fun ggml_backend_reg_count : LibC::SizeT
+
+    # Memory API (replaces deprecated KV cache API)
+    alias LlamaMemoryT = Void*
+    fun llama_get_memory(ctx : LlamaContext*) : LlamaMemoryT
+    fun llama_memory_clear(mem : LlamaMemoryT, data : Bool) : Void
+    fun llama_memory_seq_rm(mem : LlamaMemoryT, seq_id : LlamaSeqId, p0 : LlamaPos, p1 : LlamaPos) : Bool
+    fun llama_memory_seq_cp(mem : LlamaMemoryT, seq_id_src : LlamaSeqId, seq_id_dst : LlamaSeqId, p0 : LlamaPos, p1 : LlamaPos) : Void
+    fun llama_memory_seq_keep(mem : LlamaMemoryT, seq_id : LlamaSeqId) : Void
+    fun llama_memory_seq_add(mem : LlamaMemoryT, seq_id : LlamaSeqId, p0 : LlamaPos, p1 : LlamaPos, delta : LlamaPos) : Void
+    fun llama_memory_seq_div(mem : LlamaMemoryT, seq_id : LlamaSeqId, p0 : LlamaPos, p1 : LlamaPos, d : Int32) : Void
+    fun llama_memory_seq_pos_min(mem : LlamaMemoryT, seq_id : LlamaSeqId) : LlamaPos
+    fun llama_memory_seq_pos_max(mem : LlamaMemoryT, seq_id : LlamaSeqId) : LlamaPos
+    fun llama_memory_can_shift(mem : LlamaMemoryT) : Bool
 
     # Model Functions
     fun llama_model_load_from_file(path_model : LibC::Char*, params : LlamaModelParams) : LlamaModel*

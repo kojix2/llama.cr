@@ -1,4 +1,5 @@
 require "./context/error"
+require "./memory"
 
 module Llama
   # Wrapper for the llama_context structure
@@ -60,8 +61,24 @@ module Llama
       @state = nil
     end
 
-    # Returns the KV cache for this context
+    # Returns the memory for this context (modern API)
+    #
+    # The memory system provides unified access to various memory types:
+    # - Standard KV cache (llama_kv_cache_unified)
+    # - SWA (Sliding Window Attention) cache
+    # - Recurrent layer memory
+    # - Hybrid attention/recurrent models
+    #
+    # Returns:
+    # - A Memory instance
+    def memory : Memory
+      @memory ||= Memory.new(self)
+    end
+
+    # Returns the KV cache for this context (legacy API)
     # Lazily initializes the KV cache if it doesn't exist yet
+    #
+    # Note: This is the legacy API. Consider using `memory` for new code.
     def kv_cache : KvCache
       @kv_cache ||= KvCache.new(LibLlama.llama_get_kv_self(@handle), self)
     end
@@ -907,6 +924,7 @@ module Llama
 
     @handle : LibLlama::LlamaContext*
     @model : Model
+    @memory : Memory?
     @kv_cache : KvCache?
     @state : State?
 

@@ -4,11 +4,11 @@ module Llama
   # DEPRECATED: KV Cache View functionality has been removed from llama.cpp
   # This class is temporarily disabled until migration to new memory APIs
   # See: https://github.com/ggml-org/llama.cpp/pull/XXXX
-  
+
   # TODO: Implement replacement using new memory management APIs
   # The KV cache view functionality needs to be reimplemented using
   # the new llama_memory_* functions instead of the removed llama_kv_cache_view_* functions
-  
+
   # Placeholder classes to maintain API compatibility
   class KvCacheViewCell
     def initialize(@pos : Int32 = -1)

@@ -75,6 +75,7 @@ require "./llama/kv_cache_view"
 require "./llama/batch"
 require "./llama/state"
 require "./llama/adapter_lora"
+require "./llama/memory"
 require "./llama/context"
 require "./llama/sampler"
 
@@ -284,7 +285,34 @@ module Llama
   def self.init
     @@backend_mutex.synchronize do
       unless @@backend_initialized
-        LibLlama.llama_backend_init
+        # Set environment variable to help backend loading find libraries
+        if ENV["LLAMA_CPP_DIR"]?
+          backend_path = File.join(ENV["LLAMA_CPP_DIR"], "build", "bin")
+          ENV["GGML_BACKEND_PATH"] = backend_path
+          # Also change working directory to the build/bin directory
+          original_dir = Dir.current
+          begin
+            Dir.cd(backend_path)
+            LibLlama.llama_backend_init
+            LibLlama.ggml_backend_load_all
+          ensure
+            Dir.cd(original_dir)
+          end
+        else
+          LibLlama.llama_backend_init
+          LibLlama.ggml_backend_load_all
+        end
+
+        # Verify that backends were actually loaded
+        backend_count = LibLlama.ggml_backend_reg_count
+
+        # Log backend loading status for debugging
+        if backend_count > 0
+          STDERR.puts "llama.cr: Successfully loaded #{backend_count} backend(s)" if ENV["LLAMA_DEBUG"]?
+        else
+          STDERR.puts "llama.cr: Warning - No backends loaded! Model loading may fail."
+        end
+
         @@backend_initialized = true
       end
     end
