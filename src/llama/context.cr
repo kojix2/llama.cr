@@ -74,39 +74,6 @@ module Llama
       @memory ||= Memory.new(self)
     end
 
-    # Creates a KV cache view for this context
-    #
-    # Parameters:
-    # - n_seq_max: Maximum number of sequences per cell to track (default: 4)
-    #
-    # Returns:
-    # - A new KvCacheView instance
-    #
-    # Raises:
-    # - Llama::KvCacheView::Error if the view cannot be created
-    def kv_cache_view(n_seq_max : Int32 = 4) : KvCacheView
-      KvCacheView.new(self, n_seq_max)
-    end
-
-    # Creates a KV cache view for this context with a block
-    #
-    # Parameters:
-    # - n_seq_max: Maximum number of sequences per cell to track (default: 4)
-    # - block: The block to execute with the view
-    #
-    # The view will be automatically freed after the block execution
-    #
-    # Returns:
-    # - A new KvCacheView instance
-    #
-    # Raises:
-    # - Llama::KvCacheView::Error if the view cannot be created
-    def kv_cache_view(n_seq_max : Int32 = 4, &block) : KvCacheView
-      KvCacheView.new(self, n_seq_max) do |view|
-        yield view
-      end
-    end
-
     # Returns the context window size (n_ctx)
     def n_ctx : UInt32
       LibLlama.llama_n_ctx(@handle)
