@@ -1,6 +1,10 @@
 require "./spec_helper"
 
-describe Llama::KvCacheView do
+# DEPRECATED: KV Cache View tests are temporarily disabled
+# The KV cache view functionality has been removed from llama.cpp
+# These tests will be re-enabled once the new memory management APIs are implemented
+
+pending "Llama::KvCacheView (DEPRECATED - functionality removed from llama.cpp)" do
   describe "#initialization" do
     it "can create a KV cache view" do
       model = Llama::Model.new(MODEL_PATH)
