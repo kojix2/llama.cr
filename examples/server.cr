@@ -44,7 +44,7 @@ end
 def generate_words(context, vocab, sampler, prompt) : Array(String)
   response = ""
   words = [] of String
-  is_first = context.kv_cache.used_cells == 0
+  is_first = true
   prompt_tokens = vocab.tokenize(prompt, add_special: is_first, parse_special: true)
 
   if prompt_tokens.empty?
@@ -56,8 +56,7 @@ def generate_words(context, vocab, sampler, prompt) : Array(String)
   context_limit_reached = false
   loop do
     n_ctx = context.n_ctx
-    n_ctx_used = context.kv_cache.used_cells
-    if n_ctx_used + batch.n_tokens > n_ctx
+    if batch.n_tokens > n_ctx
       context_limit_reached = true
       break
     end

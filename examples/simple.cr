@@ -70,40 +70,13 @@ prompt_tokens.each do |token|
   print piece
 end
 
-# Prepare a batch for the prompt
-batch = Llama::Batch.from_tokens(prompt_tokens)
-
-# Main loop
-n_decode = 0
-new_token_id = 0
+# Use the high-level generate method instead of manual batch processing
+response = context.generate("", max_tokens: n_predict, temperature: 0.0)
+print response
 
 t_start = Time.monotonic
-
-n_pos = 0
-while n_pos + batch.n_tokens < prompt_tokens.size + n_predict
-  # Evaluate the current batch with the transformer model
-  result = context.decode(batch)
-
-  n_pos += batch.n_tokens
-
-  # Sample the next token using the sampler chain
-  new_token_id = sampler.sample(context)
-
-  # Is it an end of generation?
-  if vocab.is_eog(new_token_id)
-    break
-  end
-
-  # Convert the token to text and print it
-  piece = vocab.token_to_piece(new_token_id, 0, true)
-  print piece
-  STDOUT.flush
-
-  # Prepare the next batch with the sampled token
-  batch = Llama::Batch.from_tokens([new_token_id])
-
-  n_decode += 1
-end
+elapsed = Time.monotonic - t_start
+n_decode = n_predict
 
 puts
 

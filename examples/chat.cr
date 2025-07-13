@@ -50,10 +50,9 @@ if tmpl.nil?
   tmpl = ""
 end
 
-# Evaluate prompt and generate response
 def generate(context, vocab, sampler, prompt) : String
   response = ""
-  is_first = context.kv_cache.used_cells == 0
+  is_first = true
   prompt_tokens = vocab.tokenize(prompt, add_special: is_first, parse_special: true)
 
   if prompt_tokens.empty?
@@ -64,8 +63,7 @@ def generate(context, vocab, sampler, prompt) : String
   batch = Llama::Batch.get_one(prompt_tokens)
   loop do
     n_ctx = context.n_ctx
-    n_ctx_used = context.kv_cache.used_cells
-    if n_ctx_used + batch.n_tokens > n_ctx
+    if batch.n_tokens > n_ctx
       puts
       abort "Context size exceeded"
     end
