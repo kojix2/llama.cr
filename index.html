@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Crystal Docs 1.15.1">
+<meta name="generator" content="Crystal Docs 1.16.3">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="llama">
 
@@ -304,6 +304,7 @@
   </svg>
 </a>llama.cr</h1>
 <p><a href="https://github.com/kojix2/llama.cr/actions/workflows/test.yml"><img src="https://github.com/kojix2/llama.cr/actions/workflows/test.yml/badge.svg" alt="test" /></a>
+<a href="https://github.com/kojix2/llama.cr/actions/workflows/examples.yml"><img src="https://github.com/kojix2/llama.cr/actions/workflows/examples.yml/badge.svg" alt="examples" /></a>
 <a href="https://kojix2.github.io/llama.cr"><img src="https://img.shields.io/badge/docs-latest-blue.svg" alt="docs" /></a>
 <a href="https://tokei.kojix2.net/github/kojix2/llama.cr"><img src="https://img.shields.io/endpoint?url=https://tokei.kojix2.net/badge/github/kojix2/llama.cr/lines" alt="Lines of Code" /></a></p>
 <p>Crystal bindings for <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.</p>
@@ -340,27 +341,25 @@
     <use href="#octicon-link"/>
   </svg>
 </a>1. Download Prebuilt Binary (Recommended)</h4>
-<p>You can download a prebuilt binary matching the required version automatically:</p>
-<p><strong>Linux/macOS (bash):</strong></p>
 <pre><code class="language-sh">LLAMA_VERSION=$(cat LLAMA_VERSION)
-wget &quot;https://github.com/ggerganov/llama.cpp/releases/download/v${LLAMA_VERSION}/llama-linux-x64.zip&quot;
-unzip &quot;llama-linux-x64.zip&quot;
-# Move libllama.so to ./lib or set LD_LIBRARY_PATH
-export LD_LIBRARY_PATH=$PWD/lib:$LD_LIBRARY_PATH</code></pre>
-<p>You can also specify the library location without installing:</p>
-<pre><code class="language-bash">crystal build examples/simple.cr --link-flags=&quot;-L/path/to/lib&quot;
-LD_LIBRARY_PATH=/path/to/lib ./simple /path/to/model.gguf &quot;Your prompt here&quot;</code></pre>
+curl -L &quot;https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.zip&quot; -o llama.zip
+unzip llama.zip
+sudo cp build/bin/*.so /usr/local/lib/
+sudo ldconfig</code></pre>
+<p>For macOS, replace <code>ubuntu-x64</code> with <code>macos-arm64</code> and <code>*.so</code> with <code>*.dylib</code>.</p>
+<p><strong>Alternative: Using LLAMA_CPP_DIR</strong></p>
+<p>If you prefer not to install system-wide, you can set the <code>LLAMA_CPP_DIR</code> environment variable:</p>
+<pre><code class="language-sh">export LLAMA_CPP_DIR=/path/to/llama.cpp
+crystal build examples/simple.cr
+LLAMA_CPP_DIR=/path/to/llama.cpp ./simple_example --model models/tiny_model.gguf</code></pre>
 <details>
 <summary>Build from source (advanced users)</summary>
-<p>You can build llama.cpp from source if you prefer:</p>
 <pre><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
-git checkout v$(cat ../LLAMA_VERSION)
+git checkout $(cat ../LLAMA_VERSION)
 mkdir build &amp;&amp; cd build
-cmake ..
-cmake --build . --config Release
-sudo cmake --install .
-sudo ldconfig</code></pre>
+cmake .. &amp;&amp; cmake --build . --config Release
+sudo cmake --install . &amp;&amp; sudo ldconfig</code></pre>
 </details>
 <h3><a id="obtaining-gguf-model-files" class="anchor" href="#obtaining-gguf-model-files">
   <svg class="octicon-link" aria-hidden="true">
