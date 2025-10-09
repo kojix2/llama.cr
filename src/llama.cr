@@ -383,4 +383,10 @@ module Llama
     t1 = time_us
     (t1 - t0) / 1000.0
   end
+
+  # Returns the maximum number of parallel sequences supported by backend
+  # This is a thin wrapper around LibLlama.llama_max_parallel_sequences.
+  def self.max_parallel_sequences : Int64
+    LibLlama.llama_max_parallel_sequences.to_i64
+  end
 end
