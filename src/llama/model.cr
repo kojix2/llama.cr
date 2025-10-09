@@ -107,6 +107,21 @@ module Llama
       LibLlama.llama_model_is_recurrent(@handle)
     end
 
+    # Returns whether the model is a hybrid (e.g., Jamba, Granite, etc.)
+    def hybrid? : Bool
+      LibLlama.llama_model_is_hybrid(@handle)
+    end
+
+    # Returns whether the model is diffusion-based (e.g., LLaDA, Dream, etc.)
+    def diffusion? : Bool
+      LibLlama.llama_model_is_diffusion(@handle)
+    end
+
+    # Returns the number of SWA (sliding window attention) layers in the model
+    def n_swa : Int32
+      LibLlama.llama_model_n_swa(@handle)
+    end
+
     # Returns the model's RoPE frequency scaling factor
     def rope_freq_scale_train : Float32
       LibLlama.llama_model_rope_freq_scale_train(@handle)
