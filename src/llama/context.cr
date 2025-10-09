@@ -658,6 +658,12 @@ module Llama
       LibLlama.llama_perf_context_reset(@handle)
     end
 
+    # Print a per-device memory breakdown via llama.cpp
+    # Useful for debugging memory usage. Outputs to STDERR via llama.cpp logger.
+    def print_memory_breakdown
+      LibLlama.llama_memory_breakdown_print(@handle)
+    end
+
     # Attaches a LoRA adapter to this context
     #
     # Parameters:
