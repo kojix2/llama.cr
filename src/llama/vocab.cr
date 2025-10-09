@@ -159,6 +159,11 @@ module Llama
       LibLlama.llama_vocab_pad(@handle)
     end
 
+    # Returns the mask token ID (if defined by the tokenizer)
+    def mask : Int32
+      LibLlama.llama_vocab_mask(@handle)
+    end
+
     # Checks if a token is an end-of-generation token
     def is_eog(token : Int32) : Bool
       LibLlama.llama_vocab_is_eog(@handle, token)
