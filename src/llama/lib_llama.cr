@@ -255,15 +255,15 @@ module Llama
 
     # Adapter Functions
     fun llama_adapter_lora_init(model : LlamaModel*, path_lora : LibC::Char*) : LlamaAdapterLora*
-  # Adapter metadata accessors
-  fun llama_adapter_meta_val_str(adapter : LlamaAdapterLora*, key : LibC::Char*, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
-  fun llama_adapter_meta_count(adapter : LlamaAdapterLora*) : Int32
-  fun llama_adapter_meta_key_by_index(adapter : LlamaAdapterLora*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
-  fun llama_adapter_meta_val_str_by_index(adapter : LlamaAdapterLora*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
+    # Adapter metadata accessors
+    fun llama_adapter_meta_val_str(adapter : LlamaAdapterLora*, key : LibC::Char*, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
+    fun llama_adapter_meta_count(adapter : LlamaAdapterLora*) : Int32
+    fun llama_adapter_meta_key_by_index(adapter : LlamaAdapterLora*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
+    fun llama_adapter_meta_val_str_by_index(adapter : LlamaAdapterLora*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
     fun llama_adapter_lora_free(adapter : LlamaAdapterLora*) : Void
-  # ALoRA invocation tokens
-  fun llama_adapter_get_alora_n_invocation_tokens(adapter : LlamaAdapterLora*) : UInt64
-  fun llama_adapter_get_alora_invocation_tokens(adapter : LlamaAdapterLora*) : LlamaToken*
+    # ALoRA invocation tokens
+    fun llama_adapter_get_alora_n_invocation_tokens(adapter : LlamaAdapterLora*) : UInt64
+    fun llama_adapter_get_alora_invocation_tokens(adapter : LlamaAdapterLora*) : LlamaToken*
     fun llama_set_adapter_lora(ctx : LlamaContext*, adapter : LlamaAdapterLora*, scale : Float32) : Int32
     fun llama_rm_adapter_lora(ctx : LlamaContext*, adapter : LlamaAdapterLora*) : Int32
     fun llama_clear_adapter_lora(ctx : LlamaContext*) : Void
