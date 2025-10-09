@@ -28,12 +28,13 @@ module Llama
     type LlamaAdapterLora = Void*
 
     enum LlamaVocabType
-      NONE = 0
-      SPM  = 1
-      BPE  = 2
-      WPM  = 3
-      UGM  = 4
-      RWKV = 5
+      NONE   = 0
+      SPM    = 1
+      BPE    = 2
+      WPM    = 3
+      UGM    = 4
+      RWKV   = 5
+      PLAMO2 = 6
     end
 
     struct LlamaModelQuantizeParams
@@ -49,6 +50,7 @@ module Llama
       imatrix : Void*
       kv_overrides : Void*
       tensor_types : Void*
+      prune_layers : Void*
     end
 
     fun llama_model_quantize_default_params : LlamaModelQuantizeParams
@@ -127,39 +129,40 @@ module Llama
 
     # Enum Definitions
     enum LlamaFtype
-      ALL_F32        =    0
-      MOSTLY_F16     =    1
-      MOSTLY_Q4_0    =    2
-      MOSTLY_Q4_1    =    3
-      MOSTLY_Q8_0    =    7
-      MOSTLY_Q5_0    =    8
-      MOSTLY_Q5_1    =    9
-      MOSTLY_Q2_K    =   10
-      MOSTLY_Q3_K_S  =   11
-      MOSTLY_Q3_K_M  =   12
-      MOSTLY_Q3_K_L  =   13
-      MOSTLY_Q4_K_S  =   14
-      MOSTLY_Q4_K_M  =   15
-      MOSTLY_Q5_K_S  =   16
-      MOSTLY_Q5_K_M  =   17
-      MOSTLY_Q6_K    =   18
-      MOSTLY_IQ2_XXS =   19
-      MOSTLY_IQ2_XS  =   20
-      MOSTLY_Q2_K_S  =   21
-      MOSTLY_IQ3_XS  =   22
-      MOSTLY_IQ3_XXS =   23
-      MOSTLY_IQ1_S   =   24
-      MOSTLY_IQ4_NL  =   25
-      MOSTLY_IQ3_S   =   26
-      MOSTLY_IQ3_M   =   27
-      MOSTLY_IQ2_S   =   28
-      MOSTLY_IQ2_M   =   29
-      MOSTLY_IQ4_XS  =   30
-      MOSTLY_IQ1_M   =   31
-      MOSTLY_BF16    =   32
-      MOSTLY_TQ1_0   =   36
-      MOSTLY_TQ2_0   =   37
-      GUESSED        = 1024
+      ALL_F32          =    0
+      MOSTLY_F16       =    1
+      MOSTLY_Q4_0      =    2
+      MOSTLY_Q4_1      =    3
+      MOSTLY_Q8_0      =    7
+      MOSTLY_Q5_0      =    8
+      MOSTLY_Q5_1      =    9
+      MOSTLY_Q2_K      =   10
+      MOSTLY_Q3_K_S    =   11
+      MOSTLY_Q3_K_M    =   12
+      MOSTLY_Q3_K_L    =   13
+      MOSTLY_Q4_K_S    =   14
+      MOSTLY_Q4_K_M    =   15
+      MOSTLY_Q5_K_S    =   16
+      MOSTLY_Q5_K_M    =   17
+      MOSTLY_Q6_K      =   18
+      MOSTLY_IQ2_XXS   =   19
+      MOSTLY_IQ2_XS    =   20
+      MOSTLY_Q2_K_S    =   21
+      MOSTLY_IQ3_XS    =   22
+      MOSTLY_IQ3_XXS   =   23
+      MOSTLY_IQ1_S     =   24
+      MOSTLY_IQ4_NL    =   25
+      MOSTLY_IQ3_S     =   26
+      MOSTLY_IQ3_M     =   27
+      MOSTLY_IQ2_S     =   28
+      MOSTLY_IQ2_M     =   29
+      MOSTLY_IQ4_XS    =   30
+      MOSTLY_IQ1_M     =   31
+      MOSTLY_BF16      =   32
+      MOSTLY_TQ1_0     =   36
+      MOSTLY_TQ2_0     =   37
+      MOSTLY_MXFP4_MOE =   38
+      GUESSED          = 1024
     end
 
     enum LlamaRopeType
@@ -192,6 +195,12 @@ module Llama
       UNSPECIFIED = -1
       CAUSAL      =  0
       NON_CAUSAL  =  1
+    end
+
+    enum LlamaFlashAttnType
+      AUTO     = -1
+      DISABLED =  0
+      ENABLED  =  1
     end
 
     enum LlamaSplitMode
@@ -246,7 +255,15 @@ module Llama
 
     # Adapter Functions
     fun llama_adapter_lora_init(model : LlamaModel*, path_lora : LibC::Char*) : LlamaAdapterLora*
+  # Adapter metadata accessors
+  fun llama_adapter_meta_val_str(adapter : LlamaAdapterLora*, key : LibC::Char*, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
+  fun llama_adapter_meta_count(adapter : LlamaAdapterLora*) : Int32
+  fun llama_adapter_meta_key_by_index(adapter : LlamaAdapterLora*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
+  fun llama_adapter_meta_val_str_by_index(adapter : LlamaAdapterLora*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
     fun llama_adapter_lora_free(adapter : LlamaAdapterLora*) : Void
+  # ALoRA invocation tokens
+  fun llama_adapter_get_alora_n_invocation_tokens(adapter : LlamaAdapterLora*) : UInt64
+  fun llama_adapter_get_alora_invocation_tokens(adapter : LlamaAdapterLora*) : LlamaToken*
     fun llama_set_adapter_lora(ctx : LlamaContext*, adapter : LlamaAdapterLora*, scale : Float32) : Int32
     fun llama_rm_adapter_lora(ctx : LlamaContext*, adapter : LlamaAdapterLora*) : Int32
     fun llama_clear_adapter_lora(ctx : LlamaContext*) : Void
@@ -282,6 +299,8 @@ module Llama
       use_mmap : Bool
       use_mlock : Bool
       check_tensors : Bool
+      use_extra_bufts : Bool
+      no_host : Bool
     end
 
     struct LlamaContextParams
@@ -294,6 +313,7 @@ module Llama
       rope_scaling_type : LlamaRopeScalingType
       pooling_type : LlamaPoolingType
       attention_type : LlamaAttentionType
+      flash_attn_type : LlamaFlashAttnType
       rope_freq_base : Float32
       rope_freq_scale : Float32
       yarn_ext_factor : Float32
@@ -310,15 +330,16 @@ module Llama
       abort_callback_data : Void*
       embeddings : Bool
       offload_kqv : Bool
-      flash_attn : Bool
       no_perf : Bool
       op_offload : Bool
       swa_full : Bool
+      kv_unified : Bool
     end
 
     fun llama_model_default_params : LlamaModelParams
     fun llama_context_default_params : LlamaContextParams
     fun llama_sampler_chain_default_params : LlamaSamplerChainParams
+    fun llama_flash_attn_type_name(type : LlamaFlashAttnType) : LibC::Char*
 
     # Initialization and Finalization
     fun llama_backend_init : Void
@@ -352,6 +373,7 @@ module Llama
     fun llama_model_save_to_file(model : LlamaModel*, path_model : LibC::Char*) : Void
     fun llama_model_free(model : LlamaModel*) : Void
     fun llama_max_devices : LibC::SizeT
+    fun llama_max_parallel_sequences : LibC::SizeT
     fun llama_model_n_params(model : LlamaModel*) : UInt64
     fun llama_model_size(model : LlamaModel*) : UInt64
     fun llama_supports_mmap : Bool
@@ -364,9 +386,12 @@ module Llama
     fun llama_model_rope_type(model : LlamaModel*) : LlamaRopeType
     fun llama_model_n_head(model : LlamaModel*) : Int32
     fun llama_model_n_head_kv(model : LlamaModel*) : Int32
+    fun llama_model_n_swa(model : LlamaModel*) : Int32
     fun llama_model_has_encoder(model : LlamaModel*) : Bool
     fun llama_model_has_decoder(model : LlamaModel*) : Bool
     fun llama_model_is_recurrent(model : LlamaModel*) : Bool
+    fun llama_model_is_hybrid(model : LlamaModel*) : Bool
+    fun llama_model_is_diffusion(model : LlamaModel*) : Bool
     fun llama_model_rope_freq_scale_train(model : LlamaModel*) : Float32
     fun llama_model_decoder_start_token(model : LlamaModel*) : LlamaToken
     fun llama_model_n_cls_out(model : LlamaModel*) : UInt32
@@ -479,6 +504,7 @@ module Llama
     fun llama_vocab_sep(vocab : LlamaVocab*) : LlamaToken
     fun llama_vocab_nl(vocab : LlamaVocab*) : LlamaToken
     fun llama_vocab_pad(vocab : LlamaVocab*) : LlamaToken
+    fun llama_vocab_mask(vocab : LlamaVocab*) : LlamaToken
     fun llama_vocab_get_add_bos(vocab : LlamaVocab*) : Bool
     fun llama_vocab_get_add_eos(vocab : LlamaVocab*) : Bool
     fun llama_vocab_get_add_sep(vocab : LlamaVocab*) : Bool
@@ -498,6 +524,7 @@ module Llama
     # Define the callback type for logging
     alias GgmlLogCallback = Proc(Int32, LibC::Char*, Void*, Void)
     fun llama_log_set(log_callback : GgmlLogCallback, user_data : Void*) : Void
+    fun llama_memory_breakdown_print(ctx : LlamaContext*) : Void
     fun llama_batch_get_one(tokens : LlamaToken*, n_tokens : Int32) : LlamaBatch
     fun llama_batch_init(n_tokens : Int32, embd : Int32, n_seq_max : Int32) : LlamaBatch
     fun llama_batch_free(batch : LlamaBatch) : Void
