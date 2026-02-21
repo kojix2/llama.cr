@@ -15,11 +15,11 @@ This project is under active development and may change rapidly.
 ## Versioning Policy
 
 - This library version tracks the upstream `llama.cpp` build number.
-- `LLAMA_VERSION` uses the upstream format (for example `b8118`).
-- The shard version uses the numeric part (for example `8118`).
-- Git tags use the `v<build>` format (for example `v8118`).
+- `LLAMA_VERSION` uses the upstream format (for example `b8119`).
+- The shard version uses the numeric part (for example `8119`).
+- Git tags use the `v<build>` format (for example `v8119`).
 - Compatibility target is one upstream build at a time.
-- Consumers should pin an exact shard version (for example `8118`), not a version range.
+- Consumers should pin an exact shard version (for example `8119`), not a version range.
 
 ## Features
 
@@ -124,7 +124,7 @@ We strongly recommend pinning an exact version because llama.cpp updates can inc
 dependencies:
   llama:
     github: kojix2/llama.cr
-    version: 8118
+    version: 8119
 ```
 
 Then run `shards install`.

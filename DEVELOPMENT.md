@@ -74,9 +74,9 @@ This document outlines the development guidelines for the llama.cr project, prim
 
 ### Version Mapping Rules
 
-- `LLAMA_VERSION` must use upstream format: `b<build>` (example: `b8118`).
-- `shard.yml` version must use the numeric build value (example: `8118`).
-- Release tags must use `v<build>` (example: `v8118`).
+- `LLAMA_VERSION` must use upstream format: `b<build>` (example: `b8119`).
+- `shard.yml` version must use the numeric build value (example: `8119`).
+- Release tags must use `v<build>` (example: `v8119`).
 - Keep all three values aligned in the same update.
 
 - Document which version of llama.cpp the library is compatible with
