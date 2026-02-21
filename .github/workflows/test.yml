@@ -18,6 +18,23 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            archive_suffix: ubuntu-x64
+            lib_glob: "*.so*"
+            runtime_lib_env: LD_LIBRARY_PATH
+            backend_candidates: "libggml-cpu-x64.so libggml-cpu-haswell.so libggml-cpu-*.so"
+            system_deps: |
+              sudo apt-get update
+              sudo apt-get install -y cmake
+            post_install: sudo ldconfig
+          - os: macos-latest
+            archive_suffix: macos-arm64
+            lib_glob: "*.dylib*"
+            runtime_lib_env: DYLD_LIBRARY_PATH
+            backend_candidates: "libggml-cpu-arm64.dylib libggml-cpu-*.dylib"
+            system_deps: brew install cmake
+            post_install: ":"
         spec_file:
           - spec/llama_spec.cr
           - spec/context_spec.cr
@@ -37,88 +54,45 @@ jobs:
       - name: Install Crystal
         uses: crystal-lang/install-crystal@v1
 
-      - name: Install dependencies (Ubuntu)
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake
-
-      - name: Install dependencies (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          brew install cmake
+      - name: Install system dependencies
+        run: ${{ matrix.system_deps }}
 
       - name: Set llama.cpp version
         id: set_version
         run: |
           echo "LLAMA_VERSION=$(cat LLAMA_VERSION)" >> $GITHUB_ENV
 
-      - name: Install llama.cpp (Ubuntu)
-        if: runner.os == 'Linux'
+      - name: Install llama.cpp
         run: |
-          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.tar.gz -o llama.tar.gz
+          curl -L "https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-${{ matrix.archive_suffix }}.tar.gz" -o llama.tar.gz
           tar -xzf llama.tar.gz
           LLAMA_DIR=$(ls -d llama-${LLAMA_VERSION}* | head -n1)
           sudo mkdir -p /usr/local/lib
-          sudo cp "$LLAMA_DIR"/*.so* /usr/local/lib/
-          sudo ldconfig
+          sudo cp "$LLAMA_DIR"/${{ matrix.lib_glob }} /usr/local/lib/
+          ${{ matrix.post_install }}
 
-      - name: Install llama.cpp (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-macos-arm64.tar.gz -o llama.tar.gz
-          tar -xzf llama.tar.gz
-          LLAMA_DIR=$(ls -d llama-${LLAMA_VERSION}* | head -n1)
-          sudo mkdir -p /usr/local/lib
-          sudo cp "$LLAMA_DIR"/*.dylib* /usr/local/lib/
-
-      - name: Set library path (Linux)
-        if: runner.os == 'Linux'
+      - name: Set library and backend paths
         run: |
           echo 'LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
-          echo 'LD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+          echo '${{ matrix.runtime_lib_env }}=/usr/local/lib' >> $GITHUB_ENV
 
-      - name: Set GGML backend path (Linux)
-        if: runner.os == 'Linux'
-        run: |
           BACKEND_PATH=""
-          if [ -f /usr/local/lib/libggml-cpu-x64.so ]; then
-            BACKEND_PATH=/usr/local/lib/libggml-cpu-x64.so
-          elif [ -f /usr/local/lib/libggml-cpu-haswell.so ]; then
-            BACKEND_PATH=/usr/local/lib/libggml-cpu-haswell.so
-          else
-            BACKEND_PATH=$(ls /usr/local/lib/libggml-cpu-*.so 2>/dev/null | head -n1 || true)
-          fi
+          for pattern in ${{ matrix.backend_candidates }}; do
+            for candidate in /usr/local/lib/$pattern; do
+              [ -f "$candidate" ] || continue
+              BACKEND_PATH="$candidate"
+              break 2
+            done
+          done
+
           if [ -n "$BACKEND_PATH" ]; then
             echo "GGML_BACKEND_PATH=$BACKEND_PATH" >> $GITHUB_ENV
             echo "Using GGML_BACKEND_PATH=$BACKEND_PATH"
           else
-            echo "No libggml-cpu-*.so found under /usr/local/lib; backend auto-detection will be used"
+            echo "No GGML backend library found under /usr/local/lib; backend auto-detection will be used"
           fi
 
-      - name: Set library path (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          echo 'LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
-          echo 'DYLD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
-
-      - name: Set GGML backend path (macOS)
-        if: runner.os == 'macOS'
-        run: |
-          BACKEND_PATH=""
-          if [ -f /usr/local/lib/libggml-cpu-arm64.dylib ]; then
-            BACKEND_PATH=/usr/local/lib/libggml-cpu-arm64.dylib
-          else
-            BACKEND_PATH=$(ls /usr/local/lib/libggml-cpu-*.dylib 2>/dev/null | head -n1 || true)
-          fi
-          if [ -n "$BACKEND_PATH" ]; then
-            echo "GGML_BACKEND_PATH=$BACKEND_PATH" >> $GITHUB_ENV
-            echo "Using GGML_BACKEND_PATH=$BACKEND_PATH"
-          else
-            echo "No libggml-cpu-*.dylib found under /usr/local/lib; backend auto-detection will be used"
-          fi
-
-      - name: Install dependencies
+      - name: Install shard dependencies
         run: shards install
 
       - name: Build
