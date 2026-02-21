@@ -3,15 +3,15 @@ module Llama
   @[Link("ggml")]
   lib LibLlama
     # Constants
-    LLAMA_DEFAULT_SEED      = 0xFFFFFFFF_u32
-    LLAMA_TOKEN_NULL        =             -1
-    LLAMA_FILE_MAGIC_GGLA   = 0x67676c61_u32 # 'ggla'
-    LLAMA_FILE_MAGIC_GGSN   = 0x6767736e_u32 # 'ggsn'
-    LLAMA_FILE_MAGIC_GGSQ   = 0x67677371_u32 # 'ggsq'
-    LLAMA_SESSION_MAGIC     = LLAMA_FILE_MAGIC_GGSN
-    LLAMA_SESSION_VERSION   = 9
-    LLAMA_STATE_SEQ_MAGIC   = LLAMA_FILE_MAGIC_GGSQ
-    LLAMA_STATE_SEQ_VERSION = 2
+    LLAMA_DEFAULT_SEED                 = 0xFFFFFFFF_u32
+    LLAMA_TOKEN_NULL                   =             -1
+    LLAMA_FILE_MAGIC_GGLA              = 0x67676c61_u32 # 'ggla'
+    LLAMA_FILE_MAGIC_GGSN              = 0x6767736e_u32 # 'ggsn'
+    LLAMA_FILE_MAGIC_GGSQ              = 0x67677371_u32 # 'ggsq'
+    LLAMA_SESSION_MAGIC                = LLAMA_FILE_MAGIC_GGSN
+    LLAMA_SESSION_VERSION              = 9
+    LLAMA_STATE_SEQ_MAGIC              = LLAMA_FILE_MAGIC_GGSQ
+    LLAMA_STATE_SEQ_VERSION            =     2
     LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY = 1_u32
 
     alias LlamaToken = Int32
