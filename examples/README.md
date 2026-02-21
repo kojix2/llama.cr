@@ -101,3 +101,4 @@ If the model fails to load:
 - Verify the model file exists and is not corrupted
 - Ensure you have enough RAM to load the model
 - Try a smaller model if you're having memory issues
+- If backend auto-detection fails, set `GGML_BACKEND_PATH` to a backend library file (for example `libggml-cpu-x64.so`) as a fallback
