@@ -823,8 +823,9 @@ module Llama
       LibLlama.llama_pooling_type(@handle)
     end
 
-    # Gets all output token embeddings
-    # Only available when embeddings mode is enabled
+    # Gets embeddings for the latest output token.
+    #
+    # Internally this uses the index-based embeddings API.
     #
     # Returns:
     # - An array of embeddings, or nil if embeddings are not available
@@ -832,24 +833,7 @@ module Llama
     # Raises:
     # - Llama::Context::Error if embeddings mode is not enabled
     def get_embeddings : Array(Float32)?
-      ptr = LibLlama.llama_get_embeddings(@handle)
-      return nil if ptr.null?
-
-      # Get the embedding dimension from the model
-      n_embd = @model.n_embd
-
-      # Get the number of outputs with embeddings
-      # This is a simplification - in a real implementation, you would need to
-      # track how many tokens had embeddings requested
-      n_outputs = 1
-
-      # Copy the embeddings to a Crystal array
-      result = Array(Float32).new(n_outputs * n_embd)
-      (n_outputs * n_embd).times do |i|
-        result << ptr[i]
-      end
-
-      result
+      get_embeddings_ith(-1)
     end
 
     # Gets the embeddings for a specific token
