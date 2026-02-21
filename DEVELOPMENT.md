@@ -92,6 +92,9 @@ This document outlines the development guidelines for the llama.cr project, prim
   9. Run tests:
      - `crystal spec`
      - LoRA specs with adapter path configured when applicable
+    - If model loading reports "No backends loaded", set `GGML_BACKEND_PATH` to a backend library file (for example `libggml-cpu-haswell.so`), not a directory
+    - Typical local command:
+      - `MODEL_PATH=/path/to/model.gguf ADAPTER_PATH=/path/to/adapter.gguf LIBRARY_PATH=/path/to/libs LD_LIBRARY_PATH=/path/to/libs GGML_BACKEND_PATH=/path/to/libs/libggml-cpu-haswell.so crystal spec`
   10. Validate examples:
      - `examples/simple.cr`
      - `examples/chat.cr`

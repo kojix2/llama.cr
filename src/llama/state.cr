@@ -275,14 +275,21 @@ module Llama
     # Parameters:
     # - seq_id: The sequence ID
     #
+    # Parameters:
+    # - flags: Optional state-sequence flags (0 for full state)
+    #
     # Returns:
     # - The size in bytes
     #
     # Raises:
     # - Llama::State::Error if the operation fails
-    def seq_size(seq_id : Int32) : LibC::SizeT
+    def seq_size(seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = 0_u32) : LibC::SizeT
       begin
-        result = LibLlama.llama_state_seq_get_size(ctx_ptr, seq_id)
+        result = if flags == 0
+                   LibLlama.llama_state_seq_get_size(ctx_ptr, seq_id)
+                 else
+                   LibLlama.llama_state_seq_get_size_ext(ctx_ptr, seq_id, flags)
+                 end
 
         if result == 0
           error_msg = Llama.format_error(
@@ -311,26 +318,39 @@ module Llama
     # Parameters:
     # - seq_id: The sequence ID
     #
+    # Parameters:
+    # - flags: Optional state-sequence flags (0 for full state)
+    #
     # Returns:
     # - A Bytes object containing the sequence state data
     #
     # Raises:
     # - Llama::State::Error if the operation fails
-    def seq_get_data(seq_id : Int32) : Bytes
+    def seq_get_data(seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = 0_u32) : Bytes
       begin
         # Get the size needed
-        state_size = seq_size(seq_id)
+        state_size = seq_size(seq_id, flags)
 
         # Allocate a buffer
         buffer = Bytes.new(state_size)
 
         # Get the state data
-        bytes_copied = LibLlama.llama_state_seq_get_data(
-          ctx_ptr,
-          buffer.to_unsafe,
-          state_size,
-          seq_id
-        )
+        bytes_copied = if flags == 0
+                         LibLlama.llama_state_seq_get_data(
+                           ctx_ptr,
+                           buffer.to_unsafe,
+                           state_size,
+                           seq_id
+                         )
+                       else
+                         LibLlama.llama_state_seq_get_data_ext(
+                           ctx_ptr,
+                           buffer.to_unsafe,
+                           state_size,
+                           seq_id,
+                           flags
+                         )
+                       end
 
         if bytes_copied == 0
           error_msg = Llama.format_error(
@@ -360,6 +380,7 @@ module Llama
     # Parameters:
     # - data: The state data to set
     # - dest_seq_id: The destination sequence ID
+    # - flags: Optional state-sequence flags (0 for full state)
     #
     # Returns:
     # - The number of bytes read, or 0 if failed
@@ -367,18 +388,28 @@ module Llama
     # Raises:
     # - ArgumentError if data is empty
     # - Llama::State::Error if the operation fails
-    def seq_set_data(data : Bytes, dest_seq_id : Int32) : LibC::SizeT
+    def seq_set_data(data : Bytes, dest_seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = 0_u32) : LibC::SizeT
       if data.empty?
         raise ArgumentError.new("State data cannot be empty")
       end
 
       begin
-        result = LibLlama.llama_state_seq_set_data(
-          ctx_ptr,
-          data.to_unsafe,
-          data.size,
-          dest_seq_id
-        )
+        result = if flags == 0
+                   LibLlama.llama_state_seq_set_data(
+                     ctx_ptr,
+                     data.to_unsafe,
+                     data.size,
+                     dest_seq_id
+                   )
+                 else
+                   LibLlama.llama_state_seq_set_data_ext(
+                     ctx_ptr,
+                     data.to_unsafe,
+                     data.size,
+                     dest_seq_id,
+                     flags
+                   )
+                 end
 
         if result == 0
           error_msg = Llama.format_error(

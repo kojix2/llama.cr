@@ -12,6 +12,7 @@ module Llama
     LLAMA_SESSION_VERSION   = 9
     LLAMA_STATE_SEQ_MAGIC   = LLAMA_FILE_MAGIC_GGSQ
     LLAMA_STATE_SEQ_VERSION = 2
+    LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY = 1_u32
 
     alias LlamaToken = Int32
     alias LlamaPos = Int32

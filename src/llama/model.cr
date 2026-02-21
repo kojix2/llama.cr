@@ -82,6 +82,16 @@ module Llama
       LibLlama.llama_model_n_embd(@handle)
     end
 
+    # Returns the input embedding dimension used by the model
+    def n_embd_inp : Int32
+      LibLlama.llama_model_n_embd_inp(@handle)
+    end
+
+    # Returns the output embedding dimension used by the model
+    def n_embd_out : Int32
+      LibLlama.llama_model_n_embd_out(@handle)
+    end
+
     # Returns the number of layers in the model
     def n_layer : Int32
       LibLlama.llama_model_n_layer(@handle)

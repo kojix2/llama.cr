@@ -96,6 +96,11 @@ module Llama
       LibLlama.llama_n_ctx(@handle)
     end
 
+    # Returns the sequence context window size (n_ctx_seq)
+    def n_ctx_seq : UInt32
+      LibLlama.llama_n_ctx_seq(@handle)
+    end
+
     # Returns the logical batch size (n_batch)
     def n_batch : UInt32
       LibLlama.llama_n_batch(@handle)

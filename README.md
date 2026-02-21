@@ -62,6 +62,22 @@ LD_LIBRARY_PATH="$LLAMA_LIB_DIR" ./simple --model models/tiny_model.gguf
 
 On macOS, replace `LD_LIBRARY_PATH` with `DYLD_LIBRARY_PATH`.
 
+If backend auto-detection fails in newer llama.cpp builds, also set `GGML_BACKEND_PATH` to a backend shared library file (not a directory), for example:
+
+```sh
+export GGML_BACKEND_PATH="$LLAMA_LIB_DIR/libggml-cpu-haswell.so"
+```
+
+For local development/tests, a full example is:
+
+```sh
+MODEL_PATH=/path/to/model.gguf \
+LIBRARY_PATH="$LLAMA_LIB_DIR" \
+LD_LIBRARY_PATH="$LLAMA_LIB_DIR" \
+GGML_BACKEND_PATH="$LLAMA_LIB_DIR/libggml-cpu-haswell.so" \
+crystal spec
+```
+
 Minimal examples:
 
 ```sh
