@@ -348,11 +348,20 @@ tar -xzf llama.tar.gz
 sudo cp llama-${LLAMA_VERSION}/*.so* /usr/local/lib/
 sudo ldconfig</code></pre>
 <p>For macOS, replace <code>ubuntu-x64</code> with <code>macos-arm64</code> and <code>*.so</code> with <code>*.dylib</code>.</p>
-<p><strong>Alternative: Using LLAMA_CPP_DIR</strong></p>
-<p>If you prefer not to install system-wide, you can set the <code>LLAMA_CPP_DIR</code> environment variable:</p>
-<pre><code class="language-sh">export LLAMA_CPP_DIR=/path/to/llama.cpp
-crystal build examples/simple.cr
-LLAMA_CPP_DIR=/path/to/llama.cpp ./simple --model models/tiny_model.gguf</code></pre>
+<p><strong>Alternative: Use local libraries with standard linker flags</strong></p>
+<p>If you prefer not to install system-wide, point Crystal and the runtime loader to your local llama.cpp library directory:</p>
+<pre><code class="language-sh">export LLAMA_LIB_DIR=/path/to/llama.cpp
+LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; crystal build examples/simple.cr --link-flags &quot;-L$LLAMA_LIB_DIR -Wl,-rpath,$LLAMA_LIB_DIR -lllama -lggml&quot;
+LD_LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; ./simple --model models/tiny_model.gguf</code></pre>
+<p>On macOS, replace <code>LD_LIBRARY_PATH</code> with <code>DYLD_LIBRARY_PATH</code>.</p>
+<p>Minimal examples:</p>
+<pre><code class="language-sh"># Linux
+LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; crystal build examples/simple.cr --link-flags &quot;-L$LLAMA_LIB_DIR -Wl,-rpath,$LLAMA_LIB_DIR -lllama -lggml&quot;
+LD_LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; ./simple --model models/tiny_model.gguf
+
+# macOS
+LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; crystal build examples/simple.cr --link-flags &quot;-L$LLAMA_LIB_DIR -Wl,-rpath,$LLAMA_LIB_DIR -lllama -lggml&quot;
+DYLD_LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; ./simple --model models/tiny_model.gguf</code></pre>
 <details>
 <summary>Build from source (advanced users)</summary>
 <pre><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
