@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::Sampler::TempExt - llama main</title>
+  <title>Llama::Sampler::AdaptiveP - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -157,7 +157,7 @@
       
         <ul>
   
-  <li class=" " data-id="llama/Llama/Sampler/AdaptiveP" data-name="llama::sampler::adaptivep">
+  <li class=" current" data-id="llama/Llama/Sampler/AdaptiveP" data-name="llama::sampler::adaptivep">
       <a href="../../Llama/Sampler/AdaptiveP.html">AdaptiveP</a>
       
     </li>
@@ -222,7 +222,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/Sampler/TempExt" data-name="llama::sampler::tempext">
+  <li class=" " data-id="llama/Llama/Sampler/TempExt" data-name="llama::sampler::tempext">
       <a href="../../Llama/Sampler/TempExt.html">TempExt</a>
       
     </li>
@@ -308,12 +308,12 @@
 
   <span class="kind">
     class
-  </span> Llama::<wbr>Sampler::<wbr>TempExt
+  </span> Llama::<wbr>Sampler::<wbr>AdaptiveP
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Llama/Sampler/TempExt.html">Llama::Sampler::TempExt</a></li><li class="superclass"><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Llama/Sampler/AdaptiveP.html">Llama::Sampler::AdaptiveP</a></li><li class="superclass"><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -327,13 +327,8 @@
     Overview
   </h2>
 
-  <p>Extended Temperature sampler</p>
-<p>The Extended Temperature sampler provides more control over temperature
-sampling with additional parameters for dynamic temperature adjustment.
-This is based on the paper &quot;Dynamic Temperature for Language Models&quot; (https://arxiv.org/abs/2309.02772).</p>
-<p>Example:</p>
-<pre><code class="language-crystal"><span class="c"># Create a temperature sampler with base temp 0.8, delta 0.5, and exponent 1.0</span>
-sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">TempExt</span>.new(<span class="n">0.8</span>, <span class="n">0.5</span>, <span class="n">1.0</span>)</code></pre>
+  <p>Adaptive-P sampler</p>
+<p>Selects tokens near a configurable target probability over time.</p>
 
 
 
@@ -360,8 +355,8 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/sampler/temp_ext.cr#L14" target="_blank">
-        llama/sampler/temp_ext.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/sampler/adaptive_p.cr#L6" target="_blank">
+        llama/sampler/adaptive_p.cr
       </a>
     
     <br/>
@@ -383,9 +378,9 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28t%3AFloat32%2Cdelta%3AFloat32%2Cexponent%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(t : Float32, delta : Float32, exponent : Float32)</a>
+        <a href="#new%28target%3AFloat32%2Cdecay%3AFloat32%2Cseed%3AUInt32%3DLibLlama%3A%3ALLAMA_DEFAULT_SEED%29-class-method" class="signature"><strong>.new</strong>(target : Float32, decay : Float32, seed : UInt32 = <span class="t">LibLlama</span><span class="t">::</span><span class="t">LLAMA_DEFAULT_SEED</span>)</a>
         
-          <div class="summary"><p>Creates a new Extended Temperature sampler</p></div>
+          <div class="summary"><p>Creates a new Adaptive-P sampler.</p></div>
         
       </li>
     
@@ -470,22 +465,22 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(t:Float32,delta:Float32,exponent:Float32)-class-method">
+    <div class="entry-detail" id="new(target:Float32,decay:Float32,seed:UInt32=LibLlama::LLAMA_DEFAULT_SEED)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(t : Float32, delta : Float32, exponent : Float32)
+        def self.<strong>new</strong>(target : Float32, decay : Float32, seed : UInt32 = <span class="t">LibLlama</span><span class="t">::</span><span class="t">LLAMA_DEFAULT_SEED</span>)
 
-        <a class="method-permalink" href="#new%28t%3AFloat32%2Cdelta%3AFloat32%2Cexponent%3AFloat32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28target%3AFloat32%2Cdecay%3AFloat32%2Cseed%3AUInt32%3DLibLlama%3A%3ALLAMA_DEFAULT_SEED%29-class-method">#</a>
       </div>
       
         <div class="doc">
           
-          <p>Creates a new Extended Temperature sampler</p>
+          <p>Creates a new Adaptive-P sampler.</p>
 <p>Parameters:</p>
 <ul>
-<li>t: Base temperature value</li>
-<li>delta: Temperature delta for dynamic adjustment</li>
-<li>exponent: Exponent for the temperature formula</li>
+<li>target: Target probability (0.0 to 1.0, negative to disable)</li>
+<li>decay: EMA decay (0.0 to 0.99)</li>
+<li>seed: RNG seed</li>
 </ul>
 <p>Raises:</p>
 <ul>
@@ -496,7 +491,7 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/sampler/temp_ext.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/sampler/adaptive_p.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>

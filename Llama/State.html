@@ -157,6 +157,11 @@
       
         <ul>
   
+  <li class=" " data-id="llama/Llama/Sampler/AdaptiveP" data-name="llama::sampler::adaptivep">
+      <a href="../Llama/Sampler/AdaptiveP.html">AdaptiveP</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/Sampler/Base" data-name="llama::sampler::base">
       <a href="../Llama/Sampler/Base.html">Base</a>
       
@@ -350,14 +355,14 @@ Provides methods for saving and loading model state</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L6" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L6" target="_blank">
         llama/state.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state/error.cr#L4" target="_blank">
         llama/state/error.cr
       </a>
     
@@ -433,7 +438,7 @@ Provides methods for saving and loading model state</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_get_data%28seq_id%3AInt32%29%3ABytes-instance-method" class="signature"><strong>#seq_get_data</strong>(seq_id : Int32) : Bytes</a>
+        <a href="#seq_get_data%28seq_id%3AInt32%2Cflags%3ALibLlama%3A%3ALlamaStateSeqFlags%3D0_u32%29%3ABytes-instance-method" class="signature"><strong>#seq_get_data</strong>(seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = <span class="n">0_u32</span>) : Bytes</a>
         
           <div class="summary"><p>Gets the state data for a specific sequence</p></div>
         
@@ -454,14 +459,14 @@ Provides methods for saving and loading model state</p>
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_set_data%28data%3ABytes%2Cdest_seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_set_data</strong>(data : Bytes, dest_seq_id : Int32) : LibC::SizeT</a>
+        <a href="#seq_set_data%28data%3ABytes%2Cdest_seq_id%3AInt32%2Cflags%3ALibLlama%3A%3ALlamaStateSeqFlags%3D0_u32%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_set_data</strong>(data : Bytes, dest_seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = <span class="n">0_u32</span>) : LibC::SizeT</a>
         
           <div class="summary"><p>Sets the state for a specific sequence from data</p></div>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#seq_size%28seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_size</strong>(seq_id : Int32) : LibC::SizeT</a>
+        <a href="#seq_size%28seq_id%3AInt32%2Cflags%3ALibLlama%3A%3ALlamaStateSeqFlags%3D0_u32%29%3ALibC%3A%3ASizeT-instance-method" class="signature"><strong>#seq_size</strong>(seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = <span class="n">0_u32</span>) : LibC::SizeT</a>
         
           <div class="summary"><p>Gets the size needed to store a specific sequence's state</p></div>
         
@@ -550,7 +555,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L16" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L16" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -587,7 +592,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L525" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L556" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -616,7 +621,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L83" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -651,7 +656,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L170" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L170" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -686,17 +691,17 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L234" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L234" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_get_data(seq_id:Int32):Bytes-instance-method">
+    <div class="entry-detail" id="seq_get_data(seq_id:Int32,flags:LibLlama::LlamaStateSeqFlags=0_u32):Bytes-instance-method">
       <div class="signature">
         
-        def <strong>seq_get_data</strong>(seq_id : Int32) : Bytes
+        def <strong>seq_get_data</strong>(seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = <span class="n">0_u32</span>) : Bytes
 
-        <a class="method-permalink" href="#seq_get_data%28seq_id%3AInt32%29%3ABytes-instance-method">#</a>
+        <a class="method-permalink" href="#seq_get_data%28seq_id%3AInt32%2Cflags%3ALibLlama%3A%3ALlamaStateSeqFlags%3D0_u32%29%3ABytes-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -705,6 +710,10 @@ Provides methods for saving and loading model state</p>
 <p>Parameters:</p>
 <ul>
 <li>seq_id: The sequence ID</li>
+</ul>
+<p>Parameters:</p>
+<ul>
+<li>flags: Optional state-sequence flags (0 for full state)</li>
 </ul>
 <p>Returns:</p>
 <ul>
@@ -719,7 +728,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L319" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L329" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -755,7 +764,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L471" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L502" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -791,17 +800,17 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L418" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L449" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_set_data(data:Bytes,dest_seq_id:Int32):LibC::SizeT-instance-method">
+    <div class="entry-detail" id="seq_set_data(data:Bytes,dest_seq_id:Int32,flags:LibLlama::LlamaStateSeqFlags=0_u32):LibC::SizeT-instance-method">
       <div class="signature">
         
-        def <strong>seq_set_data</strong>(data : Bytes, dest_seq_id : Int32) : LibC::SizeT
+        def <strong>seq_set_data</strong>(data : Bytes, dest_seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = <span class="n">0_u32</span>) : LibC::SizeT
 
-        <a class="method-permalink" href="#seq_set_data%28data%3ABytes%2Cdest_seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+        <a class="method-permalink" href="#seq_set_data%28data%3ABytes%2Cdest_seq_id%3AInt32%2Cflags%3ALibLlama%3A%3ALlamaStateSeqFlags%3D0_u32%29%3ALibC%3A%3ASizeT-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -811,6 +820,7 @@ Provides methods for saving and loading model state</p>
 <ul>
 <li>data: The state data to set</li>
 <li>dest_seq_id: The destination sequence ID</li>
+<li>flags: Optional state-sequence flags (0 for full state)</li>
 </ul>
 <p>Returns:</p>
 <ul>
@@ -826,17 +836,17 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L370" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L391" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="seq_size(seq_id:Int32):LibC::SizeT-instance-method">
+    <div class="entry-detail" id="seq_size(seq_id:Int32,flags:LibLlama::LlamaStateSeqFlags=0_u32):LibC::SizeT-instance-method">
       <div class="signature">
         
-        def <strong>seq_size</strong>(seq_id : Int32) : LibC::SizeT
+        def <strong>seq_size</strong>(seq_id : Int32, flags : LibLlama::LlamaStateSeqFlags = <span class="n">0_u32</span>) : LibC::SizeT
 
-        <a class="method-permalink" href="#seq_size%28seq_id%3AInt32%29%3ALibC%3A%3ASizeT-instance-method">#</a>
+        <a class="method-permalink" href="#seq_size%28seq_id%3AInt32%2Cflags%3ALibLlama%3A%3ALlamaStateSeqFlags%3D0_u32%29%3ALibC%3A%3ASizeT-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -845,6 +855,10 @@ Provides methods for saving and loading model state</p>
 <p>Parameters:</p>
 <ul>
 <li>seq_id: The sequence ID</li>
+</ul>
+<p>Parameters:</p>
+<ul>
+<li>flags: Optional state-sequence flags (0 for full state)</li>
 </ul>
 <p>Returns:</p>
 <ul>
@@ -859,7 +873,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L283" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L286" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -893,7 +907,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L128" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L128" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -922,7 +936,7 @@ Provides methods for saving and loading model state</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f201ca6ff9cac666a2528b6df98566b5ff17ac7d/src/llama/state.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/ef2ca65c76e900618a2da693e437ce0d546ee6f1/src/llama/state.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>
