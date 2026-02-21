@@ -214,6 +214,27 @@ module Llama
       STR
     end
 
+    enum LlamaModelMetaKey
+      SAMPLING_SEQUENCE
+      SAMPLING_TOP_K
+      SAMPLING_TOP_P
+      SAMPLING_MIN_P
+      SAMPLING_XTC_PROBABILITY
+      SAMPLING_XTC_THRESHOLD
+      SAMPLING_TEMP
+      SAMPLING_PENALTY_LAST_N
+      SAMPLING_PENALTY_REPEAT
+      SAMPLING_MIROSTAT
+      SAMPLING_MIROSTAT_TAU
+      SAMPLING_MIROSTAT_ETA
+    end
+
+    enum LlamaParamsFitStatus
+      SUCCESS = 0
+      FAILURE = 1
+      ERROR   = 2
+    end
+
     struct LlamaModelKvOverride
       tag : LlamaModelKvOverrideType
       key : LibC::Char[128]
@@ -345,6 +366,7 @@ module Llama
     fun llama_context_default_params : LlamaContextParams
     fun llama_sampler_chain_default_params : LlamaSamplerChainParams
     fun llama_flash_attn_type_name(type : LlamaFlashAttnType) : LibC::Char*
+    fun llama_params_fit(path_model : LibC::Char*, mparams : LlamaModelParams*, cparams : LlamaContextParams*, tensor_split : Float32*, tensor_buft_overrides : LlamaModelTensorBuftOverride*, margins : LibC::SizeT*, n_ctx_min : UInt32, log_level : Int32) : LlamaParamsFitStatus
 
     # Initialization and Finalization
     fun llama_backend_init : Void
@@ -379,6 +401,7 @@ module Llama
     fun llama_model_free(model : LlamaModel*) : Void
     fun llama_max_devices : LibC::SizeT
     fun llama_max_parallel_sequences : LibC::SizeT
+    fun llama_max_tensor_buft_overrides : LibC::SizeT
     fun llama_model_n_params(model : LlamaModel*) : UInt64
     fun llama_model_size(model : LlamaModel*) : UInt64
     fun llama_supports_mmap : Bool
@@ -387,6 +410,8 @@ module Llama
     fun llama_supports_rpc : Bool
     fun llama_model_n_ctx_train(model : LlamaModel*) : Int32
     fun llama_model_n_embd(model : LlamaModel*) : Int32
+    fun llama_model_n_embd_inp(model : LlamaModel*) : Int32
+    fun llama_model_n_embd_out(model : LlamaModel*) : Int32
     fun llama_model_n_layer(model : LlamaModel*) : Int32
     fun llama_model_rope_type(model : LlamaModel*) : LlamaRopeType
     fun llama_model_n_head(model : LlamaModel*) : Int32
@@ -406,6 +431,7 @@ module Llama
     # Model Metadata Functions
     fun llama_model_meta_val_str(model : LlamaModel*, key : LibC::Char*, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
     fun llama_model_meta_count(model : LlamaModel*) : Int32
+    fun llama_model_meta_key_str(key : LlamaModelMetaKey) : LibC::Char*
     fun llama_model_meta_key_by_index(model : LlamaModel*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
     fun llama_model_meta_val_str_by_index(model : LlamaModel*, i : Int32, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
     fun llama_model_desc(model : LlamaModel*, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
@@ -424,11 +450,17 @@ module Llama
     fun llama_state_seq_save_file(ctx : LlamaContext*, filepath : LibC::Char*, seq_id : LlamaSeqId, tokens : LlamaToken*, n_token_count : LibC::SizeT) : LibC::SizeT
     fun llama_state_seq_load_file(ctx : LlamaContext*, filepath : LibC::Char*, dest_seq_id : LlamaSeqId, tokens_out : LlamaToken*, n_token_capacity : LibC::SizeT, n_token_count_out : LibC::SizeT*) : LibC::SizeT
 
+    alias LlamaStateSeqFlags = UInt32
+    fun llama_state_seq_get_size_ext(ctx : LlamaContext*, seq_id : LlamaSeqId, flags : LlamaStateSeqFlags) : LibC::SizeT
+    fun llama_state_seq_get_data_ext(ctx : LlamaContext*, dst : UInt8*, size : LibC::SizeT, seq_id : LlamaSeqId, flags : LlamaStateSeqFlags) : LibC::SizeT
+    fun llama_state_seq_set_data_ext(ctx : LlamaContext*, src : UInt8*, size : LibC::SizeT, dest_seq_id : LlamaSeqId, flags : LlamaStateSeqFlags) : LibC::SizeT
+
     # Context Functions
     fun llama_init_from_model(model : LlamaModel*, params : LlamaContextParams) : LlamaContext*
     fun llama_free(ctx : LlamaContext*)
     fun llama_get_model(ctx : LlamaContext*) : LlamaModel*
     fun llama_n_ctx(ctx : LlamaContext*) : UInt32
+    fun llama_n_ctx_seq(ctx : LlamaContext*) : UInt32
     fun llama_n_batch(ctx : LlamaContext*) : UInt32
     fun llama_n_ubatch(ctx : LlamaContext*) : UInt32
     fun llama_n_seq_max(ctx : LlamaContext*) : UInt32
@@ -446,6 +478,13 @@ module Llama
     fun llama_set_abort_callback(ctx : LlamaContext*, abort_callback : Void*, abort_callback_data : Void*) : Void
     fun llama_get_embeddings_ith(ctx : LlamaContext*, i : Int32) : Float32*
     fun llama_get_embeddings_seq(ctx : LlamaContext*, seq_id : LlamaSeqId) : Float32*
+    fun llama_get_sampled_token_ith(ctx : LlamaContext*, i : Int32) : LlamaToken
+    fun llama_get_sampled_probs_ith(ctx : LlamaContext*, i : Int32) : Float32*
+    fun llama_get_sampled_probs_count_ith(ctx : LlamaContext*, i : Int32) : UInt32
+    fun llama_get_sampled_logits_ith(ctx : LlamaContext*, i : Int32) : Float32*
+    fun llama_get_sampled_logits_count_ith(ctx : LlamaContext*, i : Int32) : UInt32
+    fun llama_get_sampled_candidates_ith(ctx : LlamaContext*, i : Int32) : LlamaToken*
+    fun llama_get_sampled_candidates_count_ith(ctx : LlamaContext*, i : Int32) : UInt32
     fun llama_pooling_type(ctx : LlamaContext*) : LlamaPoolingType
     fun llama_synchronize(ctx : LlamaContext*) : Void
 
@@ -453,6 +492,7 @@ module Llama
     fun llama_sampler_chain_default_params : LlamaSamplerChainParams
     fun llama_sampler_chain_init(params : LlamaSamplerChainParams) : LlamaSampler*
     fun llama_sampler_init(iface : Void*, ctx : Void*) : LlamaSampler*
+    fun llama_set_sampler(ctx : LlamaContext*, seq_id : LlamaSeqId, smpl : LlamaSampler*) : Bool
     fun llama_sampler_chain_add(chain : LlamaSampler*, smpl : LlamaSampler*) : Void
     fun llama_sampler_chain_get(chain : LlamaSampler*, i : Int32) : LlamaSampler*
     fun llama_sampler_chain_n(chain : LlamaSampler*) : Int32
@@ -487,6 +527,7 @@ module Llama
     ) : LlamaSampler*
     fun llama_sampler_init_penalties(penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32) : LlamaSampler*
     fun llama_sampler_init_dry(vocab : LlamaVocab*, n_ctx_train : Int32, dry_multiplier : Float32, dry_base : Float32, dry_allowed_length : Int32, dry_penalty_last_n : Int32, seq_breakers : LibC::Char**, num_breakers : LibC::SizeT) : LlamaSampler*
+    fun llama_sampler_init_adaptive_p(target : Float32, decay : Float32, seed : UInt32) : LlamaSampler*
     fun llama_sampler_init_logit_bias(n_vocab : Int32, n_logit_bias : Int32, logit_bias : LlamaLogitBias*) : LlamaSampler*
     fun llama_sampler_get_seed(smpl : LlamaSampler*) : UInt32
     fun llama_sampler_name(smpl : LlamaSampler*) : LibC::Char*
