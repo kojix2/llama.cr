@@ -69,7 +69,14 @@ jobs:
       - name: Set GGML backend path (Linux)
         if: runner.os == 'Linux'
         run: |
-          BACKEND_PATH=$(ls /usr/local/lib/libggml-cpu-*.so 2>/dev/null | head -n1 || true)
+          BACKEND_PATH=""
+          if [ -f /usr/local/lib/libggml-cpu-x64.so ]; then
+            BACKEND_PATH=/usr/local/lib/libggml-cpu-x64.so
+          elif [ -f /usr/local/lib/libggml-cpu-haswell.so ]; then
+            BACKEND_PATH=/usr/local/lib/libggml-cpu-haswell.so
+          else
+            BACKEND_PATH=$(ls /usr/local/lib/libggml-cpu-*.so 2>/dev/null | head -n1 || true)
+          fi
           if [ -n "$BACKEND_PATH" ]; then
             echo "GGML_BACKEND_PATH=$BACKEND_PATH" >> $GITHUB_ENV
             echo "Using GGML_BACKEND_PATH=$BACKEND_PATH"
@@ -87,7 +94,12 @@ jobs:
       - name: Set GGML backend path (macOS)
         if: runner.os == 'macOS'
         run: |
-          BACKEND_PATH=$(ls /usr/local/lib/libggml-cpu-*.dylib 2>/dev/null | head -n1 || true)
+          BACKEND_PATH=""
+          if [ -f /usr/local/lib/libggml-cpu-arm64.dylib ]; then
+            BACKEND_PATH=/usr/local/lib/libggml-cpu-arm64.dylib
+          else
+            BACKEND_PATH=$(ls /usr/local/lib/libggml-cpu-*.dylib 2>/dev/null | head -n1 || true)
+          fi
           if [ -n "$BACKEND_PATH" ]; then
             echo "GGML_BACKEND_PATH=$BACKEND_PATH" >> $GITHUB_ENV
             echo "Using GGML_BACKEND_PATH=$BACKEND_PATH"
