@@ -33,9 +33,9 @@ You need the llama.cpp shared library (libllama) available on your system.
 
 ```sh
 LLAMA_VERSION=$(cat LLAMA_VERSION)
-curl -L "https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.zip" -o llama.zip
-unzip llama.zip
-sudo cp build/bin/*.so /usr/local/lib/
+curl -L "https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.tar.gz" -o llama.tar.gz
+tar -xzf llama.tar.gz
+sudo cp llama-${LLAMA_VERSION}/*.so* /usr/local/lib/
 sudo ldconfig
 ```
 
@@ -48,7 +48,7 @@ If you prefer not to install system-wide, you can set the `LLAMA_CPP_DIR` enviro
 ```sh
 export LLAMA_CPP_DIR=/path/to/llama.cpp
 crystal build examples/simple.cr
-LLAMA_CPP_DIR=/path/to/llama.cpp ./simple_example --model models/tiny_model.gguf
+LLAMA_CPP_DIR=/path/to/llama.cpp ./simple --model models/tiny_model.gguf
 ```
 
 <details>

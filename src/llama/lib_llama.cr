@@ -47,6 +47,7 @@ module Llama
       only_copy : Bool
       pure : Bool
       keep_split : Bool
+      dry_run : Bool
       imatrix : Void*
       kv_overrides : Void*
       tensor_types : Void*
@@ -170,7 +171,8 @@ module Llama
       NORM   =  0
       NEOX   =  1
       MROPE  =  2
-      VISION =  3
+      IMROPE =  3
+      VISION =  4
     end
 
     enum LlamaRopeScalingType
@@ -264,10 +266,8 @@ module Llama
     # ALoRA invocation tokens
     fun llama_adapter_get_alora_n_invocation_tokens(adapter : LlamaAdapterLora*) : UInt64
     fun llama_adapter_get_alora_invocation_tokens(adapter : LlamaAdapterLora*) : LlamaToken*
-    fun llama_set_adapter_lora(ctx : LlamaContext*, adapter : LlamaAdapterLora*, scale : Float32) : Int32
-    fun llama_rm_adapter_lora(ctx : LlamaContext*, adapter : LlamaAdapterLora*) : Int32
-    fun llama_clear_adapter_lora(ctx : LlamaContext*) : Void
-    fun llama_apply_adapter_cvec(ctx : LlamaContext*, data : Float32*, len : LibC::SizeT, n_embd : Int32, il_start : Int32, il_end : Int32) : Int32
+    fun llama_set_adapters_lora(ctx : LlamaContext*, adapters : LlamaAdapterLora**, n_adapters : LibC::SizeT, scales : Float32*) : Int32
+    fun llama_set_adapter_cvec(ctx : LlamaContext*, data : Float32*, len : LibC::SizeT, n_embd : Int32, il_start : Int32, il_end : Int32) : Int32
 
     # Chat Functions
     fun llama_chat_apply_template(
@@ -297,10 +297,17 @@ module Llama
       kv_overrides : LlamaModelKvOverride*
       vocab_only : Bool
       use_mmap : Bool
+      use_direct_io : Bool
       use_mlock : Bool
       check_tensors : Bool
       use_extra_bufts : Bool
       no_host : Bool
+      no_alloc : Bool
+    end
+
+    struct LlamaSamplerSeqConfig
+      seq_id : LlamaSeqId
+      sampler : LlamaSampler*
     end
 
     struct LlamaContextParams
@@ -334,6 +341,8 @@ module Llama
       op_offload : Bool
       swa_full : Bool
       kv_unified : Bool
+      samplers : LlamaSamplerSeqConfig*
+      n_samplers : LibC::SizeT
     end
 
     fun llama_model_default_params : LlamaModelParams
@@ -541,6 +550,7 @@ module Llama
       t_eval_ms : Float64
       n_p_eval : Int32
       n_eval : Int32
+      n_reused : Int32
     end
 
     struct LlamaPerfSamplerData

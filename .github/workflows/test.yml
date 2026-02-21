@@ -34,7 +34,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake unzip
+          sudo apt-get install -y cmake
 
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
@@ -49,19 +49,25 @@ jobs:
       - name: Install llama.cpp (Ubuntu)
         if: runner.os == 'Linux'
         run: |
-          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${{ env.LLAMA_VERSION }}/llama-${{ env.LLAMA_VERSION }}-bin-ubuntu-x64.zip -o llama.zip
-          unzip llama.zip
+          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.tar.gz -o llama.tar.gz
+          tar -xzf llama.tar.gz
+          LLAMA_DIR=$(ls -d llama-${LLAMA_VERSION}* | head -n1)
+          mkdir -p build/bin
+          ln -sf "$PWD/${LLAMA_DIR}"/*.so* build/bin/
           sudo mkdir -p /usr/local/lib
-          sudo cp build/bin/*.so /usr/local/lib/
+          sudo cp "$LLAMA_DIR"/*.so* /usr/local/lib/
           sudo ldconfig
 
       - name: Install llama.cpp (macOS)
         if: runner.os == 'macOS'
         run: |
-          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${{ env.LLAMA_VERSION }}/llama-${{ env.LLAMA_VERSION }}-bin-macos-arm64.zip -o llama.zip
-          unzip llama.zip
+          curl -L https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-macos-arm64.tar.gz -o llama.tar.gz
+          tar -xzf llama.tar.gz
+          LLAMA_DIR=$(ls -d llama-${LLAMA_VERSION}* | head -n1)
+          mkdir -p build/bin
+          ln -sf "$PWD/${LLAMA_DIR}"/*.dylib* build/bin/
           sudo mkdir -p /usr/local/lib
-          sudo cp build/bin/*.dylib /usr/local/lib/
+          sudo cp "$LLAMA_DIR"/*.dylib* /usr/local/lib/
 
       - name: Set library path (macOS)
         if: runner.os == 'macOS'

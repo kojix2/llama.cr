@@ -30,7 +30,6 @@ module Llama
     # This can be called manually to release resources before garbage collection
     private def cleanup
       if @handle && !@handle.null?
-        LibLlama.llama_adapter_lora_free(@handle)
         @handle = Pointer(LibLlama::LlamaAdapterLora).null
       end
     end

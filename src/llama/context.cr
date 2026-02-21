@@ -54,9 +54,27 @@ module Llama
       end
 
       @model = model
+      @adapters_lora = [] of AdapterLora
+      @adapter_lora_scales = [] of Float32
 
       # Lazy initialization for state to avoid circular references
       @state = nil
+    end
+
+    private def sync_adapters_lora! : Int32
+      if @adapters_lora.empty?
+        return LibLlama.llama_set_adapters_lora(@handle, Pointer(Pointer(LibLlama::LlamaAdapterLora)).null, 0, Pointer(Float32).null)
+      end
+
+      adapters = @adapters_lora.map(&.to_unsafe)
+      scales = @adapter_lora_scales
+
+      LibLlama.llama_set_adapters_lora(
+        @handle,
+        adapters.to_unsafe.as(Pointer(Pointer(LibLlama::LlamaAdapterLora))),
+        adapters.size,
+        scales.to_unsafe
+      )
     end
 
     # Returns the memory for this context (modern API)
@@ -676,7 +694,16 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the adapter cannot be attached
     def attach_adapter_lora(adapter : AdapterLora, scale : Float32 = 1.0) : Int32
-      result = LibLlama.llama_set_adapter_lora(@handle, adapter.to_unsafe, scale)
+      existing_index = @adapters_lora.index(adapter)
+
+      if existing_index
+        @adapter_lora_scales[existing_index] = scale
+      else
+        @adapters_lora << adapter
+        @adapter_lora_scales << scale
+      end
+
+      result = sync_adapters_lora!
 
       if result < 0
         error_msg = Llama.format_error(
@@ -701,7 +728,14 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the adapter cannot be detached
     def detach_adapter_lora(adapter : AdapterLora) : Int32
-      result = LibLlama.llama_rm_adapter_lora(@handle, adapter.to_unsafe)
+      index = @adapters_lora.index(adapter)
+
+      return 0 unless index
+
+      @adapters_lora.delete_at(index)
+      @adapter_lora_scales.delete_at(index)
+
+      result = sync_adapters_lora!
 
       if result < 0
         error_msg = Llama.format_error(
@@ -717,7 +751,19 @@ module Llama
 
     # Clears all LoRA adapters from this context
     def clear_adapters_lora
-      LibLlama.llama_clear_adapter_lora(@handle)
+      @adapters_lora.clear
+      @adapter_lora_scales.clear
+
+      result = sync_adapters_lora!
+
+      if result < 0
+        error_msg = Llama.format_error(
+          "Failed to clear LoRA adapters",
+          result,
+          nil
+        )
+        raise Context::Error.new(error_msg)
+      end
     end
 
     # Applies a control vector to the LoRA adapter
@@ -734,7 +780,7 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the control vector cannot be applied
     def apply_adapter_cvec(data : Slice(Float32), n_embd : Int32, il_start : Int32, il_end : Int32) : Int32
-      result = LibLlama.llama_apply_adapter_cvec(@handle, data, data.size, n_embd, il_start, il_end)
+      result = LibLlama.llama_set_adapter_cvec(@handle, data, data.size, n_embd, il_start, il_end)
 
       if result < 0
         error_msg = Llama.format_error(

@@ -75,7 +75,7 @@ This document outlines the development guidelines for the llama.cr project, prim
 - Document which version of llama.cpp the library is compatible with
 - When updating to support a new llama.cpp version:
   1. Update the version in `LLAMA_VERSION` file
-  2. Run `scripts/download_headers.sh` to download the new header files
+  2. Run `assets/download_headers.sh` to download the new header files
   3. Update `src/llama/lib_llama.cr` bindings if necessary
   4. Run tests: `crystal spec`
   5. Commit changes and create a pull request
