@@ -343,16 +343,16 @@
   </svg>
 </a>1. Download Prebuilt Binary (Recommended)</h4>
 <pre><code class="language-sh">LLAMA_VERSION=$(cat LLAMA_VERSION)
-curl -L &quot;https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.zip&quot; -o llama.zip
-unzip llama.zip
-sudo cp build/bin/*.so /usr/local/lib/
+curl -L &quot;https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.tar.gz&quot; -o llama.tar.gz
+tar -xzf llama.tar.gz
+sudo cp llama-${LLAMA_VERSION}/*.so* /usr/local/lib/
 sudo ldconfig</code></pre>
 <p>For macOS, replace <code>ubuntu-x64</code> with <code>macos-arm64</code> and <code>*.so</code> with <code>*.dylib</code>.</p>
 <p><strong>Alternative: Using LLAMA_CPP_DIR</strong></p>
 <p>If you prefer not to install system-wide, you can set the <code>LLAMA_CPP_DIR</code> environment variable:</p>
 <pre><code class="language-sh">export LLAMA_CPP_DIR=/path/to/llama.cpp
 crystal build examples/simple.cr
-LLAMA_CPP_DIR=/path/to/llama.cpp ./simple_example --model models/tiny_model.gguf</code></pre>
+LLAMA_CPP_DIR=/path/to/llama.cpp ./simple --model models/tiny_model.gguf</code></pre>
 <details>
 <summary>Build from source (advanced users)</summary>
 <pre><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
