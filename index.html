@@ -311,6 +311,19 @@
 <p>Crystal bindings for <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.</p>
 <p>Please check the <a href="LLAMA_VERSION">LLAMA_VERSION</a> file for the current compatible version of llama.cpp.</p>
 <p>This project is under active development and may change rapidly.</p>
+<h2><a id="versioning-policy" class="anchor" href="#versioning-policy">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Versioning Policy</h2>
+<ul>
+<li>This library version tracks the upstream <code>llama.cpp</code> build number.</li>
+<li><code>LLAMA_VERSION</code> uses the upstream format (for example <code>b8118</code>).</li>
+<li>The shard version uses the numeric part (for example <code>8118</code>).</li>
+<li>Git tags use the <code>v&lt;build&gt;</code> format (for example <code>v8118</code>).</li>
+<li>Compatibility target is one upstream build at a time.</li>
+<li>Consumers should pin an exact shard version (for example <code>8118</code>), not a version range.</li>
+</ul>
 <h2><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -389,9 +402,11 @@ sudo cmake --install . &amp;&amp; sudo ldconfig</code></pre>
   </svg>
 </a>Adding to Your Project</h3>
 <p>Add the dependency to your <code>shard.yml</code>:</p>
+<p>We strongly recommend pinning an exact version because llama.cpp updates can include breaking changes between build numbers.</p>
 <pre><code class="language-yaml">dependencies:
   llama:
-    github: kojix2/llama.cr</code></pre>
+    github: kojix2/llama.cr
+    version: 8118</code></pre>
 <p>Then run <code>shards install</code>.</p>
 <h2><a id="usage" class="anchor" href="#usage">
   <svg class="octicon-link" aria-hidden="true">
