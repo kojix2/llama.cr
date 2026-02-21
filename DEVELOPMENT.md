@@ -76,6 +76,25 @@ This document outlines the development guidelines for the llama.cr project, prim
 - When updating to support a new llama.cpp version:
   1. Update the version in `LLAMA_VERSION` file
   2. Run `assets/download_headers.sh` to download the new header files
-  3. Update `src/llama/lib_llama.cr` bindings if necessary
-  4. Run tests: `crystal spec`
-  5. Commit changes and create a pull request
+  3. Update `src/llama/lib_llama.cr` bindings (struct/enum/function signatures)
+  4. Update wrapper code under `src/llama/` when API behavior changes (especially LoRA-related paths)
+  5. Ensure workflows are aligned with the current release artifacts (`.tar.gz`) and test asset requirements
+  6. Verify docs (`README.md`) still match the build/runtime model
+  7. Run tests:
+     - `crystal spec`
+     - LoRA specs with adapter path configured when applicable
+  8. Validate examples:
+     - `examples/simple.cr`
+     - `examples/chat.cr`
+     - `examples/tokenize.cr`
+  9. Commit changes and create a pull request
+
+### Standard Linker/Runtime Environment
+
+- Do not use project-specific linker environment variables.
+- Use standard environment variables:
+  - Compile/link: `LIBRARY_PATH`
+  - Runtime (Linux): `LD_LIBRARY_PATH`
+  - Runtime (macOS): `DYLD_LIBRARY_PATH`
+- When building against local libraries, prefer explicit flags:
+  - `crystal build ... --link-flags "-L<libdir> -Wl,-rpath,<libdir> -lllama -lggml"`
