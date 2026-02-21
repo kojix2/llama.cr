@@ -79,31 +79,19 @@ jobs:
       - name: Build
         run: crystal build --no-codegen src/llama.cr
 
-      - name: Cache model files
-        id: cache-models
+      - name: Cache test assets
         uses: actions/cache@v5
         with:
-          path: models
-          key: ${{ runner.os }}-models-tinyllama-v2
+          path: |
+            models
+            adapters
+          key: ${{ runner.os }}-test-assets-tinyllama-v3
 
-      - name: Download test model (if not cached)
-        if: steps.cache-models.outputs.cache-hit != 'true'
+      - name: Ensure test assets
         run: |
-          mkdir -p models
-          curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
-
-      - name: Cache LoRA adapter files
-        id: cache-adapters
-        uses: actions/cache@v5
-        with:
-          path: adapters
-          key: ${{ runner.os }}-adapters-tinyllama-function-call-v1
-
-      - name: Download test LoRA adapter (if not cached)
-        if: steps.cache-adapters.outputs.cache-hit != 'true'
-        run: |
-          mkdir -p adapters
-          curl -L https://huggingface.co/makaveli10/tinyllama-function-call-lora-adapter-250424-F16-GGUF/resolve/main/tinyllama-function-call-lora-adapter-250424-f16.gguf -o adapters/tiny_model_adapter.gguf
+          mkdir -p models adapters
+          [ -f models/tiny_model.gguf ] || curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
+          [ -f adapters/tiny_model_adapter.gguf ] || curl -L https://huggingface.co/makaveli10/tinyllama-function-call-lora-adapter-250424-F16-GGUF/resolve/main/tinyllama-function-call-lora-adapter-250424-f16.gguf -o adapters/tiny_model_adapter.gguf
 
       - name: Run spec file ${{ matrix.spec_file }}
         env:
