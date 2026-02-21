@@ -78,11 +78,33 @@ jobs:
           echo 'LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
           echo 'LD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
 
+      - name: Set GGML backend path (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          BACKEND_PATH=$(ls /usr/local/lib/libggml-cpu-*.so 2>/dev/null | head -n1 || true)
+          if [ -n "$BACKEND_PATH" ]; then
+            echo "GGML_BACKEND_PATH=$BACKEND_PATH" >> $GITHUB_ENV
+            echo "Using GGML_BACKEND_PATH=$BACKEND_PATH"
+          else
+            echo "No libggml-cpu-*.so found under /usr/local/lib; backend auto-detection will be used"
+          fi
+
       - name: Set library path (macOS)
         if: runner.os == 'macOS'
         run: |
           echo 'LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
           echo 'DYLD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+
+      - name: Set GGML backend path (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          BACKEND_PATH=$(ls /usr/local/lib/libggml-cpu-*.dylib 2>/dev/null | head -n1 || true)
+          if [ -n "$BACKEND_PATH" ]; then
+            echo "GGML_BACKEND_PATH=$BACKEND_PATH" >> $GITHUB_ENV
+            echo "Using GGML_BACKEND_PATH=$BACKEND_PATH"
+          else
+            echo "No libggml-cpu-*.dylib found under /usr/local/lib; backend auto-detection will be used"
+          fi
 
       - name: Install dependencies
         run: shards install
