@@ -420,14 +420,26 @@ module Llama
       result
     end
 
-    # Gets the logits for the last token
+    # Gets the logits for a specific output index.
+    #
+    # Parameters:
+    # - i: Output index (negative indices access from the end; -1 is latest)
+    #
+    # Returns:
+    # - A pointer to the logits array for the specified output, or nil if unavailable
+    def logits_ith(i : Int32) : Pointer(Float32)?
+      ptr = LibLlama.llama_get_logits_ith(@handle, i)
+      ptr.null? ? nil : ptr
+    end
+
+    # Gets the logits for the latest output token.
     #
     # Returns:
     # - A pointer to the logits array
     def logits : Pointer(Float32)
-      ptr = LibLlama.llama_get_logits(@handle)
+      ptr = logits_ith(-1)
 
-      if ptr.null?
+      if ptr.nil?
         error_msg = Llama.format_error(
           "Failed to get logits",
           nil,
