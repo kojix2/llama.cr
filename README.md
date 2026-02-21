@@ -41,14 +41,28 @@ sudo ldconfig
 
 For macOS, replace `ubuntu-x64` with `macos-arm64` and `*.so` with `*.dylib`.
 
-**Alternative: Using LLAMA_CPP_DIR**
+**Alternative: Use local libraries with standard linker flags**
 
-If you prefer not to install system-wide, you can set the `LLAMA_CPP_DIR` environment variable:
+If you prefer not to install system-wide, point Crystal and the runtime loader to your local llama.cpp library directory:
 
 ```sh
-export LLAMA_CPP_DIR=/path/to/llama.cpp
-crystal build examples/simple.cr
-LLAMA_CPP_DIR=/path/to/llama.cpp ./simple --model models/tiny_model.gguf
+export LLAMA_LIB_DIR=/path/to/llama.cpp
+LIBRARY_PATH="$LLAMA_LIB_DIR" crystal build examples/simple.cr --link-flags "-L$LLAMA_LIB_DIR -Wl,-rpath,$LLAMA_LIB_DIR -lllama -lggml"
+LD_LIBRARY_PATH="$LLAMA_LIB_DIR" ./simple --model models/tiny_model.gguf
+```
+
+On macOS, replace `LD_LIBRARY_PATH` with `DYLD_LIBRARY_PATH`.
+
+Minimal examples:
+
+```sh
+# Linux
+LIBRARY_PATH="$LLAMA_LIB_DIR" crystal build examples/simple.cr --link-flags "-L$LLAMA_LIB_DIR -Wl,-rpath,$LLAMA_LIB_DIR -lllama -lggml"
+LD_LIBRARY_PATH="$LLAMA_LIB_DIR" ./simple --model models/tiny_model.gguf
+
+# macOS
+LIBRARY_PATH="$LLAMA_LIB_DIR" crystal build examples/simple.cr --link-flags "-L$LLAMA_LIB_DIR -Wl,-rpath,$LLAMA_LIB_DIR -lllama -lggml"
+DYLD_LIBRARY_PATH="$LLAMA_LIB_DIR" ./simple --model models/tiny_model.gguf
 ```
 
 <details>

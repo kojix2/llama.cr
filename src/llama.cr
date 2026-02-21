@@ -288,23 +288,9 @@ module Llama
         # Initialize the backend first
         LibLlama.llama_backend_init
 
-        # Set environment variable to help backend loading find libraries
-        if ENV["LLAMA_CPP_DIR"]?
-          backend_path = File.join(ENV["LLAMA_CPP_DIR"], "build", "bin")
-          ENV["GGML_BACKEND_PATH"] = backend_path
-          # Also change working directory to the build/bin directory
-          original_dir = Dir.current
-          begin
-            Dir.cd(backend_path) if Dir.exists?(backend_path)
-            LibLlama.ggml_backend_load_all
-          ensure
-            Dir.cd(original_dir)
-          end
-        else
-          # Try to load backends from standard locations
-          ENV["GGML_BACKEND_PATH"] = "/usr/local/lib"
-          LibLlama.ggml_backend_load_all
-        end
+        # Load backends from standard dynamic loader search paths.
+        # Users can set GGML_BACKEND_PATH explicitly when needed.
+        LibLlama.ggml_backend_load_all
 
         # Verify that backends were actually loaded
         backend_count = LibLlama.ggml_backend_reg_count

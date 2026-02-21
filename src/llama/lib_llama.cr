@@ -1,10 +1,6 @@
 module Llama
-  {% if env("LLAMA_CPP_DIR") %}
-    @[Link(ldflags: "-L `echo $LLAMA_CPP_DIR/build/bin` -lllama -lggml -Wl,-rpath,`echo $LLAMA_CPP_DIR/build/bin`")]
-  {% else %}
-    @[Link("llama")]
-    @[Link("ggml")]
-  {% end %}
+  @[Link("llama")]
+  @[Link("ggml")]
   lib LibLlama
     # Constants
     LLAMA_DEFAULT_SEED      = 0xFFFFFFFF_u32

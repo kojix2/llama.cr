@@ -7,6 +7,13 @@ on:
 
 jobs:
   test:
+    env:
+      CRYSTAL_OPTS: --error-trace
+      GC_DEBUG: "1"
+      MODEL_PATH: models/tiny_model.gguf
+      ADAPTER_PATH: adapters/tiny_model_adapter.gguf
+      TINY_MODEL_URL: https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+      TINY_ADAPTER_URL: https://huggingface.co/makaveli10/tinyllama-function-call-lora-adapter-250424-F16-GGUF/resolve/main/tinyllama-function-call-lora-adapter-250424-f16.gguf
     strategy:
       fail-fast: false
       matrix:
@@ -52,8 +59,6 @@ jobs:
           curl -L https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.tar.gz -o llama.tar.gz
           tar -xzf llama.tar.gz
           LLAMA_DIR=$(ls -d llama-${LLAMA_VERSION}* | head -n1)
-          mkdir -p build/bin
-          ln -sf "$PWD/${LLAMA_DIR}"/*.so* build/bin/
           sudo mkdir -p /usr/local/lib
           sudo cp "$LLAMA_DIR"/*.so* /usr/local/lib/
           sudo ldconfig
@@ -64,14 +69,20 @@ jobs:
           curl -L https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-macos-arm64.tar.gz -o llama.tar.gz
           tar -xzf llama.tar.gz
           LLAMA_DIR=$(ls -d llama-${LLAMA_VERSION}* | head -n1)
-          mkdir -p build/bin
-          ln -sf "$PWD/${LLAMA_DIR}"/*.dylib* build/bin/
           sudo mkdir -p /usr/local/lib
           sudo cp "$LLAMA_DIR"/*.dylib* /usr/local/lib/
 
+      - name: Set library path (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          echo 'LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+          echo 'LD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+
       - name: Set library path (macOS)
         if: runner.os == 'macOS'
-        run: echo 'DYLD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+        run: |
+          echo 'LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
+          echo 'DYLD_LIBRARY_PATH=/usr/local/lib' >> $GITHUB_ENV
 
       - name: Install dependencies
         run: shards install
@@ -90,21 +101,14 @@ jobs:
       - name: Ensure test assets
         run: |
           mkdir -p models adapters
-          [ -f models/tiny_model.gguf ] || curl -L https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf -o models/tiny_model.gguf
-          [ -f adapters/tiny_model_adapter.gguf ] || curl -L https://huggingface.co/makaveli10/tinyllama-function-call-lora-adapter-250424-F16-GGUF/resolve/main/tinyllama-function-call-lora-adapter-250424-f16.gguf -o adapters/tiny_model_adapter.gguf
+          [ -f "$MODEL_PATH" ] || curl -L "$TINY_MODEL_URL" -o "$MODEL_PATH"
+          [ -f "$ADAPTER_PATH" ] || curl -L "$TINY_ADAPTER_URL" -o "$ADAPTER_PATH"
 
       - name: Run spec file ${{ matrix.spec_file }}
-        env:
-          CRYSTAL_OPTS: --error-trace
-          MODEL_PATH: models/tiny_model.gguf
-          ADAPTER_PATH: adapters/tiny_model_adapter.gguf
-          LLAMA_CPP_DIR: ${{ github.workspace }}
-          GC_DEBUG: "1"
         run: |
           echo "Running ${{ matrix.spec_file }}"
           echo "Model path: $MODEL_PATH"
           echo "Adapter path: $ADAPTER_PATH"
-          echo "LLAMA_CPP_DIR: $LLAMA_CPP_DIR"
           echo "Working directory: $(pwd)"
           crystal spec "${{ matrix.spec_file }}"
 
