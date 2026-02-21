@@ -8,15 +8,14 @@
 
 Crystal bindings for [llama.cpp](https://github.com/ggml-org/llama.cpp), a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.
 
-Please check the [LLAMA_VERSION](LLAMA_VERSION) file for the current compatible version of llama.cpp.
+The version in `shard.yml` corresponds to the compatible llama.cpp build number.
 
 This project is under active development and may change rapidly.
 
 ## Versioning Policy
 
 - This library version tracks the upstream `llama.cpp` build number.
-- `LLAMA_VERSION` uses the upstream format (for example `b8119`).
-- The shard version uses the numeric part (for example `8119`).
+- The version in `shard.yml` uses the numeric build value (for example `8119`).
 - Git tags use the `v<build>` format (for example `v8119`).
 - Compatibility target is one upstream build at a time.
 - Consumers should pin an exact shard version (for example `8119`), not a version range.
@@ -41,10 +40,10 @@ You need the llama.cpp shared library (libllama) available on your system.
 #### 1. Download Prebuilt Binary (Recommended)
 
 ```sh
-LLAMA_VERSION=$(cat LLAMA_VERSION)
-curl -L "https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.tar.gz" -o llama.tar.gz
+LLAMA_BUILD="b$(shards version)"
+curl -L "https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_BUILD}/llama-${LLAMA_BUILD}-bin-ubuntu-x64.tar.gz" -o llama.tar.gz
 tar -xzf llama.tar.gz
-sudo cp llama-${LLAMA_VERSION}/*.so* /usr/local/lib/
+sudo cp llama-${LLAMA_BUILD}/*.so* /usr/local/lib/
 sudo ldconfig
 ```
 
@@ -96,7 +95,8 @@ DYLD_LIBRARY_PATH="$LLAMA_LIB_DIR" ./simple --model models/tiny_model.gguf
 ```bash
 git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
-git checkout $(cat ../LLAMA_VERSION)
+LLAMA_BUILD="b$(shards version ..)"
+git checkout "${LLAMA_BUILD}"
 mkdir build && cd build
 cmake .. && cmake --build . --config Release
 sudo cmake --install . && sudo ldconfig

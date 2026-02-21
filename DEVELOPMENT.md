@@ -74,32 +74,32 @@ This document outlines the development guidelines for the llama.cr project, prim
 
 ### Version Mapping Rules
 
-- `LLAMA_VERSION` must use upstream format: `b<build>` (example: `b8119`).
 - `shard.yml` version must use the numeric build value (example: `8119`).
-- Release tags must use `v<build>` (example: `v8119`).
-- Keep all three values aligned in the same update.
+- Release tags must use `v<build>` format (example: `v8119`).
+- When referenced in documentation or scripts, the build is prefixed with `b` (example: `b8119`).
 
-- Document which version of llama.cpp the library is compatible with
-- When updating to support a new llama.cpp version:
-  1. Update the version in `LLAMA_VERSION` file
-  2. Update `version` in `shard.yml` to the matching numeric build
-  3. Create/update release tag as `v<build>`
-  4. Run `assets/download_headers.sh` to download the new header files
-  5. Update `src/llama/lib_llama.cr` bindings (struct/enum/function signatures)
-  6. Update wrapper code under `src/llama/` when API behavior changes (especially LoRA-related paths)
-  7. Ensure workflows are aligned with the current release artifacts (`.tar.gz`) and test asset requirements
-  8. Verify docs (`README.md`) still match the build/runtime model
-  9. Run tests:
-     - `crystal spec`
-     - LoRA specs with adapter path configured when applicable
-    - If model loading reports "No backends loaded", set `GGML_BACKEND_PATH` to a backend library file (for example `libggml-cpu-haswell.so`), not a directory
-    - Typical local command:
-      - `MODEL_PATH=/path/to/model.gguf ADAPTER_PATH=/path/to/adapter.gguf LIBRARY_PATH=/path/to/libs LD_LIBRARY_PATH=/path/to/libs GGML_BACKEND_PATH=/path/to/libs/libggml-cpu-haswell.so crystal spec`
-  10. Validate examples:
-     - `examples/simple.cr`
-     - `examples/chat.cr`
-     - `examples/tokenize.cr`
-  11. Commit changes and create a pull request
+### Version Update Process
+
+Document which version of llama.cpp the library is compatible with. When updating to support a new llama.cpp version:
+
+1. Update `version` in `shard.yml` to the matching numeric build
+2. Create/update release tag as `v<build>`
+3. Run `assets/download_headers.sh` to download the new header files
+4. Update `src/llama/lib_llama.cr` bindings (struct/enum/function signatures)
+5. Update wrapper code under `src/llama/` when API behavior changes (especially LoRA-related paths)
+6. Ensure workflows are aligned with the current release artifacts (`.tar.gz`) and test asset requirements
+7. Verify docs (`README.md`) still match the build/runtime model
+8. Run tests:
+  - `crystal spec`
+  - LoRA specs with adapter path configured when applicable
+  - If model loading reports "No backends loaded", set `GGML_BACKEND_PATH` to a backend library file (for example `libggml-cpu-haswell.so`), not a directory
+  - Typical local command:
+    - `MODEL_PATH=/path/to/model.gguf ADAPTER_PATH=/path/to/adapter.gguf LIBRARY_PATH=/path/to/libs LD_LIBRARY_PATH=/path/to/libs GGML_BACKEND_PATH=/path/to/libs/libggml-cpu-haswell.so crystal spec`
+9. Validate examples:
+  - `examples/simple.cr`
+  - `examples/chat.cr`
+  - `examples/tokenize.cr`
+10. Commit changes and create a pull request
 
 ### Standard Linker/Runtime Environment
 

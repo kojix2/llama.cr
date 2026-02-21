@@ -79,7 +79,7 @@ require "./llama/sampler"
 
 module Llama
   VERSION                      = {{ `shards version #{__DIR__}`.chomp.stringify }}
-  LLAMA_CPP_COMPATIBLE_VERSION = read_file("#{__DIR__}/LLAMA_VERSION").chomp
+  LLAMA_CPP_COMPATIBLE_VERSION = "b#{VERSION}"
 
   # ==== Native constants (wrapped for user convenience) ====
   DEFAULT_SEED    = LibLlama::LLAMA_DEFAULT_SEED
