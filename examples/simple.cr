@@ -18,7 +18,11 @@ OptionParser.parse do |parser|
     n_predict = n.to_i
   end
 
-  parser.on("-ngl N", "--n-gpu-layers=N", "Number of layers to offload to GPU (default: 99)") do |n|
+  parser.on("-g N", "--n-gpu-layers=N", "Number of layers to offload to GPU (default: 99)") do |n|
+    ngl = n.to_i
+  end
+
+  parser.on("--ngl=N", "Alias for --n-gpu-layers") do |n|
     ngl = n.to_i
   end
 

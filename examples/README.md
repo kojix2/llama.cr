@@ -37,8 +37,8 @@ For more models, visit [TheBloke's Hugging Face page](https://huggingface.co/The
 This example demonstrates how to generate text from a prompt.
 
 ```bash
-crystal build simple.cr --link-flags="-L/path/to/llama.cpp/build/bin"
-LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./simple /path/to/model.gguf "Once upon a time"
+LIBRARY_PATH=/path/to/llama/libs crystal build simple.cr --link-flags="-L/path/to/llama/libs -Wl,-rpath,/path/to/llama/libs -lllama -lggml"
+LD_LIBRARY_PATH=/path/to/llama/libs ./simple --model /path/to/model.gguf "Once upon a time"
 ```
 
 ### Chat Example
@@ -46,8 +46,8 @@ LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./simple /path/to/model.gguf "Once 
 This example demonstrates how to use the chat functionality with chat templates.
 
 ```bash
-crystal build chat.cr --link-flags="-L/path/to/llama.cpp/build/bin"
-LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./chat /path/to/model.gguf
+LIBRARY_PATH=/path/to/llama/libs crystal build chat.cr --link-flags="-L/path/to/llama/libs -Wl,-rpath,/path/to/llama/libs -lllama -lggml"
+LD_LIBRARY_PATH=/path/to/llama/libs ./chat --model /path/to/model.gguf
 ```
 
 ### Tokenization Example
@@ -55,8 +55,19 @@ LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./chat /path/to/model.gguf
 This example demonstrates how to tokenize text and work with the model's vocabulary.
 
 ```bash
-crystal build tokenize.cr --link-flags="-L/path/to/llama.cpp/build/bin"
-LD_LIBRARY_PATH=/path/to/llama.cpp/build/bin ./tokenize /path/to/model.gguf "Hello, world!"
+LIBRARY_PATH=/path/to/llama/libs crystal build tokenize.cr --link-flags="-L/path/to/llama/libs -Wl,-rpath,/path/to/llama/libs -lllama -lggml"
+LD_LIBRARY_PATH=/path/to/llama/libs ./tokenize --model /path/to/model.gguf --prompt "Hello, world!"
+```
+
+### Web Chat Server
+
+This example starts a browser-based chat UI.
+
+```bash
+cd examples
+shards install
+LIBRARY_PATH=/path/to/llama/libs crystal build server.cr --link-flags="-L/path/to/llama/libs -Wl,-rpath,/path/to/llama/libs -lllama -lggml" -o server
+LD_LIBRARY_PATH=/path/to/llama/libs ./server --model /path/to/model.gguf --port 3000
 ```
 
 ## Example List
