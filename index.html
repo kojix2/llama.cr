@@ -314,7 +314,7 @@
 <a href="https://tokei.kojix2.net/github/kojix2/llama.cr"><img src="https://img.shields.io/endpoint?url=https://tokei.kojix2.net/badge/github/kojix2/llama.cr/lines" alt="Lines of Code" /></a>
 <img src="https://img.shields.io/badge/PURE-VIBE_CODING-magenta" alt="Static Badge" /></p>
 <p>Crystal bindings for <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.</p>
-<p>Please check the <a href="LLAMA_VERSION">LLAMA_VERSION</a> file for the current compatible version of llama.cpp.</p>
+<p>The version in <code>shard.yml</code> corresponds to the compatible llama.cpp build number.</p>
 <p>This project is under active development and may change rapidly.</p>
 <h2><a id="versioning-policy" class="anchor" href="#versioning-policy">
   <svg class="octicon-link" aria-hidden="true">
@@ -323,8 +323,7 @@
 </a>Versioning Policy</h2>
 <ul>
 <li>This library version tracks the upstream <code>llama.cpp</code> build number.</li>
-<li><code>LLAMA_VERSION</code> uses the upstream format (for example <code>b8119</code>).</li>
-<li>The shard version uses the numeric part (for example <code>8119</code>).</li>
+<li>The version in <code>shard.yml</code> uses the numeric build value (for example <code>8119</code>).</li>
 <li>Git tags use the <code>v&lt;build&gt;</code> format (for example <code>v8119</code>).</li>
 <li>Compatibility target is one upstream build at a time.</li>
 <li>Consumers should pin an exact shard version (for example <code>8119</code>), not a version range.</li>
@@ -360,10 +359,10 @@
     <use href="#octicon-link"/>
   </svg>
 </a>1. Download Prebuilt Binary (Recommended)</h4>
-<pre><code class="language-sh">LLAMA_VERSION=$(cat LLAMA_VERSION)
-curl -L &quot;https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-ubuntu-x64.tar.gz&quot; -o llama.tar.gz
+<pre><code class="language-sh">LLAMA_BUILD=&quot;b$(shards version)&quot;
+curl -L &quot;https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_BUILD}/llama-${LLAMA_BUILD}-bin-ubuntu-x64.tar.gz&quot; -o llama.tar.gz
 tar -xzf llama.tar.gz
-sudo cp llama-${LLAMA_VERSION}/*.so* /usr/local/lib/
+sudo cp llama-${LLAMA_BUILD}/*.so* /usr/local/lib/
 sudo ldconfig</code></pre>
 <p>For macOS, replace <code>ubuntu-x64</code> with <code>macos-arm64</code> and <code>*.so</code> with <code>*.dylib</code>.</p>
 <p><strong>Alternative: Use local libraries with standard linker flags</strong></p>
@@ -392,7 +391,8 @@ DYLD_LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; ./simple --model models/tiny_model.
 <summary>Build from source (advanced users)</summary>
 <pre><code class="language-bash">git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
-git checkout $(cat ../LLAMA_VERSION)
+LLAMA_BUILD=&quot;b$(shards version ..)&quot;
+git checkout &quot;${LLAMA_BUILD}&quot;
 mkdir build &amp;&amp; cd build
 cmake .. &amp;&amp; cmake --build . --config Release
 sudo cmake --install . &amp;&amp; sudo ldconfig</code></pre>
