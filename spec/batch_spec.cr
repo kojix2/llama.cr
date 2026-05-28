@@ -43,11 +43,11 @@ describe Llama::Batch do
       batch.n_tokens.should eq(tokens.size)
     end
 
-    it "handles empty token arrays" do
+    it "rejects empty token arrays" do
       tokens = [] of Int32
-      batch = Llama::Batch.get_one(tokens)
-      batch.should_not be_nil
-      batch.n_tokens.should eq(0)
+      expect_raises(ArgumentError, "Tokens array cannot be empty") do
+        Llama::Batch.get_one(tokens)
+      end
     end
   end
 
