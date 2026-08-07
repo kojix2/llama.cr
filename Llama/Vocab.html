@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Crystal Docs 1.19.1">
+<meta name="generator" content="Crystal Docs 1.20.3">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="llama">
 
@@ -344,7 +344,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L5" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L5" target="_blank">
         llama/vocab.cr
       </a>
     
@@ -490,6 +490,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#suppress_tokens%3AArray%28Int32%29-instance-method" class="signature"><strong>#suppress_tokens</strong> : Array(Int32)</a>
+        
+          <div class="summary"><p>Returns the model-specific tokens suppressed during sampling.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaVocab%29-instance-method" class="signature"><strong>#to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaVocab)</a>
         
           <div class="summary"><p>Returns the raw pointer to the underlying llama_vocab structure</p></div>
@@ -587,7 +594,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -624,7 +631,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L180" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L180" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -645,7 +652,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L185" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L185" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -666,7 +673,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L190" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L190" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -687,7 +694,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L197" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L206" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -708,7 +715,7 @@ Users should obtain Vocab instances through Model#vocab.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L232" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L241" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -731,7 +738,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L69" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -752,7 +759,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L227" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L236" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -773,7 +780,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L202" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L211" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -794,7 +801,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L207" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L216" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -825,7 +832,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L115" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -846,7 +853,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L222" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L231" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -867,7 +874,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L14" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L14" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -888,7 +895,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L212" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L221" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -909,7 +916,28 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L217" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L226" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="suppress_tokens:Array(Int32)-instance-method">
+      <div class="signature">
+        
+        def <strong>suppress_tokens</strong> : Array(Int32)
+
+        <a class="method-permalink" href="#suppress_tokens%3AArray%28Int32%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Returns the model-specific tokens suppressed during sampling.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L195" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -930,7 +958,7 @@ token text entries when reconstructing generated output.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L237" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L246" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -955,7 +983,7 @@ token as output text.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L24" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -986,7 +1014,7 @@ token as output text.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1010,7 +1038,7 @@ token as output text.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L34" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L34" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1031,7 +1059,7 @@ token as output text.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/vocab.cr#L129" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/vocab.cr#L129" target="_blank">View source</a>]
         
       </div>
     </div>

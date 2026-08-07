@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Crystal Docs 1.19.1">
+<meta name="generator" content="Crystal Docs 1.20.3">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="llama">
 
@@ -323,7 +323,7 @@ to reduce repetition and improve diversity in the generated text.
 It can penalize recently used tokens, frequent tokens, and more.</p>
 <p>Example:</p>
 <pre><code class="language-crystal"><span class="c"># Apply penalties to the last 64 tokens with a repetition penalty of 1.1</span>
-sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">Penalties</span>.new(<span class="n">64</span>, <span class="n">1.1</span>, <span class="n">0.0</span>, <span class="n">0.0</span>)</code></pre>
+sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">Penalties</span>.new(vocab, <span class="n">64</span>, <span class="n">1.1</span>, <span class="n">0.0</span>, <span class="n">0.0</span>)</code></pre>
 
 
 
@@ -350,7 +350,7 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/sampler/penalties.cr#L14" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/sampler/penalties.cr#L14" target="_blank">
         llama/sampler/penalties.cr
       </a>
     
@@ -373,9 +373,16 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28penalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)</a>
+        <a href="#new%28vocab%3AVocab%2Cpenalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(vocab : Vocab, penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)</a>
         
           <div class="summary"><p>Creates a new Penalties sampler</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#new%28n_vocab%3AInt32%2Cpenalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method" class="signature"><strong>.new</strong>(n_vocab : Int32, penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)</a>
+        
+          <div class="summary"><p>Creates a new Penalties sampler from a vocabulary size.</p></div>
         
       </li>
     
@@ -460,12 +467,12 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(penalty_last_n:Int32,penalty_repeat:Float32,penalty_freq:Float32,penalty_present:Float32)-class-method">
+    <div class="entry-detail" id="new(vocab:Vocab,penalty_last_n:Int32,penalty_repeat:Float32,penalty_freq:Float32,penalty_present:Float32)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)
+        def self.<strong>new</strong>(vocab : <a href="../../Llama/Vocab.html">Vocab</a>, penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)
 
-        <a class="method-permalink" href="#new%28penalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28vocab%3AVocab%2Cpenalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method">#</a>
       </div>
       
         <div class="doc">
@@ -473,7 +480,8 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
           <p>Creates a new Penalties sampler</p>
 <p>Parameters:</p>
 <ul>
-<li>penalty_last_n: Last n tokens to penalize (0 = disable, -1 = context size)</li>
+<li>vocab: Vocabulary whose tokens will be sampled</li>
+<li>penalty_last_n: Last n tokens to penalize (0 = disable)</li>
 <li>penalty_repeat: Repetition penalty (1.0 = disabled)</li>
 <li>penalty_freq: Frequency penalty (0.0 = disabled)</li>
 <li>penalty_present: Presence penalty (0.0 = disabled)</li>
@@ -487,7 +495,28 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/a72c2de24c1781a7e5c2425b43ca65c591774b87/src/llama/sampler/penalties.cr#L25" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/sampler/penalties.cr#L26" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="new(n_vocab:Int32,penalty_last_n:Int32,penalty_repeat:Float32,penalty_freq:Float32,penalty_present:Float32)-class-method">
+      <div class="signature">
+        
+        def self.<strong>new</strong>(n_vocab : Int32, penalty_last_n : Int32, penalty_repeat : Float32, penalty_freq : Float32, penalty_present : Float32)
+
+        <a class="method-permalink" href="#new%28n_vocab%3AInt32%2Cpenalty_last_n%3AInt32%2Cpenalty_repeat%3AFloat32%2Cpenalty_freq%3AFloat32%2Cpenalty_present%3AFloat32%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new Penalties sampler from a vocabulary size.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/a81f39fb8483c3257831d0abb6ad1aa51311c271/src/llama/sampler/penalties.cr#L31" target="_blank">View source</a>]
         
       </div>
     </div>

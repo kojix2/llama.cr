@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Crystal Docs 1.19.1">
+<meta name="generator" content="Crystal Docs 1.20.3">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="llama">
 
@@ -337,7 +337,7 @@
 export LLAMA_LIB_DIR=&quot;$(brew --prefix llama.cpp)/lib&quot;</code></pre>
 <p>Linux (prebuilt release matching this shard version)</p>
 <pre><code class="language-sh">VERSION=&quot;$(shards version)&quot;
-BUILD=&quot;$(echo &quot;$VERSION&quot; | sed -E 's/^0\.([0-9]+)\.0$/\1/')&quot;
+BUILD=&quot;$(echo &quot;$VERSION&quot; | sed -E 's/^0\.([0-9]+)\.[0-9]+$/\1/')&quot;
 LLAMA_BUILD=&quot;b${BUILD}&quot;
 curl -L &quot;https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_BUILD}/llama-${LLAMA_BUILD}-bin-ubuntu-x64.tar.gz&quot; -o llama.tar.gz
 tar -xzf llama.tar.gz
@@ -379,7 +379,7 @@ DYLD_LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; ./simple --model models/tiny_model.
 <pre><code class="language-sh">git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
 VERSION=&quot;$(shards version ..)&quot;
-BUILD=&quot;$(echo &quot;$VERSION&quot; | sed -E 's/^0\.([0-9]+)\.0$/\1/')&quot;
+BUILD=&quot;$(echo &quot;$VERSION&quot; | sed -E 's/^0\.([0-9]+)\.[0-9]+$/\1/')&quot;
 LLAMA_BUILD=&quot;b${BUILD}&quot;
 git checkout &quot;${LLAMA_BUILD}&quot;
 mkdir build &amp;&amp; cd build
