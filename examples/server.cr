@@ -90,194 +90,194 @@ end
 # Serve the chat UI (SPA)
 get "/" do |_env|
   <<-HTML
-  <!DOCTYPE html>
-  <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <title>Llama.cr Chat Server</title>
-    <style>
-      body {
-        font-family: 'Segoe UI', Arial, sans-serif;
-        margin: 0;
-        background: #ececec;
-      }
-      .chat-container {
-        max-width: 480px;
-        margin: 40px auto;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 2px 16px #0002;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        height: 80vh;
-      }
-      .chat-header {
-        padding: 1em;
-        border-bottom: 1px solid #e0e0e0;
-        font-size: 1.3em;
-        font-weight: bold;
-        background: #f7f7f7;
-        border-radius: 12px 12px 0 0;
-      }
-      .chat-timeline {
-        flex: 1;
-        overflow-y: auto;
-        padding: 1em;
-        background: #f5f6fa;
-        display: flex;
-        flex-direction: column;
-        gap: 0.7em;
-      }
-      .msg-row {
-        display: flex;
-        align-items: flex-end;
-      }
-      .msg-row.user {
-        justify-content: flex-end;
-      }
-      .msg-row.assistant {
-        justify-content: flex-start;
-      }
-      .msg-bubble {
-        max-width: 70%;
-        padding: 0.7em 1em;
-        border-radius: 18px;
-        font-size: 1em;
-        line-height: 1.5;
-        box-shadow: 0 1px 4px #0001;
-        word-break: break-word;
-        display: flex;
-        flex-direction: column;
-      }
-      .msg-bubble.user {
-        background: #d2eaff;
-        color: #1a3557;
-        border-bottom-right-radius: 4px;
-        margin-left: 1em;
-      }
-      .msg-bubble.assistant {
-        background: #f0f0f0;
-        color: #222;
-        border-bottom-left-radius: 4px;
-        margin-right: 1em;
-      }
-      .msg-label {
-        font-size: 0.8em;
-        color: #888;
-        margin-bottom: 0.2em;
-      }
-      .input-area {
-        display: flex;
-        border-top: 1px solid #e0e0e0;
-        padding: 0.7em;
-        background: #fafbfc;
-        border-radius: 0 0 12px 12px;
-      }
-      .input-area input {
-        flex: 1;
-        font-size: 1em;
-        padding: 0.5em;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        outline: none;
-        margin-right: 0.5em;
-      }
-      .input-area button {
-        font-size: 1em;
-        padding: 0.5em 1.2em;
-        border-radius: 6px;
-        border: none;
-        background: #2196f3;
-        color: #fff;
-        cursor: pointer;
-        transition: background 0.2s;
-      }
-      .input-area button:hover {
-        background: #1769aa;
-      }
-      .words span {
-        display: inline-block;
-        margin-right: 2px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="chat-container">
-      <div class="chat-header">Llama.cr Chat</div>
-      <div id="timeline" class="chat-timeline"></div>
-      <form id="chat-form" class="input-area" autocomplete="off">
-        <input type="text" id="user-input" placeholder="Type your message..." autofocus autocomplete="off"/>
-        <button type="submit">Send</button>
-      </form>
-    </div>
-    <script>
-      const timeline = document.getElementById('timeline');
-      const form = document.getElementById('chat-form');
-      const input = document.getElementById('user-input');
-      let history = [];
-
-      // Render chat history
-      function render() {
-        timeline.innerHTML = '';
-        history.forEach(msg => {
-          const row = document.createElement('div');
-          row.className = 'msg-row ' + msg.role;
-          const bubble = document.createElement('div');
-          bubble.className = 'msg-bubble ' + msg.role;
-          const label = document.createElement('div');
-          label.className = 'msg-label';
-          label.textContent = msg.role === 'user' ? 'You' : 'Assistant';
-          bubble.appendChild(label);
-          if(msg.role === 'assistant') {
-            const spanWrap = document.createElement('span');
-            spanWrap.className = 'words';
-            msg.words.forEach(word => {
-              const s = document.createElement('span');
-              s.textContent = word;
-              spanWrap.appendChild(s);
-            });
-            bubble.appendChild(spanWrap);
-          } else {
-            bubble.appendChild(document.createTextNode(msg.content));
-          }
-          row.appendChild(bubble);
-          timeline.appendChild(row);
-        });
-        timeline.scrollTop = timeline.scrollHeight;
-      }
-
-      // Send user message and animate assistant response
-      async function sendMessage(text) {
-        history.push({role: 'user', content: text});
-        render();
-        input.value = '';
-        const res = await fetch('/api/chat', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({history: history})
-        });
-        const data = await res.json();
-        // Animate assistant response word by word
-        let assistantMsg = {role: 'assistant', words: []};
-        history.push(assistantMsg);
-        render();
-        for(let i=0; i<data.words.length; i++) {
-          assistantMsg.words.push(data.words[i]);
-          render();
-          await new Promise(r => setTimeout(r, 60));
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Llama.cr Chat Server</title>
+      <style>
+        body {
+          font-family: 'Segoe UI', Arial, sans-serif;
+          margin: 0;
+          background: #ececec;
         }
-      }
+        .chat-container {
+          max-width: 480px;
+          margin: 40px auto;
+          background: #fff;
+          border-radius: 12px;
+          box-shadow: 0 2px 16px #0002;
+          padding: 0;
+          display: flex;
+          flex-direction: column;
+          height: 80vh;
+        }
+        .chat-header {
+          padding: 1em;
+          border-bottom: 1px solid #e0e0e0;
+          font-size: 1.3em;
+          font-weight: bold;
+          background: #f7f7f7;
+          border-radius: 12px 12px 0 0;
+        }
+        .chat-timeline {
+          flex: 1;
+          overflow-y: auto;
+          padding: 1em;
+          background: #f5f6fa;
+          display: flex;
+          flex-direction: column;
+          gap: 0.7em;
+        }
+        .msg-row {
+          display: flex;
+          align-items: flex-end;
+        }
+        .msg-row.user {
+          justify-content: flex-end;
+        }
+        .msg-row.assistant {
+          justify-content: flex-start;
+        }
+        .msg-bubble {
+          max-width: 70%;
+          padding: 0.7em 1em;
+          border-radius: 18px;
+          font-size: 1em;
+          line-height: 1.5;
+          box-shadow: 0 1px 4px #0001;
+          word-break: break-word;
+          display: flex;
+          flex-direction: column;
+        }
+        .msg-bubble.user {
+          background: #d2eaff;
+          color: #1a3557;
+          border-bottom-right-radius: 4px;
+          margin-left: 1em;
+        }
+        .msg-bubble.assistant {
+          background: #f0f0f0;
+          color: #222;
+          border-bottom-left-radius: 4px;
+          margin-right: 1em;
+        }
+        .msg-label {
+          font-size: 0.8em;
+          color: #888;
+          margin-bottom: 0.2em;
+        }
+        .input-area {
+          display: flex;
+          border-top: 1px solid #e0e0e0;
+          padding: 0.7em;
+          background: #fafbfc;
+          border-radius: 0 0 12px 12px;
+        }
+        .input-area input {
+          flex: 1;
+          font-size: 1em;
+          padding: 0.5em;
+          border-radius: 6px;
+          border: 1px solid #ccc;
+          outline: none;
+          margin-right: 0.5em;
+        }
+        .input-area button {
+          font-size: 1em;
+          padding: 0.5em 1.2em;
+          border-radius: 6px;
+          border: none;
+          background: #2196f3;
+          color: #fff;
+          cursor: pointer;
+          transition: background 0.2s;
+        }
+        .input-area button:hover {
+          background: #1769aa;
+        }
+        .words span {
+          display: inline-block;
+          margin-right: 2px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="chat-container">
+        <div class="chat-header">Llama.cr Chat</div>
+        <div id="timeline" class="chat-timeline"></div>
+        <form id="chat-form" class="input-area" autocomplete="off">
+          <input type="text" id="user-input" placeholder="Type your message..." autofocus autocomplete="off"/>
+          <button type="submit">Send</button>
+        </form>
+      </div>
+      <script>
+        const timeline = document.getElementById('timeline');
+        const form = document.getElementById('chat-form');
+        const input = document.getElementById('user-input');
+        let history = [];
 
-      form.onsubmit = e => {
-        e.preventDefault();
-        const text = input.value.trim();
-        if(text) sendMessage(text);
-      };
-    </script>
-  </body>
-  </html>
-  HTML
+        // Render chat history
+        function render() {
+          timeline.innerHTML = '';
+          history.forEach(msg => {
+            const row = document.createElement('div');
+            row.className = 'msg-row ' + msg.role;
+            const bubble = document.createElement('div');
+            bubble.className = 'msg-bubble ' + msg.role;
+            const label = document.createElement('div');
+            label.className = 'msg-label';
+            label.textContent = msg.role === 'user' ? 'You' : 'Assistant';
+            bubble.appendChild(label);
+            if(msg.role === 'assistant') {
+              const spanWrap = document.createElement('span');
+              spanWrap.className = 'words';
+              msg.words.forEach(word => {
+                const s = document.createElement('span');
+                s.textContent = word;
+                spanWrap.appendChild(s);
+              });
+              bubble.appendChild(spanWrap);
+            } else {
+              bubble.appendChild(document.createTextNode(msg.content));
+            }
+            row.appendChild(bubble);
+            timeline.appendChild(row);
+          });
+          timeline.scrollTop = timeline.scrollHeight;
+        }
+
+        // Send user message and animate assistant response
+        async function sendMessage(text) {
+          history.push({role: 'user', content: text});
+          render();
+          input.value = '';
+          const res = await fetch('/api/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({history: history})
+          });
+          const data = await res.json();
+          // Animate assistant response word by word
+          let assistantMsg = {role: 'assistant', words: []};
+          history.push(assistantMsg);
+          render();
+          for(let i=0; i<data.words.length; i++) {
+            assistantMsg.words.push(data.words[i]);
+            render();
+            await new Promise(r => setTimeout(r, 60));
+          }
+        }
+
+        form.onsubmit = e => {
+          e.preventDefault();
+          const text = input.value.trim();
+          if(text) sendMessage(text);
+        };
+      </script>
+    </body>
+    </html>
+    HTML
 end
 
 # Chat API endpoint

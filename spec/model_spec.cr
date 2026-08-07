@@ -8,6 +8,8 @@ describe "Llama with model" do
     model = Llama::Model.new(MODEL_PATH)
     model.should_not be_nil
     model.n_params.should be > 0
+    model.n_layer_nextn.should be >= 0
+    model.ftype.should be_a(Llama::LibLlama::LlamaFtype)
     puts "  - Model parameters: #{model.n_params}"
     puts "  - Embedding size: #{model.n_embd}"
     puts "  - Layers: #{model.n_layer}"

@@ -7,3 +7,9 @@ The headers are reference files. They show which version of the llama.cpp C API 
 They are not used to build the shard. llama.cr links to the installed `libllama`.
 
 These files are useful when checking version mismatches between the Crystal binding and the installed llama.cpp library.
+
+Update them and `shard.yml` for a new llama.cpp build with:
+
+```sh
+crystal run assets/download_headers.cr -- <build>
+```

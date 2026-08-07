@@ -8,6 +8,7 @@ describe Llama::Vocab do
 
       vocab.should_not be_nil
       vocab.n_tokens.should be > 0
+      vocab.suppress_tokens.should be_a(Array(Int32))
       puts "  - Vocabulary size: #{vocab.n_tokens} tokens"
     end
 

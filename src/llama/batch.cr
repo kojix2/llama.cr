@@ -13,7 +13,6 @@ module Llama
     # Raises:
     # - ArgumentError if parameters are invalid
     # - Llama::Batch::Error if the batch cannot be created
-    # ameba:disable Metrics/CyclomaticComplexity
     def initialize(n_tokens : Int32, embd : Int32 = 0, n_seq_max : Int32 = 8)
       if n_tokens <= 0
         raise ArgumentError.new("n_tokens must be positive")

@@ -481,6 +481,13 @@ module Llama
     end
 
     private def validate_batch_for_decode!(batch : LibLlama::LlamaBatch, batch_size : Int32, context_size : Int32) : Nil
+      validate_batch_token_count!(batch, batch_size)
+      validate_batch_positions!(batch, context_size)
+      validate_batch_sequence_ids!(batch)
+      validate_batch_logits!(batch)
+    end
+
+    private def validate_batch_token_count!(batch : LibLlama::LlamaBatch, batch_size : Int32) : Nil
       if batch.n_tokens <= 0
         error_msg = Llama.format_error(
           "Cannot decode empty batch",
@@ -498,7 +505,9 @@ module Llama
         )
         raise Batch::Error.new(error_msg)
       end
+    end
 
+    private def validate_batch_positions!(batch : LibLlama::LlamaBatch, context_size : Int32) : Nil
       unless batch.pos.null?
         batch.n_tokens.times do |i|
           pos = batch.pos[i]
@@ -512,7 +521,9 @@ module Llama
           end
         end
       end
+    end
 
+    private def validate_batch_sequence_ids!(batch : LibLlama::LlamaBatch) : Nil
       if !batch.n_seq_id.null? && !batch.seq_id.null?
         batch.n_tokens.times do |i|
           n_seq = batch.n_seq_id[i]
@@ -547,7 +558,9 @@ module Llama
           end
         end
       end
+    end
 
+    private def validate_batch_logits!(batch : LibLlama::LlamaBatch) : Nil
       unless batch.logits.null?
         batch.n_tokens.times do |i|
           logits = batch.logits[i]

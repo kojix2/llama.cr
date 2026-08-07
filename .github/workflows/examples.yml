@@ -8,8 +8,8 @@ on:
 jobs:
   build:
     env:
-      MODEL_PATH: models/tiny_model.gguf
-      TINY_MODEL_URL: https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+      MODEL_PATH: models/stories15M-q4_0.gguf
+      TINY_MODEL_URL: https://huggingface.co/ggml-org/tiny-llamas/resolve/main/stories15M-q4_0.gguf
     strategy:
       fail-fast: false
       matrix:
@@ -96,7 +96,7 @@ jobs:
         uses: actions/cache@v6
         with:
           path: models
-          key: ${{ runner.os }}-models-tinyllama-v2
+          key: ${{ runner.os }}-models-stories15m-v1
 
       - name: Download test model (if not cached)
         if: steps.cache-models.outputs.cache-hit != 'true'

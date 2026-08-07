@@ -40,7 +40,7 @@ Linux (prebuilt release matching this shard version)
 
 ```sh
 VERSION="$(shards version)"
-BUILD="$(echo "$VERSION" | sed -E 's/^0\.([0-9]+)\.0$/\1/')"
+BUILD="$(echo "$VERSION" | sed -E 's/^0\.([0-9]+)\.[0-9]+$/\1/')"
 LLAMA_BUILD="b${BUILD}"
 curl -L "https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_BUILD}/llama-${LLAMA_BUILD}-bin-ubuntu-x64.tar.gz" -o llama.tar.gz
 tar -xzf llama.tar.gz
@@ -102,7 +102,7 @@ Build from source:
 git clone https://github.com/ggml-org/llama.cpp.git
 cd llama.cpp
 VERSION="$(shards version ..)"
-BUILD="$(echo "$VERSION" | sed -E 's/^0\.([0-9]+)\.0$/\1/')"
+BUILD="$(echo "$VERSION" | sed -E 's/^0\.([0-9]+)\.[0-9]+$/\1/')"
 LLAMA_BUILD="b${BUILD}"
 git checkout "${LLAMA_BUILD}"
 mkdir build && cd build

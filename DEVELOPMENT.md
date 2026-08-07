@@ -82,11 +82,11 @@ This document outlines the development guidelines for the llama.cr project, prim
 
 Document which version of llama.cpp the library is compatible with. When updating to support a new llama.cpp version:
 
-1. Update `version` in `shard.yml` to `0.<build>.0`
+1. Run `crystal run assets/download_headers.cr -- <build>` to update `shard.yml` and download the matching headers
 2. Create/update release tag as `v0.<build>.0`
-3. Run `assets/download_headers.sh` to download the new header files
-4. Update `src/llama/lib_llama.cr` bindings (struct/enum/function signatures)
-5. Update wrapper code under `src/llama/` when API behavior changes (especially LoRA-related paths)
+3. Review the reported header diff and update `src/llama/lib_llama.cr` bindings (struct/enum/function signatures)
+4. Update wrapper code under `src/llama/` when API behavior changes (especially LoRA-related paths)
+5. Run `crystal run scripts/check_abi.cr` to verify C and Crystal struct layouts
 6. Ensure workflows are aligned with the current release artifacts (`.tar.gz`) and test asset requirements
 7. Verify docs (`README.md`) still match the build/runtime model
 8. Run tests:

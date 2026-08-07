@@ -41,6 +41,10 @@ describe Llama::Sampler::Base do
     model = Llama::Model.new(MODEL_PATH)
     vocab = model.vocab
 
+    # Penalties sampler
+    penalties = Llama::Sampler::Penalties.new(vocab, 64, 1.1_f32, 0.0_f32, 0.0_f32)
+    penalties.should_not be_nil
+
     # Infill sampler
     infill = Llama::Sampler::Infill.new(vocab)
     infill.should_not be_nil

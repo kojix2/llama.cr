@@ -27,8 +27,11 @@ module Llama
 
       params = LibLlama.llama_model_default_params
       params.n_gpu_layers = n_gpu_layers
-      params.use_mmap = use_mmap
-      params.use_mlock = use_mlock
+      params.load_mode = if use_mmap
+                           use_mlock ? LibLlama::LlamaLoadMode::MMAP_MLOCK : LibLlama::LlamaLoadMode::MMAP
+                         else
+                           use_mlock ? LibLlama::LlamaLoadMode::MLOCK : LibLlama::LlamaLoadMode::NONE
+                         end
       params.vocab_only = vocab_only
 
       @handle = LibLlama.llama_model_load_from_file(path, params)
@@ -94,6 +97,16 @@ module Llama
     # Returns the number of layers in the model
     def n_layer : Int32
       LibLlama.llama_model_n_layer(@handle)
+    end
+
+    # Returns the number of next-token-prediction layers in the model.
+    def n_layer_nextn : Int32
+      LibLlama.llama_model_n_layer_nextn(@handle)
+    end
+
+    # Returns the model file's quantization type.
+    def ftype : LibLlama::LlamaFtype
+      LibLlama.llama_model_ftype(@handle)
     end
 
     # Returns the number of attention heads in the model

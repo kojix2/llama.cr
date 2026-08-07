@@ -191,6 +191,15 @@ module Llama
       LibLlama.llama_vocab_get_add_sep(@handle)
     end
 
+    # Returns the model-specific tokens suppressed during sampling.
+    def suppress_tokens : Array(Int32)
+      count = 0
+      tokens = LibLlama.llama_vocab_get_suppress_tokens(@handle, pointerof(count))
+      return [] of Int32 if tokens.null? || count <= 0
+
+      Array(Int32).new(count) { |i| tokens[i] }
+    end
+
     # Special token methods
 
     # Returns the beginning-of-sentence token ID
