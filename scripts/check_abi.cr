@@ -6,8 +6,8 @@ C_PROBE = <<-'C'
   #include <stdio.h>
   #include "llama.h"
 
-  #define PRINT_SIZE(type) printf(#type ".sizeof=%zu\\n", sizeof(struct type))
-  #define PRINT_OFFSET(type, field) printf(#type "." #field "=%zu\\n", offsetof(struct type, field))
+  #define PRINT_SIZE(type) printf(#type ".sizeof=%zu\n", sizeof(struct type))
+  #define PRINT_OFFSET(type, field) printf(#type "." #field "=%zu\n", offsetof(struct type, field))
 
   int main(void) {
       PRINT_SIZE(llama_model_params);
