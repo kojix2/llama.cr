@@ -19,6 +19,15 @@ describe Llama::Batch do
     end
   end
 
+  describe "#free" do
+    it "can free an owned batch multiple times" do
+      batch = Llama::Batch.new(10)
+
+      batch.free
+      batch.free
+    end
+  end
+
   describe "#clone_dup" do
     it "raises NotImplementedError when clone is called" do
       batch = Llama::Batch.new(10)

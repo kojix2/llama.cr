@@ -56,30 +56,35 @@ def generate_words(context, vocab, sampler, prompt) : Array(String)
   batch = Llama::Batch.from_tokens(prompt_tokens)
   pos = prompt_tokens.size
   context_limit_reached = false
-  loop do
-    n_ctx = context.n_ctx
-    if batch.n_tokens > n_ctx
-      context_limit_reached = true
-      break
+  begin
+    loop do
+      n_ctx = context.n_ctx
+      if batch.n_tokens > n_ctx
+        context_limit_reached = true
+        break
+      end
+
+      if context.decode(batch) != 0
+        STDERR.puts "Failed to decode"
+        break
+      end
+      batch.free
+
+      new_token_id = sampler.sample(context)
+      break if vocab.eog?(new_token_id)
+
+      piece = vocab.token_to_piece(new_token_id, 0, true)
+      # Split by whitespace, punctuation, and newlines (supports English and Japanese)
+      piece.split(/([。、！？\n\s]+)/).each do |fragment|
+        words << fragment unless fragment.empty?
+      end
+
+      batch = Llama::Batch.from_tokens([new_token_id])
+      batch.to_unsafe.pos[0] = pos
+      pos += 1
     end
-
-    if context.decode(batch) != 0
-      STDERR.puts "Failed to decode"
-      break
-    end
-
-    new_token_id = sampler.sample(context)
-    break if vocab.eog?(new_token_id)
-
-    piece = vocab.token_to_piece(new_token_id, 0, true)
-    # Split by whitespace, punctuation, and newlines (supports English and Japanese)
-    piece.split(/([。、！？\n\s]+)/).each do |fragment|
-      words << fragment unless fragment.empty?
-    end
-
-    batch = Llama::Batch.from_tokens([new_token_id])
-    batch.to_unsafe.pos[0] = pos
-    pos += 1
+  ensure
+    batch.free
   end
   if context_limit_reached
     words << " [Context length limit reached!]"
@@ -302,11 +307,23 @@ post "/api/chat" do |env|
     end
   end
   local_context = model.context(n_ctx: n_ctx.to_u32, n_batch: n_ctx.to_u32)
-  local_sampler = build_sampler
-  prompt = local_context.apply_chat_template(messages, true, tmpl)
-  words = generate_words(local_context, vocab, local_sampler, prompt)
-  {words: words}.to_json
+  begin
+    local_sampler = build_sampler
+    begin
+      prompt = local_context.apply_chat_template(messages, true, tmpl)
+      words = generate_words(local_context, vocab, local_sampler, prompt)
+      {words: words}.to_json
+    ensure
+      local_sampler.free
+    end
+  ensure
+    local_context.free
+  end
 end
 
 Kemal.config.port = port
-Kemal.run
+begin
+  Kemal.run
+ensure
+  model.free
+end

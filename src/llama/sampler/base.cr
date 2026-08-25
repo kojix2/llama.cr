@@ -34,13 +34,20 @@ module Llama
         @handle = ptr
       end
 
-      # :nodoc:
-      # Frees the resources associated with this sampler.
-      def finalize
+      # Releases the underlying C resources.
+      #
+      # Calling this method multiple times is safe. A sampler owned by a
+      # SamplerChain is released with the chain instead.
+      def free : Nil
         if !@owned_by_chain && @handle && !@handle.null?
           LibLlama.llama_sampler_free(@handle)
           @handle = Pointer(LibLlama::LlamaSampler).null
         end
+      end
+
+      # :nodoc:
+      def finalize
+        free
       end
 
       @handle : LibLlama::LlamaSampler*

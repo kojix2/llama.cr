@@ -306,7 +306,7 @@ module Llama
       end
 
       batch = Batch.for_embeddings(embeddings, seq_ids, n_seq_max)
-      decode(batch)
+      decode_owned_batch(batch)
     end
 
     # Creates a token batch with absolute token positions.
@@ -377,7 +377,8 @@ module Llama
         chunk = tokens[offset, chunk_size]
         is_last_chunk = offset + chunk_size == tokens.size
         compute_chunk_logits = !compute_logits_for_last || is_last_chunk
-        result = decode(token_batch(chunk, offset, compute_logits_for_last, compute_chunk_logits, seq_ids, n_seq_max))
+        batch = token_batch(chunk, offset, compute_logits_for_last, compute_chunk_logits, seq_ids, n_seq_max)
+        result = decode_owned_batch(batch)
         offset += chunk_size
       end
       result
@@ -391,6 +392,13 @@ module Llama
     # Prepares a batch for one generated token.
     private def generated_token_batch(token : Int32, pos : Int32) : Batch
       token_batch([token], pos, true)
+    end
+
+    # Decodes a temporary batch and releases its native storage immediately.
+    private def decode_owned_batch(batch : Batch) : Int32
+      decode(batch)
+    ensure
+      batch.free
     end
 
     # Generates text using a sampler chain
@@ -733,7 +741,7 @@ module Llama
         break if i == max_tokens - 1 || token_pos >= context_size
 
         # Process the generated token so the next iteration can sample from it
-        decode(generated_token_batch(next_token, token_pos))
+        decode_owned_batch(generated_token_batch(next_token, token_pos))
       rescue ex : Batch::Error | Llama::TokenizationError
         raise ex
       rescue ex

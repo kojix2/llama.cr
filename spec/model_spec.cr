@@ -53,8 +53,8 @@ describe "Llama with model" do
     model = Llama::Model.new(MODEL_PATH)
     context_refs = [] of Llama::Context
 
-    result = model.context(n_ctx: 64_u32) do |context|
-      context.n_ctx.should eq(64)
+    result = model.context(n_ctx: 256_u32) do |context|
+      context.n_ctx.should eq(256)
       context_refs << context
       "ok"
     end
@@ -68,11 +68,11 @@ describe "Llama with model" do
 
   it "frees the context when the block in Context#open returns" do
     model = Llama::Model.new(MODEL_PATH)
-    context = model.context(n_ctx: 64_u32)
+    context = model.context(n_ctx: 256_u32)
     ctx_ref = context
 
     context.open do |ctx|
-      ctx.n_ctx.should eq(64)
+      ctx.n_ctx.should eq(256)
       "ok"
     end
 

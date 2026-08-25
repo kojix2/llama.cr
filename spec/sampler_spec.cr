@@ -3,10 +3,11 @@ require "../src/llama"
 
 describe Llama::Sampler::Base do
   it "can create and free a sampler" do
-    # Test creation and finalization of a sampler
-    # This test just ensures that the sampler can be created and freed without errors
     sampler = Llama::Sampler::TopK.new(40)
-    sampler.should_not be_nil
+    sampler.free
+    sampler.free
+
+    sampler.to_unsafe.null?.should be_true
   end
 
   it "raises NotImplementedError when clone is called" do

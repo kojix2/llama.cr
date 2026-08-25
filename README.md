@@ -146,6 +146,38 @@ controlled teardown after all `Llama::Model` and `Llama::Context` instances have
 been finalized. Calling it while models or contexts are still alive raises an
 error, because their finalizers may still need the llama.cpp backend.
 
+### Resource Lifetime
+
+Native-backed objects provide an idempotent `free` method. Release resources in
+dependency order: samplers and adapters, then contexts, then models.
+
+For short scopes, use the block API:
+
+```crystal
+Llama::Model.open("/path/to/model.gguf") do |model|
+  model.context do |context|
+    puts context.generate("Once upon a time")
+  end
+end
+```
+
+For longer-lived resources, use `free` in an `ensure` block:
+
+```crystal
+model = Llama::Model.new("/path/to/model.gguf")
+context = model.context
+
+begin
+  puts context.generate("Once upon a time")
+ensure
+  context.free
+  model.free
+end
+```
+
+Samplers added to a `SamplerChain` are released with the chain. Do not free a
+model or adapter while a dependent context is still using it.
+
 ### Basic Text Generation
 
 ```crystal

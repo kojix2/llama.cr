@@ -46,28 +46,33 @@ def generate(context, vocab, sampler, prompt) : String
 
   batch = Llama::Batch.from_tokens(prompt_tokens)
   pos = prompt_tokens.size
-  loop do
-    n_ctx = context.n_ctx
-    if batch.n_tokens > n_ctx
-      raise Llama::Context::Error.new("Context size exceeded")
+  begin
+    loop do
+      n_ctx = context.n_ctx
+      if batch.n_tokens > n_ctx
+        raise Llama::Context::Error.new("Context size exceeded")
+      end
+
+      if context.decode(batch) != 0
+        STDERR.puts "Failed to decode"
+        break
+      end
+      batch.free
+
+      new_token_id = sampler.sample(context)
+      break if vocab.eog?(new_token_id)
+
+      piece = vocab.token_to_piece(new_token_id, 0, true)
+      print piece
+      STDOUT.flush
+      response += piece
+
+      batch = Llama::Batch.from_tokens([new_token_id])
+      batch.to_unsafe.pos[0] = pos
+      pos += 1
     end
-
-    if context.decode(batch) != 0
-      STDERR.puts "Failed to decode"
-      break
-    end
-
-    new_token_id = sampler.sample(context)
-    break if vocab.eog?(new_token_id)
-
-    piece = vocab.token_to_piece(new_token_id, 0, true)
-    print piece
-    STDOUT.flush
-    response += piece
-
-    batch = Llama::Batch.from_tokens([new_token_id])
-    batch.to_unsafe.pos[0] = pos
-    pos += 1
+  ensure
+    batch.free
   end
   response
 end

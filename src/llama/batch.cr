@@ -29,8 +29,10 @@ module Llama
       @n_seq_max = n_seq_max
       @handle = LibLlama.llama_batch_init(n_tokens, embd, n_seq_max)
       @handle.n_tokens = n_tokens
+      @owned = true
 
       if (embd > 0 && @handle.embd.null?) || (embd == 0 && @handle.token.null?) || @handle.pos.null? || @handle.n_seq_id.null? || @handle.seq_id.null? || @handle.logits.null?
+        cleanup
         error_msg = Llama.format_error(
           "Failed to initialize batch",
           -2, # Memory allocation error
@@ -38,8 +40,6 @@ module Llama
         )
         raise Batch::Error.new(error_msg)
       end
-
-      @owned = true
     end
 
     # ameba:enable Metrics/CyclomaticComplexity
@@ -367,8 +367,14 @@ module Llama
       @handle
     end
 
-    # Explicitly clean up resources
-    # This can be called manually to release resources before garbage collection
+    # Releases the underlying C resources for an owned batch.
+    #
+    # Calling this method multiple times is safe. Non-owned batches are left
+    # untouched.
+    def free : Nil
+      cleanup
+    end
+
     private def cleanup
       if @owned
         LibLlama.llama_batch_free(to_unsafe)
@@ -378,7 +384,7 @@ module Llama
 
     # Frees the resources associated with this batch
     def finalize
-      cleanup
+      free
     end
 
     @handle : LibLlama::LlamaBatch
