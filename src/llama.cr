@@ -287,9 +287,11 @@ module Llama
     raise ArgumentError.new("max_tokens must be positive") if max_tokens <= 0
     raise ArgumentError.new("temperature must be non-negative") if temperature < 0
 
-    model = Model.new(model_path)
-    context = model.context
-    context.generate(prompt, max_tokens, temperature)
+    Model.open(model_path) do |model|
+      model.context do |context|
+        context.generate(prompt, max_tokens, temperature)
+      end
+    end
   end
 
   # Thread-safe, idempotent initialization of the llama.cpp backend.

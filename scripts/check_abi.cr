@@ -35,6 +35,7 @@ C_PROBE = <<-'C'
       PRINT_OFFSET(llama_context_params, n_seq_max);
       PRINT_OFFSET(llama_context_params, n_rs_seq);
       PRINT_OFFSET(llama_context_params, n_outputs_max);
+      PRINT_OFFSET(llama_context_params, n_outputs_max_per_seq);
       PRINT_OFFSET(llama_context_params, n_threads);
       PRINT_OFFSET(llama_context_params, n_threads_batch);
       PRINT_OFFSET(llama_context_params, ctx_type);
@@ -95,6 +96,7 @@ def crystal_layout : Hash(String, Int32)
     "llama_context_params.n_seq_max"                 => offsetof(Llama::LibLlama::LlamaContextParams, @n_seq_max),
     "llama_context_params.n_rs_seq"                  => offsetof(Llama::LibLlama::LlamaContextParams, @n_rs_seq),
     "llama_context_params.n_outputs_max"             => offsetof(Llama::LibLlama::LlamaContextParams, @n_outputs_max),
+    "llama_context_params.n_outputs_max_per_seq"     => offsetof(Llama::LibLlama::LlamaContextParams, @n_outputs_max_per_seq),
     "llama_context_params.n_threads"                 => offsetof(Llama::LibLlama::LlamaContextParams, @n_threads),
     "llama_context_params.n_threads_batch"           => offsetof(Llama::LibLlama::LlamaContextParams, @n_threads_batch),
     "llama_context_params.ctx_type"                  => offsetof(Llama::LibLlama::LlamaContextParams, @ctx_type),

@@ -17,6 +17,27 @@ module Llama
       @samplers = [] of Sampler::Base
     end
 
+    # Creates a new SamplerChain, yields it to the block, and frees it
+    # when the block returns.
+    #
+    # The resources are released deterministically without calling
+    # `#free` manually.
+    #
+    # Parameters:
+    # - no_perf: Whether to disable performance counters (default: false)
+    #
+    # Returns:
+    # - The value of the block
+    #
+    # Raises:
+    # - Llama::Error if the sampler chain cannot be created
+    def self.open(no_perf : Bool = false, & : self -> _)
+      chain = new(no_perf)
+      yield chain
+    ensure
+      chain.try(&.free)
+    end
+
     # Adds a sampler to the chain
     #
     # Parameters:
@@ -73,8 +94,13 @@ module Llama
       LibLlama.llama_sampler_reset(@handle)
     end
 
-    # Frees the resources associated with this sampler chain
-    def finalize
+    # Releases the underlying C resources, including owned samplers
+    #
+    # Calling this method multiple times is safe; only the first call
+    # releases the resources. The finalizer also calls this method, so
+    # manual calls are only needed to release resources deterministically,
+    # for example before process exit.
+    def free : Nil
       if @handle && !@handle.null?
         LibLlama.llama_sampler_free(@handle)
         @handle = Pointer(LibLlama::LlamaSampler).null
@@ -87,6 +113,10 @@ module Llama
         end
         @samplers.clear
       end
+    end
+
+    def finalize
+      free
     end
 
     # Print performance information for this sampler chain

@@ -33,23 +33,6 @@ abort "Error: Model path is required. Use -m or --model option.\nRun with --help
 
 Llama.log_level = Llama::LOG_LEVEL_ERROR
 
-# Initialize model, context, and sampler
-# Llama.init will be called automatically
-model = Llama::Model.new(model_path, n_gpu_layers: ngl)
-vocab = model.vocab
-context = model.context(n_ctx: n_ctx.to_u32, n_batch: n_ctx.to_u32)
-
-sampler = Llama::SamplerChain.new
-sampler.add(Llama::Sampler::MinP.new(0.05, 1))
-sampler.add(Llama::Sampler::Temp.new(0.8))
-sampler.add(Llama::Sampler::Dist.new(Llama::DEFAULT_SEED))
-
-tmpl = model.chat_template
-if tmpl.nil?
-  STDERR.puts "Warning: Model does not provide a chat template, using default"
-  tmpl = ""
-end
-
 def generate(context, vocab, sampler, prompt) : String
   sampler.reset
   response = ""
@@ -66,8 +49,7 @@ def generate(context, vocab, sampler, prompt) : String
   loop do
     n_ctx = context.n_ctx
     if batch.n_tokens > n_ctx
-      puts
-      abort "Context size exceeded"
+      raise Llama::Context::Error.new("Context size exceeded")
     end
 
     if context.decode(batch) != 0
@@ -90,20 +72,43 @@ def generate(context, vocab, sampler, prompt) : String
   response
 end
 
-# Main chat loop
-messages = [] of Llama::ChatMessage
+# Scope native resources so they are released in dependency order on every exit
+# path. This is required by llama.cpp 0.2.0 (ggml 0.21.0) on Metal.
+begin
+  Llama::Model.open(model_path, n_gpu_layers: ngl) do |model|
+    vocab = model.vocab
 
-loop do
-  print "> ".colorize(:green)
-  user_input = gets
-  break if user_input.nil? || user_input.empty?
+    model.context(n_ctx: n_ctx.to_u32, n_batch: n_ctx.to_u32) do |context|
+      Llama::SamplerChain.open do |sampler|
+        sampler.add(Llama::Sampler::MinP.new(0.05, 1))
+        sampler.add(Llama::Sampler::Temp.new(0.8))
+        sampler.add(Llama::Sampler::Dist.new(Llama::DEFAULT_SEED))
 
-  messages << Llama::ChatMessage.new("user", user_input)
-  prompt = context.apply_chat_template(messages, true, tmpl)
+        tmpl = model.chat_template
+        if tmpl.nil?
+          STDERR.puts "Warning: Model does not provide a chat template, using default"
+          tmpl = ""
+        end
 
-  print "".colorize(:yellow)
-  response = generate(context, vocab, sampler, prompt)
-  puts
+        messages = [] of Llama::ChatMessage
 
-  messages << Llama::ChatMessage.new("assistant", response)
+        loop do
+          print "> ".colorize(:green)
+          user_input = gets
+          break if user_input.nil? || user_input.empty?
+
+          messages << Llama::ChatMessage.new("user", user_input)
+          prompt = context.apply_chat_template(messages, true, tmpl)
+
+          print "".colorize(:yellow)
+          response = generate(context, vocab, sampler, prompt)
+          puts
+
+          messages << Llama::ChatMessage.new("assistant", response)
+        end
+      end
+    end
+  end
+rescue ex
+  abort ex.message
 end

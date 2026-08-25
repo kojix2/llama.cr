@@ -218,11 +218,12 @@ module Llama
     end
 
     enum LlamaLoadMode
-      NONE       = 0
-      MMAP       = 1
-      MLOCK      = 2
-      MMAP_MLOCK = 3
-      DIRECT_IO  = 4
+      AUTO       = -1
+      NONE       =  0
+      MMAP       =  1
+      MLOCK      =  2
+      MMAP_MLOCK =  3
+      DIRECT_IO  =  4
     end
 
     enum LlamaModelKvOverrideType
@@ -349,6 +350,7 @@ module Llama
       n_seq_max : UInt32
       n_rs_seq : UInt32
       n_outputs_max : UInt32
+      n_outputs_max_per_seq : UInt32
       n_threads : Int32
       n_threads_batch : Int32
       ctx_type : LlamaContextType
@@ -388,6 +390,7 @@ module Llama
     fun llama_ftype_name(ftype : LlamaFtype) : LibC::Char*
     fun llama_load_mode_name(load_mode : LlamaLoadMode) : LibC::Char*
     fun llama_load_mode_from_str(str : LibC::Char*) : LlamaLoadMode
+    fun llama_version : LibC::Char*
 
     # Initialization and Finalization
     fun llama_backend_init : Void
@@ -530,6 +533,7 @@ module Llama
     fun llama_sampler_accept(smpl : LlamaSampler*, token : LlamaToken) : Void
     fun llama_sampler_reset(smpl : LlamaSampler*) : Void
     fun llama_sampler_clone(smpl : LlamaSampler*) : LlamaSampler*
+    fun llama_sampler_copy(src : LlamaSampler*, dst : LlamaSampler*) : Void
     fun llama_sampler_init_min_p(p : Float32, min_keep : LibC::SizeT) : LlamaSampler*
     fun llama_sampler_init_typical(p : Float32, min_keep : LibC::SizeT) : LlamaSampler*
     fun llama_sampler_init_temp_ext(t : Float32, delta : Float32, exponent : Float32) : LlamaSampler*

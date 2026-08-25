@@ -118,6 +118,33 @@ describe Llama::SamplerChain do
     sampler.to_unsafe.null?.should be_true
   end
 
+  it "frees the chain when the block in .open returns" do
+    sampler = Llama::Sampler::TopK.new(40)
+
+    result = Llama::SamplerChain.open do |chain|
+      chain.add(sampler)
+      chain.to_unsafe.null?.should be_false
+      "ok"
+    end
+
+    result.should eq("ok")
+    # The chain is freed after the block, so the sampler handle is cleared
+    sampler.to_unsafe.null?.should be_true
+  end
+
+  it "frees the chain in .open even when the block raises" do
+    sampler = Llama::Sampler::TopK.new(40)
+
+    expect_raises(Exception, "boom") do
+      Llama::SamplerChain.open do |chain|
+        chain.add(sampler)
+        raise "boom"
+      end
+    end
+
+    sampler.to_unsafe.null?.should be_true
+  end
+
   it "can remove samplers from the chain and restore ownership" do
     chain = Llama::SamplerChain.new
     k = Llama::Sampler::TopK.new(40)

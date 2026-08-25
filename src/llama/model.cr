@@ -47,6 +47,34 @@ module Llama
       end
     end
 
+    # Loads a model and yields it to the block.
+    #
+    # The model is freed when the block returns, so the resources are
+    # released deterministically without calling `#free` manually.
+    #
+    # Parameters:
+    # - path: Path to the model file (.gguf format).
+    # - All other parameters are the same as `#initialize`.
+    #
+    # Returns:
+    # - The value of the block
+    #
+    # Raises:
+    # - Llama::Model::Error if the model cannot be loaded.
+    def self.open(
+      path : String,
+      n_gpu_layers : Int32 = 0,
+      use_mmap : Bool = true,
+      use_mlock : Bool = false,
+      vocab_only : Bool = false,
+      & : self -> _
+    )
+      model = new(path, n_gpu_layers, use_mmap, use_mlock, vocab_only)
+      yield model
+    ensure
+      model.try(&.free)
+    end
+
     # Gets the default chat template for this model
     #
     # Parameters:
@@ -196,13 +224,38 @@ module Llama
       Context.new(self, *args, **options)
     end
 
+    # Creates a new Context for this model and yields it to the block.
+    #
+    # The context is freed when the block returns, so the resources are
+    # released deterministically without calling `Context#free` manually.
+    #
+    # Returns:
+    # - The value of the block
+    #
+    # Raises:
+    # - Llama::Context::Error if the context cannot be created
+    def context(*args, **options, & : Context -> _)
+      ctx = Context.new(self, *args, **options)
+      yield ctx
+    ensure
+      ctx.try(&.free)
+    end
+
     # Returns the raw pointer to the underlying llama_model structure
     def to_unsafe
       @handle
     end
 
-    # Explicitly clean up resources
-    # This can be called manually to release resources before garbage collection
+    # Releases the underlying C resources
+    #
+    # Calling this method multiple times is safe; only the first call
+    # releases the resources. The finalizer also calls this method, so
+    # manual calls are only needed to release resources deterministically,
+    # for example before process exit.
+    def free : Nil
+      cleanup
+    end
+
     private def cleanup
       if @handle && !@handle.null?
         LibLlama.llama_model_free(@handle)

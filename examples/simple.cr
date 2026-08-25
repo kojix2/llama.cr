@@ -46,40 +46,33 @@ end
 
 # The backend is automatically initialized by Llama::Model and Llama::Context
 
-# Load the model
-# Llama.init will be called automatically
-model = Llama::Model.new(model_path, n_gpu_layers: ngl)
+# Scope native resources so they are released in dependency order on every exit
+# path. This is required by llama.cpp 0.2.0 (ggml 0.21.0) on Metal.
+Llama::Model.open(model_path, n_gpu_layers: ngl) do |model|
+  vocab = model.vocab
+  prompt_tokens = vocab.tokenize(prompt)
 
-vocab = model.vocab
+  model.context(
+    n_ctx: (prompt_tokens.size + n_predict - 1).to_u32,
+    n_batch: prompt_tokens.size.to_u32
+  ) do |context|
+    Llama::SamplerChain.open(no_perf: false) do |sampler|
+      sampler.add(Llama::Sampler::Greedy.new)
 
-# Tokenize the prompt
-prompt_tokens = vocab.tokenize(prompt)
+      elapsed = Time.measure do
+        print prompt
+        response = context.generate_with_sampler(prompt, sampler, n_predict)
+        print response
+      end
 
-# Initialize the context
-context = Llama::Context.new(
-  model,
-  n_ctx: (prompt_tokens.size + n_predict - 1).to_u32,
-  n_batch: (prompt_tokens.size).to_u32
-)
+      puts
 
-# Initialize the sampler
-sampler = Llama::SamplerChain.new(no_perf: false)
+      STDERR.puts "Decoded #{n_predict} tokens in #{elapsed.total_seconds.round(2)} s, speed: #{(n_predict / elapsed.total_seconds).round(2)} t/s"
 
-# Add a greedy sampler to the chain
-sampler.add(Llama::Sampler::Greedy.new)
-
-elapsed = Time.measure do
-  print prompt
-  response = context.generate_with_sampler(prompt, sampler, n_predict)
-  print response
+      STDERR.puts
+      sampler.print_perf
+      context.print_perf
+      STDERR.puts
+    end
+  end
 end
-n_decode = n_predict
-
-puts
-
-STDERR.puts "Decoded #{n_decode} tokens in #{elapsed.total_seconds.round(2)} s, speed: #{(n_decode / elapsed.total_seconds).round(2)} t/s"
-
-STDERR.puts
-sampler.print_perf
-context.print_perf
-STDERR.puts

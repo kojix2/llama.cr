@@ -23,6 +23,63 @@ describe "Llama with model" do
     end
   end
 
+  it "frees the model when the block in .open returns" do
+    model_refs = [] of Llama::Model
+
+    result = Llama::Model.open(MODEL_PATH) do |model|
+      model.n_params.should be > 0
+      model_refs << model
+      "ok"
+    end
+
+    result.should eq("ok")
+    model_refs.first.to_unsafe.null?.should be_true
+  end
+
+  it "frees the model in .open even when the block raises" do
+    model_refs = [] of Llama::Model
+
+    expect_raises(Exception, "boom") do
+      Llama::Model.open(MODEL_PATH) do |model|
+        model_refs << model
+        raise "boom"
+      end
+    end
+
+    model_refs.first.to_unsafe.null?.should be_true
+  end
+
+  it "frees the context when the block in Model#context returns" do
+    model = Llama::Model.new(MODEL_PATH)
+    context_refs = [] of Llama::Context
+
+    result = model.context(n_ctx: 64_u32) do |context|
+      context.n_ctx.should eq(64)
+      context_refs << context
+      "ok"
+    end
+
+    result.should eq("ok")
+    context_refs.first.to_unsafe.null?.should be_true
+    # The model itself is still alive
+    model.to_unsafe.null?.should be_false
+    model.free
+  end
+
+  it "frees the context when the block in Context#open returns" do
+    model = Llama::Model.new(MODEL_PATH)
+    context = model.context(n_ctx: 64_u32)
+    ctx_ref = context
+
+    context.open do |ctx|
+      ctx.n_ctx.should eq(64)
+      "ok"
+    end
+
+    ctx_ref.to_unsafe.null?.should be_true
+    model.free
+  end
+
   it "raises NotImplementedError when dup is called" do
     model = Llama::Model.new(MODEL_PATH)
     expect_raises(NotImplementedError, "dup is not supported for Llama::Model") do

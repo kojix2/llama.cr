@@ -77,6 +77,7 @@ This document outlines the development guidelines for the llama.cr project, prim
 - `shard.yml` version must use `0.<build>.0` format (example: `0.9330.0`).
 - Release tags must match the shard version with `v` prefix (example: `v0.9330.0`).
 - When referenced in documentation or scripts, the build is prefixed with `b` (example: `b<build>`).
+- llama.cpp also publishes stable semver tags (`vX.Y.Z`) that point to a specific build (example: `v0.2.0` points to `b10566`). Mention the mapping when the targeted build is such a stable release.
 
 ### Version Update Process
 

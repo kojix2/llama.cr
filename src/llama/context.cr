@@ -126,8 +126,29 @@ module Llama
       State.new(self)
     end
 
-    # Explicitly clean up resources
-    # This can be called manually to release resources before garbage collection
+    # Yields self to the block and frees the context when the block returns.
+    #
+    # The resources are released deterministically without calling `#free`
+    # manually.
+    #
+    # Returns:
+    # - The value of the block
+    def open(& : self -> _)
+      yield self
+    ensure
+      free
+    end
+
+    # Releases the underlying C resources
+    #
+    # Calling this method multiple times is safe; only the first call
+    # releases the resources. The finalizer also calls this method, so
+    # manual calls are only needed to release resources deterministically,
+    # for example before process exit.
+    def free : Nil
+      cleanup
+    end
+
     private def cleanup
       # Free the context handle
       if @handle && !@handle.null?
@@ -240,30 +261,28 @@ module Llama
       results = [] of Int32
 
       prompts.each_with_index do |prompt, i|
-        begin
-          tokens = @model.vocab.tokenize(prompt)
+        tokens = @model.vocab.tokenize(prompt)
 
-          if tokens.empty?
-            error_msg = Llama.format_error(
-              "Tokenization resulted in empty token array",
-              -6, # Tokenization error
-              "prompt index: #{i}"
-            )
-            raise Llama::TokenizationError.new(error_msg)
-          end
-
-          memory.clear
-          results << decode_tokens(tokens, true, nil, 8, "Prompt")
-        rescue ex : Llama::TokenizationError
-          raise ex
-        rescue ex
+        if tokens.empty?
           error_msg = Llama.format_error(
-            "Failed to process prompt",
-            -3, # Batch processing error
-            "prompt index: #{i}, error: #{ex.message}"
+            "Tokenization resulted in empty token array",
+            -6, # Tokenization error
+            "prompt index: #{i}"
           )
-          raise Batch::Error.new(error_msg)
+          raise Llama::TokenizationError.new(error_msg)
         end
+
+        memory.clear
+        results << decode_tokens(tokens, true, nil, 8, "Prompt")
+      rescue ex : Llama::TokenizationError
+        raise ex
+      rescue ex
+        error_msg = Llama.format_error(
+          "Failed to process prompt",
+          -3, # Batch processing error
+          "prompt index: #{i}, error: #{ex.message}"
+        )
+        raise Batch::Error.new(error_msg)
       end
 
       results
@@ -399,22 +418,20 @@ module Llama
 
       # Use the internal generation method with a custom token sampler
       generate_internal(prompt, max_tokens) do |_logits|
-        begin
-          # Sample the next token using the sampler chain
-          token = sampler.sample(self)
+        # Sample the next token using the sampler chain
+        token = sampler.sample(self)
 
-          # Accept the token
-          sampler.accept(token)
+        # Accept the token
+        sampler.accept(token)
 
-          token
-        rescue ex
-          error_msg = Llama.format_error(
-            "Sampling failed",
-            -9, # Sampling error
-            ex.message
-          )
-          raise Sampler::Error.new(error_msg)
-        end
+        token
+      rescue ex
+        error_msg = Llama.format_error(
+          "Sampling failed",
+          -9, # Sampling error
+          ex.message
+        )
+        raise Sampler::Error.new(error_msg)
       end
     end
 
@@ -698,36 +715,34 @@ module Llama
 
       # Generate up to max_tokens
       max_tokens.times do |i|
-        begin
-          break if pos > context_size
+        break if pos > context_size
 
-          # Get the logits for the last token
-          logits = self.logits
+        # Get the logits for the last token
+        logits = self.logits
 
-          # Sample the next token using the provided sampler
-          next_token = token_sampler.call(logits)
+        # Sample the next token using the provided sampler
+        next_token = token_sampler.call(logits)
 
-          # Check for end-of-generation tokens such as EOS or EOT.
-          break if @model.vocab.eog?(next_token)
+        # Check for end-of-generation tokens such as EOS or EOT.
+        break if @model.vocab.eog?(next_token)
 
-          output_tokens << next_token
+        output_tokens << next_token
 
-          token_pos = pos
-          pos += 1
-          break if i == max_tokens - 1 || token_pos >= context_size
+        token_pos = pos
+        pos += 1
+        break if i == max_tokens - 1 || token_pos >= context_size
 
-          # Process the generated token so the next iteration can sample from it
-          decode(generated_token_batch(next_token, token_pos))
-        rescue ex : Batch::Error | Llama::TokenizationError
-          raise ex
-        rescue ex
-          error_msg = Llama.format_error(
-            "Text generation failed",
-            nil,
-            "at token position: #{pos}, error: #{ex.message}"
-          )
-          raise Context::Error.new(error_msg)
-        end
+        # Process the generated token so the next iteration can sample from it
+        decode(generated_token_batch(next_token, token_pos))
+      rescue ex : Batch::Error | Llama::TokenizationError
+        raise ex
+      rescue ex
+        error_msg = Llama.format_error(
+          "Text generation failed",
+          nil,
+          "at token position: #{pos}, error: #{ex.message}"
+        )
+        raise Context::Error.new(error_msg)
       end
 
       @model.vocab.detokenize(output_tokens)

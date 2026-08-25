@@ -16,3 +16,4 @@
 .llama*
 
 *.gguf
+*.tmp

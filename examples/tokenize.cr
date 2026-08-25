@@ -116,61 +116,49 @@ if disable_logging
 end
 
 begin
-  # Load the model with vocab_only=true
-  model = Llama::Model.new(model_path, vocab_only: true)
-rescue ex
-  STDERR.puts "Error: could not load model from file '#{model_path}': #{ex.message}"
-  exit(1)
-end
+  Llama::Model.open(model_path, vocab_only: true) do |model|
+    vocab = model.vocab
 
-vocab = model.vocab
+    if stdin_set
+      begin
+        prompt = STDIN.gets_to_end
+      rescue ex
+        raise "could not read the entire standard input: #{ex.message}"
+      end
+    end
 
-# Read entire prompt from stdin?
-if stdin_set
-  begin
-    prompt = STDIN.gets_to_end
-  rescue ex
-    STDERR.puts "Error: could not read the entire standard input: #{ex.message}"
-    exit(1)
-  end
-end
+    prompt = Llama.process_escapes(prompt) unless no_escape
 
-# Process escape sequences if needed
-if !no_escape
-  prompt = Llama.process_escapes(prompt)
-end
+    model_wants_add_bos = vocab.add_bos?
+    add_bos = model_wants_add_bos && !no_bos
+    parse_special = !no_parse_special
 
-# Tokenize the prompt
-model_wants_add_bos = vocab.add_bos?
-add_bos = model_wants_add_bos && !no_bos
-parse_special = !no_parse_special
-
-begin
-  tokens = vocab.tokenize(prompt, add_bos, parse_special)
-rescue ex
-  STDERR.puts "Error: failed to tokenize prompt: #{ex.message}"
-  exit(1)
-end
-
-# Print the tokens
-if printing_ids
-  print "["
-  tokens.each_with_index do |token, i|
-    print ", " if i > 0
-    print token
-  end
-  puts "]"
-else
-  tokens.each do |token|
     begin
-      puts vocab.format_token(token)
-    rescue
-      puts "#{token} -> (utf-8 decode failure)"
+      tokens = vocab.tokenize(prompt, add_bos, parse_special)
+    rescue ex
+      raise "failed to tokenize prompt: #{ex.message}"
+    end
+
+    if printing_ids
+      print "["
+      tokens.each_with_index do |token, i|
+        print ", " if i > 0
+        print token
+      end
+      puts "]"
+    else
+      tokens.each do |token|
+        puts vocab.format_token(token)
+      rescue
+        puts "#{token} -> (utf-8 decode failure)"
+      end
+    end
+
+    if show_token_count
+      puts "Total number of tokens: #{tokens.size}"
     end
   end
-end
-
-# Show token count if requested
-if show_token_count
-  puts "Total number of tokens: #{tokens.size}"
+rescue ex
+  STDERR.puts "Error: #{ex.message}"
+  exit(1)
 end

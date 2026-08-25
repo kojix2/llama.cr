@@ -30,8 +30,16 @@ module Llama
       end
     end
 
-    # Explicitly clean up resources
-    # This can be called manually to release resources before garbage collection
+    # Releases the underlying C resources
+    #
+    # Calling this method multiple times is safe; only the first call
+    # releases the resources. The finalizer also calls this method, so
+    # manual calls are only needed to release resources deterministically,
+    # for example before process exit.
+    def free : Nil
+      cleanup
+    end
+
     private def cleanup
       if @handle && !@handle.null?
         LibLlama.llama_adapter_lora_free(@handle)
