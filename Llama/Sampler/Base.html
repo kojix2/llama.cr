@@ -392,7 +392,7 @@ This is an abstract class.</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler/base.cr#L6" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/f5a41c9e28686dfdd879cad6788d1206697ea812/src/llama/sampler/base.cr#L6" target="_blank">
         llama/sampler/base.cr
       </a>
     
@@ -438,6 +438,13 @@ This is an abstract class.</p>
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#free%3ANil-instance-method" class="signature"><strong>#free</strong> : Nil</a>
+        
+          <div class="summary"><p>Releases the underlying C resources.</p></div>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="signature"><strong>#to_unsafe</strong> : Pointer(Llama::LibLlama::LlamaSampler)</a>
@@ -507,7 +514,7 @@ This is an abstract class.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler/base.cr#L10" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f5a41c9e28686dfdd879cad6788d1206697ea812/src/llama/sampler/base.cr#L10" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -528,6 +535,29 @@ This is an abstract class.</p>
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="free:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>free</strong> : Nil
+
+        <a class="method-permalink" href="#free%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Releases the underlying C resources.</p>
+<p>Calling this method multiple times is safe. A sampler owned by a
+SamplerChain is released with the chain instead.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/f5a41c9e28686dfdd879cad6788d1206697ea812/src/llama/sampler/base.cr#L41" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="to_unsafe:Pointer(Llama::LibLlama::LlamaSampler)-instance-method">
       <div class="signature">
         
@@ -544,7 +574,7 @@ This is an abstract class.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler/base.cr#L15" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/f5a41c9e28686dfdd879cad6788d1206697ea812/src/llama/sampler/base.cr#L15" target="_blank">View source</a>]
         
       </div>
     </div>

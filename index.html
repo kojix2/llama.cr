@@ -422,6 +422,31 @@ applications do not need to call it manually.</p>
 controlled teardown after all <code><a href="Llama/Model.html">Llama::Model</a></code> and <code><a href="Llama/Context.html">Llama::Context</a></code> instances have
 been finalized. Calling it while models or contexts are still alive raises an
 error, because their finalizers may still need the llama.cpp backend.</p>
+<h3><a id="resource-lifetime" class="anchor" href="#resource-lifetime">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Resource Lifetime</h3>
+<p>Native-backed objects provide an idempotent <code>free</code> method. Release resources in
+dependency order: samplers and adapters, then contexts, then models.</p>
+<p>For short scopes, use the block API:</p>
+<pre><code class="language-crystal"><span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.open(<span class="s">&quot;/path/to/model.gguf&quot;</span>) <span class="k">do</span> <span class="o">|</span>model<span class="o">|</span>
+  model.context <span class="k">do</span> <span class="o">|</span>context<span class="o">|</span>
+    puts context.generate(<span class="s">&quot;Once upon a time&quot;</span>)
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+<p>For longer-lived resources, use <code>free</code> in an <code>ensure</code> block:</p>
+<pre><code class="language-crystal">model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+context <span class="o">=</span> model.context
+
+<span class="k">begin</span>
+  puts context.generate(<span class="s">&quot;Once upon a time&quot;</span>)
+<span class="k">ensure</span>
+  context.free
+  model.free
+<span class="k">end</span></code></pre>
+<p>Samplers added to a <code>SamplerChain</code> are released with the chain. Do not free a
+model or adapter while a dependent context is still using it.</p>
 <h3><a id="basic-text-generation" class="anchor" href="#basic-text-generation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
