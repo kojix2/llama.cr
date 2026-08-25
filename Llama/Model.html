@@ -344,14 +344,14 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L5" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L5" target="_blank">
         llama/model.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model/error.cr#L4" target="_blank">
         llama/model/error.cr
       </a>
     
@@ -384,6 +384,25 @@
 
 
   
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#open%28path%3AString%2Cn_gpu_layers%3AInt32%3D0%2Cuse_mmap%3ABool%3Dtrue%2Cuse_mlock%3ABool%3Dfalse%2Cvocab_only%3ABool%3Dfalse%2C%26%3Aself-%3E_%29-class-method" class="signature"><strong>.open</strong>(path : String, n_gpu_layers : Int32 = <span class="n">0</span>, use_mmap : Bool = <span class="n">true</span>, use_mlock : Bool = <span class="n">false</span>, vocab_only : Bool = <span class="n">false</span>, & : <span class="k">self</span> -> _)</a>
+        
+          <div class="summary"><p>Loads a model and yields it to the block.</p></div>
+        
+      </li>
+    
+  </ul>
+
 
   
 
@@ -427,6 +446,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#context%28%2Aargs%2C%2A%2Aoptions%2C%26%3AContext-%3E_%29-instance-method" class="signature"><strong>#context</strong>(*args, **options, & : Context -> _)</a>
+        
+          <div class="summary"><p>Creates a new Context for this model and yields it to the block.</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#decoder_start_token%3AInt32-instance-method" class="signature"><strong>#decoder_start_token</strong> : Int32</a>
         
           <div class="summary"><p>Returns the token that must be provided to the decoder to start generating output For encoder-decoder models, returns the decoder start token For other models, returns -1</p></div>
@@ -451,6 +477,13 @@
         <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
         
           <div class="summary"><p>Frees the resources associated with this model</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#free%3ANil-instance-method" class="signature"><strong>#free</strong> : Nil</a>
+        
+          <div class="summary"><p>Releases the underlying C resources</p></div>
         
       </li>
     
@@ -687,7 +720,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -695,6 +728,52 @@
 
 
   
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="open(path:String,n_gpu_layers:Int32=0,use_mmap:Bool=true,use_mlock:Bool=false,vocab_only:Bool=false,&amp;:self-&gt;_)-class-method">
+      <div class="signature">
+        
+        def self.<strong>open</strong>(path : String, n_gpu_layers : Int32 = <span class="n">0</span>, use_mmap : Bool = <span class="n">true</span>, use_mlock : Bool = <span class="n">false</span>, vocab_only : Bool = <span class="n">false</span>, & : <span class="k">self</span> -> _)
+
+        <a class="method-permalink" href="#open%28path%3AString%2Cn_gpu_layers%3AInt32%3D0%2Cuse_mmap%3ABool%3Dtrue%2Cuse_mlock%3ABool%3Dfalse%2Cvocab_only%3ABool%3Dfalse%2C%26%3Aself-%3E_%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Loads a model and yields it to the block.</p>
+<p>The model is freed when the block returns, so the resources are
+released deterministically without calling <code><a href="../Llama/Model.html#free%3ANil-instance-method">#free</a></code> manually.</p>
+<p>Parameters:</p>
+<ul>
+<li>path: Path to the model file (.gguf format).</li>
+<li>All other parameters are the same as <code>#initialize</code>.</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The value of the block</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::Model::Error if the model cannot be loaded.</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L64" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
   
 
@@ -732,7 +811,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L57" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -757,7 +836,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L181" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L209" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -786,7 +865,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L172" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L200" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -817,7 +896,38 @@ and forwarding all other arguments.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L195" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L223" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="context(*args,**options,&amp;:Context-&gt;_)-instance-method">
+      <div class="signature">
+        
+        def <strong>context</strong>(*args, **options, & : <a href="../Llama/Context.html">Context</a> -> _)
+
+        <a class="method-permalink" href="#context%28%2Aargs%2C%2A%2Aoptions%2C%26%3AContext-%3E_%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new Context for this model and yields it to the block.</p>
+<p>The context is freed when the block returns, so the resources are
+released deterministically without calling <code><a href="../Llama/Context.html#free%3ANil-instance-method">Context#free</a></code> manually.</p>
+<p>Returns:</p>
+<ul>
+<li>The value of the block</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::Context::Error if the context cannot be created</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L237" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -840,7 +950,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L155" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L183" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -865,7 +975,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L293" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L346" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -886,7 +996,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L138" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L166" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -907,7 +1017,32 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L215" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L268" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="free:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>free</strong> : Nil
+
+        <a class="method-permalink" href="#free%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Releases the underlying C resources</p>
+<p>Calling this method multiple times is safe; only the first call
+releases the resources. The finalizer also calls this method, so
+manual calls are only needed to release resources deterministically,
+for example before process exit.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L255" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -928,7 +1063,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L108" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L136" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -949,7 +1084,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L123" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L151" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -970,7 +1105,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L118" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L146" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -991,7 +1126,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L133" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L161" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1016,7 +1151,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L318" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L371" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1041,7 +1176,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L245" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L298" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1070,7 +1205,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L256" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L309" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1099,7 +1234,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L228" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L281" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1128,7 +1263,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L276" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L329" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1153,7 +1288,7 @@ For other models, returns -1</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L310" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L363" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1175,7 +1310,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L161" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L189" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1196,7 +1331,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L83" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L111" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1217,7 +1352,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L88" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L116" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1238,7 +1373,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L121" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1259,7 +1394,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L141" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1280,7 +1415,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L98" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L126" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1301,7 +1436,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L131" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1322,7 +1457,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L78" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L106" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1343,7 +1478,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L143" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L171" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1364,7 +1499,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L128" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L156" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1385,7 +1520,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L148" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L176" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1406,7 +1541,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L200" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L245" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1427,7 +1562,7 @@ Returns 0 for non-classifier models</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/model.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/model.cr#L92" target="_blank">View source</a>]
         
       </div>
     </div>

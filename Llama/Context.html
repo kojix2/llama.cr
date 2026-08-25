@@ -344,14 +344,14 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L5" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L5" target="_blank">
         llama/context.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context/error.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context/error.cr#L4" target="_blank">
         llama/context/error.cr
       </a>
     
@@ -476,6 +476,13 @@
       </li>
     
       <li class="entry-summary">
+        <a href="#free%3ANil-instance-method" class="signature"><strong>#free</strong> : Nil</a>
+        
+          <div class="summary"><p>Releases the underlying C resources</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
         <a href="#generate%28prompt%3AString%2Cmax_tokens%3AInt32%3D128%2Ctemperature%3AFloat32%3D0.8%29%3AString-instance-method" class="signature"><strong>#generate</strong>(prompt : String, max_tokens : Int32 = <span class="n">128</span>, temperature : Float32 = <span class="n">0.8</span>) : String</a>
         
           <div class="summary"><p>Generates text from a prompt</p></div>
@@ -570,6 +577,13 @@
         <a href="#n_ubatch%3AUInt32-instance-method" class="signature"><strong>#n_ubatch</strong> : UInt32</a>
         
           <div class="summary"><p>Returns the micro-batch size (n_ubatch)</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#open%28%26%3Aself-%3E_%29-instance-method" class="signature"><strong>#open</strong>(& : <span class="k">self</span> -> _)</a>
+        
+          <div class="summary"><p>Yields self to the block and frees the context when the block returns.</p></div>
         
       </li>
     
@@ -710,7 +724,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L19" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -762,7 +776,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L955" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L970" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -793,7 +807,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L1061" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L1076" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -827,7 +841,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L865" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L880" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -865,7 +879,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L155" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L176" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -886,7 +900,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L926" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L941" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -921,7 +935,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L463" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L480" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -954,7 +968,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L903" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L918" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -984,7 +998,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L996" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L1011" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1010,7 +1024,7 @@ If true, embeddings will be returned but logits will not</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L975" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L990" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1046,7 +1060,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L435" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L452" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1067,7 +1081,32 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L830" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L845" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="free:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>free</strong> : Nil
+
+        <a class="method-permalink" href="#free%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Releases the underlying C resources</p>
+<p>Calling this method multiple times is safe; only the first call
+releases the resources. The finalizer also calls this method, so
+manual calls are only needed to release resources deterministically,
+for example before process exit.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L148" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1104,7 +1143,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L624" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L641" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1142,7 +1181,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L392" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L411" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1175,7 +1214,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L1010" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L1025" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1208,7 +1247,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L1036" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L1051" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1233,7 +1272,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L595" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L612" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1262,7 +1301,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L586" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L603" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1294,7 +1333,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L85" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1315,7 +1354,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L100" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1336,7 +1375,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L90" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1357,7 +1396,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L95" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L95" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1378,7 +1417,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L110" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L110" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1399,7 +1438,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L115" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L115" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1420,7 +1459,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L120" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L120" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1441,7 +1480,34 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L105" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L105" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="open(&amp;:self-&gt;_)-instance-method">
+      <div class="signature">
+        
+        def <strong>open</strong>(& : <span class="k">self</span> -> _)
+
+        <a class="method-permalink" href="#open%28%26%3Aself-%3E_%29-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Yields self to the block and frees the context when the block returns.</p>
+<p>The resources are released deterministically without calling <code><a href="../Llama/Context.html#free%3ANil-instance-method">#free</a></code>
+manually.</p>
+<p>Returns:</p>
+<ul>
+<li>The value of the block</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L136" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1466,7 +1532,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L983" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L998" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1487,7 +1553,7 @@ before generating text with the decoder.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L850" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L865" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1510,7 +1576,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L838" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L853" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1545,7 +1611,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L284" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L303" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1580,7 +1646,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L235" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L256" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1616,7 +1682,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L215" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L236" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1638,7 +1704,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L845" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L860" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1659,7 +1725,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L125" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L125" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -1680,7 +1746,7 @@ It's useful for debugging and performance analysis.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/context.cr#L825" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/context.cr#L840" target="_blank">View source</a>]
         
       </div>
     </div>

@@ -346,14 +346,14 @@ applied to a model to modify its behavior without changing the original weights.
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/adapter_lora.cr#L8" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/adapter_lora.cr#L8" target="_blank">
         llama/adapter_lora.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/adapter_lora/error.cr#L2" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/adapter_lora/error.cr#L2" target="_blank">
         llama/adapter_lora/error.cr
       </a>
     
@@ -404,6 +404,13 @@ applied to a model to modify its behavior without changing the original weights.
         <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
         
           <div class="summary"><p>Frees the resources associated with this adapter</p></div>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#free%3ANil-instance-method" class="signature"><strong>#free</strong> : Nil</a>
+        
+          <div class="summary"><p>Releases the underlying C resources</p></div>
         
       </li>
     
@@ -490,7 +497,7 @@ applied to a model to modify its behavior without changing the original weights.
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/adapter_lora.cr#L17" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/adapter_lora.cr#L17" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -527,7 +534,32 @@ applied to a model to modify its behavior without changing the original weights.
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/adapter_lora.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/adapter_lora.cr#L59" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="free:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>free</strong> : Nil
+
+        <a class="method-permalink" href="#free%3ANil-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Releases the underlying C resources</p>
+<p>Calling this method multiple times is safe; only the first call
+releases the resources. The finalizer also calls this method, so
+manual calls are only needed to release resources deterministically,
+for example before process exit.</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/adapter_lora.cr#L39" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -548,7 +580,7 @@ applied to a model to modify its behavior without changing the original weights.
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/adapter_lora.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/adapter_lora.cr#L56" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -569,7 +601,7 @@ applied to a model to modify its behavior without changing the original weights.
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/adapter_lora.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/adapter_lora.cr#L51" target="_blank">View source</a>]
         
       </div>
     </div>

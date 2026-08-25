@@ -345,7 +345,7 @@ Ownership and lifecycle are managed internally.</p>
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L4" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L4" target="_blank">
         llama/sampler_chain.cr
       </a>
     
@@ -378,6 +378,25 @@ Ownership and lifecycle are managed internally.</p>
 
 
   
+  <h2>
+    <a id="class-method-summary" class="anchor" href="#class-method-summary">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Summary
+  </h2>
+  <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#open%28no_perf%3ABool%3Dfalse%2C%26%3Aself-%3E_%29-class-method" class="signature"><strong>.open</strong>(no_perf : Bool = <span class="n">false</span>, & : <span class="k">self</span> -> _)</a>
+        
+          <div class="summary"><p>Creates a new SamplerChain, yields it to the block, and frees it when the block returns.</p></div>
+        
+      </li>
+    
+  </ul>
+
 
   
 
@@ -409,7 +428,12 @@ Ownership and lifecycle are managed internally.</p>
       <li class="entry-summary">
         <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
         
-          <div class="summary"><p>Frees the resources associated with this sampler chain</p></div>
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#free%3ANil-instance-method" class="signature"><strong>#free</strong> : Nil</a>
+        
+          <div class="summary"><p>Releases the underlying C resources, including owned samplers</p></div>
         
       </li>
     
@@ -523,7 +547,7 @@ Ownership and lifecycle are managed internally.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L12" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L12" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -531,6 +555,52 @@ Ownership and lifecycle are managed internally.</p>
 
 
   
+  <h2>
+    <a id="class-method-detail" class="anchor" href="#class-method-detail">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Class Method Detail
+  </h2>
+  
+    <div class="entry-detail" id="open(no_perf:Bool=false,&amp;:self-&gt;_)-class-method">
+      <div class="signature">
+        
+        def self.<strong>open</strong>(no_perf : Bool = <span class="n">false</span>, & : <span class="k">self</span> -> _)
+
+        <a class="method-permalink" href="#open%28no_perf%3ABool%3Dfalse%2C%26%3Aself-%3E_%29-class-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Creates a new SamplerChain, yields it to the block, and frees it
+when the block returns.</p>
+<p>The resources are released deterministically without calling
+<code><a href="../Llama/SamplerChain.html#free%3ANil-instance-method">#free</a></code> manually.</p>
+<p>Parameters:</p>
+<ul>
+<li>no_perf: Whether to disable performance counters (default: false)</li>
+</ul>
+<p>Returns:</p>
+<ul>
+<li>The value of the block</li>
+</ul>
+<p>Raises:</p>
+<ul>
+<li>Llama::Error if the sampler chain cannot be created</li>
+</ul>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L34" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+
 
   
 
@@ -564,7 +634,7 @@ Ownership and lifecycle are managed internally.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L66" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L87" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -589,7 +659,7 @@ Ownership and lifecycle are managed internally.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L24" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -602,15 +672,35 @@ Ownership and lifecycle are managed internally.</p>
         <a class="method-permalink" href="#finalize-instance-method">#</a>
       </div>
       
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L118" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="free:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>free</strong> : Nil
+
+        <a class="method-permalink" href="#free%3ANil-instance-method">#</a>
+      </div>
+      
         <div class="doc">
           
-          <p>Frees the resources associated with this sampler chain</p>
+          <p>Releases the underlying C resources, including owned samplers</p>
+<p>Calling this method multiple times is safe; only the first call
+releases the resources. The finalizer also calls this method, so
+manual calls are only needed to release resources deterministically,
+for example before process exit.</p>
         </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L77" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L103" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -631,7 +721,7 @@ Ownership and lifecycle are managed internally.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L93" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L123" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -653,7 +743,7 @@ Returns the original Sampler::Base instance with ownership restored.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L58" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -675,7 +765,7 @@ Useful when reusing the same chain for multiple independent generations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L72" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -696,7 +786,7 @@ Useful when reusing the same chain for multiple independent generations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L98" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L128" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -726,7 +816,7 @@ Useful when reusing the same chain for multiple independent generations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L58" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L79" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -747,7 +837,7 @@ Useful when reusing the same chain for multiple independent generations.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/2519e0ba06d17d75862dcfb5b6c8375e2835cf83/src/llama/sampler_chain.cr#L103" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/62199442e5f11fed84fa99f2d010dba6ce8efb2c/src/llama/sampler_chain.cr#L133" target="_blank">View source</a>]
         
       </div>
     </div>
