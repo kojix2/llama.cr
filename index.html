@@ -570,6 +570,15 @@ puts <span class="s">&quot;Embedding dimension: </span><span class="i">#{</span>
   </svg>
 </a>System Info</h4>
 <pre><code class="language-crystal">puts <span class="t">Llama</span>.system_info</code></pre>
+<h4><a id="backend-capabilities" class="anchor" href="#backend-capabilities">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Backend Capabilities</h4>
+<pre><code class="language-crystal">puts <span class="t">Llama</span>.gpu_offload_supported?
+puts <span class="t">Llama</span>.mmap_supported?
+puts <span class="t">Llama</span>.mlock_supported?
+puts <span class="t">Llama</span>.rpc_supported?</code></pre>
 <h4><a id="tokenization-utility" class="anchor" href="#tokenization-utility">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
