@@ -20,6 +20,7 @@ This project is under active development and may change rapidly.
 - High-level Crystal wrapper classes for easy usage
 - Memory management for C resources
 - Simple text generation interface
+- Backend capability checks and configurable GPU offloading
 - Advanced sampling methods (Min-P, Typical, Mirostat, etc.)
 - Batch processing for efficient token handling
 - KV cache management for optimized inference
@@ -87,8 +88,6 @@ LIBRARY_PATH="$LLAMA_LIB_DIR" crystal build examples/simple.cr \
 DYLD_LIBRARY_PATH="$LLAMA_LIB_DIR" ./simple --model models/tiny_model.gguf
 ```
 
-If needed, set extra runtime variables:
-
 If backend auto-detection fails in newer llama.cpp builds, set `GGML_BACKEND_PATH` to a backend shared library file (not a directory), for example:
 
 ```sh
@@ -136,47 +135,74 @@ Popular options:
 
 ## Usage
 
-### Backend Lifetime
+### Basic Text Generation
 
-`Llama.init` is called automatically when a model or context is created, so most
-applications do not need to call it manually.
+```crystal
+require "llama"
 
-`Llama.uninit` is optional and usually not needed. It is intended only for
-controlled teardown after all `Llama::Model` and `Llama::Context` instances have
-been finalized. Calling it while models or contexts are still alive raises an
-error, because their finalizers may still need the llama.cpp backend.
+response = Llama.generate(
+  "/path/to/model.gguf",
+  "Once upon a time",
+  max_tokens: 100,
+  temperature: 0.8
+)
+puts response
+```
 
-### Resource Lifetime
-
-Native-backed objects provide an idempotent `free` method. Release resources in
-dependency order: samplers and adapters, then contexts, then models.
-
-For short scopes, use the block API:
+For repeated independent generations without reloading the model, use the
+scoped model and context APIs:
 
 ```crystal
 Llama::Model.open("/path/to/model.gguf") do |model|
   model.context do |context|
     puts context.generate("Once upon a time")
+    puts context.generate("In a galaxy far away")
   end
 end
 ```
 
-For longer-lived resources, use `free` in an `ensure` block:
+### Backend Capabilities and GPU Offloading
+
+GPU offloading depends on the linked llama.cpp build and the backends available
+at runtime. Check capabilities before selecting accelerator-specific settings:
 
 ```crystal
-model = Llama::Model.new("/path/to/model.gguf")
-context = model.context
-
-begin
-  puts context.generate("Once upon a time")
-ensure
-  context.free
-  model.free
-end
+puts Llama.gpu_offload_supported?
+puts Llama.mmap_supported?
+puts Llama.mlock_supported?
+puts Llama.rpc_supported?
 ```
 
-Samplers added to a `SamplerChain` are released with the chain. Do not free a
-model or adapter while a dependent context is still using it.
+With GPU offloading available, the convenience API can offload the model and
+context operations:
+
+```crystal
+raise "GPU offloading is unavailable" unless Llama.gpu_offload_supported?
+
+response = Llama.generate(
+  "/path/to/model.gguf",
+  "Once upon a time",
+  n_gpu_layers: -1,
+  offload_kqv: true,
+  op_offload: true
+)
+```
+
+`n_gpu_layers: -1` requests all model layers; `0` keeps them on the CPU.
+`offload_kqv` controls KQV operations and the KV cache, while `op_offload`
+controls host tensor operations. These options do not add GPU support to a
+CPU-only llama.cpp build. The defaults are `n_gpu_layers: 0`,
+`offload_kqv: false`, and `op_offload: false`.
+
+The same context settings are available when managing resources directly:
+
+```crystal
+Llama::Model.open("/path/to/model.gguf", n_gpu_layers: -1) do |model|
+  model.context(offload_kqv: true, op_offload: true) do |context|
+    puts context.generate("Once upon a time")
+  end
+end
+```
 
 ### Lazy Model Loading
 
@@ -193,62 +219,71 @@ end
 
 Use `Llama::LazyMode::OFF` to always read complete tensors up front.
 
+The convenience API accepts the same setting:
+
+```crystal
+response = Llama.generate(
+  "/path/to/model.gguf",
+  "Once upon a time",
+  lazy_mode: Llama::LazyMode::ON
+)
+```
+
+### Resource Lifetime
+
+Native-backed objects provide an idempotent `free` method. Prefer the block APIs
+shown above for deterministic cleanup. For longer-lived resources, call `free`
+in an `ensure` block and release dependencies before their owners:
+
+```crystal
+model = Llama::Model.new("/path/to/model.gguf")
+context = model.context
+
+begin
+  puts context.generate("Once upon a time")
+ensure
+  context.free
+  model.free
+end
+```
+
+Release samplers and adapters before contexts, and contexts before models.
+Samplers added to a `SamplerChain` are released with the chain.
+
+### Backend Lifetime
+
+`Llama.init` is called automatically when a model or context is created, so most
+applications do not need to call it manually.
+
+`Llama.uninit` is optional and usually not needed. It is intended only for
+controlled teardown after all `Llama::Model` and `Llama::Context` instances have
+been finalized. Calling it while models or contexts are still alive raises an
+error, because their finalizers may still need the llama.cpp backend.
+
 ### Saved State Compatibility
 
 llama.cpp b10809 updates the session and sequence-state file formats. Session
 or state files written by b10566 are not guaranteed to load with this version;
 recreate them after upgrading.
 
-### Basic Text Generation
-
-```crystal
-require "llama"
-
-# Load a model
-model = Llama::Model.new("/path/to/model.gguf")
-
-# Create a context
-context = model.context
-
-# Generate text
-response = context.generate("Once upon a time", max_tokens: 100, temperature: 0.8)
-puts response
-
-# Or use the convenience method
-response = Llama.generate("/path/to/model.gguf", "Once upon a time")
-puts response
-```
-
-With a GPU-enabled llama.cpp build, the convenience method can also configure offloading:
-
-```crystal
-response = Llama.generate(
-  "/path/to/model.gguf",
-  "Once upon a time",
-  n_gpu_layers: -1,
-  offload_kqv: true,
-  op_offload: true
-)
-```
-
 ### Advanced Sampling
 
 ```crystal
 require "llama"
 
-model = Llama::Model.new("/path/to/model.gguf")
-context = model.context
+Llama::Model.open("/path/to/model.gguf") do |model|
+  model.context do |context|
+    Llama::SamplerChain.open do |chain|
+      chain.add(Llama::Sampler::TopK.new(40))
+      chain.add(Llama::Sampler::MinP.new(0.05, 1))
+      chain.add(Llama::Sampler::Temp.new(0.8))
+      chain.add(Llama::Sampler::Dist.new(42))
 
-# Create a sampler chain with multiple sampling methods
-chain = Llama::SamplerChain.new
-chain.add(Llama::Sampler::TopK.new(40))
-chain.add(Llama::Sampler::MinP.new(0.05, 1))
-chain.add(Llama::Sampler::Temp.new(0.8))
-chain.add(Llama::Sampler::Dist.new(42))
-
-# Generate text with the custom sampler chain
-result = context.generate_with_sampler("Write a short poem about AI:", chain, 150)
-puts result
+      result = context.generate_with_sampler("Write a short poem about AI:", chain, 150)
+      puts result
+    end
+  end
+end
 ```
 
 ### Chat Conversations
@@ -257,24 +292,22 @@ puts result
 require "llama"
 require "llama/chat"
 
-model = Llama::Model.new("/path/to/model.gguf")
-context = model.context
+Llama::Model.open("/path/to/model.gguf") do |model|
+  model.context do |context|
+    messages = [
+      Llama::ChatMessage.new("system", "You are a helpful assistant."),
+      Llama::ChatMessage.new("user", "Hello, who are you?"),
+    ]
 
-# Create a chat conversation
-messages = [
-  Llama::ChatMessage.new("system", "You are a helpful assistant."),
-  Llama::ChatMessage.new("user", "Hello, who are you?")
-]
+    response = context.chat(messages)
+    puts "Assistant: #{response}"
 
-# Generate a response
-response = context.chat(messages)
-puts "Assistant: #{response}"
-
-# Continue the conversation
-messages << Llama::ChatMessage.new("assistant", response)
-messages << Llama::ChatMessage.new("user", "Tell me a joke")
-response = context.chat(messages)
-puts "Assistant: #{response}"
+    messages << Llama::ChatMessage.new("assistant", response)
+    messages << Llama::ChatMessage.new("user", "Tell me a joke")
+    response = context.chat(messages)
+    puts "Assistant: #{response}"
+  end
+end
 ```
 
 ### Embeddings
@@ -282,19 +315,17 @@ puts "Assistant: #{response}"
 ```crystal
 require "llama"
 
-model = Llama::Model.new("/path/to/model.gguf")
+Llama::Model.open("/path/to/model.gguf") do |model|
+  model.context(embeddings: true) do |context|
+    text = "Hello, world!"
+    tokens = model.vocab.tokenize(text)
+    batch = Llama::Batch.from_tokens(tokens)
+    context.decode(batch)
+    embeddings = context.get_embeddings_seq(0)
 
-# Create a context with embeddings enabled
-context = model.context(embeddings: true)
-
-# Get embeddings for text
-text = "Hello, world!"
-tokens = model.vocab.tokenize(text)
-batch = Llama::Batch.from_tokens(tokens)
-context.decode(batch)
-embeddings = context.get_embeddings_seq(0)
-
-puts "Embedding dimension: #{embeddings.size}"
+    puts "Embedding dimension: #{embeddings.size}"
+  end
+end
 ```
 
 ### Utilities
@@ -305,26 +336,12 @@ puts "Embedding dimension: #{embeddings.size}"
 puts Llama.system_info
 ```
 
-#### Backend Capabilities
-
-```crystal
-puts Llama.gpu_offload_supported?
-puts Llama.mmap_supported?
-puts Llama.mlock_supported?
-puts Llama.rpc_supported?
-```
-
-With a supported backend, host tensor operations can be offloaded when creating a context:
-
-```crystal
-context = model.context(offload_kqv: true, op_offload: true)
-```
-
 #### Tokenization Utility
 
 ```crystal
-model = Llama::Model.new("/path/to/model.gguf")
-puts Llama.tokenize_and_format(model.vocab, "Hello, world!", ids_only: true)
+Llama::Model.open("/path/to/model.gguf", vocab_only: true) do |model|
+  puts Llama.tokenize_and_format(model.vocab, "Hello, world!", ids_only: true)
+end
 ```
 
 ## Examples

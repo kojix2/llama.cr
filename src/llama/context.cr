@@ -13,7 +13,7 @@ module Llama
     # - n_threads_batch: Number of threads to use for batch processing (default: 0). If 0, uses the number of hardware threads.
     # - embeddings: Extract embeddings (together with logits) (default: false). If true, extract embeddings (together with logits).
     # - offload_kqv: Whether to offload the KQV ops (including the KV cache) to GPU (default: false). Requires a GPU build of llama.cpp.
-    # - op_offload: Whether to offload host tensor operations to device (default: false). Requires a supported backend.
+    # - op_offload: Whether to offload host tensor operations to a device (default: false). Requires a supported backend.
     #
     # Raises:
     # - Llama::Context::Error if the context cannot be created.

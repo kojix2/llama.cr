@@ -34,17 +34,6 @@
 # Basic Usage:
 #   require "llama"
 #
-#   # Load a model
-#   model = Llama::Model.new("/path/to/model.gguf")
-#
-#   # Create a context
-#   context = model.context
-#
-#   # Generate text
-#   response = context.generate("Once upon a time", max_tokens: 100, temperature: 0.8)
-#   puts response
-#
-#   # Or use the convenience method
 #   response = Llama.generate("/path/to/model.gguf", "Once upon a time")
 #   puts response
 #
@@ -60,6 +49,7 @@
 # System Info:
 #   info = Llama.system_info
 #   puts info
+#   puts Llama.gpu_offload_supported?
 #
 # Tokenization Utility:
 #   model = Llama::Model.new("/path/to/model.gguf")
@@ -190,7 +180,9 @@ module Llama
     String.new(LibLlama.llama_print_system_info)
   end
 
-  # Returns whether this llama.cpp build supports offloading model work to a GPU.
+  # Returns whether the current llama.cpp runtime supports GPU offloading.
+  #
+  # Available dynamic backends are loaded by llama.cpp as needed.
   def self.gpu_offload_supported? : Bool
     LibLlama.llama_supports_gpu_offload
   end
@@ -205,7 +197,9 @@ module Llama
     LibLlama.llama_supports_mlock
   end
 
-  # Returns whether this llama.cpp build supports the RPC backend.
+  # Returns whether the current llama.cpp runtime supports the RPC backend.
+  #
+  # Available dynamic backends are loaded by llama.cpp as needed.
   def self.rpc_supported? : Bool
     LibLlama.llama_supports_rpc
   end
@@ -294,10 +288,10 @@ module Llama
   # - prompt: The input prompt
   # - max_tokens: Maximum number of tokens to generate (must be positive)
   # - temperature: Sampling temperature (0.0 = greedy, 1.0 = more random)
-  # - n_gpu_layers: Number of model layers to offload to GPU (-1 = all layers)
-  # - offload_kqv: Whether to offload KQV operations, including the KV cache
-  # - op_offload: Whether to offload host tensor operations to device
-  # - lazy_mode: Controls on-demand loading of eligible model tensors
+  # - n_gpu_layers: Number of model layers to offload to GPU (default: 0; negative = all layers)
+  # - offload_kqv: Whether to offload KQV operations, including the KV cache (default: false)
+  # - op_offload: Whether to offload host tensor operations to device (default: false)
+  # - lazy_mode: Controls on-demand loading of eligible model tensors (default: LazyMode::AUTO)
   #
   # Returns:
   # - The generated text
