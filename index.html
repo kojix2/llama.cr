@@ -117,6 +117,11 @@
       
     </li>
   
+  <li class=" " data-id="llama/Llama/LazyMode" data-name="llama::lazymode">
+      <a href="Llama/LazyMode.html">LazyMode</a>
+      
+    </li>
+  
   <li class="parent " data-id="llama/Llama/Memory" data-name="llama::memory">
       <a href="Llama/Memory.html">Memory</a>
       
@@ -305,8 +310,8 @@
 <img src="https://img.shields.io/badge/PURE-VIBE_CODING-magenta" alt="Static Badge" /></p>
 <p>Crystal bindings for <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.</p>
 <p>The version in <code>shard.yml</code> corresponds to the compatible llama.cpp build number.
-For example, shard version <code>0.10566.0</code> targets llama.cpp build <code>b10566</code>, which
-is the stable release <a href="https://github.com/ggml-org/llama.cpp/releases/tag/v0.2.0">v0.2.0</a>.</p>
+For example, shard version <code>0.10809.0</code> targets llama.cpp build <code>b10809</code>, which
+is the stable release <a href="https://github.com/ggml-org/llama.cpp/releases/tag/v0.4.0">v0.4.0</a>.</p>
 <p>This project is under active development and may change rapidly.</p>
 <h2><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
@@ -447,6 +452,27 @@ context <span class="o">=</span> model.context
 <span class="k">end</span></code></pre>
 <p>Samplers added to a <code>SamplerChain</code> are released with the chain. Do not free a
 model or adapter while a dependent context is still using it.</p>
+<h3><a id="lazy-model-loading" class="anchor" href="#lazy-model-loading">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Lazy Model Loading</h3>
+<p>llama.cpp can load eligible model tensors on demand. The default is
+<code><a href="Llama/LibLlama/LlamaLazyMode.html#AUTO">Llama::LazyMode::AUTO</a></code>, which lazily loads marked tensors larger than 4 GiB.</p>
+<pre><code class="language-crystal"><span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.open(<span class="s">&quot;/path/to/model.gguf&quot;</span>, lazy_mode: <span class="t">Llama</span><span class="t">::</span><span class="t">LazyMode</span><span class="t">::</span><span class="t">ON</span>) <span class="k">do</span> <span class="o">|</span>model<span class="o">|</span>
+  model.context <span class="k">do</span> <span class="o">|</span>context<span class="o">|</span>
+    puts context.generate(<span class="s">&quot;Once upon a time&quot;</span>)
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
+<p>Use <code><a href="Llama/LibLlama/LlamaLazyMode.html#OFF">Llama::LazyMode::OFF</a></code> to always read complete tensors up front.</p>
+<h3><a id="saved-state-compatibility" class="anchor" href="#saved-state-compatibility">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Saved State Compatibility</h3>
+<p>llama.cpp b10809 updates the session and sequence-state file formats. Session
+or state files written by b10566 are not guaranteed to load with this version;
+recreate them after upgrading.</p>
 <h3><a id="basic-text-generation" class="anchor" href="#basic-text-generation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>

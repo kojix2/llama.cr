@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::ChatMessage - llama main</title>
+  <title>Llama::LazyMode - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../";
   </script>
@@ -92,7 +92,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
+  <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
       <a href="../Llama/ChatMessage.html">ChatMessage</a>
       
     </li>
@@ -117,7 +117,7 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/LazyMode" data-name="llama::lazymode">
+  <li class=" current" data-id="llama/Llama/LazyMode" data-name="llama::lazymode">
       <a href="../Llama/LazyMode.html">LazyMode</a>
       
     </li>
@@ -302,13 +302,11 @@
 <h1 class="type-name">
 
   <span class="kind">
-    class
-  </span> Llama::<wbr>ChatMessage
+    alias
+  </span> Llama::<wbr>LazyMode
 
 </h1>
 
-
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../Llama/ChatMessage.html">Llama::ChatMessage</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -322,9 +320,19 @@
     Overview
   </h2>
 
-  <p>Represents a message in a chat conversation</p>
+  <p>Controls whether model tensors marked for lazy reading are loaded on demand.</p>
 
 
+
+  <h2>
+    <a id="alias-definition" class="anchor" href="#alias-definition">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Alias Definition
+  </h2>
+  <code>Llama::LibLlama::LlamaLazyMode</code>
 
 
 
@@ -349,8 +357,8 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/7fe01554181105b8a07b3de8520d2c4c14dd381f/src/llama/chat.cr#L3" target="_blank">
-        llama/chat.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/7fe01554181105b8a07b3de8520d2c4c14dd381f/src/llama/model.cr#L5" target="_blank">
+        llama/model.cr
       </a>
     
     <br/>
@@ -361,268 +369,25 @@
 
 
   
-  <h2>
-    <a id="constructors" class="anchor" href="#constructors">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructors
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#new%28role%3AString%2Ccontent%3AString%29-class-method" class="signature"><strong>.new</strong>(role : String, content : String)</a>
-        
-          <div class="summary"><p>Creates a new ChatMessage</p></div>
-        
-      </li>
-    
-  </ul>
-
 
   
 
   
 
   
-  <h2>
-    <a id="instance-method-summary" class="anchor" href="#instance-method-summary">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Summary
-  </h2>
-  <ul class="list-summary">
-    
-      <li class="entry-summary">
-        <a href="#content%3AString-instance-method" class="signature"><strong>#content</strong> : String</a>
-        
-          <div class="summary"><p>The content of the message</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#content%3D%28content%3AString%29-instance-method" class="signature"><strong>#content=</strong>(content : String)</a>
-        
-          <div class="summary"><p>The content of the message</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#role%3AString-instance-method" class="signature"><strong>#role</strong> : String</a>
-        
-          <div class="summary"><p>The role of the message sender (e.g., &quot;system&quot;, &quot;user&quot;, &quot;assistant&quot;)</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#role%3D%28role%3AString%29-instance-method" class="signature"><strong>#role=</strong>(role : String)</a>
-        
-          <div class="summary"><p>The role of the message sender (e.g., &quot;system&quot;, &quot;user&quot;, &quot;assistant&quot;)</p></div>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#to_unsafe%3ALibLlama%3A%3ALlamaChatMessage-instance-method" class="signature"><strong>#to_unsafe</strong> : LibLlama::LlamaChatMessage</a>
-        
-          <div class="summary"><p>Converts to the C structure</p></div>
-        
-      </li>
-    
-  </ul>
-
 
 
   <div class="methods-inherited">
     
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
-    
   </div>
 
   
-  <h2>
-    <a id="constructor-detail" class="anchor" href="#constructor-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Constructor Detail
-  </h2>
-  
-    <div class="entry-detail" id="new(role:String,content:String)-class-method">
-      <div class="signature">
-        
-        def self.<strong>new</strong>(role : String, content : String)
-
-        <a class="method-permalink" href="#new%28role%3AString%2Ccontent%3AString%29-class-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new ChatMessage</p>
-<p>Parameters:</p>
-<ul>
-<li>role: The role of the message sender</li>
-<li>content: The content of the message</li>
-</ul>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/7fe01554181105b8a07b3de8520d2c4c14dd381f/src/llama/chat.cr#L15" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
   
 
   
 
   
-  <h2>
-    <a id="instance-method-detail" class="anchor" href="#instance-method-detail">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>
-    Instance Method Detail
-  </h2>
-  
-    <div class="entry-detail" id="content:String-instance-method">
-      <div class="signature">
-        
-        def <strong>content</strong> : String
-
-        <a class="method-permalink" href="#content%3AString-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>The content of the message</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/7fe01554181105b8a07b3de8520d2c4c14dd381f/src/llama/chat.cr#L8" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="content=(content:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>content=</strong>(content : String)
-
-        <a class="method-permalink" href="#content%3D%28content%3AString%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>The content of the message</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/7fe01554181105b8a07b3de8520d2c4c14dd381f/src/llama/chat.cr#L8" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="role:String-instance-method">
-      <div class="signature">
-        
-        def <strong>role</strong> : String
-
-        <a class="method-permalink" href="#role%3AString-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>The role of the message sender (e.g., &quot;system&quot;, &quot;user&quot;, &quot;assistant&quot;)</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/7fe01554181105b8a07b3de8520d2c4c14dd381f/src/llama/chat.cr#L5" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="role=(role:String)-instance-method">
-      <div class="signature">
-        
-        def <strong>role=</strong>(role : String)
-
-        <a class="method-permalink" href="#role%3D%28role%3AString%29-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>The role of the message sender (e.g., &quot;system&quot;, &quot;user&quot;, &quot;assistant&quot;)</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/7fe01554181105b8a07b3de8520d2c4c14dd381f/src/llama/chat.cr#L5" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="to_unsafe:LibLlama::LlamaChatMessage-instance-method">
-      <div class="signature">
-        
-        def <strong>to_unsafe</strong> : LibLlama::LlamaChatMessage
-
-        <a class="method-permalink" href="#to_unsafe%3ALibLlama%3A%3ALlamaChatMessage-instance-method">#</a>
-      </div>
-      
-        <div class="doc">
-          
-          <p>Converts to the C structure</p>
-        </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/7fe01554181105b8a07b3de8520d2c4c14dd381f/src/llama/chat.cr#L19" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-
 
 
 </div>
