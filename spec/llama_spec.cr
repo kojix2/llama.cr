@@ -86,14 +86,15 @@ describe Llama do
     end
 
     it "preserves positional arguments and forwards offloading options" do
+      use_gpu = Llama.gpu_offload_supported?
       response = Llama.generate(
         MODEL_PATH,
         "Once upon a time",
         2,
         0.0_f32,
-        n_gpu_layers: 0,
-        offload_kqv: true,
-        op_offload: true,
+        n_gpu_layers: use_gpu ? -1 : 0,
+        offload_kqv: use_gpu,
+        op_offload: use_gpu,
         lazy_mode: Llama::LazyMode::OFF
       )
 

@@ -6,7 +6,7 @@ require "colorize"
 # Parse command line arguments
 model_path = ""
 n_ctx = 2048
-ngl = 99
+ngl = -1
 
 OptionParser.parse do |parser|
   parser.banner = "Usage: #{PROGRAM_NAME} -m MODEL [-c context_size] [-ngl n_gpu_layers]"
@@ -19,7 +19,7 @@ OptionParser.parse do |parser|
     n_ctx = context_size.to_i
   end
 
-  parser.on("-g", "--gpu-layers N", "Number of layers to offload to GPU (default: 99)") do |layers|
+  parser.on("-g", "--gpu-layers N", "Number of layers to offload to GPU (default: -1, all layers)") do |layers|
     ngl = layers.to_i
   end
 
@@ -82,8 +82,14 @@ end
 begin
   Llama::Model.open(model_path, n_gpu_layers: ngl) do |model|
     vocab = model.vocab
+    use_gpu = ngl != 0 && Llama.gpu_offload_supported?
 
-    model.context(n_ctx: n_ctx.to_u32, n_batch: n_ctx.to_u32) do |context|
+    model.context(
+      n_ctx: n_ctx.to_u32,
+      n_batch: n_ctx.to_u32,
+      offload_kqv: use_gpu,
+      op_offload: use_gpu
+    ) do |context|
       Llama::SamplerChain.open do |sampler|
         sampler.add(Llama::Sampler::MinP.new(0.05, 1))
         sampler.add(Llama::Sampler::Temp.new(0.8))

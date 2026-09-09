@@ -7,7 +7,7 @@ require "json"
 # Command line arguments
 model_path = ""
 n_ctx = 2048
-ngl = 99
+ngl = -1
 port = 3000
 
 OptionParser.parse do |parser|
@@ -15,7 +15,7 @@ OptionParser.parse do |parser|
 
   parser.on("-m", "--model MODEL", "Path to the model file (required)") { |path| model_path = path }
   parser.on("-c", "--context N", "Context size (default: 2048)") { |context_size| n_ctx = context_size.to_i }
-  parser.on("-g", "--gpu-layers N", "Number of layers to offload to GPU (default: 99)") { |layers| ngl = layers.to_i }
+  parser.on("-g", "--gpu-layers N", "Number of layers to offload to GPU (default: -1, all layers)") { |layers| ngl = layers.to_i }
   parser.on("-p", "--port PORT", "Port to run the server on (default: 3000)") { |port_value| port = port_value.to_i }
   parser.on("-h", "--help", "Show this help") { puts parser; exit }
 end
@@ -27,6 +27,7 @@ Llama.log_level = Llama::LOG_LEVEL_ERROR
 # Initialize model, vocab, context, and sampler
 model = Llama::Model.new(model_path, n_gpu_layers: ngl)
 vocab = model.vocab
+use_gpu = ngl != 0 && Llama.gpu_offload_supported?
 
 def build_sampler : Llama::SamplerChain
   sampler = Llama::SamplerChain.new
@@ -306,7 +307,12 @@ post "/api/chat" do |env|
       end
     end
   end
-  local_context = model.context(n_ctx: n_ctx.to_u32, n_batch: n_ctx.to_u32)
+  local_context = model.context(
+    n_ctx: n_ctx.to_u32,
+    n_batch: n_ctx.to_u32,
+    offload_kqv: use_gpu,
+    op_offload: use_gpu
+  )
   begin
     local_sampler = build_sampler
     begin

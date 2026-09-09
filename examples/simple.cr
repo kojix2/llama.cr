@@ -4,7 +4,7 @@ require "option_parser"
 # Parse command line arguments
 model_path = ""
 prompt = "Hello my name is"
-ngl = 99
+ngl = -1
 n_predict = 32
 
 OptionParser.parse do |parser|
@@ -18,7 +18,7 @@ OptionParser.parse do |parser|
     n_predict = count.to_i
   end
 
-  parser.on("-g N", "--n-gpu-layers=N", "Number of layers to offload to GPU (default: 99)") do |layers|
+  parser.on("-g N", "--n-gpu-layers=N", "Number of layers to offload to GPU (default: -1, all layers)") do |layers|
     ngl = layers.to_i
   end
 
@@ -51,10 +51,13 @@ end
 Llama::Model.open(model_path, n_gpu_layers: ngl) do |model|
   vocab = model.vocab
   prompt_tokens = vocab.tokenize(prompt)
+  use_gpu = ngl != 0 && Llama.gpu_offload_supported?
 
   model.context(
     n_ctx: (prompt_tokens.size + n_predict - 1).to_u32,
-    n_batch: prompt_tokens.size.to_u32
+    n_batch: prompt_tokens.size.to_u32,
+    offload_kqv: use_gpu,
+    op_offload: use_gpu
   ) do |context|
     Llama::SamplerChain.open(no_perf: false) do |sampler|
       sampler.add(Llama::Sampler::Greedy.new)
