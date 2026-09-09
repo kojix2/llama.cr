@@ -408,7 +408,7 @@ crystal spec</code></pre>
 <p>Popular options:</p>
 <ul>
 <li><a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF">TinyLlama 1.1B</a> <a href="https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf">[raw]</a></li>
-<li><a href="https://huggingface.co/mmnga/Meta-Llama-3-70B-Instruct-gguf">Llama 3 8B Instruct</a></li>
+<li><a href="https://huggingface.co/mmnga/Meta-Llama-3-8B-Instruct-gguf">Llama 3 8B Instruct</a></li>
 <li><a href="https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF">Mistral 7B Instruct v0.2</a></li>
 </ul>
 <h2><a id="usage" class="anchor" href="#usage">
@@ -617,8 +617,10 @@ recreate them after upgrading.</p>
 <p>The <code>examples</code> directory contains sample code demonstrating various features:</p>
 <ul>
 <li><code>simple.cr</code> - Basic text generation</li>
+<li><code>minimal.cr</code> - Minimal use of the high-level generation API</li>
 <li><code>chat.cr</code> - Chat conversations with models</li>
 <li><code>tokenize.cr</code> - Tokenization and vocabulary features</li>
+<li><code>server.cr</code> - HTTP streaming server (uses <code>examples/shard.yml</code>)</li>
 </ul>
 <h2><a id="api-documentation" class="anchor" href="#api-documentation">
   <svg class="octicon-link" aria-hidden="true">
