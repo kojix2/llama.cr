@@ -16,6 +16,20 @@ describe "Llama with model" do
     puts "  - Attention heads: #{model.n_head}"
   end
 
+  it "loads the model with each lazy loading mode" do
+    {Llama::LazyMode::AUTO, Llama::LazyMode::OFF, Llama::LazyMode::ON}.each do |lazy_mode|
+      model = Llama::Model.new(MODEL_PATH, lazy_mode: lazy_mode)
+      model.n_params.should be > 0
+      model.free
+    end
+  end
+
+  it "forwards lazy loading mode through .open" do
+    Llama::Model.open(MODEL_PATH, lazy_mode: Llama::LazyMode::OFF) do |model|
+      model.n_params.should be > 0
+    end
+  end
+
   it "raises NotImplementedError when clone is called" do
     model = Llama::Model.new(MODEL_PATH)
     expect_raises(NotImplementedError, "clone is not supported for Llama::Model") do

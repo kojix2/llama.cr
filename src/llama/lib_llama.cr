@@ -9,9 +9,9 @@ module Llama
     LLAMA_FILE_MAGIC_GGSN              = 0x6767736e_u32 # 'ggsn'
     LLAMA_FILE_MAGIC_GGSQ              = 0x67677371_u32 # 'ggsq'
     LLAMA_SESSION_MAGIC                = LLAMA_FILE_MAGIC_GGSN
-    LLAMA_SESSION_VERSION              = 9
+    LLAMA_SESSION_VERSION              = 10
     LLAMA_STATE_SEQ_MAGIC              = LLAMA_FILE_MAGIC_GGSQ
-    LLAMA_STATE_SEQ_VERSION            =     2
+    LLAMA_STATE_SEQ_VERSION            =     3
     LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY = 1_u32
 
     alias LlamaToken = Int32
@@ -49,6 +49,7 @@ module Llama
       kv_overrides : Void*
       tensor_types : Void*
       prune_layers : Void*
+      max_buf_size : LibC::SizeT
     end
 
     fun llama_model_quantize_default_params : LlamaModelQuantizeParams
@@ -226,6 +227,12 @@ module Llama
       DIRECT_IO  =  4
     end
 
+    enum LlamaLazyMode
+      OFF  = 0
+      AUTO = 1
+      ON   = 2
+    end
+
     enum LlamaModelKvOverrideType
       INT
       FLOAT
@@ -325,6 +332,7 @@ module Llama
       n_gpu_layers : Int32
       split_mode : LlamaSplitMode
       load_mode : LlamaLoadMode
+      lazy_mode : LlamaLazyMode
       main_gpu : Int32
       tensor_split : Float32*
       progress_callback : Void*

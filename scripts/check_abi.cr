@@ -10,12 +10,30 @@ C_PROBE = <<-'C'
   #define PRINT_OFFSET(type, field) printf(#type "." #field "=%zu\n", offsetof(struct type, field))
 
   int main(void) {
+      PRINT_SIZE(llama_model_quantize_params);
+      PRINT_OFFSET(llama_model_quantize_params, nthread);
+      PRINT_OFFSET(llama_model_quantize_params, ftype);
+      PRINT_OFFSET(llama_model_quantize_params, output_tensor_type);
+      PRINT_OFFSET(llama_model_quantize_params, token_embedding_type);
+      PRINT_OFFSET(llama_model_quantize_params, allow_requantize);
+      PRINT_OFFSET(llama_model_quantize_params, quantize_output_tensor);
+      PRINT_OFFSET(llama_model_quantize_params, only_copy);
+      PRINT_OFFSET(llama_model_quantize_params, pure);
+      PRINT_OFFSET(llama_model_quantize_params, keep_split);
+      PRINT_OFFSET(llama_model_quantize_params, dry_run);
+      PRINT_OFFSET(llama_model_quantize_params, imatrix);
+      PRINT_OFFSET(llama_model_quantize_params, kv_overrides);
+      PRINT_OFFSET(llama_model_quantize_params, tt_overrides);
+      PRINT_OFFSET(llama_model_quantize_params, prune_layers);
+      PRINT_OFFSET(llama_model_quantize_params, max_buf_size);
+
       PRINT_SIZE(llama_model_params);
       PRINT_OFFSET(llama_model_params, devices);
       PRINT_OFFSET(llama_model_params, tensor_buft_overrides);
       PRINT_OFFSET(llama_model_params, n_gpu_layers);
       PRINT_OFFSET(llama_model_params, split_mode);
       PRINT_OFFSET(llama_model_params, load_mode);
+      PRINT_OFFSET(llama_model_params, lazy_mode);
       PRINT_OFFSET(llama_model_params, main_gpu);
       PRINT_OFFSET(llama_model_params, tensor_split);
       PRINT_OFFSET(llama_model_params, progress_callback);
@@ -72,61 +90,78 @@ C_PROBE = <<-'C'
 
 def crystal_layout : Hash(String, Int32)
   {
-    "llama_model_params.sizeof"                      => sizeof(Llama::LibLlama::LlamaModelParams),
-    "llama_model_params.devices"                     => offsetof(Llama::LibLlama::LlamaModelParams, @devices),
-    "llama_model_params.tensor_buft_overrides"       => offsetof(Llama::LibLlama::LlamaModelParams, @tensor_buft_overrides),
-    "llama_model_params.n_gpu_layers"                => offsetof(Llama::LibLlama::LlamaModelParams, @n_gpu_layers),
-    "llama_model_params.split_mode"                  => offsetof(Llama::LibLlama::LlamaModelParams, @split_mode),
-    "llama_model_params.load_mode"                   => offsetof(Llama::LibLlama::LlamaModelParams, @load_mode),
-    "llama_model_params.main_gpu"                    => offsetof(Llama::LibLlama::LlamaModelParams, @main_gpu),
-    "llama_model_params.tensor_split"                => offsetof(Llama::LibLlama::LlamaModelParams, @tensor_split),
-    "llama_model_params.progress_callback"           => offsetof(Llama::LibLlama::LlamaModelParams, @progress_callback),
-    "llama_model_params.progress_callback_user_data" => offsetof(Llama::LibLlama::LlamaModelParams, @progress_callback_user_data),
-    "llama_model_params.kv_overrides"                => offsetof(Llama::LibLlama::LlamaModelParams, @kv_overrides),
-    "llama_model_params.vocab_only"                  => offsetof(Llama::LibLlama::LlamaModelParams, @vocab_only),
-    "llama_model_params.check_tensors"               => offsetof(Llama::LibLlama::LlamaModelParams, @check_tensors),
-    "llama_model_params.use_extra_bufts"             => offsetof(Llama::LibLlama::LlamaModelParams, @use_extra_bufts),
-    "llama_model_params.no_host"                     => offsetof(Llama::LibLlama::LlamaModelParams, @no_host),
-    "llama_model_params.no_alloc"                    => offsetof(Llama::LibLlama::LlamaModelParams, @no_alloc),
-    "llama_model_params.load_mtp"                    => offsetof(Llama::LibLlama::LlamaModelParams, @load_mtp),
-    "llama_context_params.sizeof"                    => sizeof(Llama::LibLlama::LlamaContextParams),
-    "llama_context_params.n_ctx"                     => offsetof(Llama::LibLlama::LlamaContextParams, @n_ctx),
-    "llama_context_params.n_batch"                   => offsetof(Llama::LibLlama::LlamaContextParams, @n_batch),
-    "llama_context_params.n_ubatch"                  => offsetof(Llama::LibLlama::LlamaContextParams, @n_ubatch),
-    "llama_context_params.n_seq_max"                 => offsetof(Llama::LibLlama::LlamaContextParams, @n_seq_max),
-    "llama_context_params.n_rs_seq"                  => offsetof(Llama::LibLlama::LlamaContextParams, @n_rs_seq),
-    "llama_context_params.n_outputs_max"             => offsetof(Llama::LibLlama::LlamaContextParams, @n_outputs_max),
-    "llama_context_params.n_outputs_max_per_seq"     => offsetof(Llama::LibLlama::LlamaContextParams, @n_outputs_max_per_seq),
-    "llama_context_params.n_threads"                 => offsetof(Llama::LibLlama::LlamaContextParams, @n_threads),
-    "llama_context_params.n_threads_batch"           => offsetof(Llama::LibLlama::LlamaContextParams, @n_threads_batch),
-    "llama_context_params.ctx_type"                  => offsetof(Llama::LibLlama::LlamaContextParams, @ctx_type),
-    "llama_context_params.rope_scaling_type"         => offsetof(Llama::LibLlama::LlamaContextParams, @rope_scaling_type),
-    "llama_context_params.pooling_type"              => offsetof(Llama::LibLlama::LlamaContextParams, @pooling_type),
-    "llama_context_params.attention_type"            => offsetof(Llama::LibLlama::LlamaContextParams, @attention_type),
-    "llama_context_params.flash_attn_type"           => offsetof(Llama::LibLlama::LlamaContextParams, @flash_attn_type),
-    "llama_context_params.rope_freq_base"            => offsetof(Llama::LibLlama::LlamaContextParams, @rope_freq_base),
-    "llama_context_params.rope_freq_scale"           => offsetof(Llama::LibLlama::LlamaContextParams, @rope_freq_scale),
-    "llama_context_params.yarn_ext_factor"           => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_ext_factor),
-    "llama_context_params.yarn_attn_factor"          => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_attn_factor),
-    "llama_context_params.yarn_beta_fast"            => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_beta_fast),
-    "llama_context_params.yarn_beta_slow"            => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_beta_slow),
-    "llama_context_params.yarn_orig_ctx"             => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_orig_ctx),
-    "llama_context_params.defrag_thold"              => offsetof(Llama::LibLlama::LlamaContextParams, @defrag_thold),
-    "llama_context_params.cb_eval"                   => offsetof(Llama::LibLlama::LlamaContextParams, @cb_eval),
-    "llama_context_params.cb_eval_user_data"         => offsetof(Llama::LibLlama::LlamaContextParams, @cb_eval_user_data),
-    "llama_context_params.type_k"                    => offsetof(Llama::LibLlama::LlamaContextParams, @type_k),
-    "llama_context_params.type_v"                    => offsetof(Llama::LibLlama::LlamaContextParams, @type_v),
-    "llama_context_params.abort_callback"            => offsetof(Llama::LibLlama::LlamaContextParams, @abort_callback),
-    "llama_context_params.abort_callback_data"       => offsetof(Llama::LibLlama::LlamaContextParams, @abort_callback_data),
-    "llama_context_params.embeddings"                => offsetof(Llama::LibLlama::LlamaContextParams, @embeddings),
-    "llama_context_params.offload_kqv"               => offsetof(Llama::LibLlama::LlamaContextParams, @offload_kqv),
-    "llama_context_params.no_perf"                   => offsetof(Llama::LibLlama::LlamaContextParams, @no_perf),
-    "llama_context_params.op_offload"                => offsetof(Llama::LibLlama::LlamaContextParams, @op_offload),
-    "llama_context_params.swa_full"                  => offsetof(Llama::LibLlama::LlamaContextParams, @swa_full),
-    "llama_context_params.kv_unified"                => offsetof(Llama::LibLlama::LlamaContextParams, @kv_unified),
-    "llama_context_params.samplers"                  => offsetof(Llama::LibLlama::LlamaContextParams, @samplers),
-    "llama_context_params.n_samplers"                => offsetof(Llama::LibLlama::LlamaContextParams, @n_samplers),
-    "llama_context_params.ctx_other"                 => offsetof(Llama::LibLlama::LlamaContextParams, @ctx_other),
+    "llama_model_quantize_params.sizeof"                 => sizeof(Llama::LibLlama::LlamaModelQuantizeParams),
+    "llama_model_quantize_params.nthread"                => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @nthread),
+    "llama_model_quantize_params.ftype"                  => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @ftype),
+    "llama_model_quantize_params.output_tensor_type"     => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @output_tensor_type),
+    "llama_model_quantize_params.token_embedding_type"   => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @token_embedding_type),
+    "llama_model_quantize_params.allow_requantize"       => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @allow_requantize),
+    "llama_model_quantize_params.quantize_output_tensor" => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @quantize_output_tensor),
+    "llama_model_quantize_params.only_copy"              => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @only_copy),
+    "llama_model_quantize_params.pure"                   => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @pure),
+    "llama_model_quantize_params.keep_split"             => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @keep_split),
+    "llama_model_quantize_params.dry_run"                => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @dry_run),
+    "llama_model_quantize_params.imatrix"                => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @imatrix),
+    "llama_model_quantize_params.kv_overrides"           => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @kv_overrides),
+    "llama_model_quantize_params.tt_overrides"           => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @tensor_types),
+    "llama_model_quantize_params.prune_layers"           => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @prune_layers),
+    "llama_model_quantize_params.max_buf_size"           => offsetof(Llama::LibLlama::LlamaModelQuantizeParams, @max_buf_size),
+    "llama_model_params.sizeof"                          => sizeof(Llama::LibLlama::LlamaModelParams),
+    "llama_model_params.devices"                         => offsetof(Llama::LibLlama::LlamaModelParams, @devices),
+    "llama_model_params.tensor_buft_overrides"           => offsetof(Llama::LibLlama::LlamaModelParams, @tensor_buft_overrides),
+    "llama_model_params.n_gpu_layers"                    => offsetof(Llama::LibLlama::LlamaModelParams, @n_gpu_layers),
+    "llama_model_params.split_mode"                      => offsetof(Llama::LibLlama::LlamaModelParams, @split_mode),
+    "llama_model_params.load_mode"                       => offsetof(Llama::LibLlama::LlamaModelParams, @load_mode),
+    "llama_model_params.lazy_mode"                       => offsetof(Llama::LibLlama::LlamaModelParams, @lazy_mode),
+    "llama_model_params.main_gpu"                        => offsetof(Llama::LibLlama::LlamaModelParams, @main_gpu),
+    "llama_model_params.tensor_split"                    => offsetof(Llama::LibLlama::LlamaModelParams, @tensor_split),
+    "llama_model_params.progress_callback"               => offsetof(Llama::LibLlama::LlamaModelParams, @progress_callback),
+    "llama_model_params.progress_callback_user_data"     => offsetof(Llama::LibLlama::LlamaModelParams, @progress_callback_user_data),
+    "llama_model_params.kv_overrides"                    => offsetof(Llama::LibLlama::LlamaModelParams, @kv_overrides),
+    "llama_model_params.vocab_only"                      => offsetof(Llama::LibLlama::LlamaModelParams, @vocab_only),
+    "llama_model_params.check_tensors"                   => offsetof(Llama::LibLlama::LlamaModelParams, @check_tensors),
+    "llama_model_params.use_extra_bufts"                 => offsetof(Llama::LibLlama::LlamaModelParams, @use_extra_bufts),
+    "llama_model_params.no_host"                         => offsetof(Llama::LibLlama::LlamaModelParams, @no_host),
+    "llama_model_params.no_alloc"                        => offsetof(Llama::LibLlama::LlamaModelParams, @no_alloc),
+    "llama_model_params.load_mtp"                        => offsetof(Llama::LibLlama::LlamaModelParams, @load_mtp),
+    "llama_context_params.sizeof"                        => sizeof(Llama::LibLlama::LlamaContextParams),
+    "llama_context_params.n_ctx"                         => offsetof(Llama::LibLlama::LlamaContextParams, @n_ctx),
+    "llama_context_params.n_batch"                       => offsetof(Llama::LibLlama::LlamaContextParams, @n_batch),
+    "llama_context_params.n_ubatch"                      => offsetof(Llama::LibLlama::LlamaContextParams, @n_ubatch),
+    "llama_context_params.n_seq_max"                     => offsetof(Llama::LibLlama::LlamaContextParams, @n_seq_max),
+    "llama_context_params.n_rs_seq"                      => offsetof(Llama::LibLlama::LlamaContextParams, @n_rs_seq),
+    "llama_context_params.n_outputs_max"                 => offsetof(Llama::LibLlama::LlamaContextParams, @n_outputs_max),
+    "llama_context_params.n_outputs_max_per_seq"         => offsetof(Llama::LibLlama::LlamaContextParams, @n_outputs_max_per_seq),
+    "llama_context_params.n_threads"                     => offsetof(Llama::LibLlama::LlamaContextParams, @n_threads),
+    "llama_context_params.n_threads_batch"               => offsetof(Llama::LibLlama::LlamaContextParams, @n_threads_batch),
+    "llama_context_params.ctx_type"                      => offsetof(Llama::LibLlama::LlamaContextParams, @ctx_type),
+    "llama_context_params.rope_scaling_type"             => offsetof(Llama::LibLlama::LlamaContextParams, @rope_scaling_type),
+    "llama_context_params.pooling_type"                  => offsetof(Llama::LibLlama::LlamaContextParams, @pooling_type),
+    "llama_context_params.attention_type"                => offsetof(Llama::LibLlama::LlamaContextParams, @attention_type),
+    "llama_context_params.flash_attn_type"               => offsetof(Llama::LibLlama::LlamaContextParams, @flash_attn_type),
+    "llama_context_params.rope_freq_base"                => offsetof(Llama::LibLlama::LlamaContextParams, @rope_freq_base),
+    "llama_context_params.rope_freq_scale"               => offsetof(Llama::LibLlama::LlamaContextParams, @rope_freq_scale),
+    "llama_context_params.yarn_ext_factor"               => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_ext_factor),
+    "llama_context_params.yarn_attn_factor"              => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_attn_factor),
+    "llama_context_params.yarn_beta_fast"                => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_beta_fast),
+    "llama_context_params.yarn_beta_slow"                => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_beta_slow),
+    "llama_context_params.yarn_orig_ctx"                 => offsetof(Llama::LibLlama::LlamaContextParams, @yarn_orig_ctx),
+    "llama_context_params.defrag_thold"                  => offsetof(Llama::LibLlama::LlamaContextParams, @defrag_thold),
+    "llama_context_params.cb_eval"                       => offsetof(Llama::LibLlama::LlamaContextParams, @cb_eval),
+    "llama_context_params.cb_eval_user_data"             => offsetof(Llama::LibLlama::LlamaContextParams, @cb_eval_user_data),
+    "llama_context_params.type_k"                        => offsetof(Llama::LibLlama::LlamaContextParams, @type_k),
+    "llama_context_params.type_v"                        => offsetof(Llama::LibLlama::LlamaContextParams, @type_v),
+    "llama_context_params.abort_callback"                => offsetof(Llama::LibLlama::LlamaContextParams, @abort_callback),
+    "llama_context_params.abort_callback_data"           => offsetof(Llama::LibLlama::LlamaContextParams, @abort_callback_data),
+    "llama_context_params.embeddings"                    => offsetof(Llama::LibLlama::LlamaContextParams, @embeddings),
+    "llama_context_params.offload_kqv"                   => offsetof(Llama::LibLlama::LlamaContextParams, @offload_kqv),
+    "llama_context_params.no_perf"                       => offsetof(Llama::LibLlama::LlamaContextParams, @no_perf),
+    "llama_context_params.op_offload"                    => offsetof(Llama::LibLlama::LlamaContextParams, @op_offload),
+    "llama_context_params.swa_full"                      => offsetof(Llama::LibLlama::LlamaContextParams, @swa_full),
+    "llama_context_params.kv_unified"                    => offsetof(Llama::LibLlama::LlamaContextParams, @kv_unified),
+    "llama_context_params.samplers"                      => offsetof(Llama::LibLlama::LlamaContextParams, @samplers),
+    "llama_context_params.n_samplers"                    => offsetof(Llama::LibLlama::LlamaContextParams, @n_samplers),
+    "llama_context_params.ctx_other"                     => offsetof(Llama::LibLlama::LlamaContextParams, @ctx_other),
   }
 end
 
@@ -178,4 +213,4 @@ ensure
   File.delete?(executable_path)
 end
 
-puts "ABI layouts match for llama_model_params and llama_context_params"
+puts "ABI layouts match for llama_model_quantize_params, llama_model_params, and llama_context_params"

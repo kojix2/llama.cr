@@ -1,6 +1,9 @@
 require "./model/error"
 
 module Llama
+  # Controls whether model tensors marked for lazy reading are loaded on demand.
+  alias LazyMode = LibLlama::LlamaLazyMode
+
   # Wrapper for the llama_model structure
   class Model
     # Creates a new Model instance by loading a model from a file.
@@ -11,6 +14,7 @@ module Llama
     # - use_mmap: Use mmap if possible (default: true). Reduces memory usage.
     # - use_mlock: Force the system to keep the model in RAM (default: false). May improve performance but increases memory usage.
     # - vocab_only: Only load the vocabulary, no weights (default: false). Useful for inspecting the vocabulary.
+    # - lazy_mode: Controls on-demand loading of eligible tensors (default: LazyMode::AUTO).
     #
     # Raises:
     # - Llama::Model::Error if the model cannot be loaded.
@@ -20,6 +24,7 @@ module Llama
       use_mmap : Bool = true,
       use_mlock : Bool = false,
       vocab_only : Bool = false,
+      lazy_mode : LazyMode = LazyMode::AUTO,
     )
       # Ensure llama backend is initialized
       Llama.init
@@ -33,6 +38,7 @@ module Llama
                            use_mlock ? LibLlama::LlamaLoadMode::MLOCK : LibLlama::LlamaLoadMode::NONE
                          end
       params.vocab_only = vocab_only
+      params.lazy_mode = lazy_mode
 
       @handle = LibLlama.llama_model_load_from_file(path, params)
 
@@ -41,7 +47,7 @@ module Llama
         error_msg = Llama.format_error(
           "Failed to load model",
           -5, # Model loading error
-          "path: #{path}, n_gpu_layers: #{n_gpu_layers}, use_mmap: #{use_mmap}, use_mlock: #{use_mlock}, vocab_only: #{vocab_only}"
+          "path: #{path}, n_gpu_layers: #{n_gpu_layers}, use_mmap: #{use_mmap}, use_mlock: #{use_mlock}, vocab_only: #{vocab_only}, lazy_mode: #{lazy_mode}"
         )
         raise Model::Error.new(error_msg)
       end
@@ -67,9 +73,10 @@ module Llama
       use_mmap : Bool = true,
       use_mlock : Bool = false,
       vocab_only : Bool = false,
+      lazy_mode : LazyMode = LazyMode::AUTO,
       & : self -> _
     )
-      model = new(path, n_gpu_layers, use_mmap, use_mlock, vocab_only)
+      model = new(path, n_gpu_layers, use_mmap, use_mlock, vocab_only, lazy_mode)
       yield model
     ensure
       model.try(&.free)

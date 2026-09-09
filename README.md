@@ -9,8 +9,8 @@
 Crystal bindings for [llama.cpp](https://github.com/ggml-org/llama.cpp), a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.
 
 The version in `shard.yml` corresponds to the compatible llama.cpp build number.
-For example, shard version `0.10566.0` targets llama.cpp build `b10566`, which
-is the stable release [v0.2.0](https://github.com/ggml-org/llama.cpp/releases/tag/v0.2.0).
+For example, shard version `0.10809.0` targets llama.cpp build `b10809`, which
+is the stable release [v0.4.0](https://github.com/ggml-org/llama.cpp/releases/tag/v0.4.0).
 
 This project is under active development and may change rapidly.
 
@@ -177,6 +177,27 @@ end
 
 Samplers added to a `SamplerChain` are released with the chain. Do not free a
 model or adapter while a dependent context is still using it.
+
+### Lazy Model Loading
+
+llama.cpp can load eligible model tensors on demand. The default is
+`Llama::LazyMode::AUTO`, which lazily loads marked tensors larger than 4 GiB.
+
+```crystal
+Llama::Model.open("/path/to/model.gguf", lazy_mode: Llama::LazyMode::ON) do |model|
+  model.context do |context|
+    puts context.generate("Once upon a time")
+  end
+end
+```
+
+Use `Llama::LazyMode::OFF` to always read complete tensors up front.
+
+### Saved State Compatibility
+
+llama.cpp b10809 updates the session and sequence-state file formats. Session
+or state files written by b10566 are not guaranteed to load with this version;
+recreate them after upgrading.
 
 ### Basic Text Generation
 

@@ -65,7 +65,7 @@ begin
   end
 
   if requested_build
-    shard_contents = File.read(shard_path).sub(/^version:.*$/, "version: #{target_version}")
+    shard_contents = File.read(shard_path).sub("version: #{current_version}", "version: #{target_version}")
     tempfile = File.tempfile("shard", ".yml.tmp", dir: project_dir)
     tempfile.print(shard_contents)
     tempfile.close

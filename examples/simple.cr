@@ -47,7 +47,7 @@ end
 # The backend is automatically initialized by Llama::Model and Llama::Context
 
 # Scope native resources so they are released in dependency order on every exit
-# path. This is required by llama.cpp 0.2.0 (ggml 0.21.0) on Metal.
+# path. This is required by newer llama.cpp releases on Metal.
 Llama::Model.open(model_path, n_gpu_layers: ngl) do |model|
   vocab = model.vocab
   prompt_tokens = vocab.tokenize(prompt)

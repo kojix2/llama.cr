@@ -78,7 +78,7 @@ def generate(context, vocab, sampler, prompt) : String
 end
 
 # Scope native resources so they are released in dependency order on every exit
-# path. This is required by llama.cpp 0.2.0 (ggml 0.21.0) on Metal.
+# path. This is required by newer llama.cpp releases on Metal.
 begin
   Llama::Model.open(model_path, n_gpu_layers: ngl) do |model|
     vocab = model.vocab
