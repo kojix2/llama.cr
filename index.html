@@ -323,6 +323,7 @@ is the stable release <a href="https://github.com/ggml-org/llama.cpp/releases/ta
 <li>High-level Crystal wrapper classes for easy usage</li>
 <li>Memory management for C resources</li>
 <li>Simple text generation interface</li>
+<li>Backend capability checks and configurable GPU offloading</li>
 <li>Advanced sampling methods (Min-P, Typical, Mirostat, etc.)</li>
 <li>Batch processing for efficient token handling</li>
 <li>KV cache management for optimized inference</li>
@@ -377,7 +378,6 @@ LD_LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; ./simple --model models/tiny_model.gg
 LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; crystal build examples/simple.cr \
   --link-flags &quot;-L$LLAMA_LIB_DIR -Wl,-rpath,$LLAMA_LIB_DIR -lllama -lggml&quot;
 DYLD_LIBRARY_PATH=&quot;$LLAMA_LIB_DIR&quot; ./simple --model models/tiny_model.gguf</code></pre>
-<p>If needed, set extra runtime variables:</p>
 <p>If backend auto-detection fails in newer llama.cpp builds, set <code>GGML_BACKEND_PATH</code> to a backend shared library file (not a directory), for example:</p>
 <pre><code class="language-sh">export GGML_BACKEND_PATH=&quot;$LLAMA_LIB_DIR/libggml-cpu-haswell.so&quot;</code></pre>
 <details>
@@ -416,42 +416,61 @@ crystal spec</code></pre>
     <use href="#octicon-link"/>
   </svg>
 </a>Usage</h2>
-<h3><a id="backend-lifetime" class="anchor" href="#backend-lifetime">
+<h3><a id="basic-text-generation" class="anchor" href="#basic-text-generation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Backend Lifetime</h3>
-<p><code>Llama.init</code> is called automatically when a model or context is created, so most
-applications do not need to call it manually.</p>
-<p><code>Llama.uninit</code> is optional and usually not needed. It is intended only for
-controlled teardown after all <code><a href="Llama/Model.html">Llama::Model</a></code> and <code><a href="Llama/Context.html">Llama::Context</a></code> instances have
-been finalized. Calling it while models or contexts are still alive raises an
-error, because their finalizers may still need the llama.cpp backend.</p>
-<h3><a id="resource-lifetime" class="anchor" href="#resource-lifetime">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Resource Lifetime</h3>
-<p>Native-backed objects provide an idempotent <code>free</code> method. Release resources in
-dependency order: samplers and adapters, then contexts, then models.</p>
-<p>For short scopes, use the block API:</p>
+</a>Basic Text Generation</h3>
+<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
+
+response <span class="o">=</span> <span class="t">Llama</span>.generate(
+  <span class="s">&quot;/path/to/model.gguf&quot;</span>,
+  <span class="s">&quot;Once upon a time&quot;</span>,
+  max_tokens: <span class="n">100</span>,
+  temperature: <span class="n">0.8</span>
+)
+puts response</code></pre>
+<p>For repeated independent generations without reloading the model, use the
+scoped model and context APIs:</p>
 <pre><code class="language-crystal"><span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.open(<span class="s">&quot;/path/to/model.gguf&quot;</span>) <span class="k">do</span> <span class="o">|</span>model<span class="o">|</span>
   model.context <span class="k">do</span> <span class="o">|</span>context<span class="o">|</span>
     puts context.generate(<span class="s">&quot;Once upon a time&quot;</span>)
+    puts context.generate(<span class="s">&quot;In a galaxy far away&quot;</span>)
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
-<p>For longer-lived resources, use <code>free</code> in an <code>ensure</code> block:</p>
-<pre><code class="language-crystal">model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
-context <span class="o">=</span> model.context
+<h3><a id="backend-capabilities-and-gpu-offloading" class="anchor" href="#backend-capabilities-and-gpu-offloading">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Backend Capabilities and GPU Offloading</h3>
+<p>GPU offloading depends on the linked llama.cpp build and the backends available
+at runtime. Check capabilities before selecting accelerator-specific settings:</p>
+<pre><code class="language-crystal">puts <span class="t">Llama</span>.gpu_offload_supported?
+puts <span class="t">Llama</span>.mmap_supported?
+puts <span class="t">Llama</span>.mlock_supported?
+puts <span class="t">Llama</span>.rpc_supported?</code></pre>
+<p>With GPU offloading available, the convenience API can offload the model and
+context operations:</p>
+<pre><code class="language-crystal">raise <span class="s">&quot;GPU offloading is unavailable&quot;</span> <span class="k">unless</span> <span class="t">Llama</span>.gpu_offload_supported?
 
-<span class="k">begin</span>
-  puts context.generate(<span class="s">&quot;Once upon a time&quot;</span>)
-<span class="k">ensure</span>
-  context.free
-  model.free
+response <span class="o">=</span> <span class="t">Llama</span>.generate(
+  <span class="s">&quot;/path/to/model.gguf&quot;</span>,
+  <span class="s">&quot;Once upon a time&quot;</span>,
+  n_gpu_layers: <span class="n">-1</span>,
+  offload_kqv: <span class="n">true</span>,
+  op_offload: <span class="n">true</span>
+)</code></pre>
+<p><code>n_gpu_layers: -1</code> requests all model layers; <code>0</code> keeps them on the CPU.
+<code>offload_kqv</code> controls KQV operations and the KV cache, while <code>op_offload</code>
+controls host tensor operations. These options do not add GPU support to a
+CPU-only llama.cpp build. The defaults are <code>n_gpu_layers: 0</code>,
+<code>offload_kqv: false</code>, and <code>op_offload: false</code>.</p>
+<p>The same context settings are available when managing resources directly:</p>
+<pre><code class="language-crystal"><span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.open(<span class="s">&quot;/path/to/model.gguf&quot;</span>, n_gpu_layers: <span class="n">-1</span>) <span class="k">do</span> <span class="o">|</span>model<span class="o">|</span>
+  model.context(offload_kqv: <span class="n">true</span>, op_offload: <span class="n">true</span>) <span class="k">do</span> <span class="o">|</span>context<span class="o">|</span>
+    puts context.generate(<span class="s">&quot;Once upon a time&quot;</span>)
+  <span class="k">end</span>
 <span class="k">end</span></code></pre>
-<p>Samplers added to a <code>SamplerChain</code> are released with the chain. Do not free a
-model or adapter while a dependent context is still using it.</p>
 <h3><a id="lazy-model-loading" class="anchor" href="#lazy-model-loading">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -465,6 +484,42 @@ model or adapter while a dependent context is still using it.</p>
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 <p>Use <code><a href="Llama/LibLlama/LlamaLazyMode.html#OFF">Llama::LazyMode::OFF</a></code> to always read complete tensors up front.</p>
+<p>The convenience API accepts the same setting:</p>
+<pre><code class="language-crystal">response <span class="o">=</span> <span class="t">Llama</span>.generate(
+  <span class="s">&quot;/path/to/model.gguf&quot;</span>,
+  <span class="s">&quot;Once upon a time&quot;</span>,
+  lazy_mode: <span class="t">Llama</span><span class="t">::</span><span class="t">LazyMode</span><span class="t">::</span><span class="t">ON</span>
+)</code></pre>
+<h3><a id="resource-lifetime" class="anchor" href="#resource-lifetime">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Resource Lifetime</h3>
+<p>Native-backed objects provide an idempotent <code>free</code> method. Prefer the block APIs
+shown above for deterministic cleanup. For longer-lived resources, call <code>free</code>
+in an <code>ensure</code> block and release dependencies before their owners:</p>
+<pre><code class="language-crystal">model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+context <span class="o">=</span> model.context
+
+<span class="k">begin</span>
+  puts context.generate(<span class="s">&quot;Once upon a time&quot;</span>)
+<span class="k">ensure</span>
+  context.free
+  model.free
+<span class="k">end</span></code></pre>
+<p>Release samplers and adapters before contexts, and contexts before models.
+Samplers added to a <code>SamplerChain</code> are released with the chain.</p>
+<h3><a id="backend-lifetime" class="anchor" href="#backend-lifetime">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Backend Lifetime</h3>
+<p><code>Llama.init</code> is called automatically when a model or context is created, so most
+applications do not need to call it manually.</p>
+<p><code>Llama.uninit</code> is optional and usually not needed. It is intended only for
+controlled teardown after all <code><a href="Llama/Model.html">Llama::Model</a></code> and <code><a href="Llama/Context.html">Llama::Context</a></code> instances have
+been finalized. Calling it while models or contexts are still alive raises an
+error, because their finalizers may still need the llama.cpp backend.</p>
 <h3><a id="saved-state-compatibility" class="anchor" href="#saved-state-compatibility">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -473,34 +528,6 @@ model or adapter while a dependent context is still using it.</p>
 <p>llama.cpp b10809 updates the session and sequence-state file formats. Session
 or state files written by b10566 are not guaranteed to load with this version;
 recreate them after upgrading.</p>
-<h3><a id="basic-text-generation" class="anchor" href="#basic-text-generation">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Basic Text Generation</h3>
-<pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
-
-<span class="c"># Load a model</span>
-model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
-
-<span class="c"># Create a context</span>
-context <span class="o">=</span> model.context
-
-<span class="c"># Generate text</span>
-response <span class="o">=</span> context.generate(<span class="s">&quot;Once upon a time&quot;</span>, max_tokens: <span class="n">100</span>, temperature: <span class="n">0.8</span>)
-puts response
-
-<span class="c"># Or use the convenience method</span>
-response <span class="o">=</span> <span class="t">Llama</span>.generate(<span class="s">&quot;/path/to/model.gguf&quot;</span>, <span class="s">&quot;Once upon a time&quot;</span>)
-puts response</code></pre>
-<p>With a GPU-enabled llama.cpp build, the convenience method can also configure offloading:</p>
-<pre><code class="language-crystal">response <span class="o">=</span> <span class="t">Llama</span>.generate(
-  <span class="s">&quot;/path/to/model.gguf&quot;</span>,
-  <span class="s">&quot;Once upon a time&quot;</span>,
-  n_gpu_layers: <span class="n">-1</span>,
-  offload_kqv: <span class="n">true</span>,
-  op_offload: <span class="n">true</span>
-)</code></pre>
 <h3><a id="advanced-sampling" class="anchor" href="#advanced-sampling">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -508,19 +535,19 @@ puts response</code></pre>
 </a>Advanced Sampling</h3>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
 
-model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
-context <span class="o">=</span> model.context
+<span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.open(<span class="s">&quot;/path/to/model.gguf&quot;</span>) <span class="k">do</span> <span class="o">|</span>model<span class="o">|</span>
+  model.context <span class="k">do</span> <span class="o">|</span>context<span class="o">|</span>
+    <span class="t">Llama</span><span class="t">::</span><span class="t">SamplerChain</span>.open <span class="k">do</span> <span class="o">|</span>chain<span class="o">|</span>
+      chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">TopK</span>.new(<span class="n">40</span>))
+      chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">MinP</span>.new(<span class="n">0.05</span>, <span class="n">1</span>))
+      chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">Temp</span>.new(<span class="n">0.8</span>))
+      chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">Dist</span>.new(<span class="n">42</span>))
 
-<span class="c"># Create a sampler chain with multiple sampling methods</span>
-chain <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">SamplerChain</span>.new
-chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">TopK</span>.new(<span class="n">40</span>))
-chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">MinP</span>.new(<span class="n">0.05</span>, <span class="n">1</span>))
-chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">Temp</span>.new(<span class="n">0.8</span>))
-chain.add(<span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">Dist</span>.new(<span class="n">42</span>))
-
-<span class="c"># Generate text with the custom sampler chain</span>
-result <span class="o">=</span> context.generate_with_sampler(<span class="s">&quot;Write a short poem about AI:&quot;</span>, chain, <span class="n">150</span>)
-puts result</code></pre>
+      result <span class="o">=</span> context.generate_with_sampler(<span class="s">&quot;Write a short poem about AI:&quot;</span>, chain, <span class="n">150</span>)
+      puts result
+    <span class="k">end</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
 <h3><a id="chat-conversations" class="anchor" href="#chat-conversations">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -529,24 +556,22 @@ puts result</code></pre>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
 <span class="k">require</span> <span class="s">&quot;llama/chat&quot;</span>
 
-model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
-context <span class="o">=</span> model.context
+<span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.open(<span class="s">&quot;/path/to/model.gguf&quot;</span>) <span class="k">do</span> <span class="o">|</span>model<span class="o">|</span>
+  model.context <span class="k">do</span> <span class="o">|</span>context<span class="o">|</span>
+    messages <span class="o">=</span> [
+      <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;system&quot;</span>, <span class="s">&quot;You are a helpful assistant.&quot;</span>),
+      <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;user&quot;</span>, <span class="s">&quot;Hello, who are you?&quot;</span>),
+    ]
 
-<span class="c"># Create a chat conversation</span>
-messages <span class="o">=</span> [
-  <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;system&quot;</span>, <span class="s">&quot;You are a helpful assistant.&quot;</span>),
-  <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;user&quot;</span>, <span class="s">&quot;Hello, who are you?&quot;</span>)
-]
+    response <span class="o">=</span> context.chat(messages)
+    puts <span class="s">&quot;Assistant: </span><span class="i">#{</span>response<span class="i">}</span><span class="s">&quot;</span>
 
-<span class="c"># Generate a response</span>
-response <span class="o">=</span> context.chat(messages)
-puts <span class="s">&quot;Assistant: </span><span class="i">#{</span>response<span class="i">}</span><span class="s">&quot;</span>
-
-<span class="c"># Continue the conversation</span>
-messages <span class="o">&lt;&lt;</span> <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;assistant&quot;</span>, response)
-messages <span class="o">&lt;&lt;</span> <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;user&quot;</span>, <span class="s">&quot;Tell me a joke&quot;</span>)
-response <span class="o">=</span> context.chat(messages)
-puts <span class="s">&quot;Assistant: </span><span class="i">#{</span>response<span class="i">}</span><span class="s">&quot;</span></code></pre>
+    messages <span class="o">&lt;&lt;</span> <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;assistant&quot;</span>, response)
+    messages <span class="o">&lt;&lt;</span> <span class="t">Llama</span><span class="t">::</span><span class="t">ChatMessage</span>.new(<span class="s">&quot;user&quot;</span>, <span class="s">&quot;Tell me a joke&quot;</span>)
+    response <span class="o">=</span> context.chat(messages)
+    puts <span class="s">&quot;Assistant: </span><span class="i">#{</span>response<span class="i">}</span><span class="s">&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
 <h3><a id="embeddings" class="anchor" href="#embeddings">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -554,19 +579,17 @@ puts <span class="s">&quot;Assistant: </span><span class="i">#{</span>response<s
 </a>Embeddings</h3>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
 
-model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
+<span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.open(<span class="s">&quot;/path/to/model.gguf&quot;</span>) <span class="k">do</span> <span class="o">|</span>model<span class="o">|</span>
+  model.context(embeddings: <span class="n">true</span>) <span class="k">do</span> <span class="o">|</span>context<span class="o">|</span>
+    text <span class="o">=</span> <span class="s">&quot;Hello, world!&quot;</span>
+    tokens <span class="o">=</span> model.vocab.tokenize(text)
+    batch <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Batch</span>.from_tokens(tokens)
+    context.decode(batch)
+    embeddings <span class="o">=</span> context.get_embeddings_seq(<span class="n">0</span>)
 
-<span class="c"># Create a context with embeddings enabled</span>
-context <span class="o">=</span> model.context(embeddings: <span class="n">true</span>)
-
-<span class="c"># Get embeddings for text</span>
-text <span class="o">=</span> <span class="s">&quot;Hello, world!&quot;</span>
-tokens <span class="o">=</span> model.vocab.tokenize(text)
-batch <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Batch</span>.from_tokens(tokens)
-context.decode(batch)
-embeddings <span class="o">=</span> context.get_embeddings_seq(<span class="n">0</span>)
-
-puts <span class="s">&quot;Embedding dimension: </span><span class="i">#{</span>embeddings.size<span class="i">}</span><span class="s">&quot;</span></code></pre>
+    puts <span class="s">&quot;Embedding dimension: </span><span class="i">#{</span>embeddings.size<span class="i">}</span><span class="s">&quot;</span>
+  <span class="k">end</span>
+<span class="k">end</span></code></pre>
 <h3><a id="utilities" class="anchor" href="#utilities">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -578,24 +601,14 @@ puts <span class="s">&quot;Embedding dimension: </span><span class="i">#{</span>
   </svg>
 </a>System Info</h4>
 <pre><code class="language-crystal">puts <span class="t">Llama</span>.system_info</code></pre>
-<h4><a id="backend-capabilities" class="anchor" href="#backend-capabilities">
-  <svg class="octicon-link" aria-hidden="true">
-    <use href="#octicon-link"/>
-  </svg>
-</a>Backend Capabilities</h4>
-<pre><code class="language-crystal">puts <span class="t">Llama</span>.gpu_offload_supported?
-puts <span class="t">Llama</span>.mmap_supported?
-puts <span class="t">Llama</span>.mlock_supported?
-puts <span class="t">Llama</span>.rpc_supported?</code></pre>
-<p>With a supported backend, host tensor operations can be offloaded when creating a context:</p>
-<pre><code class="language-crystal">context <span class="o">=</span> model.context(offload_kqv: <span class="n">true</span>, op_offload: <span class="n">true</span>)</code></pre>
 <h4><a id="tokenization-utility" class="anchor" href="#tokenization-utility">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
 </a>Tokenization Utility</h4>
-<pre><code class="language-crystal">model <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.new(<span class="s">&quot;/path/to/model.gguf&quot;</span>)
-puts <span class="t">Llama</span>.tokenize_and_format(model.vocab, <span class="s">&quot;Hello, world!&quot;</span>, ids_only: <span class="n">true</span>)</code></pre>
+<pre><code class="language-crystal"><span class="t">Llama</span><span class="t">::</span><span class="t">Model</span>.open(<span class="s">&quot;/path/to/model.gguf&quot;</span>, vocab_only: <span class="n">true</span>) <span class="k">do</span> <span class="o">|</span>model<span class="o">|</span>
+  puts <span class="t">Llama</span>.tokenize_and_format(model.vocab, <span class="s">&quot;Hello, world!&quot;</span>, ids_only: <span class="n">true</span>)
+<span class="k">end</span></code></pre>
 <h2><a id="examples" class="anchor" href="#examples">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
