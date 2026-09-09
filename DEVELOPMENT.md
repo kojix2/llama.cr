@@ -98,8 +98,10 @@ Document which version of llama.cpp the library is compatible with. When updatin
     - `MODEL_PATH=/path/to/model.gguf ADAPTER_PATH=/path/to/adapter.gguf LIBRARY_PATH=/path/to/libs LD_LIBRARY_PATH=/path/to/libs GGML_BACKEND_PATH=/path/to/libs/libggml-cpu-haswell.so crystal spec`
 9. Validate examples:
   - `examples/simple.cr`
+  - `examples/minimal.cr`
   - `examples/chat.cr`
   - `examples/tokenize.cr`
+  - `examples/server.cr` (build only; dependencies are in `examples/shard.yml`)
 10. Commit changes and create a pull request
 
 ### Standard Linker/Runtime Environment

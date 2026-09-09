@@ -130,7 +130,7 @@ You'll need a model file in GGUF format. For testing, smaller quantized models (
 Popular options:
 
 - [TinyLlama 1.1B](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF) [[raw]](https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf)
-- [Llama 3 8B Instruct](https://huggingface.co/mmnga/Meta-Llama-3-70B-Instruct-gguf)
+- [Llama 3 8B Instruct](https://huggingface.co/mmnga/Meta-Llama-3-8B-Instruct-gguf)
 - [Mistral 7B Instruct v0.2](https://huggingface.co/TheBloke/Mistral-7B-Instruct-v0.2-GGUF)
 
 ## Usage
@@ -349,8 +349,10 @@ end
 The `examples` directory contains sample code demonstrating various features:
 
 - `simple.cr` - Basic text generation
+- `minimal.cr` - Minimal use of the high-level generation API
 - `chat.cr` - Chat conversations with models
 - `tokenize.cr` - Tokenization and vocabulary features
+- `server.cr` - HTTP streaming server (uses `examples/shard.yml`)
 
 ## API Documentation
 

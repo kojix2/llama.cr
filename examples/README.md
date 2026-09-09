@@ -130,9 +130,11 @@ Then open <http://localhost:3000> in your browser.
 
 ## Example List
 
+- `minimal.cr` - Minimal use of the high-level generation API
 - `simple.cr` - Basic text generation
 - `chat.cr` - Chat conversations with models
 - `tokenize.cr` - Tokenization and vocabulary features
+- `server.cr` - Browser-based streaming chat server
 
 ## Troubleshooting
 
