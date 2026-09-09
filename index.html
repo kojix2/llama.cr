@@ -579,6 +579,8 @@ puts <span class="s">&quot;Embedding dimension: </span><span class="i">#{</span>
 puts <span class="t">Llama</span>.mmap_supported?
 puts <span class="t">Llama</span>.mlock_supported?
 puts <span class="t">Llama</span>.rpc_supported?</code></pre>
+<p>With a supported backend, host tensor operations can be offloaded when creating a context:</p>
+<pre><code class="language-crystal">context <span class="o">=</span> model.context(offload_kqv: <span class="n">true</span>, op_offload: <span class="n">true</span>)</code></pre>
 <h4><a id="tokenization-utility" class="anchor" href="#tokenization-utility">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
