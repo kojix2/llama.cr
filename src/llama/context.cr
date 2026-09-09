@@ -13,6 +13,7 @@ module Llama
     # - n_threads_batch: Number of threads to use for batch processing (default: 0). If 0, uses the number of hardware threads.
     # - embeddings: Extract embeddings (together with logits) (default: false). If true, extract embeddings (together with logits).
     # - offload_kqv: Whether to offload the KQV ops (including the KV cache) to GPU (default: false). Requires a GPU build of llama.cpp.
+    # - op_offload: Whether to offload host tensor operations to device (default: false). Requires a supported backend.
     #
     # Raises:
     # - Llama::Context::Error if the context cannot be created.
@@ -24,6 +25,7 @@ module Llama
       n_threads_batch : Int32 = 0, # Number of threads for batch processing
       embeddings : Bool = false,   # Enable or disable embeddings
       offload_kqv : Bool = false,  # Offload KQV to GPU
+      op_offload : Bool = false,   # Offload host tensor operations to device
     )
       # Ensure llama backend is initialized
       Llama.init
@@ -37,7 +39,7 @@ module Llama
       params.n_threads_batch = n_threads_batch
       params.embeddings = embeddings
       params.offload_kqv = offload_kqv
-      params.op_offload = false
+      params.op_offload = op_offload
       params.swa_full = true
       @handle = LibLlama.llama_init_from_model(model.to_unsafe, params)
 
@@ -46,7 +48,7 @@ module Llama
         error_msg = Llama.format_error(
           "Failed to create context",
           -4, # Context creation error
-          "n_ctx: #{n_ctx}, n_batch: #{n_batch}, n_threads: #{n_threads}, n_threads_batch: #{n_threads_batch}, embeddings: #{embeddings}, offload_kqv: #{offload_kqv}"
+          "n_ctx: #{n_ctx}, n_batch: #{n_batch}, n_threads: #{n_threads}, n_threads_batch: #{n_threads_batch}, embeddings: #{embeddings}, offload_kqv: #{offload_kqv}, op_offload: #{op_offload}"
         )
         raise Context::Error.new(error_msg)
       end

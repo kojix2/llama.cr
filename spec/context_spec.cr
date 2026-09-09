@@ -56,6 +56,18 @@ describe Llama::Context do
     end
   end
 
+  describe "offloading options" do
+    it "creates contexts with operation offloading enabled or disabled" do
+      model = Llama::Model.new(MODEL_PATH)
+
+      {false, true}.each do |op_offload|
+        model.context(op_offload: op_offload) do |context|
+          context.n_ctx.should be > 0
+        end
+      end
+    end
+  end
+
   describe "#encode" do
     it "encodes input for encoder-decoder models" do
       model = Llama::Model.new(MODEL_PATH)

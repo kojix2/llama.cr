@@ -302,6 +302,12 @@ puts Llama.mlock_supported?
 puts Llama.rpc_supported?
 ```
 
+With a supported backend, host tensor operations can be offloaded when creating a context:
+
+```crystal
+context = model.context(offload_kqv: true, op_offload: true)
+```
+
 #### Tokenization Utility
 
 ```crystal
