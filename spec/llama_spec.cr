@@ -84,5 +84,21 @@ describe Llama do
       puts "  - Prompt with special chars: '#{prompt}'"
       puts "  - Generated: '#{response}'"
     end
+
+    it "preserves positional arguments and forwards offloading options" do
+      response = Llama.generate(
+        MODEL_PATH,
+        "Once upon a time",
+        2,
+        0.0_f32,
+        n_gpu_layers: 0,
+        offload_kqv: true,
+        op_offload: true,
+        lazy_mode: Llama::LazyMode::OFF
+      )
+
+      response.should be_a(String)
+      response.should_not be_empty
+    end
   end
 end

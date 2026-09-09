@@ -219,6 +219,18 @@ response = Llama.generate("/path/to/model.gguf", "Once upon a time")
 puts response
 ```
 
+With a GPU-enabled llama.cpp build, the convenience method can also configure offloading:
+
+```crystal
+response = Llama.generate(
+  "/path/to/model.gguf",
+  "Once upon a time",
+  n_gpu_layers: -1,
+  offload_kqv: true,
+  op_offload: true
+)
+```
+
 ### Advanced Sampling
 
 ```crystal

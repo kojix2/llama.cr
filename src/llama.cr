@@ -294,6 +294,10 @@ module Llama
   # - prompt: The input prompt
   # - max_tokens: Maximum number of tokens to generate (must be positive)
   # - temperature: Sampling temperature (0.0 = greedy, 1.0 = more random)
+  # - n_gpu_layers: Number of model layers to offload to GPU (-1 = all layers)
+  # - offload_kqv: Whether to offload KQV operations, including the KV cache
+  # - op_offload: Whether to offload host tensor operations to device
+  # - lazy_mode: Controls on-demand loading of eligible model tensors
   #
   # Returns:
   # - The generated text
@@ -302,13 +306,23 @@ module Llama
   # - ArgumentError if parameters are invalid
   # - Llama::Model::Error if model loading fails
   # - Llama::Context::Error if text generation fails
-  def self.generate(model_path : String, prompt : String, max_tokens : Int32 = 128, temperature : Float32 = 0.8) : String
+  def self.generate(
+    model_path : String,
+    prompt : String,
+    max_tokens : Int32 = 128,
+    temperature : Float32 = 0.8,
+    *,
+    n_gpu_layers : Int32 = 0,
+    offload_kqv : Bool = false,
+    op_offload : Bool = false,
+    lazy_mode : LazyMode = LazyMode::AUTO,
+  ) : String
     # Validate parameters
     raise ArgumentError.new("max_tokens must be positive") if max_tokens <= 0
     raise ArgumentError.new("temperature must be non-negative") if temperature < 0
 
-    Model.open(model_path) do |model|
-      model.context do |context|
+    Model.open(model_path, n_gpu_layers: n_gpu_layers, lazy_mode: lazy_mode) do |model|
+      model.context(offload_kqv: offload_kqv, op_offload: op_offload) do |context|
         context.generate(prompt, max_tokens, temperature)
       end
     end
