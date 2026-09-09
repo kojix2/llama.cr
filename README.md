@@ -293,6 +293,15 @@ puts "Embedding dimension: #{embeddings.size}"
 puts Llama.system_info
 ```
 
+#### Backend Capabilities
+
+```crystal
+puts Llama.gpu_offload_supported?
+puts Llama.mmap_supported?
+puts Llama.mlock_supported?
+puts Llama.rpc_supported?
+```
+
 #### Tokenization Utility
 
 ```crystal

@@ -190,6 +190,26 @@ module Llama
     String.new(LibLlama.llama_print_system_info)
   end
 
+  # Returns whether this llama.cpp build supports offloading model work to a GPU.
+  def self.gpu_offload_supported? : Bool
+    LibLlama.llama_supports_gpu_offload
+  end
+
+  # Returns whether this llama.cpp build supports memory-mapped model loading.
+  def self.mmap_supported? : Bool
+    LibLlama.llama_supports_mmap
+  end
+
+  # Returns whether this llama.cpp build supports locking model data in memory.
+  def self.mlock_supported? : Bool
+    LibLlama.llama_supports_mlock
+  end
+
+  # Returns whether this llama.cpp build supports the RPC backend.
+  def self.rpc_supported? : Bool
+    LibLlama.llama_supports_rpc
+  end
+
   # Process escape sequences in a string
   #
   # This method processes common escape sequences like \n, \t, etc.

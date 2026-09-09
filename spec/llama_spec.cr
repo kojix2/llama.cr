@@ -10,6 +10,24 @@ describe Llama do
     end
   end
 
+  describe "backend capabilities" do
+    it "reports GPU offload support" do
+      Llama.gpu_offload_supported?.should eq(Llama::LibLlama.llama_supports_gpu_offload)
+    end
+
+    it "reports mmap support" do
+      Llama.mmap_supported?.should eq(Llama::LibLlama.llama_supports_mmap)
+    end
+
+    it "reports mlock support" do
+      Llama.mlock_supported?.should eq(Llama::LibLlama.llama_supports_mlock)
+    end
+
+    it "reports RPC support" do
+      Llama.rpc_supported?.should eq(Llama::LibLlama.llama_supports_rpc)
+    end
+  end
+
   describe "time API" do
     it "returns increasing microseconds and milliseconds" do
       t0_us = Llama.time_us
