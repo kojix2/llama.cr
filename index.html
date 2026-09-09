@@ -493,6 +493,14 @@ puts response
 <span class="c"># Or use the convenience method</span>
 response <span class="o">=</span> <span class="t">Llama</span>.generate(<span class="s">&quot;/path/to/model.gguf&quot;</span>, <span class="s">&quot;Once upon a time&quot;</span>)
 puts response</code></pre>
+<p>With a GPU-enabled llama.cpp build, the convenience method can also configure offloading:</p>
+<pre><code class="language-crystal">response <span class="o">=</span> <span class="t">Llama</span>.generate(
+  <span class="s">&quot;/path/to/model.gguf&quot;</span>,
+  <span class="s">&quot;Once upon a time&quot;</span>,
+  n_gpu_layers: <span class="n">-1</span>,
+  offload_kqv: <span class="n">true</span>,
+  op_offload: <span class="n">true</span>
+)</code></pre>
 <h3><a id="advanced-sampling" class="anchor" href="#advanced-sampling">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
