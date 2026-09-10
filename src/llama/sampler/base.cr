@@ -4,6 +4,8 @@ module Llama
     # Sampling is the process of selecting the next token during text generation.
     # This is an abstract class.
     abstract class Base
+      include NativeResource
+
       # Creates a new Sampler instance from a raw pointer.
       #
       # Note: This constructor is intended for internal use.
@@ -13,6 +15,18 @@ module Llama
 
       # Returns the raw pointer to the underlying llama_sampler structure.
       def to_unsafe
+        @handle
+      end
+
+      # Returns whether the sampler's native handle has been released.
+      def closed? : Bool
+        @handle.null?
+      end
+
+      # Returns a checked native handle for internal wrapper use.
+      # :nodoc:
+      def unsafe_handle! : LibLlama::LlamaSampler*
+        ensure_open!
         @handle
       end
 
@@ -39,6 +53,11 @@ module Llama
       # Calling this method multiple times is safe. A sampler owned by a
       # SamplerChain is released with the chain instead.
       def free : Nil
+        close
+      end
+
+      # Releases this sampler when it is not owned by a chain.
+      def close : Nil
         if !@owned_by_chain && @handle && !@handle.null?
           LibLlama.llama_sampler_free(@handle)
           @handle = Pointer(LibLlama::LlamaSampler).null
@@ -47,7 +66,9 @@ module Llama
 
       # :nodoc:
       def finalize
-        free
+        close
+      rescue
+        # Finalizers are a best-effort fallback and must never raise.
       end
 
       @handle : LibLlama::LlamaSampler*

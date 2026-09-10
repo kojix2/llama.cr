@@ -1,6 +1,15 @@
 require "./spec_helper"
 
 describe Llama::Batch do
+  it "supports close and rejects use after close" do
+    batch = Llama::Batch.from_tokens([1, 2, 3])
+    batch.close
+    batch.close
+
+    batch.closed?.should be_true
+    expect_raises(Llama::ClosedError, "Llama::Batch is closed") { batch.n_tokens }
+  end
+
   describe ".new" do
     it "creates a batch with the specified parameters" do
       batch = Llama::Batch.new(10)

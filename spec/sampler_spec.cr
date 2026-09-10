@@ -2,6 +2,15 @@ require "./spec_helper"
 require "../src/llama"
 
 describe Llama::Sampler::Base do
+  it "supports close and reports its state" do
+    sampler = Llama::Sampler::TopK.new(40)
+    sampler.close
+    sampler.close
+
+    sampler.closed?.should be_true
+    expect_raises(Llama::ClosedError, "Llama::Sampler::TopK is closed") { sampler.unsafe_handle! }
+  end
+
   it "can create and free a sampler" do
     sampler = Llama::Sampler::TopK.new(40)
     sampler.free
@@ -63,6 +72,15 @@ describe Llama::Sampler::Base do
 end
 
 describe Llama::SamplerChain do
+  it "supports close and rejects later operations" do
+    chain = Llama::SamplerChain.new
+    chain.close
+    chain.close
+
+    chain.closed?.should be_true
+    expect_raises(Llama::ClosedError, "Llama::SamplerChain is closed") { chain.reset }
+  end
+
   it "can create a sampler chain" do
     # Test creation of a sampler chain
     chain = Llama::SamplerChain.new

@@ -2,6 +2,8 @@ module Llama
   # SamplerChain: manages a chain of samplers, but is not itself a Sampler::Base.
   # Ownership and lifecycle are managed internally.
   class SamplerChain
+    include NativeResource
+
     # Creates a new SamplerChain with optional parameters
     #
     # Parameters:
@@ -43,11 +45,13 @@ module Llama
     # Parameters:
     # - sampler: The sampler to add to the chain
     def add(sampler : Sampler::Base)
+      ensure_open!
+      sampler.unsafe_handle!
       if sampler.owned_by_chain?
         raise Error.new("Sampler is already owned by a sampler chain")
       end
 
-      LibLlama.llama_sampler_chain_add(@handle, sampler.to_unsafe)
+      LibLlama.llama_sampler_chain_add(unsafe_handle!, sampler.unsafe_handle!)
       sampler.set_owned_by_chain(true)
       # Ownership is transferred to the C side; do not free sampler separately.
       @samplers << sampler # Keep reference to prevent GC
@@ -56,8 +60,9 @@ module Llama
     # Removes a sampler from the chain at the given index.
     # Returns the original Sampler::Base instance with ownership restored.
     def remove(index : Int)
+      ensure_open!
       # Remove from C chain and get the C pointer
-      removed_ptr = LibLlama.llama_sampler_chain_remove(@handle, index)
+      removed_ptr = LibLlama.llama_sampler_chain_remove(unsafe_handle!, index)
       raise Error.new("Failed to remove sampler at index #{index}") if removed_ptr.null?
       # Find the matching Sampler::Base instance in @samplers
       sampler = @samplers.delete_at(index)
@@ -80,7 +85,7 @@ module Llama
     # llama.cpp's `llama_sampler_sample` applies the chain, selects a token, and
     # accepts it. Do not call `accept` again for the returned token.
     def sample(ctx : Context, idx : Int32 = -1) : Int32
-      LibLlama.llama_sampler_sample(@handle, ctx.to_unsafe, idx)
+      LibLlama.llama_sampler_sample(unsafe_handle!, ctx.unsafe_handle!, idx)
     end
 
     # Accepts a token, updating the internal state of the samplers.
@@ -91,13 +96,13 @@ module Llama
     # Parameters:
     # - token: The token to accept
     def accept(token : Int32)
-      LibLlama.llama_sampler_accept(@handle, token)
+      LibLlama.llama_sampler_accept(unsafe_handle!, token)
     end
 
     # Resets the internal state of the sampler chain.
     # Useful when reusing the same chain for multiple independent generations.
     def reset
-      LibLlama.llama_sampler_reset(@handle)
+      LibLlama.llama_sampler_reset(unsafe_handle!)
     end
 
     # Releases the underlying C resources, including owned samplers
@@ -107,6 +112,11 @@ module Llama
     # manual calls are only needed to release resources deterministically,
     # for example before process exit.
     def free : Nil
+      close
+    end
+
+    # Releases the chain and every sampler whose ownership it accepted.
+    def close : Nil
       if @handle && !@handle.null?
         LibLlama.llama_sampler_free(@handle)
         @handle = Pointer(LibLlama::LlamaSampler).null
@@ -122,21 +132,35 @@ module Llama
     end
 
     def finalize
-      free
+      close
+    rescue
+      # Finalizers are a best-effort fallback and must never raise.
     end
 
     # Print performance information for this sampler chain
     def print_perf
-      LibLlama.llama_perf_sampler_print(@handle)
+      LibLlama.llama_perf_sampler_print(unsafe_handle!)
     end
 
     # Reset performance counters for this sampler chain
     def reset_perf
-      LibLlama.llama_perf_sampler_reset(@handle)
+      LibLlama.llama_perf_sampler_reset(unsafe_handle!)
     end
 
     # For C API compatibility
     def to_unsafe
+      @handle
+    end
+
+    # Returns whether the sampler chain has been released.
+    def closed? : Bool
+      @handle.null?
+    end
+
+    # Returns a checked native handle for internal wrapper use.
+    # :nodoc:
+    def unsafe_handle! : LibLlama::LlamaSampler*
+      ensure_open!
       @handle
     end
 

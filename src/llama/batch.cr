@@ -4,6 +4,8 @@ module Llama
   # Wrapper for the llama_batch structure
   # Provides methods for managing batches of tokens for efficient processing
   class Batch
+    include NativeResource
+
     # Creates a new Batch instance with the specified parameters
     #
     # Parameters:
@@ -14,6 +16,7 @@ module Llama
     # - ArgumentError if parameters are invalid
     # - Llama::Batch::Error if the batch cannot be created
     def initialize(n_tokens : Int32, embd : Int32 = 0, n_seq_max : Int32 = 8)
+      @closed = false
       if n_tokens <= 0
         raise ArgumentError.new("n_tokens must be positive")
       end
@@ -28,10 +31,13 @@ module Llama
 
       @n_seq_max = n_seq_max
       @handle = LibLlama.llama_batch_init(n_tokens, embd, n_seq_max)
+      # LlamaBatch is a value type; assign the scalar on the stored struct (a
+      # checked accessor would return a copy), while pointer-backed fields may
+      # safely be accessed through unsafe_handle! below.
       @handle.n_tokens = n_tokens
       @owned = true
 
-      if (embd > 0 && @handle.embd.null?) || (embd == 0 && @handle.token.null?) || @handle.pos.null? || @handle.n_seq_id.null? || @handle.seq_id.null? || @handle.logits.null?
+      if (embd > 0 && unsafe_handle!.embd.null?) || (embd == 0 && unsafe_handle!.token.null?) || unsafe_handle!.pos.null? || unsafe_handle!.n_seq_id.null? || unsafe_handle!.seq_id.null? || unsafe_handle!.logits.null?
         cleanup
         error_msg = Llama.format_error(
           "Failed to initialize batch",
@@ -49,11 +55,12 @@ module Llama
     # Note: This constructor is intended for internal use.
     # The batch created this way is not owned by this wrapper and will not be freed.
     def initialize(@handle : LibLlama::LlamaBatch, @owned = false, @n_seq_max : Int32 = 8)
-      if @handle.n_tokens < 0
+      @closed = false
+      if unsafe_handle!.n_tokens < 0
         error_msg = Llama.format_error(
           "Invalid batch handle",
           -3, # Batch processing error
-          "n_tokens: #{@handle.n_tokens}"
+          "n_tokens: #{unsafe_handle!.n_tokens}"
         )
         raise Batch::Error.new(error_msg)
       end
@@ -80,7 +87,7 @@ module Llama
 
     # Returns the number of tokens in this batch
     def n_tokens : Int32
-      @handle.n_tokens
+      unsafe_handle!.n_tokens
     end
 
     # Adds multiple tokens to the batch
@@ -100,8 +107,8 @@ module Llama
         raise ArgumentError.new("Tokens array cannot be empty")
       end
 
-      if tokens.size > @handle.n_tokens
-        raise IndexError.new("Batch size (#{@handle.n_tokens}) is too small for #{tokens.size} tokens")
+      if tokens.size > unsafe_handle!.n_tokens
+        raise IndexError.new("Batch size (#{unsafe_handle!.n_tokens}) is too small for #{tokens.size} tokens")
       end
 
       tokens.each_with_index do |token, i|
@@ -122,44 +129,44 @@ module Llama
     # - IndexError if the index is out of bounds
     # - Llama::Batch::Error if memory allocation fails
     def set_token(i : Int32, token : Int32, pos : Int32? = nil, seq_ids : Array(Int32)? = nil, logits : Bool? = nil)
-      if i < 0 || i >= @handle.n_tokens
-        raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{@handle.n_tokens - 1})")
+      if i < 0 || i >= unsafe_handle!.n_tokens
+        raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{unsafe_handle!.n_tokens - 1})")
       end
 
-      if @handle.token.null?
+      if unsafe_handle!.token.null?
         raise ArgumentError.new("Batch is not token-based")
       end
 
       # Set the token
-      @handle.token[i] = token
+      unsafe_handle!.token[i] = token
 
       # Set the position
-      @handle.pos[i] = pos || i
+      unsafe_handle!.pos[i] = pos || i
 
       # Set the sequence IDs
       if seq_ids.nil? || seq_ids.empty?
-        @handle.n_seq_id[i] = 1
-        if @handle.seq_id[i].null?
+        unsafe_handle!.n_seq_id[i] = 1
+        if unsafe_handle!.seq_id[i].null?
           raise Batch::Error.new("Sequence ID pointer is null at index #{i}")
         end
-        @handle.seq_id[i][0] = 0
+        unsafe_handle!.seq_id[i][0] = 0
       else
         # Limit the number of sequence IDs to n_seq_max
         num_seq_ids = Math.min(seq_ids.size, @n_seq_max)
-        @handle.n_seq_id[i] = num_seq_ids
+        unsafe_handle!.n_seq_id[i] = num_seq_ids
 
-        if @handle.seq_id[i].null?
+        if unsafe_handle!.seq_id[i].null?
           raise Batch::Error.new("Sequence ID pointer is null at index #{i}")
         end
 
         num_seq_ids.times do |j|
-          @handle.seq_id[i][j] = seq_ids[j]
+          unsafe_handle!.seq_id[i][j] = seq_ids[j]
         end
       end
 
       # Set the logits flag if provided
       unless logits.nil?
-        @handle.logits[i] = logits ? 1_i8 : 0_i8
+        unsafe_handle!.logits[i] = logits ? 1_i8 : 0_i8
       end
     end
 
@@ -177,11 +184,11 @@ module Llama
     # - ArgumentError if the batch is not embedding-based
     # - Llama::Batch::Error if memory allocation fails
     def set_embedding(i : Int32, embedding : Array(Float32), pos : Int32? = nil, seq_ids : Array(Int32)? = nil, logits : Bool? = nil)
-      if i < 0 || i >= @handle.n_tokens
-        raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{@handle.n_tokens - 1})")
+      if i < 0 || i >= unsafe_handle!.n_tokens
+        raise IndexError.new("Index out of bounds: #{i} (valid range: 0..#{unsafe_handle!.n_tokens - 1})")
       end
 
-      if @handle.embd.null?
+      if unsafe_handle!.embd.null?
         raise ArgumentError.new("Batch is not embedding-based")
       end
 
@@ -192,55 +199,40 @@ module Llama
       # Copy the embedding values
       embd_size = embedding.size
       embd_size.times do |j|
-        @handle.embd[i * embd_size + j] = embedding[j]
+        unsafe_handle!.embd[i * embd_size + j] = embedding[j]
       end
 
       # Set the position
-      @handle.pos[i] = pos || i
+      unsafe_handle!.pos[i] = pos || i
 
       # Set the sequence IDs
       if seq_ids.nil? || seq_ids.empty?
-        @handle.n_seq_id[i] = 1
-        if @handle.seq_id[i].null?
+        unsafe_handle!.n_seq_id[i] = 1
+        if unsafe_handle!.seq_id[i].null?
           raise Batch::Error.new("Sequence ID pointer is null at index #{i}")
         end
-        @handle.seq_id[i][0] = 0
+        unsafe_handle!.seq_id[i][0] = 0
       else
         # Limit the number of sequence IDs to n_seq_max
         num_seq_ids = Math.min(seq_ids.size, @n_seq_max)
-        @handle.n_seq_id[i] = num_seq_ids
+        unsafe_handle!.n_seq_id[i] = num_seq_ids
 
-        if @handle.seq_id[i].null?
+        if unsafe_handle!.seq_id[i].null?
           raise Batch::Error.new("Sequence ID pointer is null at index #{i}")
         end
 
         num_seq_ids.times do |j|
-          @handle.seq_id[i][j] = seq_ids[j]
+          unsafe_handle!.seq_id[i][j] = seq_ids[j]
         end
       end
 
       # Set the logits flag if provided
       unless logits.nil?
-        @handle.logits[i] = logits ? 1_i8 : 0_i8
+        unsafe_handle!.logits[i] = logits ? 1_i8 : 0_i8
       end
     end
 
     # Factory methods for common batch creation patterns
-
-    # Creates an owned batch with token storage copied from the provided pointer.
-    private def self.init_batch_from_tokens(tokens : Pointer(Int32), n : Int32, n_seq_max : Int32 = 8) : LibLlama::LlamaBatch
-      batch = LibLlama.llama_batch_init(n, 0, n_seq_max)
-
-      if batch.token.null?
-        LibLlama.llama_batch_free(batch)
-        raise Batch::Error.new("Failed to allocate batch token storage")
-      end
-
-      batch.token.copy_from(tokens, n)
-      batch.n_tokens = n
-
-      batch
-    end
 
     # Creates a batch for a sequence of tokens with optional parameters
     #
@@ -261,10 +253,10 @@ module Llama
         raise ArgumentError.new("Tokens array cannot be empty")
       end
 
+      batch = nil.as(Batch?)
       begin
-        # Use custom function to create a batch with memory allocated
-        handle = init_batch_from_tokens(tokens.to_unsafe, tokens.size, n_seq_max)
-        batch = Batch.new(handle, owned: true, n_seq_max: n_seq_max)
+        batch = Batch.new(tokens.size, 0, n_seq_max)
+        batch.unsafe_handle!.token.copy_from(tokens.to_unsafe, tokens.size)
 
         # Set position, sequence ID, and logits flag for each token
         tokens.size.times do |i|
@@ -297,10 +289,12 @@ module Llama
           batch.to_unsafe.logits[i] = needs_logits ? 1_i8 : 0_i8
         end
 
-        batch
+        batch.not_nil!
       rescue ex : Batch::Error | ArgumentError | IndexError
+        batch.try(&.close)
         raise ex
       rescue ex
+        batch.try(&.close)
         error_msg = Llama.format_error(
           "Failed to create batch for tokens",
           -3, # Batch processing error
@@ -332,6 +326,7 @@ module Llama
         raise ArgumentError.new("Embedding vectors cannot be empty")
       end
 
+      batch = nil.as(Batch?)
       begin
         embd_size = embeddings.first.size
         batch = Batch.new(embeddings.size, embd_size, n_seq_max)
@@ -349,10 +344,12 @@ module Llama
           batch.set_embedding(i, embedding, i, seq_ids)
         end
 
-        batch
+        batch.not_nil!
       rescue ex : Batch::Error | ArgumentError | IndexError
+        batch.try(&.close)
         raise ex
       rescue ex
+        batch.try(&.close)
         error_msg = Llama.format_error(
           "Failed to create batch for embeddings",
           -3, # Batch processing error
@@ -367,11 +364,28 @@ module Llama
       @handle
     end
 
+    # Returns whether this wrapper has been closed.
+    def closed? : Bool
+      @closed
+    end
+
+    # Returns a checked batch value for internal wrapper use.
+    # :nodoc:
+    def unsafe_handle! : LibLlama::LlamaBatch
+      ensure_open!
+      @handle
+    end
+
     # Releases the underlying C resources for an owned batch.
     #
     # Calling this method multiple times is safe. Non-owned batches are left
     # untouched.
     def free : Nil
+      close
+    end
+
+    # Releases native storage for an owned batch and closes this wrapper.
+    def close : Nil
       cleanup
     end
 
@@ -380,6 +394,7 @@ module Llama
         LibLlama.llama_batch_free(to_unsafe)
         @owned = false
       end
+      @closed = true
     end
 
     # Frees the resources associated with this batch
@@ -389,6 +404,7 @@ module Llama
 
     @handle : LibLlama::LlamaBatch
     @owned : Bool
+    @closed : Bool
 
     # :nodoc:
     def clone
