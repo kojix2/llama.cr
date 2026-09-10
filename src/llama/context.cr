@@ -29,6 +29,8 @@ module Llama
       offload_kqv : Bool = false,  # Offload KQV to GPU
       op_offload : Bool = false,   # Offload host tensor operations to device
       n_ubatch : UInt32 = 512,     # The physical maximum batch size
+      n_seq_max : UInt32 = 1,      # Maximum number of independent sequences
+      pooling_type : LibLlama::LlamaPoolingType = LibLlama::LlamaPoolingType::UNSPECIFIED,
     )
       @operation_mutex = Mutex.new
       @running = false
@@ -42,9 +44,11 @@ module Llama
       params.n_ctx = n_ctx
       params.n_batch = n_batch
       params.n_ubatch = n_ubatch
+      params.n_seq_max = n_seq_max
       params.n_threads = n_threads
       params.n_threads_batch = n_threads_batch
       params.embeddings = embeddings
+      params.pooling_type = pooling_type
       params.offload_kqv = offload_kqv
       params.op_offload = op_offload
       params.swa_full = true
@@ -81,7 +85,8 @@ module Llama
         embeddings: options.embeddings,
         offload_kqv: options.offload_kqv,
         op_offload: options.op_offload,
-        n_ubatch: options.micro_batch_size
+        n_ubatch: options.micro_batch_size,
+        n_seq_max: options.sequence_count
       )
     end
 
@@ -414,7 +419,7 @@ module Llama
       label : String = "Token sequence",
       require_success : Bool = false,
     ) : Int32
-      context_size = n_ctx.to_i
+      context_size = n_ctx_seq.to_i
       if tokens.size > context_size
         error_msg = Llama.format_error(
           "#{label} exceeds context size",
@@ -554,6 +559,22 @@ module Llama
       result
     end
 
+    # Processes an encoder batch and requires native encoding to succeed.
+    # :nodoc:
+    def encode!(batch : LibLlama::LlamaBatch | Batch) : Nil
+      batch_ptr = batch.is_a?(Batch) ? batch.to_unsafe : batch
+      validate_batch_for_decode!(batch_ptr, n_batch.to_i, n_ctx_seq.to_i)
+      result = LibLlama.llama_encode(unsafe_handle!, batch_ptr)
+      return if result == 0
+
+      raise DecodeError.new(
+        "llama_encode",
+        result,
+        DecodeError.reason_for(result),
+        batch_ptr.n_tokens
+      )
+    end
+
     # Processes a batch of tokens with the decoder part of the model
     #
     # Parameters:
@@ -605,7 +626,7 @@ module Llama
     end
 
     private def decode_native(batch : LibLlama::LlamaBatch) : Int32
-      validate_batch_for_decode!(batch, n_batch.to_i, n_ctx.to_i)
+      validate_batch_for_decode!(batch, n_batch.to_i, n_ctx_seq.to_i)
       LibLlama.llama_decode(unsafe_handle!, batch)
     end
 
@@ -876,7 +897,7 @@ module Llama
       # prompts beyond n_ctx are rejected before llama_decode can fail.
       decode_prompt(input_tokens)
 
-      context_size = n_ctx.to_i
+      context_size = n_ctx_seq.to_i
 
       # Generate up to max_tokens
       max_tokens.times do |i|
@@ -1217,7 +1238,7 @@ module Llama
       return if ptr.null?
 
       # Get the embedding dimension from the model
-      n_embd = @model.n_embd
+      n_embd = @model.n_embd_out
 
       # Copy the embeddings to a Crystal array
       result = Array(Float32).new(n_embd)
@@ -1243,7 +1264,7 @@ module Llama
       return if ptr.null?
 
       # Get the embedding dimension from the model
-      n_embd = @model.n_embd
+      n_embd = @model.n_embd_out
 
       # Copy the embeddings to a Crystal array
       result = Array(Float32).new(n_embd)

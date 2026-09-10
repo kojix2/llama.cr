@@ -1,4 +1,22 @@
 module Llama
+  enum Pooling
+    None
+    Mean
+    Cls
+    Last
+    Rank
+
+    def to_native : LibLlama::LlamaPoolingType
+      case self
+      in .none? then LibLlama::LlamaPoolingType::NONE
+      in .mean? then LibLlama::LlamaPoolingType::MEAN
+      in .cls?  then LibLlama::LlamaPoolingType::CLS
+      in .last? then LibLlama::LlamaPoolingType::LAST
+      in .rank? then LibLlama::LlamaPoolingType::RANK
+      end
+    end
+  end
+
   enum OverflowPolicy
     Error
     Shift
@@ -32,6 +50,7 @@ module Llama
     getter embeddings : Bool
     getter offload_kqv : Bool
     getter op_offload : Bool
+    getter sequence_count : UInt32
 
     def initialize(
       @context_size : UInt32 = 0_u32,
@@ -42,11 +61,27 @@ module Llama
       @embeddings : Bool = false,
       @offload_kqv : Bool = false,
       @op_offload : Bool = false,
+      @sequence_count : UInt32 = 1_u32,
     )
       raise ArgumentError.new("batch_size must be positive") if @batch_size == 0
       raise ArgumentError.new("micro_batch_size must be positive") if @micro_batch_size == 0
       raise ArgumentError.new("threads must be positive") if @threads.try { |v| v <= 0 }
       raise ArgumentError.new("batch_threads must be positive") if @batch_threads.try { |v| v <= 0 }
+      raise ArgumentError.new("sequence_count must be positive") if @sequence_count == 0
+    end
+  end
+
+  class EmbeddingOptions
+    getter pooling : Pooling
+    getter normalize : Bool
+    getter max_sequences : UInt32
+
+    def initialize(
+      @pooling : Pooling = Pooling::Mean,
+      @normalize : Bool = false,
+      @max_sequences : UInt32 = 8_u32,
+    )
+      raise ArgumentError.new("max_sequences must be positive") if @max_sequences == 0
     end
   end
 

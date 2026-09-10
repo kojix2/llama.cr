@@ -13,8 +13,8 @@ module Llama
 
       prompt_tokens = @tokenizer.encode(prompt)
       raise TokenizationError.new("Tokenization resulted in empty token array") if prompt_tokens.empty?
-      if prompt_tokens.size > @context.n_ctx
-        raise ContextFullError.new("Prompt exceeds context size [tokens: #{prompt_tokens.size}, n_ctx: #{@context.n_ctx}]")
+      if prompt_tokens.size > @context.n_ctx_seq
+        raise ContextFullError.new("Prompt exceeds context size [tokens: #{prompt_tokens.size}, n_ctx_seq: #{@context.n_ctx_seq}]")
       end
 
       prompt_started = Time.instant
@@ -55,7 +55,7 @@ module Llama
           break
         end
 
-        if position >= @context.n_ctx
+        if position >= @context.n_ctx_seq
           finish_reason = FinishReason::ContextFull
           break
         end

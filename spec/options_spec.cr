@@ -18,6 +18,15 @@ describe Llama::ContextOptions do
   it "validates batch and thread sizes" do
     expect_raises(ArgumentError, "batch_size must be positive") { Llama::ContextOptions.new(batch_size: 0_u32) }
     expect_raises(ArgumentError, "threads must be positive") { Llama::ContextOptions.new(threads: 0) }
+    expect_raises(ArgumentError, "sequence_count must be positive") { Llama::ContextOptions.new(sequence_count: 0_u32) }
+  end
+end
+
+describe Llama::EmbeddingOptions do
+  it "validates the native sequence capacity" do
+    expect_raises(ArgumentError, "max_sequences must be positive") do
+      Llama::EmbeddingOptions.new(max_sequences: 0_u32)
+    end
   end
 end
 

@@ -71,6 +71,9 @@ module Llama
   class TemplateError < Error
   end
 
+  class EmbeddingError < Error
+  end
+
   # Raised by checked decode operations when llama.cpp does not accept a batch.
   #
   # `Context#decode` retains its compatibility behavior, including returning
