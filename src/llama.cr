@@ -71,6 +71,7 @@ require "./llama/memory"
 require "./llama/context"
 require "./llama/sampler"
 require "./llama/sampling_plan"
+require "./llama/options"
 
 module Llama
   VERSION         = {{ `shards version #{__DIR__}`.chomp.stringify }}

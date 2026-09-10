@@ -27,6 +27,7 @@ module Llama
       use_mlock : Bool = false,
       vocab_only : Bool = false,
       lazy_mode : LazyMode = LazyMode::AUTO,
+      check_tensors : Bool = false,
     )
       @children_mutex = Mutex.new
       # Children already keep their model alive. Weak entries avoid creating a
@@ -48,6 +49,7 @@ module Llama
                          end
       params.vocab_only = vocab_only
       params.lazy_mode = lazy_mode
+      params.check_tensors = check_tensors
 
       @handle = LibLlama.llama_model_load_from_file(path, params)
 
@@ -60,6 +62,22 @@ module Llama
         )
         raise Model::Error.new(error_msg)
       end
+    end
+
+    def initialize(path : String, options : ModelOptions)
+      initialize(
+        path,
+        options.gpu_layers,
+        options.use_mmap,
+        options.use_mlock,
+        options.vocab_only,
+        options.lazy_mode,
+        options.check_tensors
+      )
+    end
+
+    def self.load(path : String, options : ModelOptions = ModelOptions.new) : self
+      new(path, options)
     end
 
     # Loads a model and yields it to the block.
@@ -83,12 +101,20 @@ module Llama
       use_mlock : Bool = false,
       vocab_only : Bool = false,
       lazy_mode : LazyMode = LazyMode::AUTO,
+      check_tensors : Bool = false,
       & : self -> _
     )
-      model = new(path, n_gpu_layers, use_mmap, use_mlock, vocab_only, lazy_mode)
+      model = new(path, n_gpu_layers, use_mmap, use_mlock, vocab_only, lazy_mode, check_tensors)
       yield model
     ensure
       model.try(&.free)
+    end
+
+    def self.open(path : String, options : ModelOptions, & : self -> _)
+      model = new(path, options)
+      yield model
+    ensure
+      model.try(&.close)
     end
 
     # Gets the default chat template for this model

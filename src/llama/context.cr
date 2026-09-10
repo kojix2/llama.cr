@@ -28,6 +28,7 @@ module Llama
       embeddings : Bool = false,   # Enable or disable embeddings
       offload_kqv : Bool = false,  # Offload KQV to GPU
       op_offload : Bool = false,   # Offload host tensor operations to device
+      n_ubatch : UInt32 = 512,     # The physical maximum batch size
     )
       @operation_mutex = Mutex.new
       @running = false
@@ -40,6 +41,7 @@ module Llama
 
       params.n_ctx = n_ctx
       params.n_batch = n_batch
+      params.n_ubatch = n_ubatch
       params.n_threads = n_threads
       params.n_threads_batch = n_threads_batch
       params.embeddings = embeddings
@@ -67,6 +69,20 @@ module Llama
         cleanup
         raise ex
       end
+    end
+
+    def initialize(model : Model, options : ContextOptions)
+      initialize(
+        model,
+        n_ctx: options.context_size,
+        n_batch: options.batch_size,
+        n_threads: options.threads || 0,
+        n_threads_batch: options.batch_threads || 0,
+        embeddings: options.embeddings,
+        offload_kqv: options.offload_kqv,
+        op_offload: options.op_offload,
+        n_ubatch: options.micro_batch_size
+      )
     end
 
     private def sync_adapters_lora! : Int32
