@@ -1,5 +1,4 @@
 require "../src/llama"
-require "../src/llama/chat"
 require "option_parser"
 require "colorize"
 
@@ -33,90 +32,36 @@ abort "Error: Model path is required. Use -m or --model option.\nRun with --help
 
 Llama.log_level = Llama::LOG_LEVEL_ERROR
 
-def generate(context, vocab, sampler, prompt) : String
-  sampler.reset
-  response = ""
-  is_first = true
-  prompt_tokens = vocab.tokenize(prompt, add_special: is_first, parse_special: true)
-
-  if prompt_tokens.empty?
-    STDERR.puts "Failed to tokenize the prompt"
-    return response
-  end
-
-  batch = Llama::Batch.from_tokens(prompt_tokens)
-  pos = prompt_tokens.size
-  begin
-    loop do
-      n_ctx = context.n_ctx
-      if batch.n_tokens > n_ctx
-        raise Llama::Context::Error.new("Context size exceeded")
-      end
-
-      if context.decode(batch) != 0
-        STDERR.puts "Failed to decode"
-        break
-      end
-      batch.free
-
-      new_token_id = sampler.sample(context)
-      break if vocab.eog?(new_token_id)
-
-      piece = vocab.token_to_piece(new_token_id, 0, true)
-      print piece
-      STDOUT.flush
-      response += piece
-
-      batch = Llama::Batch.from_tokens([new_token_id])
-      batch.to_unsafe.pos[0] = pos
-      pos += 1
-    end
-  ensure
-    batch.free
-  end
-  response
-end
-
 # Scope native resources so they are released in dependency order on every exit
 # path. This is required by newer llama.cpp releases on Metal.
 begin
   Llama::Model.open(model_path, n_gpu_layers: ngl) do |model|
-    vocab = model.vocab
     use_gpu = ngl != 0 && Llama.gpu_offload_supported?
-
-    model.context(
-      n_ctx: n_ctx.to_u32,
-      n_batch: n_ctx.to_u32,
+    context_options = Llama::ContextOptions.new(
+      context_size: n_ctx.to_u32,
+      batch_size: n_ctx.to_u32,
       offload_kqv: use_gpu,
       op_offload: use_gpu
-    ) do |context|
-      Llama::SamplerChain.open do |sampler|
-        sampler.add(Llama::Sampler::MinP.new(0.05, 1))
-        sampler.add(Llama::Sampler::Temp.new(0.8))
-        sampler.add(Llama::Sampler::Dist.new(Llama::DEFAULT_SEED))
+    )
+    sampling = Llama::Sampling::Plan.new([
+      Llama::Sampling::MinP.new(0.05_f32),
+      Llama::Sampling::Temperature.new(0.8_f32),
+      Llama::Sampling::Distribution.new,
+    ] of Llama::Sampling::Stage)
+    generation_options = Llama::GenerationOptions.new(sampling: sampling)
 
-        tmpl = model.chat_template
-        if tmpl.nil?
-          STDERR.puts "Warning: Model does not provide a chat template, using default"
-          tmpl = ""
+    model.chat(context_options: context_options) do |chat|
+      loop do
+        print "> ".colorize(:green)
+        user_input = gets
+        break if user_input.nil? || user_input.empty?
+
+        print "Assistant: ".colorize(:yellow)
+        result = chat.ask(user_input, generation_options) do |chunk|
+          print chunk.text
+          STDOUT.flush
         end
-
-        messages = [] of Llama::ChatMessage
-
-        loop do
-          print "> ".colorize(:green)
-          user_input = gets
-          break if user_input.nil? || user_input.empty?
-
-          messages << Llama::ChatMessage.new("user", user_input)
-          prompt = context.apply_chat_template(messages, true, tmpl)
-
-          print "".colorize(:yellow)
-          response = generate(context, vocab, sampler, prompt)
-          puts
-
-          messages << Llama::ChatMessage.new("assistant", response)
-        end
+        puts "\n[#{result.finish_reason}]"
       end
     end
   end

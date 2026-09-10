@@ -135,31 +135,49 @@ Popular options:
 
 ## Usage
 
-### Basic Text Generation
+### Typed Text Generation
 
 ```crystal
 require "llama"
 
-response = Llama.generate(
+options = Llama::GenerationOptions.new(
+  max_tokens: 100,
+  stop: ["\n\n"]
+)
+
+result = Llama.complete(
   "/path/to/model.gguf",
   "Once upon a time",
-  max_tokens: 100,
-  temperature: 0.8
+  options
 )
-puts response
+puts result.text
+puts result.finish_reason
+puts result.usage.tokens_per_second
 ```
 
-For repeated independent generations without reloading the model, use the
-scoped model and context APIs:
+`Llama.generate` remains available as a compatibility convenience returning a
+`String`. `Llama.complete` returns a `Generation` with the finish reason, copied
+sampled tokens, matched stop sequence, and timing/token usage.
+
+### Streaming and Stateful Sessions
+
+Use a `Session` to reuse one context. Chunks contain valid UTF-8 and stop text is
+buffered so it is not emitted unless `include_stop` is enabled.
 
 ```crystal
 Llama::Model.open("/path/to/model.gguf") do |model|
-  model.context do |context|
-    puts context.generate("Once upon a time")
-    puts context.generate("In a galaxy far away")
+  model.session do |session|
+    result = session.generate("Once upon a time") do |chunk|
+      print chunk.text
+      STDOUT.flush
+    end
+    puts "\n#{result.finish_reason}"
   end
 end
 ```
+
+`Session` keeps a canonical transcript between calls. Call `reset` to start a
+new sequence. Only one generation may use a session at a time.
 
 ### Backend Capabilities and GPU Offloading
 
@@ -290,25 +308,21 @@ end
 
 ```crystal
 require "llama"
-require "llama/chat"
 
 Llama::Model.open("/path/to/model.gguf") do |model|
-  model.context do |context|
-    messages = [
-      Llama::ChatMessage.new("system", "You are a helpful assistant."),
-      Llama::ChatMessage.new("user", "Hello, who are you?"),
-    ]
-
-    response = context.chat(messages)
-    puts "Assistant: #{response}"
-
-    messages << Llama::ChatMessage.new("assistant", response)
-    messages << Llama::ChatMessage.new("user", "Tell me a joke")
-    response = context.chat(messages)
-    puts "Assistant: #{response}"
+  model.chat(system: "You are a helpful assistant.") do |chat|
+    result = chat.ask("Hello, who are you?") do |chunk|
+      print chunk.text
+    end
+    puts "\n#{result.finish_reason}"
   end
 end
 ```
+
+Chat history is committed transactionally. A cancelled turn is not committed
+unless `commit_partial: true` is requested. b10809 recognizes predefined chat
+template shapes; it is not a general Jinja evaluator. Pass a recognized template
+explicitly when the model does not provide one.
 
 ### Embeddings
 
@@ -316,24 +330,26 @@ end
 require "llama"
 
 Llama::Model.open("/path/to/model.gguf") do |model|
-  model.context(embeddings: true) do |context|
-    text = "Hello, world!"
-    tokens = model.vocab.tokenize(text)
-    batch = Llama::Batch.from_tokens(tokens)
-    context.decode(batch)
-    embeddings = context.get_embeddings_seq(0)
-
-    puts "Embedding dimension: #{embeddings.size}"
+  model.embedder(pooling: Llama::Pooling::Mean) do |embedder|
+    vector = embedder.embed("Hello, world!", normalize: true)
+    vectors = embedder.embed_all(["one", "two"], normalize: true)
+    puts "Embedding dimension: #{vector.size}"
   end
 end
 ```
+
+`Embedder` owns a dedicated embedding context, copies native vectors before the
+next call, and preserves input order in native multi-sequence batches.
 
 ### Utilities
 
 #### System Info
 
 ```crystal
-puts Llama.system_info
+info = Llama.runtime_info
+puts "llama.cr #{info.wrapper_version} expects #{info.expected_build}"
+puts "loaded llama.cpp #{info.reported_version} with #{info.backend_count} backends"
+puts info.system_info
 ```
 
 #### Tokenization Utility
@@ -358,9 +374,32 @@ The `examples` directory contains sample code demonstrating various features:
 
 See [kojix2.github.io/llama.cr](https://kojix2.github.io/llama.cr) for full API docs.
 
+### Stability Levels
+
+- High-level API: `GenerationOptions`, `Session`, `Chat`, `Embedder`, and
+  `Sampling::Plan` are the supported application-facing API.
+- Advanced API: `Context`, `Batch`, `Memory`, `State`, and manual samplers expose
+  native concepts. Borrowed views are valid only while their owner remains open;
+  copy pointer-backed data before another native call.
+- Raw API: `require "llama/raw"` exposes `Llama::LibLlama`. Its structs, symbols,
+  and pointer lifetimes track the pinned upstream build and may change between
+  shard releases.
+
+The wrapper checks the reported stable version (`0.4.0`) before passing ABI-
+sensitive structs by value. The C API does not report the exact build number, so
+the exact `b10809` package pin and CI ABI checks remain required.
+
+Custom `Llama.log_set` callbacks are experimental. On the pinned b10809 build,
+model loading and multithreaded decode callbacks were observed on the calling
+thread. Callback exceptions are contained at the C boundary and can be retrieved
+with `Llama.take_log_callback_error`.
+
 ### Core Classes
 
 - [Llama::Model](https://kojix2.github.io/llama.cr/Llama/Model.html) - Represents a loaded LLaMA model
+- `Llama::Session` - Reusable typed and streaming generation
+- `Llama::Chat` - Transactional conversation history
+- `Llama::Embedder` - Safe single and batched sentence embeddings
 - [Llama::Context](https://kojix2.github.io/llama.cr/Llama/Context.html) - Handles inference state for a model
 - [Llama::Vocab](https://kojix2.github.io/llama.cr/Llama/Vocab.html) - Provides access to the model's vocabulary
 - [Llama::Batch](https://kojix2.github.io/llama.cr/Llama/Batch.html) - Manages batches of tokens for efficient processing
