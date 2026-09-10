@@ -9,7 +9,7 @@
 Crystal bindings for [llama.cpp](https://github.com/ggml-org/llama.cpp), a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.
 
 The version in `shard.yml` corresponds to the compatible llama.cpp build number.
-For example, shard version `0.10809.0` targets llama.cpp build `b10809`, which
+For example, shard version `0.10809.1` targets llama.cpp build `b10809`, which
 is the stable release [v0.4.0](https://github.com/ggml-org/llama.cpp/releases/tag/v0.4.0).
 
 This project is under active development and may change rapidly.
