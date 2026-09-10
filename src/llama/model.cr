@@ -298,6 +298,18 @@ module Llama
       value.try(&.close)
     end
 
+    def chat(system : String? = nil, template : String? = nil, context_options : ContextOptions = ContextOptions.new) : Chat
+      ensure_open!
+      Chat.new(self, system, template, context_options)
+    end
+
+    def chat(system : String? = nil, template : String? = nil, context_options : ContextOptions = ContextOptions.new, & : Chat -> _)
+      value = chat(system, template, context_options)
+      yield value
+    ensure
+      value.try(&.close)
+    end
+
     # Returns the raw pointer to the underlying llama_model structure
     def to_unsafe
       @handle
