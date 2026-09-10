@@ -45,6 +45,12 @@ module Llama
     # Returns:
     # - The rendered token piece
     def token_to_piece(token : Int32, lstrip : Int32 = 0, special : Bool = false) : String
+      String.new(token_to_piece_bytes(token, lstrip, special))
+    end
+
+    # Converts a token to its raw byte piece. Token pieces are not guaranteed to
+    # be standalone UTF-8 and should be passed through StreamingDecoder.
+    def token_to_piece_bytes(token : Int32, lstrip : Int32 = 0, special : Bool = false) : Bytes
       buf_size = 128
       buf = Pointer(LibC::Char).malloc(buf_size)
 
@@ -59,7 +65,7 @@ module Llama
         raise Error.new("Failed to convert token to piece")
       end
 
-      String.new(buf, n)
+      Bytes.new(n) { |i| buf[i].to_u8 }
     end
 
     # Converts a token sequence into text.
