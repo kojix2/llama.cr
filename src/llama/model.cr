@@ -285,6 +285,19 @@ module Llama
       ctx.try(&.free)
     end
 
+    # Creates a reusable high-level generation session.
+    def session(options : ContextOptions = ContextOptions.new) : Session
+      ensure_open!
+      Session.new(self, options)
+    end
+
+    def session(options : ContextOptions = ContextOptions.new, & : Session -> _)
+      value = session(options)
+      yield value
+    ensure
+      value.try(&.close)
+    end
+
     # Returns the raw pointer to the underlying llama_model structure
     def to_unsafe
       @handle

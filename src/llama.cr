@@ -76,6 +76,7 @@ require "./llama/tokenizer"
 require "./llama/streaming_decoder"
 require "./llama/stop_detector"
 require "./llama/generator"
+require "./llama/session"
 
 module Llama
   VERSION         = {{ `shards version #{__DIR__}`.chomp.stringify }}
