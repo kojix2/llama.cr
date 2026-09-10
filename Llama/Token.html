@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="generator" content="Crystal Docs 1.20.3">
+<meta name="crystal_docs.project_version" content="main">
+<meta name="crystal_docs.project_name" content="llama">
+
+
+
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="../js/doc.js"></script>
+
+  <meta name="repository-name" content="llama">
+  <title>Llama::Token - llama main</title>
+  <script type="text/javascript">
+    CrystalDocs.base_path = "../";
+  </script>
+</head>
+<body>
+
+<svg class="hidden">
+  <symbol id="octicon-link" viewBox="0 0 16 16">
+    <path fill="currentColor" fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path>
+  </symbol>
+</svg>
+<input type="checkbox" id="sidebar-btn">
+<label for="sidebar-btn" id="sidebar-btn-label">
+  <svg class="open" xmlns="http://www.w3.org/2000/svg" height="2em" width="2em" viewBox="0 0 512 512"><title>Open Sidebar</title><path fill="currentColor" d="M80 96v64h352V96H80zm0 112v64h352v-64H80zm0 112v64h352v-64H80z"></path></svg>
+  <svg class="close" xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" viewBox="0 0 512 512"><title>Close Sidebar</title><path fill="currentColor" d="m118.6 73.4-45.2 45.2L210.7 256 73.4 393.4l45.2 45.2L256 301.3l137.4 137.3 45.2-45.2L301.3 256l137.3-137.4-45.2-45.2L256 210.7Z"></path></svg>
+</label>
+<div class="sidebar">
+  <div class="sidebar-header">
+    <div class="search-box">
+      <input type="search" class="search-input" placeholder="Search..." spellcheck="false" aria-label="Search">
+    </div>
+
+    <div class="project-summary">
+      <h1 class="project-name">
+        <a href="../index.html">
+          llama
+        </a>
+      </h1>
+
+      <span class="project-version">
+        main
+      </span>
+    </div>
+  </div>
+
+  <div class="search-results hidden">
+    <ul class="search-list"></ul>
+  </div>
+
+  <div class="types-list">
+    <ul>
+  
+  <li class="parent open current" data-id="llama/Llama" data-name="llama">
+      <a href="../Llama.html">Llama</a>
+      
+        <ul>
+  
+  <li class="parent " data-id="llama/Llama/AdapterLora" data-name="llama::adapterlora">
+      <a href="../Llama/AdapterLora.html">AdapterLora</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/AdapterLora/Error" data-name="llama::adapterlora::error">
+      <a href="../Llama/AdapterLora/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class="parent " data-id="llama/Llama/Batch" data-name="llama::batch">
+      <a href="../Llama/Batch.html">Batch</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Batch/Error" data-name="llama::batch::error">
+      <a href="../Llama/Batch/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/BusyError" data-name="llama::busyerror">
+      <a href="../Llama/BusyError.html">BusyError</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Cancellation" data-name="llama::cancellation">
+      <a href="../Llama/Cancellation.html">Cancellation</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Chat" data-name="llama::chat">
+      <a href="../Llama/Chat.html">Chat</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ChatMessage" data-name="llama::chatmessage">
+      <a href="../Llama/ChatMessage.html">ChatMessage</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ClosedError" data-name="llama::closederror">
+      <a href="../Llama/ClosedError.html">ClosedError</a>
+      
+    </li>
+  
+  <li class="parent " data-id="llama/Llama/Context" data-name="llama::context">
+      <a href="../Llama/Context.html">Context</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Context/Error" data-name="llama::context::error">
+      <a href="../Llama/Context/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ContextFullError" data-name="llama::contextfullerror">
+      <a href="../Llama/ContextFullError.html">ContextFullError</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ContextOptions" data-name="llama::contextoptions">
+      <a href="../Llama/ContextOptions.html">ContextOptions</a>
+      
+    </li>
+  
+  <li class="parent " data-id="llama/Llama/DecodeError" data-name="llama::decodeerror">
+      <a href="../Llama/DecodeError.html">DecodeError</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/DecodeError/Reason" data-name="llama::decodeerror::reason">
+      <a href="../Llama/DecodeError/Reason.html">Reason</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Embedder" data-name="llama::embedder">
+      <a href="../Llama/Embedder.html">Embedder</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/EmbeddingError" data-name="llama::embeddingerror">
+      <a href="../Llama/EmbeddingError.html">EmbeddingError</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/EmbeddingOptions" data-name="llama::embeddingoptions">
+      <a href="../Llama/EmbeddingOptions.html">EmbeddingOptions</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
+      <a href="../Llama/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/FinishReason" data-name="llama::finishreason">
+      <a href="../Llama/FinishReason.html">FinishReason</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Generation" data-name="llama::generation">
+      <a href="../Llama/Generation.html">Generation</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/GenerationChunk" data-name="llama::generationchunk">
+      <a href="../Llama/GenerationChunk.html">GenerationChunk</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/GenerationOptions" data-name="llama::generationoptions">
+      <a href="../Llama/GenerationOptions.html">GenerationOptions</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Generator" data-name="llama::generator">
+      <a href="../Llama/Generator.html">Generator</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/IncompatibleLibraryError" data-name="llama::incompatiblelibraryerror">
+      <a href="../Llama/IncompatibleLibraryError.html">IncompatibleLibraryError</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/LazyMode" data-name="llama::lazymode">
+      <a href="../Llama/LazyMode.html">LazyMode</a>
+      
+    </li>
+  
+  <li class="parent " data-id="llama/Llama/Memory" data-name="llama::memory">
+      <a href="../Llama/Memory.html">Memory</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Memory/Error" data-name="llama::memory::error">
+      <a href="../Llama/Memory/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Message" data-name="llama::message">
+      <a href="../Llama/Message.html">Message</a>
+      
+    </li>
+  
+  <li class="parent " data-id="llama/Llama/Model" data-name="llama::model">
+      <a href="../Llama/Model.html">Model</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Model/Error" data-name="llama::model::error">
+      <a href="../Llama/Model/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/ModelOptions" data-name="llama::modeloptions">
+      <a href="../Llama/ModelOptions.html">ModelOptions</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/NativeResource" data-name="llama::nativeresource">
+      <a href="../Llama/NativeResource.html">NativeResource</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/OverflowPolicy" data-name="llama::overflowpolicy">
+      <a href="../Llama/OverflowPolicy.html">OverflowPolicy</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Pooling" data-name="llama::pooling">
+      <a href="../Llama/Pooling.html">Pooling</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/RuntimeInfo" data-name="llama::runtimeinfo">
+      <a href="../Llama/RuntimeInfo.html">RuntimeInfo</a>
+      
+    </li>
+  
+  <li class="parent " data-id="llama/Llama/Sampler" data-name="llama::sampler">
+      <a href="../Llama/Sampler.html">Sampler</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Sampler/AdaptiveP" data-name="llama::sampler::adaptivep">
+      <a href="../Llama/Sampler/AdaptiveP.html">AdaptiveP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Base" data-name="llama::sampler::base">
+      <a href="../Llama/Sampler/Base.html">Base</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Dist" data-name="llama::sampler::dist">
+      <a href="../Llama/Sampler/Dist.html">Dist</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Error" data-name="llama::sampler::error">
+      <a href="../Llama/Sampler/Error.html">Error</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Grammar" data-name="llama::sampler::grammar">
+      <a href="../Llama/Sampler/Grammar.html">Grammar</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/GrammarLazyPatterns" data-name="llama::sampler::grammarlazypatterns">
+      <a href="../Llama/Sampler/GrammarLazyPatterns.html">GrammarLazyPatterns</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Greedy" data-name="llama::sampler::greedy">
+      <a href="../Llama/Sampler/Greedy.html">Greedy</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Infill" data-name="llama::sampler::infill">
+      <a href="../Llama/Sampler/Infill.html">Infill</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/MinP" data-name="llama::sampler::minp">
+      <a href="../Llama/Sampler/MinP.html">MinP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Mirostat" data-name="llama::sampler::mirostat">
+      <a href="../Llama/Sampler/Mirostat.html">Mirostat</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/MirostatV2" data-name="llama::sampler::mirostatv2">
+      <a href="../Llama/Sampler/MirostatV2.html">MirostatV2</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Penalties" data-name="llama::sampler::penalties">
+      <a href="../Llama/Sampler/Penalties.html">Penalties</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Temp" data-name="llama::sampler::temp">
+      <a href="../Llama/Sampler/Temp.html">Temp</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TempExt" data-name="llama::sampler::tempext">
+      <a href="../Llama/Sampler/TempExt.html">TempExt</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopK" data-name="llama::sampler::topk">
+      <a href="../Llama/Sampler/TopK.html">TopK</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopNSigma" data-name="llama::sampler::topnsigma">
+      <a href="../Llama/Sampler/TopNSigma.html">TopNSigma</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/TopP" data-name="llama::sampler::topp">
+      <a href="../Llama/Sampler/TopP.html">TopP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Typical" data-name="llama::sampler::typical">
+      <a href="../Llama/Sampler/Typical.html">Typical</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampler/Xtc" data-name="llama::sampler::xtc">
+      <a href="../Llama/Sampler/Xtc.html">Xtc</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/SamplerChain" data-name="llama::samplerchain">
+      <a href="../Llama/SamplerChain.html">SamplerChain</a>
+      
+    </li>
+  
+  <li class="parent " data-id="llama/Llama/Sampling" data-name="llama::sampling">
+      <a href="../Llama/Sampling.html">Sampling</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/Sampling/Distribution" data-name="llama::sampling::distribution">
+      <a href="../Llama/Sampling/Distribution.html">Distribution</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampling/Grammar" data-name="llama::sampling::grammar">
+      <a href="../Llama/Sampling/Grammar.html">Grammar</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampling/Greedy" data-name="llama::sampling::greedy">
+      <a href="../Llama/Sampling/Greedy.html">Greedy</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampling/MinP" data-name="llama::sampling::minp">
+      <a href="../Llama/Sampling/MinP.html">MinP</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampling/Plan" data-name="llama::sampling::plan">
+      <a href="../Llama/Sampling/Plan.html">Plan</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampling/Stage" data-name="llama::sampling::stage">
+      <a href="../Llama/Sampling/Stage.html">Stage</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampling/Temperature" data-name="llama::sampling::temperature">
+      <a href="../Llama/Sampling/Temperature.html">Temperature</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Sampling/TopK" data-name="llama::sampling::topk">
+      <a href="../Llama/Sampling/TopK.html">TopK</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Session" data-name="llama::session">
+      <a href="../Llama/Session.html">Session</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/SessionSnapshot" data-name="llama::sessionsnapshot">
+      <a href="../Llama/SessionSnapshot.html">SessionSnapshot</a>
+      
+    </li>
+  
+  <li class="parent " data-id="llama/Llama/State" data-name="llama::state">
+      <a href="../Llama/State.html">State</a>
+      
+        <ul>
+  
+  <li class=" " data-id="llama/Llama/State/Error" data-name="llama::state::error">
+      <a href="../Llama/State/Error.html">Error</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/StateCompatibilityError" data-name="llama::statecompatibilityerror">
+      <a href="../Llama/StateCompatibilityError.html">StateCompatibilityError</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/StopDetector" data-name="llama::stopdetector">
+      <a href="../Llama/StopDetector.html">StopDetector</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/StreamingDecoder" data-name="llama::streamingdecoder">
+      <a href="../Llama/StreamingDecoder.html">StreamingDecoder</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TemplateError" data-name="llama::templateerror">
+      <a href="../Llama/TemplateError.html">TemplateError</a>
+      
+    </li>
+  
+  <li class=" current" data-id="llama/Llama/Token" data-name="llama::token">
+      <a href="../Llama/Token.html">Token</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/TokenizationError" data-name="llama::tokenizationerror">
+      <a href="../Llama/TokenizationError.html">TokenizationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Tokenizer" data-name="llama::tokenizer">
+      <a href="../Llama/Tokenizer.html">Tokenizer</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/UnsupportedOperationError" data-name="llama::unsupportedoperationerror">
+      <a href="../Llama/UnsupportedOperationError.html">UnsupportedOperationError</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Usage" data-name="llama::usage">
+      <a href="../Llama/Usage.html">Usage</a>
+      
+    </li>
+  
+  <li class=" " data-id="llama/Llama/Vocab" data-name="llama::vocab">
+      <a href="../Llama/Vocab.html">Vocab</a>
+      
+    </li>
+  
+</ul>
+
+      
+    </li>
+  
+</ul>
+
+  </div>
+</div>
+
+
+<div class="main-content">
+<h1 class="type-name">
+
+  <span class="kind">
+    alias
+  </span> Llama::<wbr>Token
+
+</h1>
+
+
+
+
+
+
+
+  <h2>
+    <a id="alias-definition" class="anchor" href="#alias-definition">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Alias Definition
+  </h2>
+  <code>Int32</code>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2>
+    <a id="defined-in" class="anchor" href="#defined-in">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>
+    Defined in:
+  </h2>
+  
+    
+      <a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/result.cr#L2" target="_blank">
+        llama/result.cr
+      </a>
+    
+    <br/>
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+
+  <div class="methods-inherited">
+    
+  </div>
+
+  
+
+  
+
+  
+
+  
+
+
+</div>
+
+</body>
+</html>
