@@ -167,11 +167,6 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/EmbeddingOptions" data-name="llama::embeddingoptions">
-      <a href="../Llama/EmbeddingOptions.html">EmbeddingOptions</a>
-      
-    </li>
-  
   <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
       <a href="../Llama/Error.html">Error</a>
       
@@ -254,11 +249,6 @@
   
   <li class=" " data-id="llama/Llama/NativeResource" data-name="llama::nativeresource">
       <a href="../Llama/NativeResource.html">NativeResource</a>
-      
-    </li>
-  
-  <li class=" " data-id="llama/Llama/OverflowPolicy" data-name="llama::overflowpolicy">
-      <a href="../Llama/OverflowPolicy.html">OverflowPolicy</a>
       
     </li>
   
@@ -583,7 +573,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L3" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L3" target="_blank">
         llama/embedder.cr
       </a>
     
@@ -606,7 +596,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28model%3AModel%2Coptions%3AEmbeddingOptions%2Ccontext_options%3AContextOptions%3DContextOptions.new%29-class-method" class="signature"><strong>.new</strong>(model : Model, options : EmbeddingOptions, context_options : ContextOptions = <span class="t">ContextOptions</span>.new)</a>
+        <a href="#new%28model%3AModel%2Cpooling%3APooling%3DPooling%3A%3AMean%2Cmax_sequences%3AUInt32%3D8_u32%2Ccontext_options%3AContextOptions%3DContextOptions.new%29-class-method" class="signature"><strong>.new</strong>(model : Model, pooling : Pooling = <span class="t">Pooling</span><span class="t">::</span><span class="t">Mean</span>, max_sequences : UInt32 = <span class="n">8_u32</span>, context_options : ContextOptions = <span class="t">ContextOptions</span>.new)</a>
         
       </li>
     
@@ -644,12 +634,12 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#embed%28text%3AString%2Cnormalize%3ABool%7CNil%3Dnil%29%3AArray%28Float32%29-instance-method" class="signature"><strong>#embed</strong>(text : String, normalize : Bool | Nil = <span class="n">nil</span>) : Array(Float32)</a>
+        <a href="#embed%28text%3AString%2Cnormalize%3ABool%3Dfalse%29%3AArray%28Float32%29-instance-method" class="signature"><strong>#embed</strong>(text : String, normalize : Bool = <span class="n">false</span>) : Array(Float32)</a>
         
       </li>
     
       <li class="entry-summary">
-        <a href="#embed_all%28texts%3AEnumerable%28String%29%2Cnormalize%3ABool%7CNil%3Dnil%29%3AArray%28Array%28Float32%29%29-instance-method" class="signature"><strong>#embed_all</strong>(texts : Enumerable(String), normalize : Bool | Nil = <span class="n">nil</span>) : Array(Array(Float32))</a>
+        <a href="#embed_all%28texts%3AEnumerable%28String%29%2Cnormalize%3ABool%3Dfalse%29%3AArray%28Array%28Float32%29%29-instance-method" class="signature"><strong>#embed_all</strong>(texts : Enumerable(String), normalize : Bool = <span class="n">false</span>) : Array(Array(Float32))</a>
         
           <div class="summary"><p>Embeds inputs in native multi-sequence batches while preserving input order.</p></div>
         
@@ -736,18 +726,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(model:Model,options:EmbeddingOptions,context_options:ContextOptions=ContextOptions.new)-class-method">
+    <div class="entry-detail" id="new(model:Model,pooling:Pooling=Pooling::Mean,max_sequences:UInt32=8_u32,context_options:ContextOptions=ContextOptions.new)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(model : <a href="../Llama/Model.html">Model</a>, options : <a href="../Llama/EmbeddingOptions.html">EmbeddingOptions</a>, context_options : <a href="../Llama/ContextOptions.html">ContextOptions</a> = <span class="t">ContextOptions</span>.new)
+        def self.<strong>new</strong>(model : <a href="../Llama/Model.html">Model</a>, pooling : <a href="../Llama/Pooling.html">Pooling</a> = <span class="t">Pooling</span><span class="t">::</span><span class="t">Mean</span>, max_sequences : UInt32 = <span class="n">8_u32</span>, context_options : <a href="../Llama/ContextOptions.html">ContextOptions</a> = <span class="t">ContextOptions</span>.new)
 
-        <a class="method-permalink" href="#new%28model%3AModel%2Coptions%3AEmbeddingOptions%2Ccontext_options%3AContextOptions%3DContextOptions.new%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28model%3AModel%2Cpooling%3APooling%3DPooling%3A%3AMean%2Cmax_sequences%3AUInt32%3D8_u32%2Ccontext_options%3AContextOptions%3DContextOptions.new%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L8" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L8" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -779,7 +769,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L68" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L73" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -795,7 +785,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L80" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L85" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -811,33 +801,33 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L6" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L6" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="embed(text:String,normalize:Bool|Nil=nil):Array(Float32)-instance-method">
+    <div class="entry-detail" id="embed(text:String,normalize:Bool=false):Array(Float32)-instance-method">
       <div class="signature">
         
-        def <strong>embed</strong>(text : String, normalize : Bool | Nil = <span class="n">nil</span>) : Array(Float32)
+        def <strong>embed</strong>(text : String, normalize : Bool = <span class="n">false</span>) : Array(Float32)
 
-        <a class="method-permalink" href="#embed%28text%3AString%2Cnormalize%3ABool%7CNil%3Dnil%29%3AArray%28Float32%29-instance-method">#</a>
+        <a class="method-permalink" href="#embed%28text%3AString%2Cnormalize%3ABool%3Dfalse%29%3AArray%28Float32%29-instance-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L32" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L38" target="_blank">View source</a>]
         
       </div>
     </div>
   
-    <div class="entry-detail" id="embed_all(texts:Enumerable(String),normalize:Bool|Nil=nil):Array(Array(Float32))-instance-method">
+    <div class="entry-detail" id="embed_all(texts:Enumerable(String),normalize:Bool=false):Array(Array(Float32))-instance-method">
       <div class="signature">
         
-        def <strong>embed_all</strong>(texts : Enumerable(String), normalize : Bool | Nil = <span class="n">nil</span>) : Array(Array(Float32))
+        def <strong>embed_all</strong>(texts : Enumerable(String), normalize : Bool = <span class="n">false</span>) : Array(Array(Float32))
 
-        <a class="method-permalink" href="#embed_all%28texts%3AEnumerable%28String%29%2Cnormalize%3ABool%7CNil%3Dnil%29%3AArray%28Array%28Float32%29%29-instance-method">#</a>
+        <a class="method-permalink" href="#embed_all%28texts%3AEnumerable%28String%29%2Cnormalize%3ABool%3Dfalse%29%3AArray%28Array%28Float32%29%29-instance-method">#</a>
       </div>
       
         <div class="doc">
@@ -848,7 +838,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L37" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -864,7 +854,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L88" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L93" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -880,7 +870,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L76" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L81" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -896,7 +886,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/embedder.cr#L84" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/embedder.cr#L89" target="_blank">View source</a>]
         
       </div>
     </div>

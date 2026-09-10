@@ -167,11 +167,6 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/EmbeddingOptions" data-name="llama::embeddingoptions">
-      <a href="../Llama/EmbeddingOptions.html">EmbeddingOptions</a>
-      
-    </li>
-  
   <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
       <a href="../Llama/Error.html">Error</a>
       
@@ -254,11 +249,6 @@
   
   <li class=" " data-id="llama/Llama/NativeResource" data-name="llama::nativeresource">
       <a href="../Llama/NativeResource.html">NativeResource</a>
-      
-    </li>
-  
-  <li class=" " data-id="llama/Llama/OverflowPolicy" data-name="llama::overflowpolicy">
-      <a href="../Llama/OverflowPolicy.html">OverflowPolicy</a>
       
     </li>
   
@@ -558,7 +548,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L44" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L39" target="_blank">
         llama/options.cr
       </a>
     
@@ -581,7 +571,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28context_size%3AUInt32%3D0_u32%2Cbatch_size%3AUInt32%3D512_u32%2Cmicro_batch_size%3AUInt32%3D512_u32%2Cthreads%3AInt32%7CNil%3Dnil%2Cbatch_threads%3AInt32%7CNil%3Dnil%2Cembeddings%3ABool%3Dfalse%2Coffload_kqv%3ABool%3Dfalse%2Cop_offload%3ABool%3Dfalse%2Csequence_count%3AUInt32%3D1_u32%29-class-method" class="signature"><strong>.new</strong>(context_size : UInt32 = <span class="n">0_u32</span>, batch_size : UInt32 = <span class="n">512_u32</span>, micro_batch_size : UInt32 = <span class="n">512_u32</span>, threads : Int32 | Nil = <span class="n">nil</span>, batch_threads : Int32 | Nil = <span class="n">nil</span>, embeddings : Bool = <span class="n">false</span>, offload_kqv : Bool = <span class="n">false</span>, op_offload : Bool = <span class="n">false</span>, sequence_count : UInt32 = <span class="n">1_u32</span>)</a>
+        <a href="#new%28context_size%3AUInt32%3D0_u32%2Cbatch_size%3AUInt32%3D512_u32%2Cmicro_batch_size%3AUInt32%3D512_u32%2Cthreads%3AInt32%7CNil%3Dnil%2Cbatch_threads%3AInt32%7CNil%3Dnil%2Cembeddings%3ABool%3Dfalse%2Coffload_kqv%3ABool%3Dfalse%2Cop_offload%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(context_size : UInt32 = <span class="n">0_u32</span>, batch_size : UInt32 = <span class="n">512_u32</span>, micro_batch_size : UInt32 = <span class="n">512_u32</span>, threads : Int32 | Nil = <span class="n">nil</span>, batch_threads : Int32 | Nil = <span class="n">nil</span>, embeddings : Bool = <span class="n">false</span>, offload_kqv : Bool = <span class="n">false</span>, op_offload : Bool = <span class="n">false</span>)</a>
         
       </li>
     
@@ -639,11 +629,6 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#sequence_count%3AUInt32-instance-method" class="signature"><strong>#sequence_count</strong> : UInt32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#threads%3AInt32%7CNil-instance-method" class="signature"><strong>#threads</strong> : Int32 | Nil</a>
         
       </li>
@@ -692,18 +677,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(context_size:UInt32=0_u32,batch_size:UInt32=512_u32,micro_batch_size:UInt32=512_u32,threads:Int32|Nil=nil,batch_threads:Int32|Nil=nil,embeddings:Bool=false,offload_kqv:Bool=false,op_offload:Bool=false,sequence_count:UInt32=1_u32)-class-method">
+    <div class="entry-detail" id="new(context_size:UInt32=0_u32,batch_size:UInt32=512_u32,micro_batch_size:UInt32=512_u32,threads:Int32|Nil=nil,batch_threads:Int32|Nil=nil,embeddings:Bool=false,offload_kqv:Bool=false,op_offload:Bool=false)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(context_size : UInt32 = <span class="n">0_u32</span>, batch_size : UInt32 = <span class="n">512_u32</span>, micro_batch_size : UInt32 = <span class="n">512_u32</span>, threads : Int32 | Nil = <span class="n">nil</span>, batch_threads : Int32 | Nil = <span class="n">nil</span>, embeddings : Bool = <span class="n">false</span>, offload_kqv : Bool = <span class="n">false</span>, op_offload : Bool = <span class="n">false</span>, sequence_count : UInt32 = <span class="n">1_u32</span>)
+        def self.<strong>new</strong>(context_size : UInt32 = <span class="n">0_u32</span>, batch_size : UInt32 = <span class="n">512_u32</span>, micro_batch_size : UInt32 = <span class="n">512_u32</span>, threads : Int32 | Nil = <span class="n">nil</span>, batch_threads : Int32 | Nil = <span class="n">nil</span>, embeddings : Bool = <span class="n">false</span>, offload_kqv : Bool = <span class="n">false</span>, op_offload : Bool = <span class="n">false</span>)
 
-        <a class="method-permalink" href="#new%28context_size%3AUInt32%3D0_u32%2Cbatch_size%3AUInt32%3D512_u32%2Cmicro_batch_size%3AUInt32%3D512_u32%2Cthreads%3AInt32%7CNil%3Dnil%2Cbatch_threads%3AInt32%7CNil%3Dnil%2Cembeddings%3ABool%3Dfalse%2Coffload_kqv%3ABool%3Dfalse%2Cop_offload%3ABool%3Dfalse%2Csequence_count%3AUInt32%3D1_u32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28context_size%3AUInt32%3D0_u32%2Cbatch_size%3AUInt32%3D512_u32%2Cmicro_batch_size%3AUInt32%3D512_u32%2Cthreads%3AInt32%7CNil%3Dnil%2Cbatch_threads%3AInt32%7CNil%3Dnil%2Cembeddings%3ABool%3Dfalse%2Coffload_kqv%3ABool%3Dfalse%2Cop_offload%3ABool%3Dfalse%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L49" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -735,7 +720,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -751,7 +736,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -767,7 +752,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -783,7 +768,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -799,7 +784,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L42" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -815,7 +800,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L51" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -831,23 +816,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L52" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="sequence_count:UInt32-instance-method">
-      <div class="signature">
-        
-        def <strong>sequence_count</strong> : UInt32
-
-        <a class="method-permalink" href="#sequence_count%3AUInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L53" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -863,7 +832,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L48" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>

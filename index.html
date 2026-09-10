@@ -167,11 +167,6 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/EmbeddingOptions" data-name="llama::embeddingoptions">
-      <a href="Llama/EmbeddingOptions.html">EmbeddingOptions</a>
-      
-    </li>
-  
   <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
       <a href="Llama/Error.html">Error</a>
       
@@ -254,11 +249,6 @@
   
   <li class=" " data-id="llama/Llama/NativeResource" data-name="llama::nativeresource">
       <a href="Llama/NativeResource.html">NativeResource</a>
-      
-    </li>
-  
-  <li class=" " data-id="llama/Llama/OverflowPolicy" data-name="llama::overflowpolicy">
-      <a href="Llama/OverflowPolicy.html">OverflowPolicy</a>
       
     </li>
   
@@ -533,8 +523,6 @@
 For example, shard version <code>0.10809.1</code> targets llama.cpp build <code>b10809</code>, which
 is the stable release <a href="https://github.com/ggml-org/llama.cpp/releases/tag/v0.4.0">v0.4.0</a>.</p>
 <p>This project is under active development and may change rapidly.</p>
-<p>Implementation tradeoffs and intentionally deferred plan items are recorded in
-<a href="IMPLEMENTATION_DECISIONS.md">IMPLEMENTATION_DECISIONS.md</a>.</p>
 <h2><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -638,17 +626,23 @@ crystal spec</code></pre>
     <use href="#octicon-link"/>
   </svg>
 </a>Usage</h2>
-<h3><a id="typed-text-generation" class="anchor" href="#typed-text-generation">
+<h3><a id="basic-text-generation" class="anchor" href="#basic-text-generation">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Typed Text Generation</h3>
+</a>Basic Text Generation</h3>
 <pre><code class="language-crystal"><span class="k">require</span> <span class="s">&quot;llama&quot;</span>
 
-options <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">GenerationOptions</span>.new(
+response <span class="o">=</span> <span class="t">Llama</span>.generate(
+  <span class="s">&quot;/path/to/model.gguf&quot;</span>,
+  <span class="s">&quot;Once upon a time&quot;</span>,
   max_tokens: <span class="n">100</span>,
-  stop: [<span class="s">&quot;\n\n&quot;</span>]
+  temperature: <span class="n">0.8</span>
 )
+puts response</code></pre>
+<p>For a typed result with a finish reason, token usage, stop sequences, or
+streaming, use the additive <code>Llama.complete</code> API:</p>
+<pre><code class="language-crystal">options <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">GenerationOptions</span>.new(max_tokens: <span class="n">100</span>, stop: [<span class="s">&quot;\n\n&quot;</span>])
 
 result <span class="o">=</span> <span class="t">Llama</span>.complete(
   <span class="s">&quot;/path/to/model.gguf&quot;</span>,
@@ -658,9 +652,8 @@ result <span class="o">=</span> <span class="t">Llama</span>.complete(
 puts result.text
 puts result.finish_reason
 puts result.usage.tokens_per_second</code></pre>
-<p><code>Llama.generate</code> remains available as a compatibility convenience returning a
-<code>String</code>. <code>Llama.complete</code> returns a <code>Generation</code> with the finish reason, copied
-sampled tokens, matched stop sequence, and timing/token usage.</p>
+<p><code>Llama.generate</code> continues to return a <code>String</code>. <code>Llama.complete</code> returns a
+<code>Generation</code>; both use the same checked generation path.</p>
 <h3><a id="streaming-and-stateful-sessions" class="anchor" href="#streaming-and-stateful-sessions">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -680,8 +673,7 @@ buffered so it is not emitted unless <code>include_stop</code> is enabled.</p>
 <p><code>Session</code> keeps a canonical transcript between calls. Call <code>reset</code> to start a
 new sequence. <code>snapshot</code>, <code>restore</code>, <code>save</code>, and <code>load</code> validate the model and
 native version before changing that transcript. Only one generation may use a
-session at a time. <code>OverflowPolicy::Shift</code> is not implemented and is rejected
-explicitly.</p>
+session at a time.</p>
 <h3><a id="backend-capabilities-and-gpu-offloading" class="anchor" href="#backend-capabilities-and-gpu-offloading">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -870,14 +862,16 @@ puts info.system_info</code></pre>
   </svg>
 </a>API Documentation</h2>
 <p>See <a href="https://kojix2.github.io/llama.cr">kojix2.github.io/llama.cr</a> for full API docs.</p>
-<h3><a id="stability-levels" class="anchor" href="#stability-levels">
+<h3><a id="api-layers" class="anchor" href="#api-layers">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
   </svg>
-</a>Stability Levels</h3>
+</a>API Layers</h3>
 <ul>
-<li>High-level API: <code>GenerationOptions</code>, <code>Session</code>, <code>Chat</code>, <code>Embedder</code>, and
-<code>Sampling::Plan</code> are the supported application-facing API.</li>
+<li>Convenience API: <code>Llama.generate</code> and <code>Context#generate</code> retain their existing
+string-returning behavior.</li>
+<li>Typed helpers: <code>GenerationOptions</code>, <code>Session</code>, <code>Chat</code>, <code>Embedder</code>, and
+<code>Sampling::Plan</code> add structured results and managed workflows.</li>
 <li>Advanced API: <code>Context</code>, <code>Batch</code>, <code>Memory</code>, <code>State</code>, and manual samplers expose
 native concepts. Borrowed views are valid only while their owner remains open;
 copy pointer-backed data before another native call.</li>
@@ -899,11 +893,11 @@ with <code>Llama.take_log_callback_error</code>.</p>
 </a>Core Classes</h3>
 <ul>
 <li><a href="https://kojix2.github.io/llama.cr/Llama/Model.html">Llama::Model</a> - Represents a loaded LLaMA model</li>
+<li><a href="https://kojix2.github.io/llama.cr/Llama/Context.html">Llama::Context</a> - Handles inference state for a model</li>
+<li><a href="https://kojix2.github.io/llama.cr/Llama/Vocab.html">Llama::Vocab</a> - Provides access to the model's vocabulary</li>
 <li><code><a href="Llama/Session.html">Llama::Session</a></code> - Reusable typed and streaming generation</li>
 <li><code><a href="Llama/Chat.html">Llama::Chat</a></code> - Transactional conversation history</li>
 <li><code><a href="Llama/Embedder.html">Llama::Embedder</a></code> - Safe single and batched sentence embeddings</li>
-<li><a href="https://kojix2.github.io/llama.cr/Llama/Context.html">Llama::Context</a> - Handles inference state for a model</li>
-<li><a href="https://kojix2.github.io/llama.cr/Llama/Vocab.html">Llama::Vocab</a> - Provides access to the model's vocabulary</li>
 <li><a href="https://kojix2.github.io/llama.cr/Llama/Batch.html">Llama::Batch</a> - Manages batches of tokens for efficient processing</li>
 <li><a href="https://kojix2.github.io/llama.cr/Llama/Memory.html">Llama::Memory</a> - Controls KV cache memory and related operations</li>
 <li><a href="https://kojix2.github.io/llama.cr/Llama/State.html">Llama::State</a> - Handles saving and loading model state</li>

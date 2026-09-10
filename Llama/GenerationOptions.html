@@ -167,11 +167,6 @@
       
     </li>
   
-  <li class=" " data-id="llama/Llama/EmbeddingOptions" data-name="llama::embeddingoptions">
-      <a href="../Llama/EmbeddingOptions.html">EmbeddingOptions</a>
-      
-    </li>
-  
   <li class=" " data-id="llama/Llama/Error" data-name="llama::error">
       <a href="../Llama/Error.html">Error</a>
       
@@ -254,11 +249,6 @@
   
   <li class=" " data-id="llama/Llama/NativeResource" data-name="llama::nativeresource">
       <a href="../Llama/NativeResource.html">NativeResource</a>
-      
-    </li>
-  
-  <li class=" " data-id="llama/Llama/OverflowPolicy" data-name="llama::overflowpolicy">
-      <a href="../Llama/OverflowPolicy.html">OverflowPolicy</a>
       
     </li>
   
@@ -558,7 +548,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L88" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L66" target="_blank">
         llama/options.cr
       </a>
     
@@ -581,7 +571,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28max_tokens%3AInt32%3D256%2Cstop%3AArray%28String%29%3D%5B%5DofString%2Csampling%3ASampling%3A%3APlan%3DSampling.default%2Coverflow%3AOverflowPolicy%3DOverflowPolicy%3A%3AError%2Ckeep_tokens%3AInt32%3D0%2Cinclude_stop%3ABool%3Dfalse%2Crender_special%3ABool%3Dfalse%2Ccancellation%3ACancellation%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(max_tokens : Int32 = <span class="n">256</span>, stop : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, sampling : Sampling::Plan = <span class="t">Sampling</span>.default, overflow : OverflowPolicy = <span class="t">OverflowPolicy</span><span class="t">::</span><span class="t">Error</span>, keep_tokens : Int32 = <span class="n">0</span>, include_stop : Bool = <span class="n">false</span>, render_special : Bool = <span class="n">false</span>, cancellation : Cancellation | Nil = <span class="n">nil</span>)</a>
+        <a href="#new%28max_tokens%3AInt32%3D256%2Cstop%3AArray%28String%29%3D%5B%5DofString%2Csampling%3ASampling%3A%3APlan%3DSampling.default%2Cinclude_stop%3ABool%3Dfalse%2Crender_special%3ABool%3Dfalse%2Ccancellation%3ACancellation%7CNil%3Dnil%29-class-method" class="signature"><strong>.new</strong>(max_tokens : Int32 = <span class="n">256</span>, stop : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, sampling : Sampling::Plan = <span class="t">Sampling</span>.default, include_stop : Bool = <span class="n">false</span>, render_special : Bool = <span class="n">false</span>, cancellation : Cancellation | Nil = <span class="n">nil</span>)</a>
         
       </li>
     
@@ -614,17 +604,7 @@
       </li>
     
       <li class="entry-summary">
-        <a href="#keep_tokens%3AInt32-instance-method" class="signature"><strong>#keep_tokens</strong> : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
         <a href="#max_tokens%3AInt32-instance-method" class="signature"><strong>#max_tokens</strong> : Int32</a>
-        
-      </li>
-    
-      <li class="entry-summary">
-        <a href="#overflow%3AOverflowPolicy-instance-method" class="signature"><strong>#overflow</strong> : OverflowPolicy</a>
         
       </li>
     
@@ -687,18 +667,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(max_tokens:Int32=256,stop:Array(String)=[]ofString,sampling:Sampling::Plan=Sampling.default,overflow:OverflowPolicy=OverflowPolicy::Error,keep_tokens:Int32=0,include_stop:Bool=false,render_special:Bool=false,cancellation:Cancellation|Nil=nil)-class-method">
+    <div class="entry-detail" id="new(max_tokens:Int32=256,stop:Array(String)=[]ofString,sampling:Sampling::Plan=Sampling.default,include_stop:Bool=false,render_special:Bool=false,cancellation:Cancellation|Nil=nil)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(max_tokens : Int32 = <span class="n">256</span>, stop : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, sampling : <a href="../Llama/Sampling/Plan.html">Sampling::Plan</a> = <span class="t">Sampling</span>.default, overflow : <a href="../Llama/OverflowPolicy.html">OverflowPolicy</a> = <span class="t">OverflowPolicy</span><span class="t">::</span><span class="t">Error</span>, keep_tokens : Int32 = <span class="n">0</span>, include_stop : Bool = <span class="n">false</span>, render_special : Bool = <span class="n">false</span>, cancellation : <a href="../Llama/Cancellation.html">Cancellation</a> | Nil = <span class="n">nil</span>)
+        def self.<strong>new</strong>(max_tokens : Int32 = <span class="n">256</span>, stop : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, sampling : <a href="../Llama/Sampling/Plan.html">Sampling::Plan</a> = <span class="t">Sampling</span>.default, include_stop : Bool = <span class="n">false</span>, render_special : Bool = <span class="n">false</span>, cancellation : <a href="../Llama/Cancellation.html">Cancellation</a> | Nil = <span class="n">nil</span>)
 
-        <a class="method-permalink" href="#new%28max_tokens%3AInt32%3D256%2Cstop%3AArray%28String%29%3D%5B%5DofString%2Csampling%3ASampling%3A%3APlan%3DSampling.default%2Coverflow%3AOverflowPolicy%3DOverflowPolicy%3A%3AError%2Ckeep_tokens%3AInt32%3D0%2Cinclude_stop%3ABool%3Dfalse%2Crender_special%3ABool%3Dfalse%2Ccancellation%3ACancellation%7CNil%3Dnil%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28max_tokens%3AInt32%3D256%2Cstop%3AArray%28String%29%3D%5B%5DofString%2Csampling%3ASampling%3A%3APlan%3DSampling.default%2Cinclude_stop%3ABool%3Dfalse%2Crender_special%3ABool%3Dfalse%2Ccancellation%3ACancellation%7CNil%3Dnil%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L97" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L73" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -730,7 +710,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L95" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L71" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -746,23 +726,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L93" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="keep_tokens:Int32-instance-method">
-      <div class="signature">
-        
-        def <strong>keep_tokens</strong> : Int32
-
-        <a class="method-permalink" href="#keep_tokens%3AInt32-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L92" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L69" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -778,23 +742,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L89" target="_blank">View source</a>]
-        
-      </div>
-    </div>
-  
-    <div class="entry-detail" id="overflow:OverflowPolicy-instance-method">
-      <div class="signature">
-        
-        def <strong>overflow</strong> : <a href="../Llama/OverflowPolicy.html">OverflowPolicy</a>
-
-        <a class="method-permalink" href="#overflow%3AOverflowPolicy-instance-method">#</a>
-      </div>
-      
-      <br/>
-      <div>
-        
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L91" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L67" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -810,7 +758,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L94" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L70" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -826,7 +774,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L90" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L68" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -842,7 +790,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/54d771856198216a4e63e491cc6f7f0a148253db/src/llama/options.cr#L113" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/9ddd9eb83258e6adb21ff6076e61770c41fa76d0/src/llama/options.cr#L86" target="_blank">View source</a>]
         
       </div>
     </div>
