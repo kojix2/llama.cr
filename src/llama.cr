@@ -119,6 +119,8 @@ module Llama
   @@log_level = LOG_LEVEL_INFO # Default is INFO
   @@log_box : Pointer(Void)? = nil
   @@log_callback : Proc(Int32, String, Nil)? = nil
+  @@log_error_mutex : Mutex = Mutex.new
+  @@log_callback_error : Exception? = nil
 
   # Set the log level
   #
@@ -148,7 +150,13 @@ module Llama
     end
   end
 
-  # Set a custom log callback
+  # Set a custom log callback.
+  #
+  # This bridge is experimental because callback thread behavior is controlled
+  # by llama.cpp. The pinned b10809 build has been observed to invoke logging on
+  # the calling thread, including during multithreaded decode. Exceptions are
+  # caught at the native boundary and can be retrieved with
+  # `take_log_callback_error`.
   #
   # The block receives:
   # - level : Int32 - log level (0=DEBUG, 1=INFO, 2=WARNING, 3=ERROR)
@@ -163,6 +171,7 @@ module Llama
   def self.log_set(&block : Int32, String ->)
     callback = block
     @@log_callback = callback
+    @@log_error_mutex.synchronize { @@log_callback_error = nil }
     boxed = Box.box(callback)
     @@log_box = boxed
 
@@ -170,11 +179,25 @@ module Llama
       ->(level : Int32, text : LibC::Char*, user_data : Void*) {
         user_callback = Box(Proc(Int32, String, Nil)).unbox(user_data)
         msg = String.new(text)
-        user_callback.call(level, msg)
+        begin
+          user_callback.call(level, msg)
+        rescue ex
+          # Never unwind a Crystal exception through llama.cpp's C callback.
+          @@log_error_mutex.synchronize { @@log_callback_error ||= ex }
+        end
         nil
       },
       boxed
     )
+  end
+
+  # Returns and clears the first exception raised by the current log callback.
+  def self.take_log_callback_error : Exception?
+    @@log_error_mutex.synchronize do
+      error = @@log_callback_error
+      @@log_callback_error = nil
+      error
+    end
   end
 
   # Returns the llama.cpp system information
