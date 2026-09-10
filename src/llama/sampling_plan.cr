@@ -46,6 +46,22 @@ module Llama
       end
     end
 
+    class Grammar < Stage
+      getter source : String
+      getter root : String
+
+      def initialize(source : String, root : String = "root")
+        raise ArgumentError.new("grammar source must not be empty") if source.empty?
+        raise ArgumentError.new("grammar root must not be empty") if root.empty?
+        @source = source.dup
+        @root = root.dup
+      end
+
+      def build(vocab : Vocab) : Sampler::Base
+        Sampler::Grammar.new(vocab, source, root)
+      end
+    end
+
     class Distribution < Stage
       getter seed : UInt32
 

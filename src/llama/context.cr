@@ -771,10 +771,11 @@ module Llama
 
       # 空プロンプトも許可する
 
-      # Use the internal generation method with temperature sampling
-      generate_internal(prompt, max_tokens) do |logits|
-        sample_token(logits, temperature)
-      end
+      options = GenerationOptions.new(
+        max_tokens: max_tokens,
+        sampling: Sampling.temperature(temperature)
+      )
+      Generator.new(self, options).generate(prompt) { |_chunk| }.text
     end
 
     private def begin_operation! : Nil
@@ -787,6 +788,37 @@ module Llama
 
     private def end_operation! : Nil
       @operation_mutex.synchronize { @running = false }
+    end
+
+    # Generates a typed result through the shared high-level engine.
+    def complete(prompt : String, options : GenerationOptions = GenerationOptions.new, &block : GenerationChunk ->) : Generation
+      operation_started = false
+      begin_operation!
+      operation_started = true
+      Generator.new(self, options).generate(prompt, &block)
+    ensure
+      end_operation! if operation_started
+    end
+
+    def complete(prompt : String, options : GenerationOptions = GenerationOptions.new) : Generation
+      complete(prompt, options) { |_chunk| }
+    end
+
+    # Internal primitives used by Generator while it owns the operation guard.
+    # :nodoc:
+    def generator_model : Model
+      @model
+    end
+
+    # :nodoc:
+    def generator_prefill(tokens : Array(Token)) : Nil
+      memory.clear
+      decode_prompt(tokens)
+    end
+
+    # :nodoc:
+    def generator_decode(token : Token, position : Int32) : Nil
+      decode_owned_batch!(generated_token_batch(token, position))
     end
 
     # Internal implementation of text generation

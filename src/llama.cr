@@ -75,6 +75,7 @@ require "./llama/options"
 require "./llama/tokenizer"
 require "./llama/streaming_decoder"
 require "./llama/stop_detector"
+require "./llama/generator"
 
 module Llama
   VERSION         = {{ `shards version #{__DIR__}`.chomp.stringify }}
@@ -329,6 +330,19 @@ module Llama
         context.generate(prompt, max_tokens, temperature)
       end
     end
+  end
+
+  # Performs a typed one-shot completion, optionally streaming safe text chunks.
+  def self.complete(model_path : String, prompt : String, options : GenerationOptions = GenerationOptions.new, &block : GenerationChunk ->) : Generation
+    Model.open(model_path) do |model|
+      model.context do |context|
+        context.complete(prompt, options, &block)
+      end
+    end
+  end
+
+  def self.complete(model_path : String, prompt : String, options : GenerationOptions = GenerationOptions.new) : Generation
+    complete(model_path, prompt, options) { |_chunk| }
   end
 
   # Thread-safe, idempotent initialization of the llama.cpp backend.
