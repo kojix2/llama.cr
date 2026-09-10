@@ -70,6 +70,7 @@ require "./llama/adapter_lora"
 require "./llama/memory"
 require "./llama/context"
 require "./llama/sampler"
+require "./llama/sampling_plan"
 
 module Llama
   VERSION         = {{ `shards version #{__DIR__}`.chomp.stringify }}
