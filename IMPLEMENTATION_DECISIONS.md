@@ -30,9 +30,8 @@ slower but prevents hidden stop bytes from contaminating a later turn. Chat also
 renders complete candidate history and commits it only after success.
 
 Snapshots therefore store canonical text, the reported llama.cpp version, and
-a model metadata fingerprint. They do not claim native KV portability.
-`OverflowPolicy::Shift` is rejected explicitly; silently treating it as the
-default error policy would be misleading.
+a model metadata fingerprint. They do not claim native KV portability. Context
+shifting is not exposed until its token-retention semantics are implemented.
 
 ## Embedding batching has explicit native limits
 

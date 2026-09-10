@@ -7,10 +7,6 @@ module Llama
     end
 
     def generate(prompt : String, &block : GenerationChunk ->) : Generation
-      if @options.overflow.shift?
-        raise UnsupportedOperationError.new("OverflowPolicy::Shift is not implemented; use OverflowPolicy::Error")
-      end
-
       if @model.has_encoder?
         raise UnsupportedOperationError.new("encoder-decoder generation is not supported yet")
       end

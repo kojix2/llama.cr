@@ -14,9 +14,6 @@ is the stable release [v0.4.0](https://github.com/ggml-org/llama.cpp/releases/ta
 
 This project is under active development and may change rapidly.
 
-Implementation tradeoffs and intentionally deferred plan items are recorded in
-[IMPLEMENTATION_DECISIONS.md](IMPLEMENTATION_DECISIONS.md).
-
 ## Features
 
 - Low-level bindings to the llama.cpp C API
@@ -138,15 +135,25 @@ Popular options:
 
 ## Usage
 
-### Typed Text Generation
+### Basic Text Generation
 
 ```crystal
 require "llama"
 
-options = Llama::GenerationOptions.new(
+response = Llama.generate(
+  "/path/to/model.gguf",
+  "Once upon a time",
   max_tokens: 100,
-  stop: ["\n\n"]
+  temperature: 0.8
 )
+puts response
+```
+
+For a typed result with a finish reason, token usage, stop sequences, or
+streaming, use the additive `Llama.complete` API:
+
+```crystal
+options = Llama::GenerationOptions.new(max_tokens: 100, stop: ["\n\n"])
 
 result = Llama.complete(
   "/path/to/model.gguf",
@@ -158,9 +165,8 @@ puts result.finish_reason
 puts result.usage.tokens_per_second
 ```
 
-`Llama.generate` remains available as a compatibility convenience returning a
-`String`. `Llama.complete` returns a `Generation` with the finish reason, copied
-sampled tokens, matched stop sequence, and timing/token usage.
+`Llama.generate` continues to return a `String`. `Llama.complete` returns a
+`Generation`; both use the same checked generation path.
 
 ### Streaming and Stateful Sessions
 
@@ -182,8 +188,7 @@ end
 `Session` keeps a canonical transcript between calls. Call `reset` to start a
 new sequence. `snapshot`, `restore`, `save`, and `load` validate the model and
 native version before changing that transcript. Only one generation may use a
-session at a time. `OverflowPolicy::Shift` is not implemented and is rejected
-explicitly.
+session at a time.
 
 ### Backend Capabilities and GPU Offloading
 
@@ -382,10 +387,12 @@ The `examples` directory contains sample code demonstrating various features:
 
 See [kojix2.github.io/llama.cr](https://kojix2.github.io/llama.cr) for full API docs.
 
-### Stability Levels
+### API Layers
 
-- High-level API: `GenerationOptions`, `Session`, `Chat`, `Embedder`, and
-  `Sampling::Plan` are the supported application-facing API.
+- Convenience API: `Llama.generate` and `Context#generate` retain their existing
+  string-returning behavior.
+- Typed helpers: `GenerationOptions`, `Session`, `Chat`, `Embedder`, and
+  `Sampling::Plan` add structured results and managed workflows.
 - Advanced API: `Context`, `Batch`, `Memory`, `State`, and manual samplers expose
   native concepts. Borrowed views are valid only while their owner remains open;
   copy pointer-backed data before another native call.
@@ -402,14 +409,17 @@ model loading and multithreaded decode callbacks were observed on the calling
 thread. Callback exceptions are contained at the C boundary and can be retrieved
 with `Llama.take_log_callback_error`.
 
+Implementation tradeoffs and deferred optimizations are recorded in
+[IMPLEMENTATION_DECISIONS.md](IMPLEMENTATION_DECISIONS.md).
+
 ### Core Classes
 
 - [Llama::Model](https://kojix2.github.io/llama.cr/Llama/Model.html) - Represents a loaded LLaMA model
+- [Llama::Context](https://kojix2.github.io/llama.cr/Llama/Context.html) - Handles inference state for a model
+- [Llama::Vocab](https://kojix2.github.io/llama.cr/Llama/Vocab.html) - Provides access to the model's vocabulary
 - `Llama::Session` - Reusable typed and streaming generation
 - `Llama::Chat` - Transactional conversation history
 - `Llama::Embedder` - Safe single and batched sentence embeddings
-- [Llama::Context](https://kojix2.github.io/llama.cr/Llama/Context.html) - Handles inference state for a model
-- [Llama::Vocab](https://kojix2.github.io/llama.cr/Llama/Vocab.html) - Provides access to the model's vocabulary
 - [Llama::Batch](https://kojix2.github.io/llama.cr/Llama/Batch.html) - Manages batches of tokens for efficient processing
 - [Llama::Memory](https://kojix2.github.io/llama.cr/Llama/Memory.html) - Controls KV cache memory and related operations
 - [Llama::State](https://kojix2.github.io/llama.cr/Llama/State.html) - Handles saving and loading model state

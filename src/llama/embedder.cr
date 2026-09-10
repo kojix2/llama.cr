@@ -5,8 +5,14 @@ module Llama
 
     getter dimension : Int32
 
-    def initialize(@model : Model, @options : EmbeddingOptions, context_options : ContextOptions = ContextOptions.new)
-      raise EmbeddingError.new("Pooling::None produces token vectors; use Context#get_embeddings_ith for token-level embeddings") if @options.pooling.none?
+    def initialize(
+      @model : Model,
+      @pooling : Pooling = Pooling::Mean,
+      @max_sequences : UInt32 = 8_u32,
+      context_options : ContextOptions = ContextOptions.new,
+    )
+      raise ArgumentError.new("max_sequences must be positive") if @max_sequences == 0
+      raise EmbeddingError.new("Pooling::None produces token vectors; use Context#get_embeddings_ith for token-level embeddings") if @pooling.none?
       raise EmbeddingError.new("model has neither an encoder nor a decoder") unless @model.has_encoder? || @model.has_decoder?
 
       @dimension = @model.n_embd_out
@@ -24,17 +30,17 @@ module Llama
         offload_kqv: context_options.offload_kqv,
         op_offload: context_options.op_offload,
         n_ubatch: context_options.micro_batch_size,
-        n_seq_max: @options.max_sequences,
-        pooling_type: @options.pooling.to_native
+        n_seq_max: @max_sequences,
+        pooling_type: @pooling.to_native
       )
     end
 
-    def embed(text : String, normalize : Bool? = nil) : Array(Float32)
+    def embed(text : String, normalize : Bool = false) : Array(Float32)
       embed_all([text], normalize).first
     end
 
     # Embeds inputs in native multi-sequence batches while preserving input order.
-    def embed_all(texts : Enumerable(String), normalize : Bool? = nil) : Array(Array(Float32))
+    def embed_all(texts : Enumerable(String), normalize : Bool = false) : Array(Array(Float32))
       inputs = texts.to_a
       return [] of Array(Float32) if inputs.empty?
 
@@ -59,8 +65,7 @@ module Llama
         vectors.concat(embed_group(group))
       end
 
-      should_normalize = normalize.nil? ? @options.normalize : normalize
-      should_normalize ? vectors.map { |vector| normalize_vector(vector) } : vectors
+      normalize ? vectors.map { |vector| normalize_vector(vector) } : vectors
     ensure
       end_operation! if operation_started
     end
@@ -96,7 +101,7 @@ module Llama
       token_count = 0
 
       token_sets.each do |tokens|
-        if !current.empty? && (current.size.to_u32 >= @options.max_sequences || token_count + tokens.size > @context.n_batch)
+        if !current.empty? && (current.size.to_u32 >= @max_sequences || token_count + tokens.size > @context.n_batch)
           result << current
           current = [] of Array(Int32)
           token_count = 0

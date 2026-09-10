@@ -315,21 +315,19 @@ module Llama
     def embedder(
       pooling : Pooling = Pooling::Mean,
       context_options : ContextOptions = ContextOptions.new,
-      normalize : Bool = false,
       max_sequences : UInt32 = 8_u32,
     ) : Embedder
       ensure_open!
-      Embedder.new(self, EmbeddingOptions.new(pooling, normalize, max_sequences), context_options)
+      Embedder.new(self, pooling, max_sequences, context_options)
     end
 
     def embedder(
       pooling : Pooling = Pooling::Mean,
       context_options : ContextOptions = ContextOptions.new,
-      normalize : Bool = false,
       max_sequences : UInt32 = 8_u32,
       & : Embedder -> _
     )
-      value = embedder(pooling, context_options, normalize, max_sequences)
+      value = embedder(pooling, context_options, max_sequences)
       yield value
     ensure
       value.try(&.close)

@@ -17,11 +17,6 @@ module Llama
     end
   end
 
-  enum OverflowPolicy
-    Error
-    Shift
-  end
-
   class ModelOptions
     getter gpu_layers : Int32
     getter use_mmap : Bool
@@ -50,7 +45,6 @@ module Llama
     getter embeddings : Bool
     getter offload_kqv : Bool
     getter op_offload : Bool
-    getter sequence_count : UInt32
 
     def initialize(
       @context_size : UInt32 = 0_u32,
@@ -61,35 +55,17 @@ module Llama
       @embeddings : Bool = false,
       @offload_kqv : Bool = false,
       @op_offload : Bool = false,
-      @sequence_count : UInt32 = 1_u32,
     )
       raise ArgumentError.new("batch_size must be positive") if @batch_size == 0
       raise ArgumentError.new("micro_batch_size must be positive") if @micro_batch_size == 0
       raise ArgumentError.new("threads must be positive") if @threads.try { |v| v <= 0 }
       raise ArgumentError.new("batch_threads must be positive") if @batch_threads.try { |v| v <= 0 }
-      raise ArgumentError.new("sequence_count must be positive") if @sequence_count == 0
-    end
-  end
-
-  class EmbeddingOptions
-    getter pooling : Pooling
-    getter normalize : Bool
-    getter max_sequences : UInt32
-
-    def initialize(
-      @pooling : Pooling = Pooling::Mean,
-      @normalize : Bool = false,
-      @max_sequences : UInt32 = 8_u32,
-    )
-      raise ArgumentError.new("max_sequences must be positive") if @max_sequences == 0
     end
   end
 
   class GenerationOptions
     getter max_tokens : Int32
     getter sampling : Sampling::Plan
-    getter overflow : OverflowPolicy
-    getter keep_tokens : Int32
     getter include_stop : Bool
     getter render_special : Bool
     getter cancellation : Cancellation?
@@ -98,15 +74,12 @@ module Llama
       @max_tokens : Int32 = 256,
       stop : Array(String) = [] of String,
       @sampling : Sampling::Plan = Sampling.default,
-      @overflow : OverflowPolicy = OverflowPolicy::Error,
-      @keep_tokens : Int32 = 0,
       @include_stop : Bool = false,
       @render_special : Bool = false,
       @cancellation : Cancellation? = nil,
     )
       raise ArgumentError.new("max_tokens must be positive") if @max_tokens <= 0
       raise ArgumentError.new("stop sequences must not be empty") if stop.any?(&.empty?)
-      raise ArgumentError.new("keep_tokens must be non-negative") if @keep_tokens < 0
       @stop = stop.dup
     end
 

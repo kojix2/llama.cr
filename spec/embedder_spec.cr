@@ -31,6 +31,9 @@ describe Llama::Embedder do
     expect_raises(Llama::EmbeddingError, "Pooling::None produces token vectors") do
       model.embedder(pooling: Llama::Pooling::None)
     end
+    expect_raises(ArgumentError, "max_sequences must be positive") do
+      model.embedder(max_sequences: 0_u32)
+    end
     model.close
   end
 end

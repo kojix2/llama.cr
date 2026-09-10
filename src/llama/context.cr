@@ -85,8 +85,7 @@ module Llama
         embeddings: options.embeddings,
         offload_kqv: options.offload_kqv,
         op_offload: options.op_offload,
-        n_ubatch: options.micro_batch_size,
-        n_seq_max: options.sequence_count
+        n_ubatch: options.micro_batch_size
       )
     end
 
