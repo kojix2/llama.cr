@@ -74,6 +74,15 @@ module Llama
   class EmbeddingError < Error
   end
 
+  class IncompatibleLibraryError < Error
+    getter expected : String
+    getter reported : String
+
+    def initialize(@expected : String, @reported : String)
+      super("incompatible llama.cpp library: expected stable version #{@expected}, reported #{@reported}")
+    end
+  end
+
   # Raised by checked decode operations when llama.cpp does not accept a batch.
   #
   # `Context#decode` retains its compatibility behavior, including returning

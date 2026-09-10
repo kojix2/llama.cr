@@ -12,6 +12,7 @@ module Llama
     # Raises:
     # - Llama::Error if the sampler chain cannot be created
     def initialize(no_perf : Bool = false)
+      Llama.check_compatibility!
       params = LibLlama.llama_sampler_chain_default_params
       params.no_perf = no_perf
       @handle = LibLlama.llama_sampler_chain_init(params)

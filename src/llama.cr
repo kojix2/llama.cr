@@ -59,6 +59,7 @@
 require "weak_ref"
 require "./llama/lib_llama"
 require "./llama/error"
+require "./llama/runtime_info"
 require "./llama/native_resource"
 require "./llama/cancellation"
 require "./llama/result"
@@ -90,6 +91,7 @@ module Llama
     end
   end
   LLAMA_CPP_COMPATIBLE_VERSION = "b#{LLAMA_CPP_BUILD}"
+  LLAMA_CPP_REPORTED_VERSION   = "0.4.0"
 
   # ==== Native constants (wrapped for user convenience) ====
   DEFAULT_SEED    = LibLlama::LLAMA_DEFAULT_SEED
@@ -215,6 +217,40 @@ module Llama
   # Available dynamic backends are loaded by llama.cpp as needed.
   def self.rpc_supported? : Bool
     LibLlama.llama_supports_rpc
+  end
+
+  # Returns the semantic version reported by the loaded llama.cpp library.
+  # The exact build number is not exposed by llama.cpp's C API.
+  def self.llama_cpp_version : String
+    version = LibLlama.llama_version
+    raise IncompatibleLibraryError.new(LLAMA_CPP_REPORTED_VERSION, "<null>") if version.null?
+    String.new(version)
+  end
+
+  # Collects version, backend, and feature diagnostics for the loaded runtime.
+  def self.runtime_info : RuntimeInfo
+    init
+    RuntimeInfo.new(
+      VERSION,
+      LLAMA_CPP_COMPATIBLE_VERSION,
+      llama_cpp_version,
+      LibLlama.ggml_backend_reg_count.to_u64,
+      system_info,
+      mmap_supported?,
+      mlock_supported?,
+      rpc_supported?,
+      gpu_offload_supported?
+    )
+  end
+
+  # Rejects a different stable llama.cpp release before ABI-sensitive structs
+  # are passed by value. Exact b10809 verification remains a packaging/CI duty
+  # because llama_version reports only the stable semantic version.
+  def self.check_compatibility! : Nil
+    reported = llama_cpp_version
+    return if reported == LLAMA_CPP_REPORTED_VERSION
+
+    raise IncompatibleLibraryError.new(LLAMA_CPP_REPORTED_VERSION, reported)
   end
 
   # Process escape sequences in a string
@@ -353,6 +389,8 @@ module Llama
   def self.init
     @@backend_mutex.synchronize do
       unless @@backend_initialized
+        check_compatibility!
+
         # Initialize the backend first
         LibLlama.llama_backend_init
 
