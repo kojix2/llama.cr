@@ -78,6 +78,7 @@ require "./llama/tokenizer"
 require "./llama/streaming_decoder"
 require "./llama/stop_detector"
 require "./llama/generator"
+require "./llama/session_snapshot"
 require "./llama/session"
 require "./llama/embedder"
 

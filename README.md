@@ -14,6 +14,9 @@ is the stable release [v0.4.0](https://github.com/ggml-org/llama.cpp/releases/ta
 
 This project is under active development and may change rapidly.
 
+Implementation tradeoffs and intentionally deferred plan items are recorded in
+[IMPLEMENTATION_DECISIONS.md](IMPLEMENTATION_DECISIONS.md).
+
 ## Features
 
 - Low-level bindings to the llama.cpp C API
@@ -177,7 +180,10 @@ end
 ```
 
 `Session` keeps a canonical transcript between calls. Call `reset` to start a
-new sequence. Only one generation may use a session at a time.
+new sequence. `snapshot`, `restore`, `save`, and `load` validate the model and
+native version before changing that transcript. Only one generation may use a
+session at a time. `OverflowPolicy::Shift` is not implemented and is rejected
+explicitly.
 
 ### Backend Capabilities and GPU Offloading
 

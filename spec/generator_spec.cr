@@ -1,6 +1,19 @@
 require "./spec_helper"
 
 describe Llama::Generator do
+  it "rejects the unimplemented shift policy explicitly" do
+    model = Llama::Model.new(MODEL_PATH)
+    context = model.context
+    options = Llama::GenerationOptions.new(overflow: Llama::OverflowPolicy::Shift)
+
+    expect_raises(Llama::UnsupportedOperationError, "OverflowPolicy::Shift is not implemented") do
+      context.complete("hello", options)
+    end
+
+    context.close
+    model.close
+  end
+
   it "returns typed usage and streams the same text" do
     model = Llama::Model.new(MODEL_PATH)
     context = model.context

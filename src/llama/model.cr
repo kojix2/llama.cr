@@ -1,4 +1,5 @@
 require "./model/error"
+require "digest/sha256"
 
 module Llama
   # Controls whether model tensors marked for lazy reading are loaded on demand.
@@ -527,6 +528,21 @@ module Llama
       end
 
       result
+    end
+
+    # Stable fingerprint of model structure and serialized GGUF metadata.
+    # It validates wrapper snapshots; it is not intended as a file checksum.
+    def fingerprint : String
+      digest = Digest::SHA256.new
+      digest.update("#{n_params}\0#{model_size}\0#{n_embd_inp}\0#{n_embd_out}\0#{n_layer}\0")
+      values = metadata
+      values.keys.sort!.each do |key|
+        digest.update(key)
+        digest.update("\0")
+        digest.update(values[key])
+        digest.update("\0")
+      end
+      digest.final.hexstring
     end
 
     @handle : LibLlama::LlamaModel*
