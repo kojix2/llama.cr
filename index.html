@@ -879,9 +879,12 @@ copy pointer-backed data before another native call.</li>
 and pointer lifetimes track the pinned upstream build and may change between
 shard releases.</li>
 </ul>
-<p>The wrapper checks the reported stable version (<code>0.4.0</code>) before passing ABI-
-sensitive structs by value. The C API does not report the exact build number, so
-the exact <code>b10809</code> package pin and CI ABI checks remain required.</p>
+<p><code>Llama.check_compatibility!</code> can explicitly check the version reported by the
+library. It is not enforced during initialization, allowing other llama.cpp
+versions to be tested at the user's own risk. Stable packages of the supported
+release report <code>0.4.0</code>, while the official <code>b10809</code> release archives report
+<code>0.4.0-dev</code>. The C API does not report the exact build number, so package pins
+and ABI checks are still needed when strict compatibility is required.</p>
 <p>Custom <code>Llama.log_set</code> callbacks are experimental. On the pinned b10809 build,
 model loading and multithreaded decode callbacks were observed on the calling
 thread. Callback exceptions are contained at the C boundary and can be retrieved
