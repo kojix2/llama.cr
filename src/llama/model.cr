@@ -286,15 +286,8 @@ module Llama
     # Returns:
     # - The metadata value as a string, or nil if not found
     def metadata_value(key : String) : String?
-      buf_size = 1024
-      buf = Pointer(LibC::Char).malloc(buf_size)
-      result = LibLlama.llama_model_meta_val_str(@handle, key, buf, buf_size)
-
-      if result < 0
-        # Not an error, just no metadata found
-        nil
-      else
-        String.new(buf, result)
+      read_native_string do |buf, buf_size|
+        LibLlama.llama_model_meta_val_str(@handle, key, buf, buf_size)
       end
     end
 
@@ -314,15 +307,8 @@ module Llama
     # Returns:
     # - The key name, or nil if the index is out of bounds
     def metadata_key_at(i : Int32) : String?
-      buf_size = 1024
-      buf = Pointer(LibC::Char).malloc(buf_size)
-      result = LibLlama.llama_model_meta_key_by_index(@handle, i, buf, buf_size)
-
-      if result < 0
-        # Not an error, just index out of bounds
-        nil
-      else
-        String.new(buf, result)
+      read_native_string do |buf, buf_size|
+        LibLlama.llama_model_meta_key_by_index(@handle, i, buf, buf_size)
       end
     end
 
@@ -334,15 +320,8 @@ module Llama
     # Returns:
     # - The value as a string, or nil if the index is out of bounds
     def metadata_value_at(i : Int32) : String?
-      buf_size = 1024
-      buf = Pointer(LibC::Char).malloc(buf_size)
-      result = LibLlama.llama_model_meta_val_str_by_index(@handle, i, buf, buf_size)
-
-      if result < 0
-        # Not an error, just index out of bounds
-        nil
-      else
-        String.new(buf, result)
+      read_native_string do |buf, buf_size|
+        LibLlama.llama_model_meta_val_str_by_index(@handle, i, buf, buf_size)
       end
     end
 
@@ -351,15 +330,22 @@ module Llama
     # Returns:
     # - A description of the model
     def description : String
-      buf_size = 1024
-      buf = Pointer(LibC::Char).malloc(buf_size)
-      result = LibLlama.llama_model_desc(@handle, buf, buf_size)
+      read_native_string { |buf, buf_size| LibLlama.llama_model_desc(@handle, buf, buf_size) } || "Unknown model"
+    end
 
-      if result < 0
-        # Error getting description, return a default
-        "Unknown model"
-      else
-        String.new(buf, result)
+    # Native metadata functions report the required byte length even when the
+    # supplied buffer is too small. Always reserve one additional byte for the
+    # terminating NUL mandated by llama.h and retry with the reported size.
+    private def read_native_string(initial_capacity : Int32 = 256, & : Pointer(LibC::Char), LibC::SizeT -> Int32) : String?
+      capacity = initial_capacity
+
+      loop do
+        buf = Pointer(LibC::Char).malloc(capacity)
+        length = yield buf, capacity.to_u64
+        return nil if length < 0
+        return String.new(buf, length) if length < capacity
+
+        capacity = length + 1
       end
     end
 
