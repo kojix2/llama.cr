@@ -139,5 +139,21 @@ jobs:
           echo "Working directory: $(pwd)"
           crystal spec "${{ matrix.spec_file }}"
 
+      - name: Run high-level API specs
+        if: matrix.spec_file == 'spec/llama_spec.cr'
+        run: >-
+          crystal spec
+          spec/decode_error_spec.cr
+          spec/embedder_spec.cr
+          spec/generator_spec.cr
+          spec/high_level_chat_spec.cr
+          spec/log_callback_spec.cr
+          spec/options_spec.cr
+          spec/result_spec.cr
+          spec/runtime_info_spec.cr
+          spec/sampling_plan_spec.cr
+          spec/session_spec.cr
+          spec/streaming_spec.cr
+
       - name: Run static analysis
-        run: crystal tool format --check
+        run: crystal tool format --check src spec scripts examples/*.cr

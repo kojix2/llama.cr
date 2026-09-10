@@ -111,6 +111,8 @@ jobs:
           crystal build examples/minimal.cr -o minimal_example
           crystal build examples/simple.cr -o simple_example
           crystal build examples/chat.cr -o chat_example
+          crystal build examples/streaming.cr -o streaming_example
+          crystal build examples/embedding.cr -o embedding_example
           crystal build examples/tokenize.cr -o tokenize_example
           (cd examples && crystal build server.cr -o ../server_example)
 

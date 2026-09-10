@@ -2,6 +2,10 @@ require "../src/llama"
 require "option_parser"
 require "colorize"
 
+CHATML_TEMPLATE = <<-'TEMPLATE'
+{% for message in messages %}{{'<|im_start|>' + message['role'] + '\n' + message['content'] + '<|im_end|>' + '\n'}}{% endfor %}{% if add_generation_prompt %}{{ '<|im_start|>assistant\n' }}{% endif %}
+TEMPLATE
+
 # Parse command line arguments
 model_path = ""
 n_ctx = 2048
@@ -50,7 +54,9 @@ begin
     ] of Llama::Sampling::Stage)
     generation_options = Llama::GenerationOptions.new(sampling: sampling)
 
-    model.chat(context_options: context_options) do |chat|
+    # b10809 accepts recognized template shapes rather than arbitrary Jinja.
+    template = model.chat_template || CHATML_TEMPLATE
+    model.chat(template: template, context_options: context_options) do |chat|
       loop do
         print "> ".colorize(:green)
         user_input = gets

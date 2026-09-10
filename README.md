@@ -367,6 +367,8 @@ The `examples` directory contains sample code demonstrating various features:
 - `simple.cr` - Basic text generation
 - `minimal.cr` - Minimal use of the high-level generation API
 - `chat.cr` - Chat conversations with models
+- `streaming.cr` - UTF-8-safe streamed generation with a session
+- `embedding.cr` - Single-batch normalized sentence embeddings
 - `tokenize.cr` - Tokenization and vocabulary features
 - `server.cr` - HTTP streaming server (uses `examples/shard.yml`)
 
