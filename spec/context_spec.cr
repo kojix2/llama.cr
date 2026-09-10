@@ -11,6 +11,19 @@ class Llama::Context
 end
 
 describe Llama::Context do
+  it "supports idempotent close and rejects later operations" do
+    model = Llama::Model.new(MODEL_PATH)
+    context = model.context
+
+    context.close
+    context.close
+
+    context.closed?.should be_true
+    model.closed?.should be_false
+    expect_raises(Llama::ClosedError, "Llama::Context is closed") { context.n_ctx }
+    model.close
+  end
+
   describe "#clone_dup" do
     it "raises NotImplementedError when clone is called" do
       model = Llama::Model.new(MODEL_PATH)

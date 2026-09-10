@@ -47,6 +47,24 @@ module Llama
   class TokenizationError < Error
   end
 
+  # Raised when an operation uses a native resource after it has been closed.
+  class ClosedError < Error
+    getter resource_type : String
+
+    def initialize(@resource_type : String)
+      super("#{@resource_type} is closed")
+    end
+  end
+
+  # Raised when closing or mutating a resource used by an active operation.
+  class BusyError < Error
+    getter resource_type : String
+
+    def initialize(@resource_type : String)
+      super("#{@resource_type} is busy")
+    end
+  end
+
   # Raised by checked decode operations when llama.cpp does not accept a batch.
   #
   # `Context#decode` retains its compatibility behavior, including returning

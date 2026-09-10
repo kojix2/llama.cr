@@ -56,8 +56,10 @@
 #   result = Llama.tokenize_and_format(model.vocab, "Hello, world!", ids_only: true)
 #   puts result # Prints "[1, 2, 3, ...]"
 
+require "weak_ref"
 require "./llama/lib_llama"
 require "./llama/error"
+require "./llama/native_resource"
 require "./llama/vocab"
 require "./llama/model"
 require "./llama/batch"

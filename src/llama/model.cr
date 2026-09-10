@@ -6,6 +6,8 @@ module Llama
 
   # Wrapper for the llama_model structure
   class Model
+    include NativeResource
+
     # Creates a new Model instance by loading a model from a file.
     #
     # Parameters:
@@ -26,6 +28,13 @@ module Llama
       vocab_only : Bool = false,
       lazy_mode : LazyMode = LazyMode::AUTO,
     )
+      @children_mutex = Mutex.new
+      # Children already keep their model alive. Weak entries avoid creating a
+      # finalizable Model <-> child cycle (Boehm GC reports and skips such
+      # cycles), while still letting explicit Model#close find every live child.
+      @contexts = [] of WeakRef(Context)
+      @adapters_lora = [] of WeakRef(AdapterLora)
+
       # Ensure llama backend is initialized
       Llama.init
       Llama.register_model
@@ -90,14 +99,14 @@ module Llama
     # Returns:
     # - The chat template string, or nil if not available
     def chat_template(name : String? = nil) : String?
-      ptr = LibLlama.llama_model_chat_template(@handle, name.nil? ? nil : name.to_unsafe)
+      ptr = LibLlama.llama_model_chat_template(unsafe_handle!, name.nil? ? nil : name.to_unsafe)
       return if ptr.null? # No error, just no template available
       String.new(ptr)
     end
 
     # Returns the vocabulary associated with this model
     def vocab : Vocab
-      vocab_ptr = LibLlama.llama_model_get_vocab(@handle)
+      vocab_ptr = LibLlama.llama_model_get_vocab(unsafe_handle!)
       if vocab_ptr.null?
         error_msg = Llama.format_error(
           "Failed to get vocabulary",
@@ -111,90 +120,90 @@ module Llama
 
     # Returns the number of parameters in the model
     def n_params : UInt64
-      LibLlama.llama_model_n_params(@handle)
+      LibLlama.llama_model_n_params(unsafe_handle!)
     end
 
     # Returns the number of embedding dimensions in the model
     def n_embd : Int32
-      LibLlama.llama_model_n_embd(@handle)
+      LibLlama.llama_model_n_embd(unsafe_handle!)
     end
 
     # Returns the input embedding dimension used by the model
     def n_embd_inp : Int32
-      LibLlama.llama_model_n_embd_inp(@handle)
+      LibLlama.llama_model_n_embd_inp(unsafe_handle!)
     end
 
     # Returns the output embedding dimension used by the model
     def n_embd_out : Int32
-      LibLlama.llama_model_n_embd_out(@handle)
+      LibLlama.llama_model_n_embd_out(unsafe_handle!)
     end
 
     # Returns the number of layers in the model
     def n_layer : Int32
-      LibLlama.llama_model_n_layer(@handle)
+      LibLlama.llama_model_n_layer(unsafe_handle!)
     end
 
     # Returns the number of next-token-prediction layers in the model.
     def n_layer_nextn : Int32
-      LibLlama.llama_model_n_layer_nextn(@handle)
+      LibLlama.llama_model_n_layer_nextn(unsafe_handle!)
     end
 
     # Returns the model file's quantization type.
     def ftype : LibLlama::LlamaFtype
-      LibLlama.llama_model_ftype(@handle)
+      LibLlama.llama_model_ftype(unsafe_handle!)
     end
 
     # Returns the number of attention heads in the model
     def n_head : Int32
-      LibLlama.llama_model_n_head(@handle)
+      LibLlama.llama_model_n_head(unsafe_handle!)
     end
 
     # Returns whether the model contains an encoder
     def has_encoder? : Bool
-      LibLlama.llama_model_has_encoder(@handle)
+      LibLlama.llama_model_has_encoder(unsafe_handle!)
     end
 
     # Returns whether the model contains a decoder
     def has_decoder? : Bool
-      LibLlama.llama_model_has_decoder(@handle)
+      LibLlama.llama_model_has_decoder(unsafe_handle!)
     end
 
     # Returns whether the model is recurrent (like Mamba, RWKV, etc.)
     def recurrent? : Bool
-      LibLlama.llama_model_is_recurrent(@handle)
+      LibLlama.llama_model_is_recurrent(unsafe_handle!)
     end
 
     # Returns whether the model is a hybrid (e.g., Jamba, Granite, etc.)
     def hybrid? : Bool
-      LibLlama.llama_model_is_hybrid(@handle)
+      LibLlama.llama_model_is_hybrid(unsafe_handle!)
     end
 
     # Returns whether the model is diffusion-based (e.g., LLaDA, Dream, etc.)
     def diffusion? : Bool
-      LibLlama.llama_model_is_diffusion(@handle)
+      LibLlama.llama_model_is_diffusion(unsafe_handle!)
     end
 
     # Returns the number of SWA (sliding window attention) layers in the model
     def n_swa : Int32
-      LibLlama.llama_model_n_swa(@handle)
+      LibLlama.llama_model_n_swa(unsafe_handle!)
     end
 
     # Returns the model's RoPE frequency scaling factor
     def rope_freq_scale_train : Float32
-      LibLlama.llama_model_rope_freq_scale_train(@handle)
+      LibLlama.llama_model_rope_freq_scale_train(unsafe_handle!)
     end
 
     # Returns the token that must be provided to the decoder to start generating output
     # For encoder-decoder models, returns the decoder start token
     # For other models, returns -1
     def decoder_start_token : Int32
-      LibLlama.llama_model_decoder_start_token(@handle)
+      LibLlama.llama_model_decoder_start_token(unsafe_handle!)
     end
 
     # Returns the number of classifier outputs (only valid for classifier models)
     # Returns 0 for non-classifier models
     def n_cls_out : UInt32
-      LibLlama.llama_model_n_cls_out(@handle)
+      LibLlama.llama_model_n_cls_out(unsafe_handle!)
     end
 
     # Returns the classifier label by index
@@ -205,7 +214,7 @@ module Llama
     # Returns:
     # - The classifier label, or nil if index is out of bounds or no label is provided
     def cls_label(i : UInt32) : String?
-      ptr = LibLlama.llama_model_cls_label(@handle, i)
+      ptr = LibLlama.llama_model_cls_label(unsafe_handle!, i)
       ptr.null? ? nil : String.new(ptr)
     end
 
@@ -228,6 +237,7 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the context cannot be created
     def context(*args, **options) : Context
+      ensure_open!
       Context.new(self, *args, **options)
     end
 
@@ -242,6 +252,7 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the context cannot be created
     def context(*args, **options, & : Context -> _)
+      ensure_open!
       ctx = Context.new(self, *args, **options)
       yield ctx
     ensure
@@ -253,6 +264,53 @@ module Llama
       @handle
     end
 
+    # Returns whether the native model has been released.
+    def closed? : Bool
+      @handle.null?
+    end
+
+    # Returns a checked native handle for internal wrapper use.
+    # :nodoc:
+    def unsafe_handle! : LibLlama::LlamaModel*
+      ensure_open!
+      @handle
+    end
+
+    # Registers a native context owned by this model.
+    # :nodoc:
+    def register_child(context : Context) : Nil
+      @children_mutex.synchronize do
+        ensure_open!
+        unless @contexts.any? { |ref| ref.value.try(&.same?(context)) }
+          @contexts << WeakRef.new(context)
+        end
+      end
+    end
+
+    # Registers a native LoRA adapter owned by this model.
+    # :nodoc:
+    def register_child(adapter : AdapterLora) : Nil
+      @children_mutex.synchronize do
+        ensure_open!
+        unless @adapters_lora.any? { |ref| ref.value.try(&.same?(adapter)) }
+          @adapters_lora << WeakRef.new(adapter)
+        end
+      end
+    end
+
+    # Removes a closed child from the ownership registry.
+    # :nodoc:
+    def unregister_child(child : Context | AdapterLora) : Nil
+      @children_mutex.synchronize do
+        case child
+        when Context
+          @contexts.reject! { |ref| value = ref.value; value.nil? || value.same?(child) }
+        when AdapterLora
+          @adapters_lora.reject! { |ref| value = ref.value; value.nil? || value.same?(child) }
+        end
+      end
+    end
+
     # Releases the underlying C resources
     #
     # Calling this method multiple times is safe; only the first call
@@ -260,12 +318,29 @@ module Llama
     # manual calls are only needed to release resources deterministically,
     # for example before process exit.
     def free : Nil
+      close
+    end
+
+    # Closes child contexts, then adapters, before releasing the model.
+    def close : Nil
+      contexts = [] of Context
+      adapters = [] of AdapterLora
+
+      @children_mutex.synchronize do
+        return if closed?
+        contexts = @contexts.compact_map(&.value)
+        raise BusyError.new(self.class.to_s) if contexts.any?(&.busy?)
+        adapters = @adapters_lora.compact_map(&.value)
+      end
+
+      contexts.each(&.close)
+      adapters.each(&.close)
       cleanup
     end
 
     private def cleanup
       if @handle && !@handle.null?
-        LibLlama.llama_model_free(@handle)
+        LibLlama.llama_model_free(unsafe_handle!)
         @handle = Pointer(LibLlama::LlamaModel).null
         Llama.unregister_model
       end
@@ -273,7 +348,9 @@ module Llama
 
     # Frees the resources associated with this model
     def finalize
-      cleanup
+      close
+    rescue
+      # Finalizers are a best-effort fallback and must never raise.
     end
 
     # ===== MODEL METADATA METHODS =====
@@ -287,7 +364,7 @@ module Llama
     # - The metadata value as a string, or nil if not found
     def metadata_value(key : String) : String?
       read_native_string do |buf, buf_size|
-        LibLlama.llama_model_meta_val_str(@handle, key, buf, buf_size)
+        LibLlama.llama_model_meta_val_str(unsafe_handle!, key, buf, buf_size)
       end
     end
 
@@ -296,7 +373,7 @@ module Llama
     # Returns:
     # - The number of metadata entries
     def metadata_count : Int32
-      LibLlama.llama_model_meta_count(@handle)
+      LibLlama.llama_model_meta_count(unsafe_handle!)
     end
 
     # Gets a metadata key name by index
@@ -308,7 +385,7 @@ module Llama
     # - The key name, or nil if the index is out of bounds
     def metadata_key_at(i : Int32) : String?
       read_native_string do |buf, buf_size|
-        LibLlama.llama_model_meta_key_by_index(@handle, i, buf, buf_size)
+        LibLlama.llama_model_meta_key_by_index(unsafe_handle!, i, buf, buf_size)
       end
     end
 
@@ -321,7 +398,7 @@ module Llama
     # - The value as a string, or nil if the index is out of bounds
     def metadata_value_at(i : Int32) : String?
       read_native_string do |buf, buf_size|
-        LibLlama.llama_model_meta_val_str_by_index(@handle, i, buf, buf_size)
+        LibLlama.llama_model_meta_val_str_by_index(unsafe_handle!, i, buf, buf_size)
       end
     end
 
@@ -330,7 +407,7 @@ module Llama
     # Returns:
     # - A description of the model
     def description : String
-      read_native_string { |buf, buf_size| LibLlama.llama_model_desc(@handle, buf, buf_size) } || "Unknown model"
+      read_native_string { |buf, buf_size| LibLlama.llama_model_desc(unsafe_handle!, buf, buf_size) } || "Unknown model"
     end
 
     # Native metadata functions report the required byte length even when the
@@ -354,7 +431,7 @@ module Llama
     # Returns:
     # - The total size of all tensors in the model (in bytes)
     def model_size : UInt64
-      LibLlama.llama_model_size(@handle)
+      LibLlama.llama_model_size(unsafe_handle!)
     end
 
     # Gets all metadata as a hash
@@ -378,6 +455,9 @@ module Llama
     end
 
     @handle : LibLlama::LlamaModel*
+    @children_mutex : Mutex
+    @contexts : Array(WeakRef(Context))
+    @adapters_lora : Array(WeakRef(AdapterLora))
 
     # :nodoc:
     def clone

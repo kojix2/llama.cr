@@ -6,6 +6,8 @@ module Llama
   # This class represents a LoRA (Low-Rank Adaptation) adapter that can be
   # applied to a model to modify its behavior without changing the original weights.
   class AdapterLora
+    include NativeResource
+
     # Creates a new LoRA adapter from a file
     #
     # Parameters:
@@ -21,12 +23,21 @@ module Llama
       # Keep the associated model alive while this adapter exists.
       # llama.cpp requires adapter lifetime to be within model lifetime.
       @model = model
+      @attachments_mutex = Mutex.new
+      @attachments = [] of WeakRef(Context)
 
-      @handle = LibLlama.llama_adapter_lora_init(model.to_unsafe, path)
+      @handle = LibLlama.llama_adapter_lora_init(model.unsafe_handle!, path)
 
       if @handle.null?
         error_msg = "Failed to load LoRA adapter from '#{path}'"
         raise AdapterLora::Error.new(error_msg)
+      end
+
+      begin
+        @model.register_child(self)
+      rescue ex
+        cleanup
+        raise ex
       end
     end
 
@@ -37,13 +48,52 @@ module Llama
     # manual calls are only needed to release resources deterministically,
     # for example before process exit.
     def free : Nil
-      cleanup
+      close
+    end
+
+    # Releases the adapter unless it is still attached to a context.
+    def close : Nil
+      @attachments_mutex.synchronize do
+        return if closed?
+        raise BusyError.new(self.class.to_s) if @attachments.any?(&.value)
+        cleanup
+      end
+    end
+
+    # Returns whether the native adapter has been released.
+    def closed? : Bool
+      @handle.null?
+    end
+
+    # Returns a checked native handle for internal wrapper use.
+    # :nodoc:
+    def unsafe_handle! : LibLlama::LlamaAdapterLora*
+      ensure_open!
+      @handle
+    end
+
+    # :nodoc:
+    def register_attachment(context : Context) : Nil
+      @attachments_mutex.synchronize do
+        ensure_open!
+        unless @attachments.any? { |ref| ref.value.try(&.same?(context)) }
+          @attachments << WeakRef.new(context)
+        end
+      end
+    end
+
+    # :nodoc:
+    def unregister_attachment(context : Context) : Nil
+      @attachments_mutex.synchronize do
+        @attachments.reject! { |ref| value = ref.value; value.nil? || value.same?(context) }
+      end
     end
 
     private def cleanup
       if @handle && !@handle.null?
         LibLlama.llama_adapter_lora_free(@handle)
         @handle = Pointer(LibLlama::LlamaAdapterLora).null
+        @model.unregister_child(self)
       end
     end
 
@@ -57,7 +107,9 @@ module Llama
 
     # Frees the resources associated with this adapter
     def finalize
-      cleanup
+      close
+    rescue
+      # Finalizers are a best-effort fallback and must never raise.
     end
 
     # :nodoc:
@@ -72,5 +124,7 @@ module Llama
 
     @handle : LibLlama::LlamaAdapterLora*
     @model : Model
+    @attachments_mutex : Mutex
+    @attachments : Array(WeakRef(Context))
   end
 end

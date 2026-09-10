@@ -3,6 +3,8 @@ require "./context/error"
 module Llama
   # Wrapper for the llama_context structure
   class Context
+    include NativeResource
+
     # Creates a new Context instance for a model.
     #
     # Parameters:
@@ -27,6 +29,9 @@ module Llama
       offload_kqv : Bool = false,  # Offload KQV to GPU
       op_offload : Bool = false,   # Offload host tensor operations to device
     )
+      @operation_mutex = Mutex.new
+      @running = false
+
       # Ensure llama backend is initialized
       Llama.init
       Llama.register_context
@@ -41,7 +46,7 @@ module Llama
       params.offload_kqv = offload_kqv
       params.op_offload = op_offload
       params.swa_full = true
-      @handle = LibLlama.llama_init_from_model(model.to_unsafe, params)
+      @handle = LibLlama.llama_init_from_model(model.unsafe_handle!, params)
 
       if @handle.null?
         Llama.unregister_context
@@ -56,18 +61,24 @@ module Llama
       @model = model
       @adapters_lora = [] of AdapterLora
       @adapter_lora_scales = [] of Float32
+      begin
+        @model.register_child(self)
+      rescue ex
+        cleanup
+        raise ex
+      end
     end
 
     private def sync_adapters_lora! : Int32
       if @adapters_lora.empty?
-        return LibLlama.llama_set_adapters_lora(@handle, Pointer(Pointer(LibLlama::LlamaAdapterLora)).null, 0, Pointer(Float32).null)
+        return LibLlama.llama_set_adapters_lora(unsafe_handle!, Pointer(Pointer(LibLlama::LlamaAdapterLora)).null, 0, Pointer(Float32).null)
       end
 
-      adapters = @adapters_lora.map(&.to_unsafe)
+      adapters = @adapters_lora.map(&.unsafe_handle!)
       scales = @adapter_lora_scales
 
       LibLlama.llama_set_adapters_lora(
-        @handle,
+        unsafe_handle!,
         adapters.to_unsafe.as(Pointer(Pointer(LibLlama::LlamaAdapterLora))),
         adapters.size,
         scales.to_unsafe
@@ -85,46 +96,48 @@ module Llama
     # Returns:
     # - A Memory instance
     def memory : Memory
+      ensure_open!
       Memory.new(self)
     end
 
     # Returns the context window size (n_ctx)
     def n_ctx : UInt32
-      LibLlama.llama_n_ctx(@handle)
+      LibLlama.llama_n_ctx(unsafe_handle!)
     end
 
     # Returns the sequence context window size (n_ctx_seq)
     def n_ctx_seq : UInt32
-      LibLlama.llama_n_ctx_seq(@handle)
+      LibLlama.llama_n_ctx_seq(unsafe_handle!)
     end
 
     # Returns the logical batch size (n_batch)
     def n_batch : UInt32
-      LibLlama.llama_n_batch(@handle)
+      LibLlama.llama_n_batch(unsafe_handle!)
     end
 
     # Returns the micro-batch size (n_ubatch)
     def n_ubatch : UInt32
-      LibLlama.llama_n_ubatch(@handle)
+      LibLlama.llama_n_ubatch(unsafe_handle!)
     end
 
     # Returns the maximum number of sequence IDs per token (n_seq_max)
     def n_seq_max : UInt32
-      LibLlama.llama_n_seq_max(@handle)
+      LibLlama.llama_n_seq_max(unsafe_handle!)
     end
 
     # Returns the number of threads used for generation
     def n_threads : Int32
-      LibLlama.llama_n_threads(@handle)
+      LibLlama.llama_n_threads(unsafe_handle!)
     end
 
     # Returns the number of threads used for batch processing
     def n_threads_batch : Int32
-      LibLlama.llama_n_threads_batch(@handle)
+      LibLlama.llama_n_threads_batch(unsafe_handle!)
     end
 
     # Returns the state manager for this context
     def state : State
+      ensure_open!
       State.new(self)
     end
 
@@ -148,15 +161,46 @@ module Llama
     # manual calls are only needed to release resources deterministically,
     # for example before process exit.
     def free : Nil
-      cleanup
+      close
+    end
+
+    # Releases the native context unless a high-level operation is active.
+    def close : Nil
+      @operation_mutex.synchronize do
+        return if closed?
+        raise BusyError.new(self.class.to_s) if @running
+        cleanup
+      end
+    end
+
+    # Returns whether the native context has been released.
+    def closed? : Bool
+      @handle.null?
+    end
+
+    # Returns whether a high-level operation currently owns this context.
+    # :nodoc:
+    def busy? : Bool
+      @operation_mutex.synchronize { @running }
+    end
+
+    # Returns a checked native handle for internal wrapper use.
+    # :nodoc:
+    def unsafe_handle! : LibLlama::LlamaContext*
+      ensure_open!
+      @handle
     end
 
     private def cleanup
       # Free the context handle
       if @handle && !@handle.null?
-        LibLlama.llama_free(@handle)
+        LibLlama.llama_free(unsafe_handle!)
         @handle = Pointer(LibLlama::LlamaContext).null
+        @adapters_lora.each { |adapter| adapter.unregister_attachment(self) }
+        @adapters_lora.clear
+        @adapter_lora_scales.clear
         Llama.unregister_context
+        @model.unregister_child(self)
       end
     end
 
@@ -181,6 +225,7 @@ module Llama
       temperature : Float32 = 0.8,
       template : String? = nil,
     ) : String
+      ensure_open!
       # Validate parameters
       if max_tokens <= 0
         raise ArgumentError.new("max_tokens must be positive")
@@ -433,6 +478,15 @@ module Llama
     # - Llama::TokenizationError if the prompt cannot be tokenized
     # - Llama::Sampler::Error if sampling fails
     def generate_with_sampler(prompt : String, sampler : SamplerChain, max_tokens : Int32 = 128) : String
+      operation_started = false
+      begin_operation!
+      operation_started = true
+      generate_with_sampler_impl(prompt, sampler, max_tokens)
+    ensure
+      end_operation! if operation_started
+    end
+
+    private def generate_with_sampler_impl(prompt : String, sampler : SamplerChain, max_tokens : Int32) : String
       # Validate parameters
       if max_tokens <= 0
         raise ArgumentError.new("max_tokens must be positive")
@@ -470,7 +524,7 @@ module Llama
     # - Llama::Batch::Error on error
     def encode(batch : LibLlama::LlamaBatch | Batch) : Int32
       batch_ptr = batch.is_a?(Batch) ? batch.to_unsafe : batch
-      result = LibLlama.llama_encode(@handle, batch_ptr)
+      result = LibLlama.llama_encode(unsafe_handle!, batch_ptr)
 
       if result < 0
         error_msg = Llama.format_error(
@@ -536,7 +590,7 @@ module Llama
 
     private def decode_native(batch : LibLlama::LlamaBatch) : Int32
       validate_batch_for_decode!(batch, n_batch.to_i, n_ctx.to_i)
-      LibLlama.llama_decode(@handle, batch)
+      LibLlama.llama_decode(unsafe_handle!, batch)
     end
 
     private def validate_batch_for_decode!(batch : LibLlama::LlamaBatch, batch_size : Int32, context_size : Int32) : Nil
@@ -643,7 +697,7 @@ module Llama
     # Returns:
     # - A pointer to the logits array for the specified output, or nil if unavailable
     def logits_ith(i : Int32) : Pointer(Float32)?
-      ptr = LibLlama.llama_get_logits_ith(@handle, i)
+      ptr = LibLlama.llama_get_logits_ith(unsafe_handle!, i)
       ptr.null? ? nil : ptr
     end
 
@@ -681,6 +735,15 @@ module Llama
     # - Llama::Context::Error if text generation fails
     # - Llama::TokenizationError if the prompt cannot be tokenized
     def generate(prompt : String, max_tokens : Int32 = 128, temperature : Float32 = 0.8) : String
+      operation_started = false
+      begin_operation!
+      operation_started = true
+      generate_impl(prompt, max_tokens, temperature)
+    ensure
+      end_operation! if operation_started
+    end
+
+    private def generate_impl(prompt : String, max_tokens : Int32, temperature : Float32) : String
       # Validate parameters
       if max_tokens <= 0
         raise ArgumentError.new("max_tokens must be positive")
@@ -696,6 +759,18 @@ module Llama
       generate_internal(prompt, max_tokens) do |logits|
         sample_token(logits, temperature)
       end
+    end
+
+    private def begin_operation! : Nil
+      @operation_mutex.synchronize do
+        ensure_open!
+        raise BusyError.new(self.class.to_s) if @running
+        @running = true
+      end
+    end
+
+    private def end_operation! : Nil
+      @operation_mutex.synchronize { @running = false }
     end
 
     # Internal implementation of text generation
@@ -885,7 +960,9 @@ module Llama
 
     # Frees the resources associated with this context
     def finalize
-      cleanup
+      close
+    rescue
+      # Finalizers are a best-effort fallback and must never raise.
     end
 
     # Print performance information for this context
@@ -893,14 +970,14 @@ module Llama
     # This method prints performance statistics about the context to STDERR.
     # It's useful for debugging and performance analysis.
     def print_perf
-      LibLlama.llama_perf_context_print(@handle)
+      LibLlama.llama_perf_context_print(unsafe_handle!)
     end
 
     # Reset performance counters for this context
     #
     # This method resets all performance counters for the context.
     def reset_perf
-      LibLlama.llama_perf_context_reset(@handle)
+      LibLlama.llama_perf_context_reset(unsafe_handle!)
     end
 
     # NOTE: llama_memory_breakdown_print was removed in llama.cpp b9297.
@@ -920,13 +997,18 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the adapter cannot be attached
     def attach_adapter_lora(adapter : AdapterLora, scale : Float32 = 1.0) : Int32
+      ensure_open!
+      adapter.unsafe_handle!
+
       if adapter.model != @model
         raise Context::Error.new("LoRA adapter was loaded for a different model")
       end
 
       existing_index = @adapters_lora.index(adapter)
+      previous_scale = nil.as(Float32?)
 
       if existing_index
+        previous_scale = @adapter_lora_scales[existing_index]
         @adapter_lora_scales[existing_index] = scale
       else
         @adapters_lora << adapter
@@ -935,7 +1017,13 @@ module Llama
 
       result = sync_adapters_lora!
 
-      if result < 0
+      if result != 0
+        if existing_index
+          @adapter_lora_scales[existing_index] = previous_scale.not_nil!
+        else
+          @adapters_lora.pop
+          @adapter_lora_scales.pop
+        end
         error_msg = Llama.format_error(
           "Failed to attach LoRA adapter",
           result,
@@ -944,6 +1032,7 @@ module Llama
         raise Context::Error.new(error_msg)
       end
 
+      adapter.register_attachment(self) unless existing_index
       result
     end
 
@@ -958,16 +1047,19 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the adapter cannot be detached
     def detach_adapter_lora(adapter : AdapterLora) : Int32
+      ensure_open!
       index = @adapters_lora.index(adapter)
 
       return 0 unless index
 
-      @adapters_lora.delete_at(index)
-      @adapter_lora_scales.delete_at(index)
+      old_adapter = @adapters_lora.delete_at(index)
+      old_scale = @adapter_lora_scales.delete_at(index)
 
       result = sync_adapters_lora!
 
-      if result < 0
+      if result != 0
+        @adapters_lora.insert(index, old_adapter)
+        @adapter_lora_scales.insert(index, old_scale)
         error_msg = Llama.format_error(
           "Failed to detach LoRA adapter",
           result,
@@ -976,17 +1068,23 @@ module Llama
         raise Context::Error.new(error_msg)
       end
 
+      adapter.unregister_attachment(self)
       result
     end
 
     # Clears all LoRA adapters from this context
     def clear_adapters_lora
+      ensure_open!
+      old_adapters = @adapters_lora.dup
+      old_scales = @adapter_lora_scales.dup
       @adapters_lora.clear
       @adapter_lora_scales.clear
 
       result = sync_adapters_lora!
 
-      if result < 0
+      if result != 0
+        @adapters_lora.concat(old_adapters)
+        @adapter_lora_scales.concat(old_scales)
         error_msg = Llama.format_error(
           "Failed to clear LoRA adapters",
           result,
@@ -994,6 +1092,8 @@ module Llama
         )
         raise Context::Error.new(error_msg)
       end
+
+      old_adapters.each { |adapter| adapter.unregister_attachment(self) }
     end
 
     # Applies a control vector to the LoRA adapter
@@ -1010,7 +1110,7 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the control vector cannot be applied
     def apply_adapter_cvec(data : Slice(Float32), n_embd : Int32, il_start : Int32, il_end : Int32) : Int32
-      result = LibLlama.llama_set_adapter_cvec(@handle, data, data.size, n_embd, il_start, il_end)
+      result = LibLlama.llama_set_adapter_cvec(unsafe_handle!, data, data.size, n_embd, il_start, il_end)
 
       if result < 0
         error_msg = Llama.format_error(
@@ -1030,7 +1130,7 @@ module Llama
     # Parameters:
     # - enabled: Whether to enable embeddings mode
     def embeddings=(enabled : Bool)
-      LibLlama.llama_set_embeddings(@handle, enabled)
+      LibLlama.llama_set_embeddings(unsafe_handle!, enabled)
     end
 
     # Gets the pooling type used for embeddings
@@ -1038,7 +1138,7 @@ module Llama
     # Returns:
     # - The pooling type as a PoolingType enum
     def pooling_type : LibLlama::LlamaPoolingType
-      LibLlama.llama_pooling_type(@handle)
+      LibLlama.llama_pooling_type(unsafe_handle!)
     end
 
     # Gets embeddings for the latest output token.
@@ -1065,7 +1165,7 @@ module Llama
     # Raises:
     # - Llama::Context::Error if embeddings mode is not enabled
     def get_embeddings_ith(i : Int32) : Array(Float32)?
-      ptr = LibLlama.llama_get_embeddings_ith(@handle, i)
+      ptr = LibLlama.llama_get_embeddings_ith(unsafe_handle!, i)
       return if ptr.null?
 
       # Get the embedding dimension from the model
@@ -1091,7 +1191,7 @@ module Llama
     # Raises:
     # - Llama::Context::Error if embeddings mode is not enabled
     def get_embeddings_seq(seq_id : Int32) : Array(Float32)?
-      ptr = LibLlama.llama_get_embeddings_seq(@handle, seq_id)
+      ptr = LibLlama.llama_get_embeddings_seq(unsafe_handle!, seq_id)
       return if ptr.null?
 
       # Get the embedding dimension from the model

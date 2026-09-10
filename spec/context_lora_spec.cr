@@ -1,6 +1,20 @@
 require "./spec_helper"
 
 describe Llama::Context do
+  it "rejects closing an attached LoRA adapter" do
+    pending! "Test model or adapter file not found" unless File.exists?(ADAPTER_PATH)
+    model = Llama::Model.new(MODEL_PATH)
+    context = model.context
+    adapter = Llama::AdapterLora.new(model, ADAPTER_PATH)
+    context.attach_adapter_lora(adapter)
+
+    expect_raises(Llama::BusyError, "Llama::AdapterLora is busy") { adapter.close }
+
+    context.close
+    adapter.close
+    model.close
+  end
+
   it "can attach and detach a LoRA adapter" do
     pending! "Test model or adapter file not found" unless File.exists?(ADAPTER_PATH)
     model = Llama::Model.new(MODEL_PATH)

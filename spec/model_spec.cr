@@ -4,6 +4,18 @@ require "./spec_helper"
 # Run with: crystal spec spec/model_spec.cr -- --model=/path/to/model.gguf
 
 describe "Llama with model" do
+  it "closes owned contexts before closing the model" do
+    model = Llama::Model.new(MODEL_PATH)
+    context = model.context
+
+    model.close
+
+    model.closed?.should be_true
+    context.closed?.should be_true
+    expect_raises(Llama::ClosedError, "Llama::Model is closed") { model.n_params }
+    expect_raises(Llama::ClosedError, "Llama::Context is closed") { context.n_ctx }
+  end
+
   it "loads the model" do
     model = Llama::Model.new(MODEL_PATH)
     model.should_not be_nil
