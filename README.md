@@ -409,9 +409,6 @@ model loading and multithreaded decode callbacks were observed on the calling
 thread. Callback exceptions are contained at the C boundary and can be retrieved
 with `Llama.take_log_callback_error`.
 
-Implementation tradeoffs and deferred optimizations are recorded in
-[IMPLEMENTATION_DECISIONS.md](IMPLEMENTATION_DECISIONS.md).
-
 ### Core Classes
 
 - [Llama::Model](https://kojix2.github.io/llama.cr/Llama/Model.html) - Represents a loaded LLaMA model

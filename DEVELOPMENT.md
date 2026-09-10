@@ -48,6 +48,14 @@ This document outlines the development guidelines for the llama.cr project, prim
 
 ## Memory Management for Complex Objects
 
+- Prefer deterministic, idempotent `close` methods and block APIs. Finalizers
+  are a fallback only.
+- A native-backed child keeps its parent alive. Parent registries use weak
+  references so parent/child finalizers do not form a Boehm GC cycle; explicit
+  parent close must still close every live child in dependency order.
+- Borrowed wrappers and pointer-backed results must validate their owner and be
+  copied before another native call can invalidate them.
+
 - **Batch Processing**: When implementing batch processing functionality:
 
   - Centralize memory allocation logic in helper methods
@@ -69,13 +77,38 @@ This document outlines the development guidelines for the llama.cr project, prim
 - Include error codes and specific details in exception messages
 - For critical operations (model loading, context creation), provide more detailed error information
 - When wrapping C functions that return error codes, propagate meaningful error messages
+- Library-owned generation and embedding paths must use checked `decode!` or
+  `encode!`; do not read logits or embeddings after a non-zero native result.
+
+## High-Level API Constraints
+
+- Keep `Llama.generate`, `Context`, `Batch`, `State`, and manual samplers
+  available alongside additive typed helpers.
+- `Session` and `Chat` currently rebuild native state from canonical visible
+  text. Do not add incremental KV reuse until stop sequences ending inside a
+  token are reconciled transactionally.
+- Session snapshots contain canonical text and compatibility metadata, not
+  portable native KV bytes.
+- `Embedder` copies vectors before subsequent native calls. Do not split one
+  sentence across batches for mean, CLS, last, or rank pooling; that changes
+  pooling semantics. Token-level `Pooling::None` remains an advanced `Context`
+  use case.
+- b10809 chat templates are recognized template shapes, not arbitrary Jinja.
+  Unsupported shapes must raise `TemplateError`.
+- Custom native log callbacks are experimental. Exceptions must never cross the
+  C boundary. Add a C-owned queue only if a supported runtime is shown to invoke
+  callbacks from unmanaged worker threads.
+- Do not add a general C adapter or a second injectable backend abstraction
+  without a concrete ABI, callback-threading, or multi-version requirement.
 
 ## llama.cpp Version Compatibility
 
 ### Version Mapping Rules
 
-- `shard.yml` version must use `0.<build>.0` format (example: `0.9330.0`).
-- Release tags must match the shard version with `v` prefix (example: `v0.9330.0`).
+- `shard.yml` version must use `0.<build>.<patch>` format (example: `0.10809.1`).
+- Increment `<patch>` for wrapper fixes and additive APIs that retain the same
+  llama.cpp build. Reset it to `0` when `<build>` changes.
+- Release tags must match the shard version with a `v` prefix (example: `v0.10809.1`).
 - When referenced in documentation or scripts, the build is prefixed with `b` (example: `b<build>`).
 - llama.cpp also publishes stable semver tags (`vX.Y.Z`) that point to a specific build (example: `v0.4.0` points to `b10809`). Mention the mapping when the targeted build is such a stable release.
 
@@ -84,7 +117,7 @@ This document outlines the development guidelines for the llama.cr project, prim
 Document which version of llama.cpp the library is compatible with. When updating to support a new llama.cpp version:
 
 1. Run `crystal run assets/download_headers.cr -- <build>` to update `shard.yml` and download the matching headers
-2. Create/update release tag as `v0.<build>.0`
+2. Create/update the release tag as `v0.<build>.<patch>`
 3. Review the reported header diff and update `src/llama/lib_llama.cr` bindings (struct/enum/function signatures)
 4. Update wrapper code under `src/llama/` when API behavior changes (especially LoRA-related paths)
 5. Run `crystal run scripts/check_abi.cr` to verify C and Crystal struct layouts
@@ -100,6 +133,8 @@ Document which version of llama.cpp the library is compatible with. When updatin
   - `examples/simple.cr`
   - `examples/minimal.cr`
   - `examples/chat.cr`
+  - `examples/streaming.cr`
+  - `examples/embedding.cr`
   - `examples/tokenize.cr`
   - `examples/server.cr` (build only; dependencies are in `examples/shard.yml`)
 10. Commit changes and create a pull request
