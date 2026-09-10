@@ -12,7 +12,7 @@ module Llama
     # Raises:
     # - Llama::State::Error if the context pointer is null
     def initialize(@ctx : Context)
-      @ctx_ptr = @ctx.to_unsafe
+      @ctx_ptr = @ctx.unsafe_handle!
 
       if @ctx_ptr.null?
         error_msg = Llama.format_error(
@@ -26,6 +26,7 @@ module Llama
 
     # Get the context pointer for internal use
     private def ctx_ptr : LibLlama::LlamaContext*
+      @ctx.unsafe_handle!
       if @ctx_ptr.null?
         error_msg = Llama.format_error(
           "Invalid context pointer",
@@ -58,7 +59,7 @@ module Llama
       end
 
       result
-    rescue ex : State::Error
+    rescue ex : State::Error | ClosedError
       raise ex
     rescue ex
       error_msg = Llama.format_error(
@@ -97,7 +98,7 @@ module Llama
 
       # Return the buffer (potentially truncated if bytes_copied < state_size)
       buffer[0, bytes_copied]
-    rescue ex : State::Error
+    rescue ex : State::Error | ClosedError
       raise ex
     rescue ex
       error_msg = Llama.format_error(
@@ -137,7 +138,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ArgumentError
+      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -201,7 +202,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ArgumentError
+      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -252,7 +253,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ArgumentError
+      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -294,7 +295,7 @@ module Llama
       end
 
       result
-    rescue ex : State::Error
+    rescue ex : State::Error | ClosedError
       raise ex
     rescue ex
       error_msg = Llama.format_error(
@@ -354,7 +355,7 @@ module Llama
 
       # Return the buffer (potentially truncated if bytes_copied < state_size)
       buffer[0, bytes_copied]
-    rescue ex : State::Error
+    rescue ex : State::Error | ClosedError
       raise ex
     rescue ex
       error_msg = Llama.format_error(
@@ -411,7 +412,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ArgumentError
+      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -464,7 +465,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ArgumentError
+      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -530,7 +531,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ArgumentError
+      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
         raise ex
       rescue ex
         error_msg = Llama.format_error(

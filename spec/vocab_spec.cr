@@ -1,6 +1,14 @@
 require "./spec_helper"
 
 describe Llama::Vocab do
+  it "rejects use after its model closes" do
+    model = Llama::Model.new(MODEL_PATH)
+    vocab = model.vocab
+    model.close
+
+    expect_raises(Llama::ClosedError, "Llama::Model is closed") { vocab.n_tokens }
+  end
+
   describe "basic properties" do
     it "can access vocabulary from model" do
       model = Llama::Model.new(MODEL_PATH)

@@ -24,6 +24,16 @@ describe Llama::Context do
     model.close
   end
 
+  it "invalidates borrowed memory views when closed" do
+    model = Llama::Model.new(MODEL_PATH)
+    context = model.context
+    memory = context.memory
+    context.close
+
+    expect_raises(Llama::ClosedError, "Llama::Context is closed") { memory.can_shift? }
+    model.close
+  end
+
   describe "#clone_dup" do
     it "raises NotImplementedError when clone is called" do
       model = Llama::Model.new(MODEL_PATH)

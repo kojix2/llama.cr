@@ -12,7 +12,7 @@ module Llama
 
     # Returns the number of tokens in the vocabulary
     def n_tokens : Int32
-      LibLlama.llama_vocab_n_tokens(@handle)
+      LibLlama.llama_vocab_n_tokens(handle!)
     end
 
     # Returns the raw vocabulary text entry for a token.
@@ -22,7 +22,7 @@ module Llama
     # `detokenize` for token sequences and `token_to_piece` for rendering one
     # token as output text.
     def token_text(token : Int32) : String
-      ptr = LibLlama.llama_vocab_get_text(@handle, token)
+      ptr = LibLlama.llama_vocab_get_text(handle!, token)
       String.new(ptr)
     end
 
@@ -48,11 +48,11 @@ module Llama
       buf_size = 128
       buf = Pointer(LibC::Char).malloc(buf_size)
 
-      n = LibLlama.llama_token_to_piece(@handle, token, buf, buf_size, lstrip, special)
+      n = LibLlama.llama_token_to_piece(handle!, token, buf, buf_size, lstrip, special)
       if n < 0
         buf_size = -n
         buf = Pointer(LibC::Char).malloc(buf_size)
-        n = LibLlama.llama_token_to_piece(@handle, token, buf, buf_size, lstrip, special)
+        n = LibLlama.llama_token_to_piece(handle!, token, buf, buf_size, lstrip, special)
       end
 
       if n < 0
@@ -73,7 +73,7 @@ module Llama
       text = Pointer(LibC::Char).malloc(text_len)
 
       n = LibLlama.llama_detokenize(
-        @handle,
+        handle!,
         tokens.to_unsafe,
         tokens.size,
         text,
@@ -86,7 +86,7 @@ module Llama
         text_len = -n
         text = Pointer(LibC::Char).malloc(text_len)
         n = LibLlama.llama_detokenize(
-          @handle,
+          handle!,
           tokens.to_unsafe,
           tokens.size,
           text,
@@ -131,7 +131,7 @@ module Llama
       tokens = Pointer(LibLlama::LlamaToken).malloc(max_tokens)
 
       n_tokens = LibLlama.llama_tokenize(
-        @handle,
+        handle!,
         text,
         text.bytesize,
         tokens,
@@ -156,7 +156,7 @@ module Llama
         tokens = Pointer(LibLlama::LlamaToken).malloc(max_tokens)
 
         n_tokens = LibLlama.llama_tokenize(
-          @handle,
+          handle!,
           text,
           text.bytesize,
           tokens,
@@ -178,23 +178,23 @@ module Llama
 
     # Returns whether the model adds BOS token by default
     def add_bos? : Bool
-      LibLlama.llama_vocab_get_add_bos(@handle)
+      LibLlama.llama_vocab_get_add_bos(handle!)
     end
 
     # Returns whether the model adds EOS token by default
     def add_eos? : Bool
-      LibLlama.llama_vocab_get_add_eos(@handle)
+      LibLlama.llama_vocab_get_add_eos(handle!)
     end
 
     # Returns whether the model adds SEP token by default
     def add_sep? : Bool
-      LibLlama.llama_vocab_get_add_sep(@handle)
+      LibLlama.llama_vocab_get_add_sep(handle!)
     end
 
     # Returns the model-specific tokens suppressed during sampling.
     def suppress_tokens : Array(Int32)
       count = 0
-      tokens = LibLlama.llama_vocab_get_suppress_tokens(@handle, pointerof(count))
+      tokens = LibLlama.llama_vocab_get_suppress_tokens(handle!, pointerof(count))
       return [] of Int32 if tokens.null? || count <= 0
 
       Array(Int32).new(count) { |i| tokens[i] }
@@ -204,47 +204,58 @@ module Llama
 
     # Returns the beginning-of-sentence token ID
     def bos : Int32
-      LibLlama.llama_vocab_bos(@handle)
+      LibLlama.llama_vocab_bos(handle!)
     end
 
     # Returns the end-of-sentence token ID
     def eos : Int32
-      LibLlama.llama_vocab_eos(@handle)
+      LibLlama.llama_vocab_eos(handle!)
     end
 
     # Returns the end-of-turn token ID
     def eot : Int32
-      LibLlama.llama_vocab_eot(@handle)
+      LibLlama.llama_vocab_eot(handle!)
     end
 
     # Returns the newline token ID
     def nl : Int32
-      LibLlama.llama_vocab_nl(@handle)
+      LibLlama.llama_vocab_nl(handle!)
     end
 
     # Returns the padding token ID
     def pad : Int32
-      LibLlama.llama_vocab_pad(@handle)
+      LibLlama.llama_vocab_pad(handle!)
     end
 
     # Returns the mask token ID (if defined by the tokenizer)
     def mask : Int32
-      LibLlama.llama_vocab_mask(@handle)
+      LibLlama.llama_vocab_mask(handle!)
     end
 
     # Checks if a token is an end-of-generation token
     def eog?(token : Int32) : Bool
-      LibLlama.llama_vocab_is_eog(@handle, token)
+      LibLlama.llama_vocab_is_eog(handle!, token)
     end
 
     # Checks if a token is a control token
     def control?(token : Int32) : Bool
-      LibLlama.llama_vocab_is_control(@handle, token)
+      LibLlama.llama_vocab_is_control(handle!, token)
     end
 
     # Returns the raw pointer to the underlying llama_vocab structure
     def to_unsafe
       @handle
+    end
+
+    # Returns the borrowed handle after verifying that its model is alive.
+    # :nodoc:
+    def unsafe_handle! : LibLlama::LlamaVocab*
+      @model.unsafe_handle!
+      @handle
+    end
+
+    private def handle! : LibLlama::LlamaVocab*
+      unsafe_handle!
     end
 
     @handle : LibLlama::LlamaVocab*

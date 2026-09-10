@@ -20,7 +20,7 @@ module Llama
     # Raises:
     # - Memory::Error if memory handle cannot be obtained
     def initialize(@ctx : Context)
-      @handle = LibLlama.llama_get_memory(@ctx.to_unsafe)
+      @handle = LibLlama.llama_get_memory(@ctx.unsafe_handle!)
       if @handle.null?
         error_msg = Llama.format_error(
           "Failed to get memory handle",
@@ -39,8 +39,10 @@ module Llama
     # Returns:
     # - self for method chaining
     def clear(data : Bool = false) : self
-      LibLlama.llama_memory_clear(@handle, data)
+      LibLlama.llama_memory_clear(handle!, data)
       self
+    rescue ex : ClosedError
+      raise ex
     rescue ex
       error_msg = Llama.format_error(
         "Failed to clear memory",
@@ -62,7 +64,9 @@ module Llama
     #
     # Note: Removing a whole sequence never fails
     def seq_rm(seq_id : Int32, p0 : Int32, p1 : Int32) : Bool
-      LibLlama.llama_memory_seq_rm(@handle, seq_id, p0, p1)
+      LibLlama.llama_memory_seq_rm(handle!, seq_id, p0, p1)
+    rescue ex : ClosedError
+      raise ex
     rescue ex
       error_msg = Llama.format_error(
         "Failed to remove sequence from memory",
@@ -83,8 +87,10 @@ module Llama
     # Returns:
     # - self for method chaining
     def seq_cp(seq_id_src : Int32, seq_id_dst : Int32, p0 : Int32, p1 : Int32) : self
-      LibLlama.llama_memory_seq_cp(@handle, seq_id_src, seq_id_dst, p0, p1)
+      LibLlama.llama_memory_seq_cp(handle!, seq_id_src, seq_id_dst, p0, p1)
       self
+    rescue ex : ClosedError
+      raise ex
     rescue ex
       error_msg = Llama.format_error(
         "Failed to copy sequence in memory",
@@ -102,8 +108,10 @@ module Llama
     # Returns:
     # - self for method chaining
     def seq_keep(seq_id : Int32) : self
-      LibLlama.llama_memory_seq_keep(@handle, seq_id)
+      LibLlama.llama_memory_seq_keep(handle!, seq_id)
       self
+    rescue ex : ClosedError
+      raise ex
     rescue ex
       error_msg = Llama.format_error(
         "Failed to keep sequence in memory",
@@ -124,8 +132,10 @@ module Llama
     # Returns:
     # - self for method chaining
     def seq_add(seq_id : Int32, p0 : Int32, p1 : Int32, delta : Int32) : self
-      LibLlama.llama_memory_seq_add(@handle, seq_id, p0, p1, delta)
+      LibLlama.llama_memory_seq_add(handle!, seq_id, p0, p1, delta)
       self
+    rescue ex : ClosedError
+      raise ex
     rescue ex
       error_msg = Llama.format_error(
         "Failed to add position delta to sequence in memory",
@@ -154,8 +164,10 @@ module Llama
       end
 
       begin
-        LibLlama.llama_memory_seq_div(@handle, seq_id, p0, p1, d)
+        LibLlama.llama_memory_seq_div(handle!, seq_id, p0, p1, d)
         self
+      rescue ex : ClosedError
+        raise ex
       rescue ex
         error_msg = Llama.format_error(
           "Failed to divide positions in sequence in memory",
@@ -177,7 +189,9 @@ module Llama
     # Returns:
     # - Minimum position, or -1 if sequence is empty
     def seq_pos_min(seq_id : Int32) : Int32
-      LibLlama.llama_memory_seq_pos_min(@handle, seq_id)
+      LibLlama.llama_memory_seq_pos_min(handle!, seq_id)
+    rescue ex : ClosedError
+      raise ex
     rescue ex
       error_msg = Llama.format_error(
         "Failed to get minimum position in sequence",
@@ -197,7 +211,9 @@ module Llama
     # Returns:
     # - Maximum position, or -1 if sequence is empty
     def seq_pos_max(seq_id : Int32) : Int32
-      LibLlama.llama_memory_seq_pos_max(@handle, seq_id)
+      LibLlama.llama_memory_seq_pos_max(handle!, seq_id)
+    rescue ex : ClosedError
+      raise ex
     rescue ex
       error_msg = Llama.format_error(
         "Failed to get maximum position in sequence",
@@ -212,7 +228,9 @@ module Llama
     # Returns:
     # - true if shifting is supported, false otherwise
     def can_shift? : Bool
-      LibLlama.llama_memory_can_shift(@handle)
+      LibLlama.llama_memory_can_shift(handle!)
+    rescue ex : ClosedError
+      raise ex
     rescue ex
       error_msg = Llama.format_error(
         "Failed to check if memory supports shifting",
@@ -228,6 +246,17 @@ module Llama
     # - Raw memory handle pointer
     def to_unsafe
       @handle
+    end
+
+    # Returns the borrowed handle after verifying that its context is alive.
+    # :nodoc:
+    def unsafe_handle! : LibLlama::LlamaMemoryT
+      @ctx.unsafe_handle!
+      @handle
+    end
+
+    private def handle! : LibLlama::LlamaMemoryT
+      unsafe_handle!
     end
 
     @handle : LibLlama::LlamaMemoryT

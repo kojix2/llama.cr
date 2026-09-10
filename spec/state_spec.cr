@@ -2,6 +2,16 @@ require "./spec_helper"
 require "file_utils"
 
 describe Llama::State do
+  it "rejects use after its context closes" do
+    model = Llama::Model.new(MODEL_PATH)
+    context = model.context
+    state = context.state
+    context.close
+
+    expect_raises(Llama::ClosedError, "Llama::Context is closed") { state.size }
+    model.close
+  end
+
   describe "#clone_dup" do
     it "raises NotImplementedError when clone is called" do
       model = Llama::Model.new(MODEL_PATH)
