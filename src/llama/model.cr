@@ -77,10 +77,6 @@ module Llama
       )
     end
 
-    def self.load(path : String, options : ModelOptions = ModelOptions.new) : self
-      new(path, options)
-    end
-
     # Loads a model and yields it to the block.
     #
     # The model is freed when the block returns, so the resources are

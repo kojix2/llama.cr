@@ -31,7 +31,7 @@ module Llama
 
     def used_tokens : Int32
       ensure_open!
-      Tokenizer.new(@model.vocab).encode(@transcript).size
+      @model.vocab.tokenize(@transcript).size
     end
 
     def reset : Nil
@@ -58,7 +58,7 @@ module Llama
         ensure_open!
         raise BusyError.new(self.class.to_s) if @running
         validate_snapshot!(value)
-        token_count = Tokenizer.new(@model.vocab).encode(value.transcript).size
+        token_count = @model.vocab.tokenize(value.transcript).size
         if token_count > @context.n_ctx_seq
           raise StateCompatibilityError.new("session snapshot exceeds context size")
         end

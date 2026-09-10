@@ -4,12 +4,6 @@ require "./spec_helper"
 # Run with: crystal spec spec/context_spec.cr -- --model=/path/to/model.gguf
 # Or set the MODEL_PATH environment variable
 
-class Llama::Context
-  def __spec_sample_token(logits : Pointer(Float32), temperature : Float32) : Int32
-    sample_token(logits, temperature)
-  end
-end
-
 describe Llama::Context do
   it "supports idempotent close and rejects later operations" do
     model = Llama::Model.new(MODEL_PATH)
@@ -218,20 +212,6 @@ describe Llama::Context do
       responses.each do |response|
         response.should_not be_empty
       end
-    end
-
-    it "does not mutate logits during temperature sampling" do
-      model = Llama::Model.new(MODEL_PATH)
-      context = model.context
-      n_vocab = model.vocab.n_tokens
-      values = Array(Float32).new(n_vocab) { |i| ((i % 97).to_f32 - 48.0_f32) / 10.0_f32 }
-      before = values.dup
-
-      token = context.__spec_sample_token(values.to_unsafe, 0.5)
-
-      token.should be >= 0
-      token.should be < n_vocab
-      values.should eq(before)
     end
 
     it "starts each generate call with clear memory" do

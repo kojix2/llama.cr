@@ -67,7 +67,6 @@ module Llama
     getter max_tokens : Int32
     getter sampling : Sampling::Plan
     getter include_stop : Bool
-    getter render_special : Bool
     getter cancellation : Cancellation?
 
     def initialize(
@@ -75,7 +74,6 @@ module Llama
       stop : Array(String) = [] of String,
       @sampling : Sampling::Plan = Sampling.default,
       @include_stop : Bool = false,
-      @render_special : Bool = false,
       @cancellation : Cancellation? = nil,
     )
       raise ArgumentError.new("max_tokens must be positive") if @max_tokens <= 0

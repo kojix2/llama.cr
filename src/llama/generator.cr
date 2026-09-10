@@ -3,7 +3,7 @@ module Llama
   class Generator
     def initialize(@context : Context, @options : GenerationOptions)
       @model = @context.generator_model
-      @tokenizer = Tokenizer.new(@model.vocab)
+      @vocab = @model.vocab
     end
 
     def generate(prompt : String, &block : GenerationChunk ->) : Generation
@@ -11,7 +11,7 @@ module Llama
         raise UnsupportedOperationError.new("encoder-decoder generation is not supported yet")
       end
 
-      prompt_tokens = @tokenizer.encode(prompt)
+      prompt_tokens = @vocab.tokenize(prompt)
       raise TokenizationError.new("Tokenization resulted in empty token array") if prompt_tokens.empty?
       if prompt_tokens.size > @context.n_ctx_seq
         raise ContextFullError.new("Prompt exceeds context size [tokens: #{prompt_tokens.size}, n_ctx_seq: #{@context.n_ctx_seq}]")
@@ -25,7 +25,7 @@ module Llama
       prompt_seconds = (Time.instant - prompt_started).total_seconds
 
       chain = @options.sampling.build(@model.vocab)
-      decoder = StreamingDecoder.new(@tokenizer)
+      decoder = StreamingDecoder.new
       detector = StopDetector.new(@options.stop, @options.include_stop)
       sampled = [] of Token
       output = IO::Memory.new
@@ -48,7 +48,7 @@ module Llama
 
         # Match llama_detokenize's historical handling of the first generated
         # piece while retaining byte-safe streaming for subsequent pieces.
-        piece = @tokenizer.piece(token, sampled.size == 1 ? 1 : 0)
+        piece = @vocab.token_to_piece_bytes(token, sampled.size == 1 ? 1 : 0)
         emit(detector.push(decoder.push(piece)), token, index, output, &block)
         if detector.matched
           finish_reason = FinishReason::StopSequence

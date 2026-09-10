@@ -77,6 +77,7 @@ module Llama
     #
     # Raises:
     # - Llama::Batch::Error if the batch cannot be created
+    @[Deprecated("Use Batch.from_tokens instead.")]
     def self.get_one(tokens : Array(Int32)) : Batch
       if tokens.empty?
         raise ArgumentError.new("Tokens array cannot be empty")

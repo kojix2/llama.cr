@@ -74,7 +74,6 @@ require "./llama/context"
 require "./llama/sampler"
 require "./llama/sampling_plan"
 require "./llama/options"
-require "./llama/tokenizer"
 require "./llama/streaming_decoder"
 require "./llama/stop_detector"
 require "./llama/generator"
@@ -92,11 +91,10 @@ module Llama
     end
   end
   LLAMA_CPP_COMPATIBLE_VERSION = "b#{LLAMA_CPP_BUILD}"
-  LLAMA_CPP_REPORTED_VERSION   = "0.4.0"
 
   # The b10809 release archives report a development suffix, while stable
   # package builds from the same release report the plain semantic version.
-  LLAMA_CPP_REPORTED_VERSIONS = {LLAMA_CPP_REPORTED_VERSION, "0.4.0-dev"}
+  private LLAMA_CPP_REPORTED_VERSIONS = {"0.4.0", "0.4.0-dev"}
 
   # ==== Native constants (wrapped for user convenience) ====
   DEFAULT_SEED    = LibLlama::LLAMA_DEFAULT_SEED

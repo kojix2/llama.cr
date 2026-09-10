@@ -1,15 +1,10 @@
 module Llama
   # Converts token byte pieces into chunks that are always valid UTF-8.
   class StreamingDecoder
-    def initialize(@tokenizer : Tokenizer)
+    def initialize
       @pending = [] of UInt8
     end
 
-    def push(token : Token) : String
-      push(@tokenizer.piece(token))
-    end
-
-    # Byte-oriented entry point useful for adapters and deterministic tests.
     def push(bytes : Bytes) : String
       @pending.concat(bytes)
       consume(final: false)
@@ -17,10 +12,6 @@ module Llama
 
     def finish : String
       consume(final: true)
-    end
-
-    def reset : Nil
-      @pending.clear
     end
 
     private def consume(final : Bool) : String
