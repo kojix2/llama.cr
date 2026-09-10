@@ -122,14 +122,16 @@ Document which version of llama.cpp the library is compatible with. When updatin
 4. Update wrapper code under `src/llama/` when API behavior changes (especially LoRA-related paths)
 5. Run `crystal run scripts/check_abi.cr` to verify C and Crystal struct layouts
 6. Ensure workflows are aligned with the current release artifacts (`.tar.gz`) and test asset requirements
-7. Verify docs (`README.md`) still match the build/runtime model
-8. Run tests:
+7. Check `llama_version()` in both the official release archive and supported
+   package builds, and record any known version-string variants explicitly
+8. Verify docs (`README.md`) still match the build/runtime model
+9. Run tests:
   - `crystal spec`
   - LoRA specs with adapter path configured when applicable
   - If model loading reports "No backends loaded", set `GGML_BACKEND_PATH` to a backend library file (for example `libggml-cpu-haswell.so`), not a directory
   - Typical local command:
     - `MODEL_PATH=/path/to/model.gguf ADAPTER_PATH=/path/to/adapter.gguf LIBRARY_PATH=/path/to/libs LD_LIBRARY_PATH=/path/to/libs GGML_BACKEND_PATH=/path/to/libs/libggml-cpu-haswell.so crystal spec`
-9. Validate examples:
+10. Validate examples:
   - `examples/simple.cr`
   - `examples/minimal.cr`
   - `examples/chat.cr`

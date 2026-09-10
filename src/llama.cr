@@ -94,6 +94,10 @@ module Llama
   LLAMA_CPP_COMPATIBLE_VERSION = "b#{LLAMA_CPP_BUILD}"
   LLAMA_CPP_REPORTED_VERSION   = "0.4.0"
 
+  # The b10809 release archives report a development suffix, while stable
+  # package builds from the same release report the plain semantic version.
+  LLAMA_CPP_REPORTED_VERSIONS = {LLAMA_CPP_REPORTED_VERSION, "0.4.0-dev"}
+
   # ==== Native constants (wrapped for user convenience) ====
   DEFAULT_SEED    = LibLlama::LLAMA_DEFAULT_SEED
   TOKEN_NULL      = LibLlama::LLAMA_TOKEN_NULL
@@ -247,7 +251,9 @@ module Llama
   # The exact build number is not exposed by llama.cpp's C API.
   def self.llama_cpp_version : String
     version = LibLlama.llama_version
-    raise IncompatibleLibraryError.new(LLAMA_CPP_REPORTED_VERSION, "<null>") if version.null?
+    if version.null?
+      raise IncompatibleLibraryError.new(LLAMA_CPP_REPORTED_VERSIONS.join(" or "), "<null>")
+    end
     String.new(version)
   end
 
@@ -267,14 +273,14 @@ module Llama
     )
   end
 
-  # Rejects a different stable llama.cpp release before ABI-sensitive structs
-  # are passed by value. Exact b10809 verification remains a packaging/CI duty
-  # because llama_version reports only the stable semantic version.
+  # Rejects a different llama.cpp release before ABI-sensitive structs are
+  # passed by value. Exact b10809 verification remains a packaging/CI duty
+  # because llama_version does not report the build number.
   def self.check_compatibility! : Nil
     reported = llama_cpp_version
-    return if reported == LLAMA_CPP_REPORTED_VERSION
+    return if LLAMA_CPP_REPORTED_VERSIONS.includes?(reported)
 
-    raise IncompatibleLibraryError.new(LLAMA_CPP_REPORTED_VERSION, reported)
+    raise IncompatibleLibraryError.new(LLAMA_CPP_REPORTED_VERSIONS.join(" or "), reported)
   end
 
   # Process escape sequences in a string

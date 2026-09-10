@@ -79,7 +79,7 @@ module Llama
     getter reported : String
 
     def initialize(@expected : String, @reported : String)
-      super("incompatible llama.cpp library: expected stable version #{@expected}, reported #{@reported}")
+      super("incompatible llama.cpp library: expected #{@expected}, reported #{@reported}")
     end
   end
 
