@@ -194,8 +194,20 @@ describe Llama::SamplerChain do
     token = chain.sample(context)
     token.should be_a(Int32)
 
-    # Accept the token
-    chain.accept(token)
-    # If we get here without errors, the test passes
+    # llama_sampler_sample accepts the token internally. Calling #accept here
+    # would advance stateful sampler stages a second time.
+  end
+
+  it "advances a stateful grammar exactly once per generated token" do
+    Llama::Model.open(MODEL_PATH) do |model|
+      model.context do |context|
+        Llama::SamplerChain.open do |chain|
+          chain.add(Llama::Sampler::Grammar.new(model.vocab, %(root ::= "abc"), "root"))
+          chain.add(Llama::Sampler::Greedy.new)
+
+          context.generate_with_sampler("Story:", chain, 8).should eq("abc")
+        end
+      end
+    end
   end
 end

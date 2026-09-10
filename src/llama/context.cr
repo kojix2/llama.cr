@@ -351,6 +351,7 @@ module Llama
       seq_ids : Array(Int32)? = nil,
       n_seq_max : Int32 = 8,
       label : String = "Token sequence",
+      require_success : Bool = false,
     ) : Int32
       context_size = n_ctx.to_i
       if tokens.size > context_size
@@ -380,15 +381,20 @@ module Llama
         is_last_chunk = offset + chunk_size == tokens.size
         compute_chunk_logits = !compute_logits_for_last || is_last_chunk
         batch = token_batch(chunk, offset, compute_logits_for_last, compute_chunk_logits, seq_ids, n_seq_max)
-        result = decode_owned_batch(batch)
+        result = if require_success
+                   decode_owned_batch!(batch)
+                   0
+                 else
+                   decode_owned_batch(batch)
+                 end
         offset += chunk_size
       end
       result
     end
 
     # Decodes the prompt in chunks no larger than n_batch.
-    private def decode_prompt(input_tokens : Array(Int32)) : Int32
-      decode_tokens(input_tokens, true, nil, 8, "Prompt")
+    private def decode_prompt(input_tokens : Array(Int32)) : Nil
+      decode_tokens(input_tokens, true, nil, 8, "Prompt", require_success: true)
     end
 
     # Prepares a batch for one generated token.
@@ -399,6 +405,14 @@ module Llama
     # Decodes a temporary batch and releases its native storage immediately.
     private def decode_owned_batch(batch : Batch) : Int32
       decode(batch)
+    ensure
+      batch.free
+    end
+
+    # Decodes a temporary batch through the checked path and releases its native
+    # storage even when validation or native decoding fails.
+    private def decode_owned_batch!(batch : Batch) : Nil
+      decode!(batch)
     ensure
       batch.free
     end
@@ -428,13 +442,8 @@ module Llama
 
       # Use the internal generation method with a custom token sampler
       generate_internal(prompt, max_tokens) do |_logits|
-        # Sample the next token using the sampler chain
-        token = sampler.sample(self)
-
-        # Accept the token
-        sampler.accept(token)
-
-        token
+        # llama_sampler_sample applies, selects, and accepts exactly once.
+        sampler.sample(self)
       rescue ex
         error_msg = Llama.format_error(
           "Sampling failed",
@@ -483,17 +492,16 @@ module Llama
     # Returns:
     # - 0 on success
     # - 1 if no KV slot was found for the batch
-    # - < 0 on error
+    # - 2 if decoding was aborted
+    # - -1 if the batch is invalid
+    # - < -1 on fatal error
     #
     # Raises:
     # - Llama::Batch::Error on error
     def decode(batch : LibLlama::LlamaBatch | Batch) : Int32
       batch_ptr = batch.is_a?(Batch) ? batch.to_unsafe : batch
-      batch_size = n_batch.to_i
 
-      validate_batch_for_decode!(batch_ptr, batch_size, n_ctx.to_i)
-
-      result = LibLlama.llama_decode(@handle, batch_ptr)
+      result = decode_native(batch_ptr)
 
       if result < 0
         error_msg = Llama.format_error(
@@ -505,6 +513,30 @@ module Llama
       end
 
       result
+    end
+
+    # Processes a batch and requires native decoding to succeed.
+    #
+    # Unlike `decode`, which preserves the historical positive-status return
+    # behavior, this method raises `DecodeError` for every non-zero result.
+    # Higher-level generation and embedding algorithms should use this method so
+    # they never sample or read outputs after an incomplete decode.
+    def decode!(batch : LibLlama::LlamaBatch | Batch) : Nil
+      batch_ptr = batch.is_a?(Batch) ? batch.to_unsafe : batch
+      result = decode_native(batch_ptr)
+      return if result == 0
+
+      raise DecodeError.new(
+        "llama_decode",
+        result,
+        DecodeError.reason_for(result),
+        batch_ptr.n_tokens
+      )
+    end
+
+    private def decode_native(batch : LibLlama::LlamaBatch) : Int32
+      validate_batch_for_decode!(batch, n_batch.to_i, n_ctx.to_i)
+      LibLlama.llama_decode(@handle, batch)
     end
 
     private def validate_batch_for_decode!(batch : LibLlama::LlamaBatch, batch_size : Int32, context_size : Int32) : Nil
@@ -743,8 +775,8 @@ module Llama
         break if i == max_tokens - 1 || token_pos >= context_size
 
         # Process the generated token so the next iteration can sample from it
-        decode_owned_batch(generated_token_batch(next_token, token_pos))
-      rescue ex : Batch::Error | Llama::TokenizationError
+        decode_owned_batch!(generated_token_batch(next_token, token_pos))
+      rescue ex : Batch::Error | DecodeError | Llama::TokenizationError
         raise ex
       rescue ex
         error_msg = Llama.format_error(

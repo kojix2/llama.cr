@@ -68,7 +68,7 @@ module Llama
       sampler
     end
 
-    # Samples a token using the sampler chain
+    # Samples and accepts a token using the sampler chain
     #
     # Parameters:
     # - ctx: The context to sample from
@@ -76,11 +76,17 @@ module Llama
     #
     # Returns:
     # - The sampled token
+    #
+    # llama.cpp's `llama_sampler_sample` applies the chain, selects a token, and
+    # accepts it. Do not call `accept` again for the returned token.
     def sample(ctx : Context, idx : Int32 = -1) : Int32
       LibLlama.llama_sampler_sample(@handle, ctx.to_unsafe, idx)
     end
 
-    # Accepts a token, updating the internal state of the samplers
+    # Accepts a token, updating the internal state of the samplers.
+    #
+    # This is intended for manual sampling paths that use sampler `apply`; a
+    # token returned by `sample` has already been accepted.
     #
     # Parameters:
     # - token: The token to accept
