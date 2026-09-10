@@ -273,9 +273,9 @@ module Llama
     )
   end
 
-  # Rejects a different llama.cpp release before ABI-sensitive structs are
-  # passed by value. Exact b10809 verification remains a packaging/CI duty
-  # because llama_version does not report the build number.
+  # Explicitly verifies the loaded llama.cpp release against the version used
+  # to build these bindings. This check is opt-in so users can test other
+  # llama.cpp versions at their own risk.
   def self.check_compatibility! : Nil
     reported = llama_cpp_version
     return if LLAMA_CPP_REPORTED_VERSIONS.includes?(reported)
@@ -419,8 +419,6 @@ module Llama
   def self.init
     @@backend_mutex.synchronize do
       unless @@backend_initialized
-        check_compatibility!
-
         # Initialize the backend first
         LibLlama.llama_backend_init
 

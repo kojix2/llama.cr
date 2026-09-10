@@ -400,11 +400,12 @@ See [kojix2.github.io/llama.cr](https://kojix2.github.io/llama.cr) for full API 
   and pointer lifetimes track the pinned upstream build and may change between
   shard releases.
 
-The wrapper checks the version reported by the library before passing ABI-
-sensitive structs by value. Stable packages report `0.4.0`, while the official
-`b10809` release archives report `0.4.0-dev`; both identify the supported release.
-The C API does not report the exact build number, so the exact `b10809` package
-pin and CI ABI checks remain required.
+`Llama.check_compatibility!` can explicitly check the version reported by the
+library. It is not enforced during initialization, allowing other llama.cpp
+versions to be tested at the user's own risk. Stable packages of the supported
+release report `0.4.0`, while the official `b10809` release archives report
+`0.4.0-dev`. The C API does not report the exact build number, so package pins
+and ABI checks are still needed when strict compatibility is required.
 
 Custom `Llama.log_set` callbacks are experimental. On the pinned b10809 build,
 model loading and multithreaded decode callbacks were observed on the calling

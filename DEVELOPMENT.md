@@ -111,6 +111,9 @@ This document outlines the development guidelines for the llama.cr project, prim
 - Release tags must match the shard version with a `v` prefix (example: `v0.10809.1`).
 - When referenced in documentation or scripts, the build is prefixed with `b` (example: `b<build>`).
 - llama.cpp also publishes stable semver tags (`vX.Y.Z`) that point to a specific build (example: `v0.4.0` points to `b10809`). Mention the mapping when the targeted build is such a stable release.
+- Runtime compatibility checks must remain opt-in. Users may load other
+  llama.cpp versions to evaluate their actual compatibility; do not reject them
+  during normal initialization solely because their version string differs.
 
 ### Version Update Process
 
