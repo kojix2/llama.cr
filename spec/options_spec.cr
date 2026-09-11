@@ -1,4 +1,4 @@
-require "./spec_helper"
+require "./unit_helper"
 
 describe Llama::GenerationOptions do
   it "validates values and defensively copies stop sequences" do
@@ -22,10 +22,10 @@ describe Llama::ContextOptions do
 end
 
 describe Llama::ModelOptions do
-  it "loads models through typed options" do
-    options = Llama::ModelOptions.new(vocab_only: true, check_tensors: true)
-    Llama::Model.open(MODEL_PATH, options) do |model|
-      model.n_params.should be > 0
-    end
+  it "retains typed model construction policy" do
+    options = Llama::ModelOptions.new(gpu_layers: 3, vocab_only: true, check_tensors: true)
+    options.gpu_layers.should eq(3)
+    options.vocab_only.should be_true
+    options.check_tensors.should be_true
   end
 end

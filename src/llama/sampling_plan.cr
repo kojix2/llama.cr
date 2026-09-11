@@ -26,7 +26,7 @@ module Llama
 
       def initialize(@p : Float32, @min_keep : Int32 = 1)
         raise ArgumentError.new("p must be between 0 and 1") unless 0.0 <= @p <= 1.0
-        raise ArgumentError.new("min_keep must be positive") if @min_keep == 0
+        raise ArgumentError.new("min_keep must be positive") if @min_keep <= 0
       end
 
       def build(vocab : Vocab) : Sampler::Base

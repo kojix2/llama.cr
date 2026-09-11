@@ -1,4 +1,4 @@
-require "./spec_helper"
+require "./unit_helper"
 
 describe Llama::Cancellation do
   it "cancels idempotently" do

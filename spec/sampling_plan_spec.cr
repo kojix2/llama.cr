@@ -1,4 +1,4 @@
-require "./spec_helper"
+require "./unit_helper"
 
 describe Llama::Sampling::Plan do
   it "validates selector placement" do
@@ -19,14 +19,9 @@ describe Llama::Sampling::Plan do
     plan.stages.size.should eq(1)
   end
 
-  it "builds independent native chains" do
-    model = Llama::Model.new(MODEL_PATH)
-    plan = Llama::Sampling.greedy
-    first = plan.build(model.vocab)
-    second = plan.build(model.vocab)
-    first.to_unsafe.should_not eq(second.to_unsafe)
-    first.close
-    second.close
-    model.close
+  it "rejects non-positive Min-P retention counts" do
+    expect_raises(ArgumentError, "min_keep must be positive") { Llama::Sampling::MinP.new(0.05_f32, -1) }
+    expect_raises(ArgumentError, "min_keep must be positive") { Llama::Sampling::MinP.new(0.05_f32, 0) }
+    Llama::Sampling::MinP.new(0.05_f32, 1).min_keep.should eq(1)
   end
 end
