@@ -1,4 +1,4 @@
-require "./spec_helper"
+require "./integration_helper"
 
 describe Llama::Batch do
   it "supports close and rejects use after close" do
@@ -124,6 +124,50 @@ describe Llama::Batch do
   end
 
   describe "#set_embedding" do
+    it "uses the allocated dimension for every row" do
+      batch = Llama::Batch.new(2, 4)
+      first = [1.0_f32, 2.0_f32, 3.0_f32, 4.0_f32]
+      last = [5.0_f32, 6.0_f32, 7.0_f32, 8.0_f32]
+      batch.set_embedding(0, first)
+      batch.set_embedding(1, last)
+
+      4.times do |index|
+        batch.to_unsafe.embd[index].should eq(first[index])
+        batch.to_unsafe.embd[4 + index].should eq(last[index])
+      end
+      batch.close
+    end
+
+    it "rejects rows that do not exactly match the allocated dimension" do
+      batch = Llama::Batch.new(1, 4)
+      expect_raises(ArgumentError, /expected 4, got 3/) do
+        batch.set_embedding(0, [1.0_f32, 2.0_f32, 3.0_f32])
+      end
+      expect_raises(ArgumentError, /expected 4, got 5/) do
+        batch.set_embedding(0, [1.0_f32, 2.0_f32, 3.0_f32, 4.0_f32, 5.0_f32])
+      end
+      batch.close
+    end
+
+    it "rejects mutation when a borrowed batch has no known dimension" do
+      owner = Llama::Batch.new(1, 4)
+      borrowed = Llama::Batch.new(owner.to_unsafe)
+      expect_raises(ArgumentError, "Embedding dimension is unknown for this borrowed batch") do
+        borrowed.set_embedding(0, [1.0_f32, 2.0_f32, 3.0_f32, 4.0_f32])
+      end
+      borrowed.close
+      owner.close
+    end
+
+    it "allows a borrowed embedding batch with an explicit dimension" do
+      owner = Llama::Batch.new(1, 4)
+      borrowed = Llama::Batch.new(owner.to_unsafe, embedding_dimension: 4)
+      borrowed.set_embedding(0, [1.0_f32, 2.0_f32, 3.0_f32, 4.0_f32])
+      owner.to_unsafe.embd[3].should eq(4.0_f32)
+      borrowed.close
+      owner.close
+    end
+
     it "sets logits to false explicitly" do
       batch = Llama::Batch.new(1, 4)
 

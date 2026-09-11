@@ -25,11 +25,16 @@ module Llama
         raise ArgumentError.new("embd must be non-negative")
       end
 
+      if n_tokens.to_i64 * embd.to_i64 > Int32::MAX
+        raise ArgumentError.new("batch embedding storage is too large")
+      end
+
       if n_seq_max <= 0
         raise ArgumentError.new("n_seq_max must be positive")
       end
 
       @n_seq_max = n_seq_max
+      @embedding_dimension = embd > 0 ? embd : nil
       @handle = LibLlama.llama_batch_init(n_tokens, embd, n_seq_max)
       # LlamaBatch is a value type; assign the scalar on the stored struct (a
       # checked accessor would return a copy), while pointer-backed fields may
@@ -54,8 +59,19 @@ module Llama
     #
     # Note: This constructor is intended for internal use.
     # The batch created this way is not owned by this wrapper and will not be freed.
-    def initialize(@handle : LibLlama::LlamaBatch, @owned = false, @n_seq_max : Int32 = 8)
+    def initialize(
+      @handle : LibLlama::LlamaBatch,
+      @owned = false,
+      @n_seq_max : Int32 = 8,
+      @embedding_dimension : Int32? = nil,
+    )
       @closed = false
+      if dimension = @embedding_dimension
+        raise ArgumentError.new("embedding_dimension must be positive") if dimension <= 0
+        if unsafe_handle!.n_tokens.to_i64 * dimension.to_i64 > Int32::MAX
+          raise ArgumentError.new("batch embedding storage is too large")
+        end
+      end
       if unsafe_handle!.n_tokens < 0
         error_msg = Llama.format_error(
           "Invalid batch handle",
@@ -193,14 +209,22 @@ module Llama
         raise ArgumentError.new("Batch is not embedding-based")
       end
 
-      if embedding.empty?
-        raise ArgumentError.new("Embedding array cannot be empty")
+      dimension = @embedding_dimension
+      unless dimension
+        raise ArgumentError.new("Embedding dimension is unknown for this borrowed batch")
+      end
+
+      if embedding.size != dimension
+        raise ArgumentError.new("Embedding size must equal the allocated dimension (expected #{dimension}, got #{embedding.size})")
       end
 
       # Copy the embedding values
-      embd_size = embedding.size
-      embd_size.times do |j|
-        unsafe_handle!.embd[i * embd_size + j] = embedding[j]
+      offset = i.to_i64 * dimension.to_i64
+      if offset < 0 || offset + dimension > unsafe_handle!.n_tokens.to_i64 * dimension
+        raise IndexError.new("Embedding row offset is out of bounds")
+      end
+      dimension.times do |j|
+        unsafe_handle!.embd[offset + j] = embedding[j]
       end
 
       # Set the position
@@ -406,6 +430,7 @@ module Llama
     @handle : LibLlama::LlamaBatch
     @owned : Bool
     @closed : Bool
+    @embedding_dimension : Int32?
 
     # :nodoc:
     def clone

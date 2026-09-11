@@ -3,6 +3,8 @@ require "./error"
 module Llama
   # Wrapper for the llama_vocab structure
   class Vocab
+    private MAX_NATIVE_BUFFER_ELEMENTS = 64 * 1024 * 1024
+
     # Creates a new Vocab instance from a raw pointer
     #
     # Note: This constructor is intended for internal use.
@@ -56,6 +58,7 @@ module Llama
 
       n = LibLlama.llama_token_to_piece(handle!, token, buf, buf_size, lstrip, special)
       if n < 0
+        raise Error.new("Token piece is too large") if n == Int32::MIN || -n > MAX_NATIVE_BUFFER_ELEMENTS
         buf_size = -n
         buf = Pointer(LibC::Char).malloc(buf_size)
         n = LibLlama.llama_token_to_piece(handle!, token, buf, buf_size, lstrip, special)
@@ -63,6 +66,9 @@ module Llama
 
       if n < 0
         raise Error.new("Failed to convert token to piece")
+      end
+      if n > buf_size
+        raise Error.new("Token piece exceeded the allocated buffer")
       end
 
       Bytes.new(n) { |i| buf[i].to_u8 }
@@ -75,7 +81,11 @@ module Llama
     def detokenize(tokens : Array(Int32), remove_special : Bool = true, unparse_special : Bool = false) : String
       return "" if tokens.empty?
 
-      text_len = tokens.size * 16 + 16
+      text_len64 = tokens.size.to_i64 * 16 + 16
+      if text_len64 > MAX_NATIVE_BUFFER_ELEMENTS
+        raise ArgumentError.new("Token sequence is too large to detokenize safely")
+      end
+      text_len = text_len64.to_i
       text = Pointer(LibC::Char).malloc(text_len)
 
       n = LibLlama.llama_detokenize(
@@ -89,6 +99,7 @@ module Llama
       )
 
       if n < 0
+        raise Error.new("Detokenized text is too large") if n == Int32::MIN || -n > MAX_NATIVE_BUFFER_ELEMENTS
         text_len = -n
         text = Pointer(LibC::Char).malloc(text_len)
         n = LibLlama.llama_detokenize(
@@ -104,6 +115,9 @@ module Llama
 
       if n < 0
         raise Error.new("Failed to detokenize tokens")
+      end
+      if n > text_len
+        raise Error.new("Detokenized text exceeded the allocated buffer")
       end
 
       String.new(text, n)
@@ -133,7 +147,11 @@ module Llama
 
     # Tokenizes a string into an array of token IDs
     def tokenize(text : String, add_special : Bool = true, parse_special : Bool = true) : Array(Int32)
-      max_tokens = text.size * 2 # A reasonable upper bound
+      max_tokens64 = text.size.to_i64 * 2
+      if max_tokens64 > MAX_NATIVE_BUFFER_ELEMENTS
+        raise TokenizationError.new("Input is too large to tokenize safely")
+      end
+      max_tokens = Math.max(max_tokens64.to_i, 1)
       tokens = Pointer(LibLlama::LlamaToken).malloc(max_tokens)
 
       n_tokens = LibLlama.llama_tokenize(
@@ -158,6 +176,9 @@ module Llama
 
       if n_tokens < 0
         # If n_tokens is negative, it indicates the required buffer size
+        if -n_tokens > MAX_NATIVE_BUFFER_ELEMENTS
+          raise TokenizationError.new("Tokenized output is too large")
+        end
         max_tokens = -n_tokens
         tokens = Pointer(LibLlama::LlamaToken).malloc(max_tokens)
 
@@ -173,6 +194,9 @@ module Llama
       end
 
       raise Error.new("Failed to tokenize text") if n_tokens < 0
+      if n_tokens > max_tokens
+        raise TokenizationError.new("Tokenized output exceeded the allocated buffer")
+      end
 
       result = Array(Int32).new(n_tokens)
       n_tokens.times do |i|
