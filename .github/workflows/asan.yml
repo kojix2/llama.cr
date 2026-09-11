@@ -1,0 +1,72 @@
+name: asan
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  native-safety:
+    runs-on: ubuntu-latest
+    env:
+      SMALL_MODEL_PATH: models/stories15M-q4_0.gguf
+      LORA_MODEL_PATH: models/tinyllama_lora_base.gguf
+      ADAPTER_PATH: adapters/tiny_model_adapter.gguf
+      SMALL_MODEL_URL: https://huggingface.co/ggml-org/tiny-llamas/resolve/main/stories15M-q4_0.gguf
+      LORA_MODEL_URL: https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
+      TINY_ADAPTER_URL: https://huggingface.co/makaveli10/tinyllama-function-call-lora-adapter-250424-F16-GGUF/resolve/main/tinyllama-function-call-lora-adapter-250424-f16.gguf
+      SMALL_MODEL_SHA256: 6151b1929d7f5aa3385d9ddef3393e55587c0a55de661562322bc51dfda93a04
+      LORA_MODEL_SHA256: 9fecc3b3cd76bba89d504f29b616eedf7da85b96540e490ca5824d3f7d2776a0
+      TINY_ADAPTER_SHA256: 6e1f26287818774005fdc97ea9fb116c89740cf25dd9775e142432791a048bac
+      LLAMA_COMMIT: 5266f24da75dc449bd56cbed7addb9c8e4a6a73e
+      ASAN_OPTIONS: detect_leaks=0:strict_string_checks=1
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: crystal-lang/install-crystal@v1
+
+      - name: Install build dependencies
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
+
+      - name: Resolve pinned llama.cpp build
+        run: |
+          VERSION=$(shards version)
+          BUILD=$(echo "$VERSION" | sed -E 's/^0\.([0-9]+)\.[0-9]+$/\1/')
+          test "$BUILD" != "$VERSION"
+          echo "LLAMA_VERSION=b${BUILD}" >> "$GITHUB_ENV"
+
+      - name: Build llama.cpp with AddressSanitizer
+        run: |
+          git clone --depth 1 --branch "$LLAMA_VERSION" https://github.com/ggml-org/llama.cpp.git llama.cpp
+          test "$(git -C llama.cpp rev-parse HEAD)" = "$LLAMA_COMMIT"
+          cmake -S llama.cpp -B llama.cpp/build -G Ninja \
+            -DBUILD_SHARED_LIBS=ON -DLLAMA_CURL=OFF -DGGML_NATIVE=OFF \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DCMAKE_C_FLAGS='-fsanitize=address -fno-omit-frame-pointer' \
+            -DCMAKE_CXX_FLAGS='-fsanitize=address -fno-omit-frame-pointer'
+          cmake --build llama.cpp/build
+          cmake --install llama.cpp/build --prefix "$PWD/llama-install"
+          echo "LIBRARY_PATH=$PWD/llama-install/lib" >> "$GITHUB_ENV"
+          echo "LD_LIBRARY_PATH=$PWD/llama-install/lib" >> "$GITHUB_ENV"
+
+      - name: Install shard dependencies
+        run: shards install
+
+      - name: Download and verify fixtures
+        run: |
+          mkdir -p models adapters
+          curl -L "$SMALL_MODEL_URL" -o "$SMALL_MODEL_PATH"
+          curl -L "$LORA_MODEL_URL" -o "$LORA_MODEL_PATH"
+          curl -L "$TINY_ADAPTER_URL" -o "$ADAPTER_PATH"
+          echo "$SMALL_MODEL_SHA256  $SMALL_MODEL_PATH" | shasum -a 256 -c -
+          echo "$LORA_MODEL_SHA256  $LORA_MODEL_PATH" | shasum -a 256 -c -
+          echo "$TINY_ADAPTER_SHA256  $ADAPTER_PATH" | shasum -a 256 -c -
+
+      - name: Exercise native lifetime and embedding boundaries
+        run: |
+          MODEL_PATH="$SMALL_MODEL_PATH" crystal spec --link-flags '-fsanitize=address' \
+            spec/batch_spec.cr spec/embedder_spec.cr spec/generator_spec.cr \
+            spec/sampling_plan_integration_spec.cr
+          MODEL_PATH="$LORA_MODEL_PATH" crystal spec --link-flags '-fsanitize=address' \
+            spec/context_lora_spec.cr

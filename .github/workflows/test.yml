@@ -16,6 +16,9 @@ jobs:
       SMALL_MODEL_URL: https://huggingface.co/ggml-org/tiny-llamas/resolve/main/stories15M-q4_0.gguf
       LORA_MODEL_URL: https://huggingface.co/TheBloke/TinyLlama-1.1B-Chat-v1.0-GGUF/resolve/main/tinyllama-1.1b-chat-v1.0.Q4_K_M.gguf
       TINY_ADAPTER_URL: https://huggingface.co/makaveli10/tinyllama-function-call-lora-adapter-250424-F16-GGUF/resolve/main/tinyllama-function-call-lora-adapter-250424-f16.gguf
+      SMALL_MODEL_SHA256: 6151b1929d7f5aa3385d9ddef3393e55587c0a55de661562322bc51dfda93a04
+      LORA_MODEL_SHA256: 9fecc3b3cd76bba89d504f29b616eedf7da85b96540e490ca5824d3f7d2776a0
+      TINY_ADAPTER_SHA256: 6e1f26287818774005fdc97ea9fb116c89740cf25dd9775e142432791a048bac
     strategy:
       fail-fast: false
       matrix:
@@ -23,6 +26,7 @@ jobs:
         include:
           - os: ubuntu-latest
             archive_suffix: ubuntu-x64
+            archive_sha256: 5e34434ddc6d03cd1584f403201aff0d4bd1a5793a72ff7e286532dfd1e4b941
             lib_glob: "*.so*"
             runtime_lib_env: LD_LIBRARY_PATH
             backend_candidates: "libggml-cpu-x64.so libggml-cpu-haswell.so libggml-cpu-*.so"
@@ -32,6 +36,7 @@ jobs:
             post_install: sudo ldconfig
           - os: macos-latest
             archive_suffix: macos-arm64
+            archive_sha256: 7d692df9e1e386e62f1c12b843903218041e6cd74c9415aa39a7ed3176f9eaa2
             lib_glob: "*.dylib*"
             runtime_lib_env: DYLD_LIBRARY_PATH
             backend_candidates: "libggml-cpu-arm64.dylib libggml-cpu-*.dylib"
@@ -47,6 +52,7 @@ jobs:
           - spec/model_spec.cr
           - spec/adapter_lora_spec.cr
           - spec/context_lora_spec.cr
+          - high-level
 
     runs-on: ${{ matrix.os }}
 
@@ -74,6 +80,7 @@ jobs:
       - name: Install llama.cpp
         run: |
           curl -L "https://github.com/ggml-org/llama.cpp/releases/download/${LLAMA_VERSION}/llama-${LLAMA_VERSION}-bin-${{ matrix.archive_suffix }}.tar.gz" -o llama.tar.gz
+          echo "${{ matrix.archive_sha256 }}  llama.tar.gz" | shasum -a 256 -c -
           tar -xzf llama.tar.gz
           LLAMA_DIR=$(ls -d llama-${LLAMA_VERSION}* | head -n1)
           sudo mkdir -p /usr/local/lib
@@ -107,6 +114,16 @@ jobs:
       - name: Build
         run: crystal build --no-codegen src/llama.cr
 
+      - name: Run policy-only specs without model assets
+        if: matrix.spec_file == 'spec/llama_spec.cr'
+        run: >-
+          env -u MODEL_PATH -u ADAPTER_PATH crystal spec
+          spec/options_spec.cr
+          spec/result_spec.cr
+          spec/raw_spec.cr
+          spec/sampling_plan_spec.cr
+          spec/streaming_spec.cr
+
       - name: Verify C ABI layouts
         if: matrix.spec_file == 'spec/llama_spec.cr'
         run: crystal run scripts/check_abi.cr
@@ -127,11 +144,15 @@ jobs:
             echo "ADAPTER_PATH=$LORA_ADAPTER_PATH" >> $GITHUB_ENV
             [ -f "$LORA_MODEL_PATH" ] || curl -L "$LORA_MODEL_URL" -o "$LORA_MODEL_PATH"
             [ -f "$LORA_ADAPTER_PATH" ] || curl -L "$TINY_ADAPTER_URL" -o "$LORA_ADAPTER_PATH"
+            echo "$LORA_MODEL_SHA256  $LORA_MODEL_PATH" | shasum -a 256 -c -
+            echo "$TINY_ADAPTER_SHA256  $LORA_ADAPTER_PATH" | shasum -a 256 -c -
           else
             [ -f "$MODEL_PATH" ] || curl -L "$SMALL_MODEL_URL" -o "$MODEL_PATH"
+            echo "$SMALL_MODEL_SHA256  $MODEL_PATH" | shasum -a 256 -c -
           fi
 
       - name: Run spec file ${{ matrix.spec_file }}
+        if: matrix.spec_file != 'high-level'
         run: |
           echo "Running ${{ matrix.spec_file }}"
           echo "Model path: $MODEL_PATH"
@@ -140,7 +161,7 @@ jobs:
           crystal spec "${{ matrix.spec_file }}"
 
       - name: Run high-level API specs
-        if: matrix.spec_file == 'spec/llama_spec.cr'
+        if: matrix.spec_file == 'high-level'
         run: >-
           crystal spec
           spec/decode_error_spec.cr
@@ -151,7 +172,7 @@ jobs:
           spec/options_spec.cr
           spec/result_spec.cr
           spec/runtime_info_spec.cr
-          spec/sampling_plan_spec.cr
+          spec/sampling_plan_integration_spec.cr
           spec/session_spec.cr
           spec/streaming_spec.cr
 
