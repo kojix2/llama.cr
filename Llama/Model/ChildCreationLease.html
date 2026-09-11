@@ -14,7 +14,7 @@
 <script type="text/javascript" src="../../js/doc.js"></script>
 
   <meta name="repository-name" content="llama">
-  <title>Llama::Sampler::GrammarLazyPatterns - llama main</title>
+  <title>Llama::Model::ChildCreationLease - llama main</title>
   <script type="text/javascript">
     CrystalDocs.base_path = "../../";
   </script>
@@ -232,12 +232,12 @@
       
     </li>
   
-  <li class="parent " data-id="llama/Llama/Model" data-name="llama::model">
+  <li class="parent open current" data-id="llama/Llama/Model" data-name="llama::model">
       <a href="../../Llama/Model.html">Model</a>
       
         <ul>
   
-  <li class=" " data-id="llama/Llama/Model/ChildCreationLease" data-name="llama::model::childcreationlease">
+  <li class=" current" data-id="llama/Llama/Model/ChildCreationLease" data-name="llama::model::childcreationlease">
       <a href="../../Llama/Model/ChildCreationLease.html">ChildCreationLease</a>
       
     </li>
@@ -272,7 +272,7 @@
       
     </li>
   
-  <li class="parent open current" data-id="llama/Llama/Sampler" data-name="llama::sampler">
+  <li class="parent " data-id="llama/Llama/Sampler" data-name="llama::sampler">
       <a href="../../Llama/Sampler.html">Sampler</a>
       
         <ul>
@@ -302,7 +302,7 @@
       
     </li>
   
-  <li class=" current" data-id="llama/Llama/Sampler/GrammarLazyPatterns" data-name="llama::sampler::grammarlazypatterns">
+  <li class=" " data-id="llama/Llama/Sampler/GrammarLazyPatterns" data-name="llama::sampler::grammarlazypatterns">
       <a href="../../Llama/Sampler/GrammarLazyPatterns.html">GrammarLazyPatterns</a>
       
     </li>
@@ -518,12 +518,12 @@
 
   <span class="kind">
     class
-  </span> Llama::<wbr>Sampler::<wbr>GrammarLazyPatterns
+  </span> Llama::<wbr>Model::<wbr>ChildCreationLease
 
 </h1>
 
 
-  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Llama/Sampler/GrammarLazyPatterns.html">Llama::Sampler::GrammarLazyPatterns</a></li><li class="superclass"><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
+  <ul class="superclass-hierarchy"><li class="superclass"><a href="../../Llama/Model/ChildCreationLease.html">Llama::Model::ChildCreationLease</a></li><li class="superclass">Reference</li><li class="superclass">Object</li></ul>
 
 
 
@@ -537,27 +537,8 @@
     Overview
   </h2>
 
-  <p>Grammar Lazy Patterns sampler</p>
-<p>The Grammar Lazy Patterns sampler is an extension of the Grammar sampler
-that only applies grammar constraints when triggered by specific patterns
-or tokens. This is useful for mixed-format generation where grammar
-constraints should only apply to certain parts of the output.</p>
-<p>Example:</p>
-<pre><code class="language-crystal"><span class="c"># Define a JSON grammar that only activates when the text contains &quot;JSON:&quot;</span>
-grammar <span class="o">=</span> <span class="s">%q{
-  root ::= object
-  object ::= &quot;{&quot; ws (string &quot;:&quot; ws value (&quot;,&quot; ws string &quot;:&quot; ws value)*)? &quot;}&quot; ws
-  array ::= &quot;[&quot; ws (value (&quot;,&quot; ws value)*)? &quot;]&quot; ws
-  value ::= object | array | string | number | &quot;true&quot; | &quot;false&quot; | &quot;null&quot;
-  string ::= &quot;\&quot;&quot; ([^&quot;\\] | &quot;\\&quot; .)* &quot;\&quot;&quot;
-  number ::= &quot;-&quot;? (&quot;0&quot; | [1-9] [0-9]*) (&quot;.&quot; [0-9]+)? ([eE] [-+]? [0-9]+)?
-  ws ::= [ \t\n]*
-}</span>
-
-trigger_patterns <span class="o">=</span> [<span class="s">&quot;JSON:&quot;</span>]
-sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">Sampler</span><span class="t">::</span><span class="t">GrammarLazyPatterns</span>.new(
-  model.vocab, grammar, <span class="s">&quot;root&quot;</span>, trigger_patterns
-)</code></pre>
+  <p>Single-use permission to construct a native child from this model.
+:nodoc:</p>
 
 
 
@@ -584,8 +565,8 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/sampler/grammar_lazy_patterns.cr#L28" target="_blank">
-        llama/sampler/grammar_lazy_patterns.cr
+      <a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/model.cr#L22" target="_blank">
+        llama/model.cr
       </a>
     
     <br/>
@@ -607,9 +588,7 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28vocab%3AVocab%2Cgrammar_str%3AString%2Cgrammar_root%3AString%2Ctrigger_patterns%3AArray%28String%29%3D%5B%5DofString%2Ctrigger_tokens%3AArray%28Int32%29%3D%5B%5DofInt32%29-class-method" class="signature"><strong>.new</strong>(vocab : Vocab, grammar_str : String, grammar_root : String, trigger_patterns : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, trigger_tokens : Array(Int32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span>)</a>
-        
-          <div class="summary"><p>Creates a new Grammar Lazy Patterns sampler</p></div>
+        <a href="#new%28model%3AModel%2Chandle%3APointer%28LibLlama%3A%3ALlamaModel%29%29-class-method" class="signature"><strong>.new</strong>(model : Model, handle : Pointer(LibLlama::LlamaModel))</a>
         
       </li>
     
@@ -632,9 +611,22 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#finalize-instance-method" class="signature"><strong>#finalize</strong></a>
+        <a href="#active%3F%3ABool-instance-method" class="signature"><strong>#active?</strong> : Bool</a>
         
-          <div class="summary"><p>Overrides the parent class's finalize method to ensure proper cleanup</p></div>
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#consume%21%3ANil-instance-method" class="signature"><strong>#consume!</strong> : Nil</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#handle%3APointer%28LibLlama%3A%3ALlamaModel%29-instance-method" class="signature"><strong>#handle</strong> : Pointer(LibLlama::LlamaModel)</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#model%3AModel-instance-method" class="signature"><strong>#model</strong> : Model</a>
         
       </li>
     
@@ -643,70 +635,6 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
 
 
   <div class="methods-inherited">
-    
-      
-
-  <h3>Instance methods inherited from class <code><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></code></h3>
-  
-  
-    <a href="../../Llama/Sampler/Base.html#close%3ANil-instance-method" class="tooltip">
-      <span>close : Nil</span>
-    close</a>, 
-    
-  
-    <a href="../../Llama/Sampler/Base.html#closed%3F%3ABool-instance-method" class="tooltip">
-      <span>closed? : Bool</span>
-    closed?</a>, 
-    
-  
-    <a href="../../Llama/Sampler/Base.html#free%3ANil-instance-method" class="tooltip">
-      <span>free : Nil</span>
-    free</a>, 
-    
-  
-    <a href="../../Llama/Sampler/Base.html#to_unsafe%3APointer%28Llama%3A%3ALibLlama%3A%3ALlamaSampler%29-instance-method" class="tooltip">
-      <span>to_unsafe : Pointer(Llama::LibLlama::LlamaSampler)</span>
-    to_unsafe</a>, 
-    
-  
-    <a href="../../Llama/Sampler/Base.html#unsafe_handle%21%3APointer%28LibLlama%3A%3ALlamaSampler%29-instance-method" class="tooltip">
-      <span>unsafe_handle! : Pointer(LibLlama::LlamaSampler)</span>
-    unsafe_handle!</a>
-    
-  
-
-
-      
-
-  <h3>Constructor methods inherited from class <code><a href="../../Llama/Sampler/Base.html">Llama::Sampler::Base</a></code></h3>
-  
-  
-    <a href="../../Llama/Sampler/Base.html#new%28handle%3APointer%28LibLlama%3A%3ALlamaSampler%29%29-class-method" class="tooltip">
-      <span>new(handle : Pointer(LibLlama::LlamaSampler))</span>
-    new</a>
-    
-  
-
-
-      
-
-
-      
-
-
-    
-      
-
-
-      
-
-
-      
-
-
-      
-
-
     
       
 
@@ -746,35 +674,18 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(vocab:Vocab,grammar_str:String,grammar_root:String,trigger_patterns:Array(String)=[]ofString,trigger_tokens:Array(Int32)=[]ofInt32)-class-method">
+    <div class="entry-detail" id="new(model:Model,handle:Pointer(LibLlama::LlamaModel))-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(vocab : <a href="../../Llama/Vocab.html">Vocab</a>, grammar_str : String, grammar_root : String, trigger_patterns : Array(String) = <span class="o">[]</span> <span class="k">of</span> <span class="t">String</span>, trigger_tokens : Array(Int32) = <span class="o">[]</span> <span class="k">of</span> <span class="t">Int32</span>)
+        def self.<strong>new</strong>(model : <a href="../../Llama/Model.html">Model</a>, handle : Pointer(LibLlama::LlamaModel))
 
-        <a class="method-permalink" href="#new%28vocab%3AVocab%2Cgrammar_str%3AString%2Cgrammar_root%3AString%2Ctrigger_patterns%3AArray%28String%29%3D%5B%5DofString%2Ctrigger_tokens%3AArray%28Int32%29%3D%5B%5DofInt32%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28model%3AModel%2Chandle%3APointer%28LibLlama%3A%3ALlamaModel%29%29-class-method">#</a>
       </div>
-      
-        <div class="doc">
-          
-          <p>Creates a new Grammar Lazy Patterns sampler</p>
-<p>Parameters:</p>
-<ul>
-<li>vocab: The vocabulary to use</li>
-<li>grammar_str: The grammar definition string in GBNF format</li>
-<li>grammar_root: The root symbol of the grammar</li>
-<li>trigger_patterns: Array of string patterns that will trigger the grammar</li>
-<li>trigger_tokens: Array of token IDs that will trigger the grammar</li>
-</ul>
-<p>Raises:</p>
-<ul>
-<li>Llama::Error if the sampler cannot be created</li>
-</ul>
-        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/sampler/grammar_lazy_patterns.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/model.cr#L27" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -795,23 +706,66 @@ sampler <span class="o">=</span> <span class="t">Llama</span><span class="t">::<
     Instance Method Detail
   </h2>
   
-    <div class="entry-detail" id="finalize-instance-method">
+    <div class="entry-detail" id="active?:Bool-instance-method">
       <div class="signature">
         
-        def <strong>finalize</strong>
+        def <strong>active?</strong> : Bool
 
-        <a class="method-permalink" href="#finalize-instance-method">#</a>
+        <a class="method-permalink" href="#active%3F%3ABool-instance-method">#</a>
       </div>
-      
-        <div class="doc">
-          
-          <p>Overrides the parent class's finalize method to ensure proper cleanup</p>
-        </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/sampler/grammar_lazy_patterns.cr#L76" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/model.cr#L25" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="consume!:Nil-instance-method">
+      <div class="signature">
+        
+        def <strong>consume!</strong> : Nil
+
+        <a class="method-permalink" href="#consume%21%3ANil-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/model.cr#L31" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="handle:Pointer(LibLlama::LlamaModel)-instance-method">
+      <div class="signature">
+        
+        def <strong>handle</strong> : Pointer(LibLlama::LlamaModel)
+
+        <a class="method-permalink" href="#handle%3APointer%28LibLlama%3A%3ALlamaModel%29-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/model.cr#L24" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="model:Model-instance-method">
+      <div class="signature">
+        
+        def <strong>model</strong> : <a href="../../Llama/Model.html">Model</a>
+
+        <a class="method-permalink" href="#model%3AModel-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/model.cr#L23" target="_blank">View source</a>]
         
       </div>
     </div>

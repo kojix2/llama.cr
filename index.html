@@ -67,6 +67,11 @@
       
         <ul>
   
+  <li class=" " data-id="llama/Llama/AdapterLora/AttachmentLease" data-name="llama::adapterlora::attachmentlease">
+      <a href="Llama/AdapterLora/AttachmentLease.html">AttachmentLease</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/AdapterLora/Error" data-name="llama::adapterlora::error">
       <a href="Llama/AdapterLora/Error.html">Error</a>
       
@@ -231,6 +236,11 @@
       <a href="Llama/Model.html">Model</a>
       
         <ul>
+  
+  <li class=" " data-id="llama/Llama/Model/ChildCreationLease" data-name="llama::model::childcreationlease">
+      <a href="Llama/Model/ChildCreationLease.html">ChildCreationLease</a>
+      
+    </li>
   
   <li class=" " data-id="llama/Llama/Model/Error" data-name="llama::model::error">
       <a href="Llama/Model/Error.html">Error</a>
@@ -649,6 +659,15 @@ puts result.finish_reason
 puts result.usage.tokens_per_second</code></pre>
 <p><code>Llama.generate</code> continues to return a <code>String</code>. <code>Llama.complete</code> returns a
 <code>Generation</code>; both use the same checked generation path.</p>
+<p>Typed model and context construction policy can be supplied without managing
+the resources manually:</p>
+<pre><code class="language-crystal">result <span class="o">=</span> <span class="t">Llama</span>.complete(
+  <span class="s">&quot;/path/to/model.gguf&quot;</span>,
+  <span class="s">&quot;Once upon a time&quot;</span>,
+  options,
+  model_options: <span class="t">Llama</span><span class="t">::</span><span class="t">ModelOptions</span>.new(gpu_layers: <span class="n">-1</span>),
+  context_options: <span class="t">Llama</span><span class="t">::</span><span class="t">ContextOptions</span>.new(context_size: <span class="n">4096_u32</span>)
+)</code></pre>
 <h3><a id="streaming-and-stateful-sessions" class="anchor" href="#streaming-and-stateful-sessions">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -667,8 +686,18 @@ buffered so it is not emitted unless <code>include_stop</code> is enabled.</p>
 <span class="k">end</span></code></pre>
 <p><code>Session</code> keeps a canonical transcript between calls. Call <code>reset</code> to start a
 new sequence. <code>snapshot</code>, <code>restore</code>, <code>save</code>, and <code>load</code> validate the model and
-native version before changing that transcript. Only one generation may use a
-session at a time.</p>
+native version before changing that transcript. Snapshots store canonical text,
+not native KV-cache bytes. <code>transcript_token_count</code> counts logical transcript
+tokens; the compatibility method <code>used_tokens</code> is also a tokenizer result and
+does not report native KV occupancy. Only one generation may use a session at a
+time.</p>
+<p>A streamed <code>GenerationChunk</code> is a text-delivery unit. UTF-8 buffering and stop
+prefix detection mean it need not correspond one-to-one with a sampled token.
+Its <code>token</code> is the most recent token that triggered delivery and its <code>index</code> is
+a monotonic emission index, including final flushes. <code>Usage</code> timing is
+end-to-end wall time and therefore includes work performed by the streaming
+block. Cooperative cancellation is checked between prompt batches and generated
+tokens, so latency is bounded by one native call rather than being instantaneous.</p>
 <h3><a id="backend-capabilities-and-gpu-offloading" class="anchor" href="#backend-capabilities-and-gpu-offloading">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -797,7 +826,9 @@ recreate them after upgrading.</p>
 <p>Chat history is committed transactionally. A cancelled turn is not committed
 unless <code>commit_partial: true</code> is requested. b10809 recognizes predefined chat
 template shapes; it is not a general Jinja evaluator. Pass a recognized template
-explicitly when the model does not provide one.</p>
+explicitly when the model does not provide one. <code>Chat#clear</code> removes every
+message, including the initial system message. A second turn, <code>clear</code>, or <code>close</code>
+during an active turn raises <code>BusyError</code>.</p>
 <h3><a id="embeddings" class="anchor" href="#embeddings">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -869,7 +900,12 @@ string-returning behavior.</li>
 <code>Sampling::Plan</code> add structured results and managed workflows.</li>
 <li>Advanced API: <code>Context</code>, <code>Batch</code>, <code>Memory</code>, <code>State</code>, and manual samplers expose
 native concepts. Borrowed views are valid only while their owner remains open;
-copy pointer-backed data before another native call.</li>
+copy pointer-backed data before another native call. Callers composing these
+low-level operations are responsible for synchronization; the high-level
+<code>BusyError</code> operation guard does not make arbitrary raw call sequences atomic.
+In particular, logits and embedding pointers may be invalidated by the next
+<code>decode</code>/<code>encode</code>, and every borrowed model/context view becomes invalid when
+its owning context or model is closed.</li>
 <li>Raw API: <code>require &quot;llama/raw&quot;</code> exposes <code>Llama::LibLlama</code>. Its structs, symbols,
 and pointer lifetimes track the pinned upstream build and may change between
 shard releases.</li>

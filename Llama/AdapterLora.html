@@ -67,6 +67,11 @@
       
         <ul>
   
+  <li class=" " data-id="llama/Llama/AdapterLora/AttachmentLease" data-name="llama::adapterlora::attachmentlease">
+      <a href="../Llama/AdapterLora/AttachmentLease.html">AttachmentLease</a>
+      
+    </li>
+  
   <li class=" " data-id="llama/Llama/AdapterLora/Error" data-name="llama::adapterlora::error">
       <a href="../Llama/AdapterLora/Error.html">Error</a>
       
@@ -231,6 +236,11 @@
       <a href="../Llama/Model.html">Model</a>
       
         <ul>
+  
+  <li class=" " data-id="llama/Llama/Model/ChildCreationLease" data-name="llama::model::childcreationlease">
+      <a href="../Llama/Model/ChildCreationLease.html">ChildCreationLease</a>
+      
+    </li>
   
   <li class=" " data-id="llama/Llama/Model/Error" data-name="llama::model::error">
       <a href="../Llama/Model/Error.html">Error</a>
@@ -570,14 +580,14 @@ applied to a model to modify its behavior without changing the original weights.
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L8" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L8" target="_blank">
         llama/adapter_lora.cr
       </a>
     
     <br/>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora/error.cr#L2" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora/error.cr#L2" target="_blank">
         llama/adapter_lora/error.cr
       </a>
     
@@ -623,6 +633,13 @@ applied to a model to modify its behavior without changing the original weights.
     Instance Method Summary
   </h2>
   <ul class="list-summary">
+    
+      <li class="entry-summary">
+        <a href="#begin_attachment%21%3AAttachmentLease-instance-method" class="signature"><strong>#begin_attachment!</strong> : AttachmentLease</a>
+        
+          <div class="summary"><p>Reserves the native handle until an attachment either commits or fails.</p></div>
+        
+      </li>
     
       <li class="entry-summary">
         <a href="#close%3ANil-instance-method" class="signature"><strong>#close</strong> : Nil</a>
@@ -755,7 +772,7 @@ applied to a model to modify its behavior without changing the original weights.
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L19" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L36" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -776,6 +793,28 @@ applied to a model to modify its behavior without changing the original weights.
     Instance Method Detail
   </h2>
   
+    <div class="entry-detail" id="begin_attachment!:AttachmentLease-instance-method">
+      <div class="signature">
+        
+        def <strong>begin_attachment!</strong> : <a href="../Llama/AdapterLora/AttachmentLease.html">AttachmentLease</a>
+
+        <a class="method-permalink" href="#begin_attachment%21%3AAttachmentLease-instance-method">#</a>
+      </div>
+      
+        <div class="doc">
+          
+          <p>Reserves the native handle until an attachment either commits or fails.
+:nodoc:</p>
+        </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L117" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
     <div class="entry-detail" id="close:Nil-instance-method">
       <div class="signature">
         
@@ -792,7 +831,7 @@ applied to a model to modify its behavior without changing the original weights.
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L55" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L83" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -813,7 +852,7 @@ applied to a model to modify its behavior without changing the original weights.
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L64" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L94" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -834,7 +873,7 @@ applied to a model to modify its behavior without changing the original weights.
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L109" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L164" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -859,7 +898,7 @@ for example before process exit.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L50" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L78" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -880,7 +919,7 @@ for example before process exit.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L106" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L161" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -901,7 +940,7 @@ for example before process exit.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L101" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L156" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -923,7 +962,7 @@ for example before process exit.</p>
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/f0619e4340e35acaf883ac2e444945a120ffbff6/src/llama/adapter_lora.cr#L70" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/d0d48d5aead5d8870d3df952851ef9fa98f3694c/src/llama/adapter_lora.cr#L100" target="_blank">View source</a>]
         
       </div>
     </div>
