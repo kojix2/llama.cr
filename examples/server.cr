@@ -1,5 +1,4 @@
 require "../src/llama"
-require "../src/llama/chat"
 require "kemal"
 require "option_parser"
 require "json"
@@ -21,21 +20,25 @@ OptionParser.parse do |parser|
 end
 
 abort "Error: Model path is required. Use -m or --model option.\nRun with --help for usage information." if model_path.empty?
+abort "Error: Context size must be positive." if n_ctx <= 0
 
 Llama.log_level = Llama::LOG_LEVEL_ERROR
 
-# Initialize model, vocab, context, and sampler
+# Initialize the shared model and immutable generation policy.
 model = Llama::Model.new(model_path, n_gpu_layers: ngl)
-vocab = model.vocab
 use_gpu = ngl != 0 && Llama.gpu_offload_supported?
-
-def build_sampler : Llama::SamplerChain
-  sampler = Llama::SamplerChain.new
-  sampler.add(Llama::Sampler::MinP.new(0.05, 1))
-  sampler.add(Llama::Sampler::Temp.new(0.8))
-  sampler.add(Llama::Sampler::Dist.new(Llama::DEFAULT_SEED))
-  sampler
-end
+sampling = Llama::Sampling::Plan.new([
+  Llama::Sampling::MinP.new(0.05_f32),
+  Llama::Sampling::Temperature.new(0.8_f32),
+  Llama::Sampling::Distribution.new,
+] of Llama::Sampling::Stage)
+generation_options = Llama::GenerationOptions.new(max_tokens: n_ctx, sampling: sampling)
+context_options = Llama::ContextOptions.new(
+  context_size: n_ctx.to_u32,
+  batch_size: n_ctx.to_u32,
+  offload_kqv: use_gpu,
+  op_offload: use_gpu
+)
 
 tmpl = model.chat_template
 if tmpl.nil?
@@ -43,51 +46,12 @@ if tmpl.nil?
   tmpl = ""
 end
 
-# Generate response as an array of words/tokens
-def generate_words(context, vocab, sampler, prompt) : Array(String)
-  words = [] of String
-  is_first = true
-  prompt_tokens = vocab.tokenize(prompt, add_special: is_first, parse_special: true)
-
-  if prompt_tokens.empty?
-    STDERR.puts "Failed to tokenize the prompt"
-    return words
-  end
-
-  batch = Llama::Batch.from_tokens(prompt_tokens)
-  pos = prompt_tokens.size
-  context_limit_reached = false
-  begin
-    loop do
-      n_ctx = context.n_ctx
-      if batch.n_tokens > n_ctx
-        context_limit_reached = true
-        break
-      end
-
-      if context.decode(batch) != 0
-        STDERR.puts "Failed to decode"
-        break
-      end
-      batch.free
-
-      new_token_id = sampler.sample(context)
-      break if vocab.eog?(new_token_id)
-
-      piece = vocab.token_to_piece(new_token_id, 0, true)
-      # Split by whitespace, punctuation, and newlines (supports English and Japanese)
-      piece.split(/([。、！？\n\s]+)/).each do |fragment|
-        words << fragment unless fragment.empty?
-      end
-
-      batch = Llama::Batch.from_tokens([new_token_id])
-      batch.to_unsafe.pos[0] = pos
-      pos += 1
-    end
-  ensure
-    batch.free
-  end
-  if context_limit_reached
+# Generate valid UTF-8 through the checked high-level path, then split the
+# completed text into display fragments for the browser animation.
+def generate_words(context : Llama::Context, prompt : String, options : Llama::GenerationOptions) : Array(String)
+  result = context.complete(prompt, options)
+  words = result.text.split(/([。、！？\n\s]+)/).reject(&.empty?)
+  if result.finish_reason.context_full?
     words << " [Context length limit reached!]"
   end
   words
@@ -307,23 +271,10 @@ post "/api/chat" do |env|
       end
     end
   end
-  local_context = model.context(
-    n_ctx: n_ctx.to_u32,
-    n_batch: n_ctx.to_u32,
-    offload_kqv: use_gpu,
-    op_offload: use_gpu
-  )
-  begin
-    local_sampler = build_sampler
-    begin
-      prompt = local_context.apply_chat_template(messages, true, tmpl)
-      words = generate_words(local_context, vocab, local_sampler, prompt)
-      {words: words}.to_json
-    ensure
-      local_sampler.free
-    end
-  ensure
-    local_context.free
+  model.context(context_options) do |local_context|
+    prompt = local_context.apply_chat_template(messages, true, tmpl)
+    words = generate_words(local_context, prompt, generation_options)
+    {words: words}.to_json
   end
 end
 
