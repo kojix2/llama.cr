@@ -4,6 +4,17 @@ require "./spec_helper"
 # Run with: crystal spec spec/model_spec.cr -- --model=/path/to/model.gguf
 
 describe "Llama with model" do
+  it "rejects close while child creation is reserved" do
+    model = Llama::Model.new(MODEL_PATH)
+    lease = model.begin_child_creation!
+    expect_raises(Llama::BusyError, "Llama::Model is busy") { model.close }
+    model.cancel_child_creation!(lease)
+    expect_raises(Llama::Error, "invalid model child-creation lease") do
+      model.cancel_child_creation!(lease)
+    end
+    model.close
+  end
+
   it "closes owned contexts before closing the model" do
     model = Llama::Model.new(MODEL_PATH)
     context = model.context

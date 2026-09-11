@@ -1,6 +1,24 @@
 require "./spec_helper"
 
 describe Llama::Context do
+  it "rejects adapter close while attachment is reserved" do
+    pending! "Test model or adapter file not found" unless File.exists?(ADAPTER_PATH)
+    model = Llama::Model.new(MODEL_PATH)
+    adapter = Llama::AdapterLora.new(model, ADAPTER_PATH)
+    lease = adapter.begin_attachment!
+
+    expect_raises(Llama::BusyError, "Llama::AdapterLora is busy") { adapter.close }
+
+    context = model.context
+    adapter.finish_attachment(lease, context, false)
+    expect_raises(Llama::Error, "invalid adapter attachment lease") do
+      adapter.finish_attachment(lease, context, false)
+    end
+    adapter.close
+    context.close
+    model.close
+  end
+
   it "rejects closing an attached LoRA adapter" do
     pending! "Test model or adapter file not found" unless File.exists?(ADAPTER_PATH)
     model = Llama::Model.new(MODEL_PATH)

@@ -9,11 +9,15 @@ module Llama
     Cancelled
   end
 
+  # A unit of text delivery, not necessarily a one-to-one token event.
+  # `token` is the most recent sampled token that triggered delivery, and
+  # `index` is a monotonically increasing emission index (including flushes).
   record GenerationChunk,
     text : String,
     token : Token,
     index : Int32
 
+  # Timing is end-to-end wall time and includes time spent in streaming blocks.
   record Usage,
     prompt_tokens : Int32,
     generated_tokens : Int32,

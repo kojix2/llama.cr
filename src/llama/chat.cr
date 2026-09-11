@@ -1,4 +1,6 @@
 module Llama
+  private MAX_CHAT_TEMPLATE_BYTES = 64 * 1024 * 1024
+
   record Message, role : String, content : String do
     def self.system(content : String) : self
       new("system", content)
@@ -81,6 +83,9 @@ module Llama
     # b10809 recognizes a predefined set of Jinja template shapes; it is not a
     # general Jinja evaluator. Surface an unsupported custom template distinctly.
     raise TemplateError.new("chat template is not recognized by llama.cpp") if required_size < 0
+    if required_size > MAX_CHAT_TEMPLATE_BYTES
+      raise TemplateError.new("chat template output exceeds the safety limit")
+    end
 
     # Second call: allocate buffer and get the result
     buffer = Bytes.new(required_size)
@@ -107,11 +112,19 @@ module Llama
     capacity = 100
     output = Pointer(LibC::Char*).malloc(capacity)
     count = LibLlama.llama_chat_builtin_templates(output, capacity)
+    raise TemplateError.new("failed to enumerate built-in chat templates") if count < 0
+    if count > 10_000
+      raise TemplateError.new("built-in chat template count exceeds the safety limit")
+    end
 
     if count > capacity
       capacity = count
       output = Pointer(LibC::Char*).malloc(capacity)
       count = LibLlama.llama_chat_builtin_templates(output, capacity)
+      raise TemplateError.new("failed to enumerate built-in chat templates") if count < 0
+      if count > capacity
+        raise TemplateError.new("built-in chat template count exceeded the allocated buffer")
+      end
     end
 
     result = [] of String
@@ -128,6 +141,8 @@ module Llama
 
     def initialize(model : Model, system : String? = nil, template : String? = nil, context_options : ContextOptions = ContextOptions.new)
       @model = model
+      @mutex = Mutex.new
+      @running = false
       @session = model.session(context_options)
       @template = template || model.chat_template
       unless @template
@@ -139,8 +154,9 @@ module Llama
     end
 
     def ask(content : String, options : GenerationOptions = GenerationOptions.new, commit_partial : Bool = false, &block : GenerationChunk ->) : Generation
-      ensure_open!
-      candidate = @history + [Message.user(content)]
+      operation_started = false
+      candidate = begin_turn!(content)
+      operation_started = true
       prompt = Llama.apply_chat_template(@template, candidate.map(&.to_chat_message), true)
       @session.reset
       result = @session.generate(prompt, options, &block)
@@ -148,12 +164,20 @@ module Llama
       if result.finish_reason.cancelled? && !commit_partial
         @session.reset
       else
-        @history = candidate + [Message.assistant(result.text)]
+        @mutex.synchronize do
+          @history = candidate + [Message.assistant(result.text)]
+        end
       end
       result
     rescue ex
-      @session.reset unless closed?
+      # A rejected concurrent turn never acquired this Chat transaction. In
+      # that case the active turn still owns the Session, so attempting a
+      # rollback here would both interfere with it and mask Chat's BusyError
+      # with Session's BusyError.
+      @session.reset if operation_started && !closed?
       raise ex
+    ensure
+      end_turn! if operation_started
     end
 
     def ask(content : String, options : GenerationOptions = GenerationOptions.new, commit_partial : Bool = false) : Generation
@@ -161,18 +185,28 @@ module Llama
     end
 
     def history : Array(Message)
-      ensure_open!
-      @history.dup
+      @mutex.synchronize do
+        ensure_open!
+        @history.dup
+      end
     end
 
+    # Clears all history, including the system message supplied at construction.
     def clear : Nil
-      ensure_open!
-      @history.clear
-      @session.reset
+      @mutex.synchronize do
+        ensure_open!
+        raise BusyError.new(self.class.to_s) if @running
+        @session.reset
+        @history.clear
+      end
     end
 
     def close : Nil
-      @session.close
+      @mutex.synchronize do
+        return if closed?
+        raise BusyError.new(self.class.to_s) if @running
+        @session.close
+      end
     end
 
     def free : Nil
@@ -190,6 +224,27 @@ module Llama
     def finalize
       close
     rescue
+    end
+
+    private def begin_turn!(content : String) : Array(Message)
+      acquired = false
+      candidate = @mutex.synchronize do
+        ensure_open!
+        raise BusyError.new(self.class.to_s) if @running
+        @running = true
+        acquired = true
+        @history + [Message.user(content)]
+      end
+      @model.begin_operation!
+      candidate
+    rescue ex
+      @mutex.synchronize { @running = false } if acquired
+      raise ex
+    end
+
+    private def end_turn! : Nil
+      @model.end_operation!
+      @mutex.synchronize { @running = false }
     end
   end
 end

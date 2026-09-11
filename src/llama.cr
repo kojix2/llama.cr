@@ -122,6 +122,7 @@ module Llama
   @@log_level = LOG_LEVEL_INFO # Default is INFO
   @@log_box : Pointer(Void)? = nil
   @@log_callback : Proc(Int32, String, Nil)? = nil
+  @@log_set_mutex : Mutex = Mutex.new
   @@log_error_mutex : Mutex = Mutex.new
   @@log_callback_error : Exception? = nil
 
@@ -171,27 +172,35 @@ module Llama
   #       STDERR.print message
   #     end
   #   end
-  def self.log_set(&block : Int32, String ->)
-    callback = block
-    @@log_callback = callback
-    @@log_error_mutex.synchronize { @@log_callback_error = nil }
-    boxed = Box.box(callback)
-    @@log_box = boxed
+  def self.log_set(&block : Int32, String ->) : Nil
+    @@log_set_mutex.synchronize do
+      callback = block
+      boxed = Box.box(callback)
+      previous_box = @@log_box
+      @@log_callback = callback
+      @@log_box = boxed
+      @@log_error_mutex.synchronize { @@log_callback_error = nil }
 
-    LibLlama.llama_log_set(
-      ->(level : Int32, text : LibC::Char*, user_data : Void*) {
-        user_callback = Box(Proc(Int32, String, Nil)).unbox(user_data)
-        msg = String.new(text)
-        begin
-          user_callback.call(level, msg)
-        rescue ex
-          # Never unwind a Crystal exception through llama.cpp's C callback.
-          @@log_error_mutex.synchronize { @@log_callback_error ||= ex }
-        end
-        nil
-      },
-      boxed
-    )
+      LibLlama.llama_log_set(
+        ->(level : Int32, text : LibC::Char*, user_data : Void*) {
+          user_callback = Box(Proc(Int32, String, Nil)).unbox(user_data)
+          msg = String.new(text)
+          begin
+            user_callback.call(level, msg)
+          rescue ex
+            # Never unwind a Crystal exception through llama.cpp's C callback.
+            @@log_error_mutex.synchronize { @@log_callback_error ||= ex }
+          end
+          nil
+        },
+        boxed
+      )
+
+      # Keep the previous userdata rooted until llama.cpp has installed the new
+      # callback and returned from the setter.
+      previous_box
+      nil
+    end
   end
 
   # Returns and clears the first exception raised by the current log callback.
@@ -400,42 +409,62 @@ module Llama
   end
 
   # Performs a typed one-shot completion, optionally streaming safe text chunks.
-  def self.complete(model_path : String, prompt : String, options : GenerationOptions = GenerationOptions.new, &block : GenerationChunk ->) : Generation
-    Model.open(model_path) do |model|
-      model.context do |context|
+  def self.complete(
+    model_path : String,
+    prompt : String,
+    options : GenerationOptions = GenerationOptions.new,
+    *,
+    model_options : ModelOptions = ModelOptions.new,
+    context_options : ContextOptions = ContextOptions.new,
+    &block : GenerationChunk ->
+  ) : Generation
+    Model.open(model_path, model_options) do |model|
+      model.context(context_options) do |context|
         context.complete(prompt, options, &block)
       end
     end
   end
 
-  def self.complete(model_path : String, prompt : String, options : GenerationOptions = GenerationOptions.new) : Generation
-    complete(model_path, prompt, options) { |_chunk| }
+  def self.complete(
+    model_path : String,
+    prompt : String,
+    options : GenerationOptions = GenerationOptions.new,
+    *,
+    model_options : ModelOptions = ModelOptions.new,
+    context_options : ContextOptions = ContextOptions.new,
+  ) : Generation
+    complete(model_path, prompt, options, model_options: model_options, context_options: context_options) { |_chunk| }
   end
 
   # Thread-safe, idempotent initialization of the llama.cpp backend.
   # You do not need to call this manually in most cases.
   def self.init
     @@backend_mutex.synchronize do
-      unless @@backend_initialized
-        # Initialize the backend first
-        LibLlama.llama_backend_init
+      init_backend_locked
+    end
+  end
 
-        # Load backends from standard dynamic loader search paths.
-        # Users can set GGML_BACKEND_PATH explicitly when needed.
-        LibLlama.ggml_backend_load_all
+  private def self.init_backend_locked : Nil
+    return if @@backend_initialized
 
-        # Verify that backends were actually loaded
-        backend_count = LibLlama.ggml_backend_reg_count
+    LibLlama.llama_backend_init
+    LibLlama.ggml_backend_load_all
+    backend_count = LibLlama.ggml_backend_reg_count
+    if backend_count > 0
+      STDERR.puts "llama.cr: Successfully loaded #{backend_count} backend(s)" if ENV["LLAMA_DEBUG"]?
+    else
+      STDERR.puts "llama.cr: Warning - No backends loaded! Model loading may fail."
+    end
+    @@backend_initialized = true
+  end
 
-        # Log backend loading status for debugging
-        if backend_count > 0
-          STDERR.puts "llama.cr: Successfully loaded #{backend_count} backend(s)" if ENV["LLAMA_DEBUG"]?
-        else
-          STDERR.puts "llama.cr: Warning - No backends loaded! Model loading may fail."
-        end
-
-        @@backend_initialized = true
-      end
+  # Atomically initializes the backend and reserves a live model slot so
+  # controlled teardown cannot pass between those two state changes.
+  # :nodoc:
+  def self.acquire_model_slot : Nil
+    @@backend_mutex.synchronize do
+      init_backend_locked
+      @@live_model_count += 1
     end
   end
 
@@ -460,9 +489,7 @@ module Llama
 
   # :nodoc:
   def self.register_model
-    @@backend_mutex.synchronize do
-      @@live_model_count += 1
-    end
+    acquire_model_slot
   end
 
   # :nodoc:

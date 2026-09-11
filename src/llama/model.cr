@@ -9,6 +9,31 @@ module Llama
   class Model
     include NativeResource
 
+    private MAX_NATIVE_STRING_BYTES = 64 * 1024 * 1024
+
+    private enum LifecycleState
+      Open
+      Closing
+      Closed
+    end
+
+    # Single-use permission to construct a native child from this model.
+    # :nodoc:
+    class ChildCreationLease
+      getter model : Model
+      getter handle : LibLlama::LlamaModel*
+      getter? active : Bool
+
+      def initialize(@model : Model, @handle : LibLlama::LlamaModel*)
+        @active = true
+      end
+
+      def consume! : Nil
+        raise Error.new("model child-creation lease was already released") unless @active
+        @active = false
+      end
+    end
+
     # Creates a new Model instance by loading a model from a file.
     #
     # Parameters:
@@ -31,37 +56,41 @@ module Llama
       check_tensors : Bool = false,
     )
       @children_mutex = Mutex.new
+      @lifecycle_state = LifecycleState::Open
+      @child_creation_count = 0
+      @active_operation_count = 0
       # Children already keep their model alive. Weak entries avoid creating a
       # finalizable Model <-> child cycle (Boehm GC reports and skips such
       # cycles), while still letting explicit Model#close find every live child.
       @contexts = [] of WeakRef(Context)
       @adapters_lora = [] of WeakRef(AdapterLora)
+      @handle = Pointer(LibLlama::LlamaModel).null
 
-      # Ensure llama backend is initialized
-      Llama.init
-      Llama.register_model
+      Llama.acquire_model_slot
+      begin
+        params = LibLlama.llama_model_default_params
+        params.n_gpu_layers = n_gpu_layers
+        params.load_mode = if use_mmap
+                             use_mlock ? LibLlama::LlamaLoadMode::MMAP_MLOCK : LibLlama::LlamaLoadMode::MMAP
+                           else
+                             use_mlock ? LibLlama::LlamaLoadMode::MLOCK : LibLlama::LlamaLoadMode::NONE
+                           end
+        params.vocab_only = vocab_only
+        params.lazy_mode = lazy_mode
+        params.check_tensors = check_tensors
 
-      params = LibLlama.llama_model_default_params
-      params.n_gpu_layers = n_gpu_layers
-      params.load_mode = if use_mmap
-                           use_mlock ? LibLlama::LlamaLoadMode::MMAP_MLOCK : LibLlama::LlamaLoadMode::MMAP
-                         else
-                           use_mlock ? LibLlama::LlamaLoadMode::MLOCK : LibLlama::LlamaLoadMode::NONE
-                         end
-      params.vocab_only = vocab_only
-      params.lazy_mode = lazy_mode
-      params.check_tensors = check_tensors
-
-      @handle = LibLlama.llama_model_load_from_file(path, params)
-
-      if @handle.null?
+        @handle = LibLlama.llama_model_load_from_file(path, params)
+        if @handle.null?
+          error_msg = Llama.format_error(
+            "Failed to load model",
+            -5, # Model loading error
+            "path: #{path}, n_gpu_layers: #{n_gpu_layers}, use_mmap: #{use_mmap}, use_mlock: #{use_mlock}, vocab_only: #{vocab_only}, lazy_mode: #{lazy_mode}"
+          )
+          raise Model::Error.new(error_msg)
+        end
+      rescue ex
         Llama.unregister_model
-        error_msg = Llama.format_error(
-          "Failed to load model",
-          -5, # Model loading error
-          "path: #{path}, n_gpu_layers: #{n_gpu_layers}, use_mmap: #{use_mmap}, use_mlock: #{use_mlock}, vocab_only: #{vocab_only}, lazy_mode: #{lazy_mode}"
-        )
-        raise Model::Error.new(error_msg)
+        raise ex
       end
     end
 
@@ -284,8 +313,12 @@ module Llama
 
     # Creates a reusable high-level generation session.
     def session(options : ContextOptions = ContextOptions.new) : Session
-      ensure_open!
-      Session.new(self, options)
+      lease = begin_child_creation!
+      begin
+        Session.new(self, options)
+      ensure
+        cancel_child_creation!(lease)
+      end
     end
 
     def session(options : ContextOptions = ContextOptions.new, & : Session -> _)
@@ -296,8 +329,12 @@ module Llama
     end
 
     def chat(system : String? = nil, template : String? = nil, context_options : ContextOptions = ContextOptions.new) : Chat
-      ensure_open!
-      Chat.new(self, system, template, context_options)
+      lease = begin_child_creation!
+      begin
+        Chat.new(self, system, template, context_options)
+      ensure
+        cancel_child_creation!(lease)
+      end
     end
 
     def chat(system : String? = nil, template : String? = nil, context_options : ContextOptions = ContextOptions.new, & : Chat -> _)
@@ -313,8 +350,12 @@ module Llama
       context_options : ContextOptions = ContextOptions.new,
       max_sequences : UInt32 = 8_u32,
     ) : Embedder
-      ensure_open!
-      Embedder.new(self, pooling, max_sequences, context_options)
+      lease = begin_child_creation!
+      begin
+        Embedder.new(self, pooling, max_sequences, context_options)
+      ensure
+        cancel_child_creation!(lease)
+      end
     end
 
     def embedder(
@@ -346,14 +387,61 @@ module Llama
       @handle
     end
 
+    # Reserves permission to use the model pointer while constructing a child.
+    # :nodoc:
+    def begin_child_creation! : ChildCreationLease
+      @children_mutex.synchronize do
+        raise ClosedError.new(self.class.to_s) unless @lifecycle_state.open? && !@handle.null?
+        @child_creation_count += 1
+        ChildCreationLease.new(self, @handle)
+      end
+    end
+
+    # Atomically registers a constructed child and releases its reservation.
+    # :nodoc:
+    def commit_child_creation!(lease : ChildCreationLease, child : Context | AdapterLora) : Nil
+      @children_mutex.synchronize do
+        validate_child_lease!(lease)
+        raise Error.new("no model child-creation reservation") if @child_creation_count <= 0
+        raise BusyError.new(self.class.to_s) unless @lifecycle_state.open?
+        register_child_locked(child)
+        lease.consume!
+        @child_creation_count -= 1
+      end
+    end
+
+    # :nodoc:
+    def cancel_child_creation!(lease : ChildCreationLease) : Nil
+      @children_mutex.synchronize do
+        validate_child_lease!(lease)
+        raise Error.new("no model child-creation reservation") if @child_creation_count <= 0
+        lease.consume!
+        @child_creation_count -= 1
+      end
+    end
+
+    # Makes high-level context activity visible to Model#close.
+    # :nodoc:
+    def begin_operation! : Nil
+      @children_mutex.synchronize do
+        raise ClosedError.new(self.class.to_s) unless @lifecycle_state.open? && !@handle.null?
+        @active_operation_count += 1
+      end
+    end
+
+    # :nodoc:
+    def end_operation! : Nil
+      @children_mutex.synchronize do
+        @active_operation_count -= 1 if @active_operation_count > 0
+      end
+    end
+
     # Registers a native context owned by this model.
     # :nodoc:
     def register_child(context : Context) : Nil
       @children_mutex.synchronize do
         ensure_open!
-        unless @contexts.any? { |ref| ref.value.try(&.same?(context)) }
-          @contexts << WeakRef.new(context)
-        end
+        register_child_locked(context)
       end
     end
 
@@ -362,9 +450,7 @@ module Llama
     def register_child(adapter : AdapterLora) : Nil
       @children_mutex.synchronize do
         ensure_open!
-        unless @adapters_lora.any? { |ref| ref.value.try(&.same?(adapter)) }
-          @adapters_lora << WeakRef.new(adapter)
-        end
+        register_child_locked(adapter)
       end
     end
 
@@ -397,15 +483,30 @@ module Llama
       adapters = [] of AdapterLora
 
       @children_mutex.synchronize do
-        return if closed?
+        return if @lifecycle_state.closed?
+        raise BusyError.new(self.class.to_s) if @lifecycle_state.closing?
+        if @child_creation_count > 0 || @active_operation_count > 0
+          raise BusyError.new(self.class.to_s)
+        end
         contexts = @contexts.compact_map(&.value)
-        raise BusyError.new(self.class.to_s) if contexts.any?(&.busy?)
         adapters = @adapters_lora.compact_map(&.value)
+        # Closing prevents a context operation that is between setting its
+        # local running flag and registering with the model from proceeding.
+        # Do not inspect Context#busy? while holding this mutex: Context#close
+        # unregisters itself while holding its operation mutex, so taking the
+        # locks in the opposite order here would permit a close/close deadlock.
+        @lifecycle_state = LifecycleState::Closing
       end
 
       contexts.each(&.close)
       adapters.each(&.close)
       cleanup
+      @children_mutex.synchronize { @lifecycle_state = LifecycleState::Closed }
+    rescue ex
+      @children_mutex.synchronize do
+        @lifecycle_state = LifecycleState::Open if !@handle.null?
+      end
+      raise ex
     end
 
     private def cleanup
@@ -413,6 +514,24 @@ module Llama
         LibLlama.llama_model_free(unsafe_handle!)
         @handle = Pointer(LibLlama::LlamaModel).null
         Llama.unregister_model
+      end
+    end
+
+    private def register_child_locked(child : Context) : Nil
+      unless @contexts.any? { |ref| ref.value.try(&.same?(child)) }
+        @contexts << WeakRef.new(child)
+      end
+    end
+
+    private def validate_child_lease!(lease : ChildCreationLease) : Nil
+      unless lease.model.same?(self) && lease.active?
+        raise Error.new("invalid model child-creation lease")
+      end
+    end
+
+    private def register_child_locked(child : AdapterLora) : Nil
+      unless @adapters_lora.any? { |ref| ref.value.try(&.same?(child)) }
+        @adapters_lora << WeakRef.new(child)
       end
     end
 
@@ -491,6 +610,10 @@ module Llama
         length = yield buf, capacity.to_u64
         return nil if length < 0
         return String.new(buf, length) if length < capacity
+
+        if length >= MAX_NATIVE_STRING_BYTES
+          raise Model::Error.new("Native model string exceeds the safety limit")
+        end
 
         capacity = length + 1
       end

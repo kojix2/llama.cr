@@ -8,6 +8,23 @@ module Llama
   class AdapterLora
     include NativeResource
 
+    # Single-use reservation that prevents close during native attachment.
+    # :nodoc:
+    class AttachmentLease
+      getter adapter : AdapterLora
+      getter handle : LibLlama::LlamaAdapterLora*
+      getter? active : Bool
+
+      def initialize(@adapter : AdapterLora, @handle : LibLlama::LlamaAdapterLora*)
+        @active = true
+      end
+
+      def consume! : Nil
+        raise Error.new("adapter attachment lease was already released") unless @active
+        @active = false
+      end
+    end
+
     # Creates a new LoRA adapter from a file
     #
     # Parameters:
@@ -17,26 +34,37 @@ module Llama
     # Raises:
     # - Llama::AdapterLora::Error if the adapter cannot be loaded
     def initialize(model : Model, path : String)
-      # Ensure llama backend is initialized
-      Llama.init
-
       # Keep the associated model alive while this adapter exists.
       # llama.cpp requires adapter lifetime to be within model lifetime.
       @model = model
       @attachments_mutex = Mutex.new
       @attachments = [] of WeakRef(Context)
-
-      @handle = LibLlama.llama_adapter_lora_init(model.unsafe_handle!, path)
-
-      if @handle.null?
-        error_msg = "Failed to load LoRA adapter from '#{path}'"
-        raise AdapterLora::Error.new(error_msg)
-      end
+      @pending_attachments = 0
+      @handle = Pointer(LibLlama::LlamaAdapterLora).null
+      child_reserved = false
+      child_committed = false
+      child_lease = nil.as(Model::ChildCreationLease?)
 
       begin
-        @model.register_child(self)
+        child_lease = @model.begin_child_creation!
+        child_reserved = true
+        @handle = LibLlama.llama_adapter_lora_init(child_lease.not_nil!.handle, path)
+
+        if @handle.null?
+          error_msg = "Failed to load LoRA adapter from '#{path}'"
+          raise AdapterLora::Error.new(error_msg)
+        end
+
+        @model.commit_child_creation!(child_lease.not_nil!, self)
+        child_reserved = false
+        child_committed = true
       rescue ex
-        cleanup
+        @model.cancel_child_creation!(child_lease.not_nil!) if child_reserved
+        unless @handle.null?
+          LibLlama.llama_adapter_lora_free(@handle)
+          @handle = Pointer(LibLlama::LlamaAdapterLora).null
+        end
+        @model.unregister_child(self) if child_committed
         raise ex
       end
     end
@@ -55,7 +83,9 @@ module Llama
     def close : Nil
       @attachments_mutex.synchronize do
         return if closed?
-        raise BusyError.new(self.class.to_s) if @attachments.any?(&.value)
+        if @pending_attachments > 0 || @attachments.any?(&.value)
+          raise BusyError.new(self.class.to_s)
+        end
         cleanup
       end
     end
@@ -79,6 +109,31 @@ module Llama
         unless @attachments.any? { |ref| ref.value.try(&.same?(context)) }
           @attachments << WeakRef.new(context)
         end
+      end
+    end
+
+    # Reserves the native handle until an attachment either commits or fails.
+    # :nodoc:
+    def begin_attachment! : AttachmentLease
+      @attachments_mutex.synchronize do
+        ensure_open!
+        @pending_attachments += 1
+        AttachmentLease.new(self, @handle)
+      end
+    end
+
+    # :nodoc:
+    def finish_attachment(lease : AttachmentLease, context : Context, commit : Bool) : Nil
+      @attachments_mutex.synchronize do
+        unless lease.adapter.same?(self) && lease.active?
+          raise Error.new("invalid adapter attachment lease")
+        end
+        raise Error.new("no pending LoRA attachment") if @pending_attachments <= 0
+        if commit && !@attachments.any? { |ref| ref.value.try(&.same?(context)) }
+          @attachments << WeakRef.new(context)
+        end
+        lease.consume!
+        @pending_attachments -= 1
       end
     end
 
@@ -126,5 +181,6 @@ module Llama
     @model : Model
     @attachments_mutex : Mutex
     @attachments : Array(WeakRef(Context))
+    @pending_attachments : Int32
   end
 end

@@ -44,30 +44,34 @@ module Llama
       inputs = texts.to_a
       return [] of Array(Float32) if inputs.empty?
 
-      operation_started = false
-      begin_operation!
-      operation_started = true
-      token_sets = inputs.map { |text| @model.vocab.tokenize(text) }
-      token_sets.each_with_index do |tokens, index|
-        raise EmbeddingError.new("input #{index} tokenized to an empty sequence") if tokens.empty?
-        if tokens.size > @context.n_ctx_seq
-          raise EmbeddingError.new("input #{index} exceeds sequence context size (#{tokens.size} tokens > #{@context.n_ctx_seq})")
-        end
-        if tokens.size > @context.n_batch
-          # Pooling is performed for one native batch in this llama.cpp build;
-          # splitting a sentence would silently change mean/CLS/last semantics.
-          raise EmbeddingError.new("input #{index} exceeds embedding batch size (#{tokens.size} tokens > #{@context.n_batch})")
+      @context.with_operation do
+        operation_started = false
+        begin_operation!
+        operation_started = true
+        begin
+          token_sets = inputs.map { |text| @model.vocab.tokenize(text) }
+          token_sets.each_with_index do |tokens, index|
+            raise EmbeddingError.new("input #{index} tokenized to an empty sequence") if tokens.empty?
+            if tokens.size > @context.n_ctx_seq
+              raise EmbeddingError.new("input #{index} exceeds sequence context size (#{tokens.size} tokens > #{@context.n_ctx_seq})")
+            end
+            if tokens.size > @context.n_batch
+              # Pooling is performed for one native batch in this llama.cpp build;
+              # splitting a sentence would silently change mean/CLS/last semantics.
+              raise EmbeddingError.new("input #{index} exceeds embedding batch size (#{tokens.size} tokens > #{@context.n_batch})")
+            end
+          end
+
+          vectors = [] of Array(Float32)
+          groups(token_sets).each do |group|
+            vectors.concat(embed_group(group))
+          end
+
+          normalize ? vectors.map { |vector| normalize_vector(vector) } : vectors
+        ensure
+          end_operation! if operation_started
         end
       end
-
-      vectors = [] of Array(Float32)
-      groups(token_sets).each do |group|
-        vectors.concat(embed_group(group))
-      end
-
-      normalize ? vectors.map { |vector| normalize_vector(vector) } : vectors
-    ensure
-      end_operation! if operation_started
     end
 
     def close : Nil

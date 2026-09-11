@@ -138,7 +138,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
+      rescue ex : State::Error | ClosedError | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -202,7 +202,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
+      rescue ex : State::Error | ClosedError | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -253,7 +253,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
+      rescue ex : State::Error | ClosedError | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -412,7 +412,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
+      rescue ex : State::Error | ClosedError | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -465,7 +465,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
+      rescue ex : State::Error | ClosedError | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(
@@ -531,7 +531,7 @@ module Llama
         end
 
         result
-      rescue ex : State::Error | ClosedError | ArgumentError | ClosedError
+      rescue ex : State::Error | ClosedError | ArgumentError
         raise ex
       rescue ex
         error_msg = Llama.format_error(

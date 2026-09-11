@@ -19,7 +19,11 @@ module Llama
       operation_started = true
       candidate = @transcript + prompt
       result = @context.complete(candidate, options, &block)
-      @transcript = candidate + result.text
+      if result.finish_reason.cancelled?
+        @context.memory.clear
+      else
+        @transcript = candidate + result.text
+      end
       result
     ensure
       end_operation! if operation_started
@@ -29,9 +33,25 @@ module Llama
       generate(prompt, options) { |_chunk| }
     end
 
+    # Returns the historical tokenization count, including the vocabulary's
+    # default special-token behavior. This is not native KV-cache occupancy.
     def used_tokens : Int32
-      ensure_open!
-      @model.vocab.tokenize(@transcript).size
+      @mutex.synchronize do
+        ensure_open!
+        raise BusyError.new(self.class.to_s) if @running
+        @model.vocab.tokenize(@transcript).size
+      end
+    end
+
+    # Returns logical transcript tokens. An empty transcript is always zero;
+    # callers can explicitly choose tokenizer special-token behavior.
+    def transcript_token_count(add_special : Bool = true, parse_special : Bool = true) : Int32
+      @mutex.synchronize do
+        ensure_open!
+        raise BusyError.new(self.class.to_s) if @running
+        return 0 if @transcript.empty?
+        @model.vocab.tokenize(@transcript, add_special, parse_special).size
+      end
     end
 
     def reset : Nil
@@ -107,14 +127,21 @@ module Llama
     end
 
     private def begin_operation! : Nil
+      acquired = false
       @mutex.synchronize do
         ensure_open!
         raise BusyError.new(self.class.to_s) if @running
         @running = true
+        acquired = true
       end
+      @model.begin_operation!
+    rescue ex
+      @mutex.synchronize { @running = false } if acquired
+      raise ex
     end
 
     private def end_operation! : Nil
+      @model.end_operation!
       @mutex.synchronize { @running = false }
     end
 

@@ -1,6 +1,19 @@
 require "./spec_helper"
 
 describe Llama::Embedder do
+  it "closes the block factory after a caller exception" do
+    model = Llama::Model.new(MODEL_PATH)
+    captured = nil.as(Llama::Embedder?)
+    expect_raises(Exception, "boom") do
+      model.embedder do |embedder|
+        captured = embedder
+        raise "boom"
+      end
+    end
+    captured.not_nil!.closed?.should be_true
+    model.close
+  end
+
   it "copies normalized vectors and preserves batch order" do
     model = Llama::Model.new(MODEL_PATH)
     embedder = model.embedder

@@ -34,43 +34,59 @@ module Llama
     )
       @operation_mutex = Mutex.new
       @running = false
-
-      # Ensure llama backend is initialized
-      Llama.init
-      Llama.register_context
-
-      params = LibLlama.llama_context_default_params
-
-      params.n_ctx = n_ctx
-      params.n_batch = n_batch
-      params.n_ubatch = n_ubatch
-      params.n_seq_max = n_seq_max
-      params.n_threads = n_threads
-      params.n_threads_batch = n_threads_batch
-      params.embeddings = embeddings
-      params.pooling_type = pooling_type
-      params.offload_kqv = offload_kqv
-      params.op_offload = op_offload
-      params.swa_full = true
-      @handle = LibLlama.llama_init_from_model(model.unsafe_handle!, params)
-
-      if @handle.null?
-        Llama.unregister_context
-        error_msg = Llama.format_error(
-          "Failed to create context",
-          -4, # Context creation error
-          "n_ctx: #{n_ctx}, n_batch: #{n_batch}, n_threads: #{n_threads}, n_threads_batch: #{n_threads_batch}, embeddings: #{embeddings}, offload_kqv: #{offload_kqv}, op_offload: #{op_offload}"
-        )
-        raise Context::Error.new(error_msg)
-      end
-
       @model = model
       @adapters_lora = [] of AdapterLora
       @adapter_lora_scales = [] of Float32
+      @handle = Pointer(LibLlama::LlamaContext).null
+      @registered_context = false
+      child_reserved = false
+      child_committed = false
+      child_lease = nil.as(Model::ChildCreationLease?)
+
       begin
-        @model.register_child(self)
+        child_lease = @model.begin_child_creation!
+        child_reserved = true
+
+        params = LibLlama.llama_context_default_params
+
+        params.n_ctx = n_ctx
+        params.n_batch = n_batch
+        params.n_ubatch = n_ubatch
+        params.n_seq_max = n_seq_max
+        params.n_threads = n_threads
+        params.n_threads_batch = n_threads_batch
+        params.embeddings = embeddings
+        params.pooling_type = pooling_type
+        params.offload_kqv = offload_kqv
+        params.op_offload = op_offload
+        params.swa_full = true
+        @handle = LibLlama.llama_init_from_model(child_lease.not_nil!.handle, params)
+
+        if @handle.null?
+          error_msg = Llama.format_error(
+            "Failed to create context",
+            -4, # Context creation error
+            "n_ctx: #{n_ctx}, n_batch: #{n_batch}, n_threads: #{n_threads}, n_threads_batch: #{n_threads_batch}, embeddings: #{embeddings}, offload_kqv: #{offload_kqv}, op_offload: #{op_offload}"
+          )
+          raise Context::Error.new(error_msg)
+        end
+
+        Llama.register_context
+        @registered_context = true
+        @model.commit_child_creation!(child_lease.not_nil!, self)
+        child_reserved = false
+        child_committed = true
       rescue ex
-        cleanup
+        @model.cancel_child_creation!(child_lease.not_nil!) if child_reserved
+        unless @handle.null?
+          LibLlama.llama_free(@handle)
+          @handle = Pointer(LibLlama::LlamaContext).null
+        end
+        if @registered_context
+          Llama.unregister_context
+          @registered_context = false
+        end
+        @model.unregister_child(self) if child_committed
         raise ex
       end
     end
@@ -219,7 +235,10 @@ module Llama
         @adapters_lora.each { |adapter| adapter.unregister_attachment(self) }
         @adapters_lora.clear
         @adapter_lora_scales.clear
-        Llama.unregister_context
+        if @registered_context
+          Llama.unregister_context
+          @registered_context = false
+        end
         @model.unregister_child(self)
       end
     end
@@ -458,8 +477,25 @@ module Llama
     end
 
     # Decodes the prompt in chunks no larger than n_batch.
-    private def decode_prompt(input_tokens : Array(Int32)) : Nil
-      decode_tokens(input_tokens, true, nil, 8, "Prompt", require_success: true)
+    private def decode_prompt(input_tokens : Array(Int32), cancellation : Cancellation? = nil) : Bool
+      context_size = n_ctx_seq.to_i
+      if input_tokens.size > context_size
+        raise Context::Error.new("Prompt exceeds context size [tokens: #{input_tokens.size}, n_ctx: #{context_size}]")
+      end
+
+      batch_size = n_batch.to_i
+      raise Context::Error.new("Invalid batch size: #{batch_size}") if batch_size <= 0
+
+      offset = 0
+      while offset < input_tokens.size
+        return false if cancellation.try(&.cancelled?)
+        chunk_size = Math.min(batch_size, input_tokens.size - offset)
+        chunk = input_tokens[offset, chunk_size]
+        is_last_chunk = offset + chunk_size == input_tokens.size
+        decode_owned_batch!(token_batch(chunk, offset, true, is_last_chunk))
+        offset += chunk_size
+      end
+      true
     end
 
     # Prepares a batch for one generated token.
@@ -789,7 +825,7 @@ module Llama
         raise ArgumentError.new("temperature must be non-negative")
       end
 
-      # 空プロンプトも許可する
+      # Empty prompts are allowed when tokenization supplies a special token.
 
       options = GenerationOptions.new(
         max_tokens: max_tokens,
@@ -799,15 +835,34 @@ module Llama
     end
 
     private def begin_operation! : Nil
+      acquired = false
       @operation_mutex.synchronize do
         ensure_open!
         raise BusyError.new(self.class.to_s) if @running
         @running = true
+        acquired = true
       end
+      @model.begin_operation!
+    rescue ex
+      @operation_mutex.synchronize { @running = false } if acquired
+      raise ex
     end
 
     private def end_operation! : Nil
+      @model.end_operation!
       @operation_mutex.synchronize { @running = false }
+    end
+
+    # Runs an internal high-level facade operation under the same exclusive
+    # context/model lease used by generation.
+    # :nodoc:
+    def with_operation(& : -> T) : T forall T
+      operation_started = false
+      begin_operation!
+      operation_started = true
+      yield
+    ensure
+      end_operation! if operation_started
     end
 
     # Generates a typed result through the shared high-level engine.
@@ -831,9 +886,9 @@ module Llama
     end
 
     # :nodoc:
-    def generator_prefill(tokens : Array(Token)) : Nil
+    def generator_prefill(tokens : Array(Token), cancellation : Cancellation? = nil) : Bool
       memory.clear
-      decode_prompt(tokens)
+      decode_prompt(tokens, cancellation)
     end
 
     # :nodoc:
@@ -977,43 +1032,47 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the adapter cannot be attached
     def attach_adapter_lora(adapter : AdapterLora, scale : Float32 = 1.0) : Int32
-      ensure_open!
-      adapter.unsafe_handle!
-
       if adapter.model != @model
         raise Context::Error.new("LoRA adapter was loaded for a different model")
       end
 
-      existing_index = @adapters_lora.index(adapter)
-      previous_scale = nil.as(Float32?)
+      with_operation do
+        existing_index = @adapters_lora.index(adapter)
+        previous_scale = nil.as(Float32?)
+        attachment_lease = nil.as(AdapterLora::AttachmentLease?)
 
-      if existing_index
-        previous_scale = @adapter_lora_scales[existing_index]
-        @adapter_lora_scales[existing_index] = scale
-      else
-        @adapters_lora << adapter
-        @adapter_lora_scales << scale
-      end
-
-      result = sync_adapters_lora!
-
-      if result != 0
         if existing_index
-          @adapter_lora_scales[existing_index] = previous_scale.not_nil!
+          adapter.unsafe_handle!
+          previous_scale = @adapter_lora_scales[existing_index]
+          @adapter_lora_scales[existing_index] = scale
         else
+          attachment_lease = adapter.begin_attachment!
+          @adapters_lora << adapter
+          @adapter_lora_scales << scale
+        end
+
+        result = sync_adapters_lora!
+        if result != 0
+          raise Context::Error.new(Llama.format_error("Failed to attach LoRA adapter", result, "scale: #{scale}"))
+        end
+
+        if lease = attachment_lease
+          adapter.finish_attachment(lease, self, true)
+          attachment_lease = nil
+        end
+        result
+      rescue ex
+        if existing_index
+          @adapter_lora_scales[existing_index] = previous_scale.not_nil! if previous_scale
+        elsif @adapters_lora.last? == adapter
           @adapters_lora.pop
           @adapter_lora_scales.pop
         end
-        error_msg = Llama.format_error(
-          "Failed to attach LoRA adapter",
-          result,
-          "scale: #{scale}"
-        )
-        raise Context::Error.new(error_msg)
+        if lease = attachment_lease
+          adapter.finish_attachment(lease, self, false)
+        end
+        raise ex
       end
-
-      adapter.register_attachment(self) unless existing_index
-      result
     end
 
     # Detaches a LoRA adapter from this context
@@ -1027,53 +1086,45 @@ module Llama
     # Raises:
     # - Llama::Context::Error if the adapter cannot be detached
     def detach_adapter_lora(adapter : AdapterLora) : Int32
-      ensure_open!
-      index = @adapters_lora.index(adapter)
+      with_operation do
+        index = @adapters_lora.index(adapter)
 
-      return 0 unless index
+        next 0 unless index
 
-      old_adapter = @adapters_lora.delete_at(index)
-      old_scale = @adapter_lora_scales.delete_at(index)
+        old_adapter = @adapters_lora.delete_at(index)
+        old_scale = @adapter_lora_scales.delete_at(index)
 
-      result = sync_adapters_lora!
+        result = sync_adapters_lora!
 
-      if result != 0
-        @adapters_lora.insert(index, old_adapter)
-        @adapter_lora_scales.insert(index, old_scale)
-        error_msg = Llama.format_error(
-          "Failed to detach LoRA adapter",
-          result,
-          nil
-        )
-        raise Context::Error.new(error_msg)
+        if result != 0
+          @adapters_lora.insert(index, old_adapter)
+          @adapter_lora_scales.insert(index, old_scale)
+          raise Context::Error.new(Llama.format_error("Failed to detach LoRA adapter", result, nil))
+        end
+
+        adapter.unregister_attachment(self)
+        result
       end
-
-      adapter.unregister_attachment(self)
-      result
     end
 
     # Clears all LoRA adapters from this context
     def clear_adapters_lora
-      ensure_open!
-      old_adapters = @adapters_lora.dup
-      old_scales = @adapter_lora_scales.dup
-      @adapters_lora.clear
-      @adapter_lora_scales.clear
+      with_operation do
+        old_adapters = @adapters_lora.dup
+        old_scales = @adapter_lora_scales.dup
+        @adapters_lora.clear
+        @adapter_lora_scales.clear
 
-      result = sync_adapters_lora!
+        result = sync_adapters_lora!
 
-      if result != 0
-        @adapters_lora.concat(old_adapters)
-        @adapter_lora_scales.concat(old_scales)
-        error_msg = Llama.format_error(
-          "Failed to clear LoRA adapters",
-          result,
-          nil
-        )
-        raise Context::Error.new(error_msg)
+        if result != 0
+          @adapters_lora.concat(old_adapters)
+          @adapter_lora_scales.concat(old_scales)
+          raise Context::Error.new(Llama.format_error("Failed to clear LoRA adapters", result, nil))
+        end
+
+        old_adapters.each { |adapter| adapter.unregister_attachment(self) }
       end
-
-      old_adapters.each { |adapter| adapter.unregister_attachment(self) }
     end
 
     # Applies a control vector to the LoRA adapter
@@ -1202,6 +1253,7 @@ module Llama
 
     @handle : LibLlama::LlamaContext*
     @model : Model
+    @registered_context : Bool
 
     # :nodoc:
     def clone

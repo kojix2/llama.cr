@@ -21,7 +21,10 @@ module Llama
       if cancelled?
         return result("", Array(Token).new, FinishReason::Cancelled, nil, prompt_tokens.size, 0.0, 0.0)
       end
-      @context.generator_prefill(prompt_tokens)
+      unless @context.generator_prefill(prompt_tokens, @options.cancellation)
+        prompt_seconds = (Time.instant - prompt_started).total_seconds
+        return result("", Array(Token).new, FinishReason::Cancelled, nil, prompt_tokens.size, prompt_seconds, 0.0)
+      end
       prompt_seconds = (Time.instant - prompt_started).total_seconds
 
       chain = @options.sampling.build(@model.vocab)
@@ -32,6 +35,7 @@ module Llama
       finish_reason = FinishReason::Length
       position = prompt_tokens.size
       generation_started = Time.instant
+      emission_index = 0
 
       @options.max_tokens.times do |index|
         if cancelled?
@@ -49,7 +53,7 @@ module Llama
         # Match llama_detokenize's historical handling of the first generated
         # piece while retaining byte-safe streaming for subsequent pieces.
         piece = @vocab.token_to_piece_bytes(token, sampled.size == 1 ? 1 : 0)
-        emit(detector.push(decoder.push(piece)), token, index, output, &block)
+        emission_index = emit(detector.push(decoder.push(piece)), token, emission_index, output, &block)
         if detector.matched
           finish_reason = FinishReason::StopSequence
           break
@@ -66,9 +70,9 @@ module Llama
       end
 
       tail = detector.push(decoder.finish)
-      emit(tail, sampled.last? || TOKEN_NULL, sampled.size, output, &block)
+      emission_index = emit(tail, sampled.last? || TOKEN_NULL, emission_index, output, &block)
       finish_reason = FinishReason::StopSequence if detector.matched
-      emit(detector.finish, sampled.last? || TOKEN_NULL, sampled.size, output, &block)
+      emit(detector.finish, sampled.last? || TOKEN_NULL, emission_index, output, &block)
       generation_seconds = (Time.instant - generation_started).total_seconds
 
       result(output.to_s, sampled, finish_reason, detector.matched, prompt_tokens.size, prompt_seconds, generation_seconds)
@@ -76,10 +80,11 @@ module Llama
       chain.try(&.close)
     end
 
-    private def emit(text : String, token : Token, index : Int32, output : IO::Memory, &block : GenerationChunk ->) : Nil
-      return if text.empty?
+    private def emit(text : String, token : Token, index : Int32, output : IO::Memory, &block : GenerationChunk ->) : Int32
+      return index if text.empty?
       output << text
       yield GenerationChunk.new(text, token, index)
+      index + 1
     end
 
     private def cancelled? : Bool
