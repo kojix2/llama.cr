@@ -168,6 +168,19 @@ puts result.usage.tokens_per_second
 `Llama.generate` continues to return a `String`. `Llama.complete` returns a
 `Generation`; both use the same checked generation path.
 
+Typed model and context construction policy can be supplied without managing
+the resources manually:
+
+```crystal
+result = Llama.complete(
+  "/path/to/model.gguf",
+  "Once upon a time",
+  options,
+  model_options: Llama::ModelOptions.new(gpu_layers: -1),
+  context_options: Llama::ContextOptions.new(context_size: 4096_u32)
+)
+```
+
 ### Streaming and Stateful Sessions
 
 Use a `Session` to reuse one context. Chunks contain valid UTF-8 and stop text is
@@ -187,8 +200,19 @@ end
 
 `Session` keeps a canonical transcript between calls. Call `reset` to start a
 new sequence. `snapshot`, `restore`, `save`, and `load` validate the model and
-native version before changing that transcript. Only one generation may use a
-session at a time.
+native version before changing that transcript. Snapshots store canonical text,
+not native KV-cache bytes. `transcript_token_count` counts logical transcript
+tokens; the compatibility method `used_tokens` is also a tokenizer result and
+does not report native KV occupancy. Only one generation may use a session at a
+time.
+
+A streamed `GenerationChunk` is a text-delivery unit. UTF-8 buffering and stop
+prefix detection mean it need not correspond one-to-one with a sampled token.
+Its `token` is the most recent token that triggered delivery and its `index` is
+a monotonic emission index, including final flushes. `Usage` timing is
+end-to-end wall time and therefore includes work performed by the streaming
+block. Cooperative cancellation is checked between prompt batches and generated
+tokens, so latency is bounded by one native call rather than being instantaneous.
 
 ### Backend Capabilities and GPU Offloading
 
@@ -333,7 +357,9 @@ end
 Chat history is committed transactionally. A cancelled turn is not committed
 unless `commit_partial: true` is requested. b10809 recognizes predefined chat
 template shapes; it is not a general Jinja evaluator. Pass a recognized template
-explicitly when the model does not provide one.
+explicitly when the model does not provide one. `Chat#clear` removes every
+message, including the initial system message. A second turn, `clear`, or `close`
+during an active turn raises `BusyError`.
 
 ### Embeddings
 
@@ -395,7 +421,12 @@ See [kojix2.github.io/llama.cr](https://kojix2.github.io/llama.cr) for full API 
   `Sampling::Plan` add structured results and managed workflows.
 - Advanced API: `Context`, `Batch`, `Memory`, `State`, and manual samplers expose
   native concepts. Borrowed views are valid only while their owner remains open;
-  copy pointer-backed data before another native call.
+  copy pointer-backed data before another native call. Callers composing these
+  low-level operations are responsible for synchronization; the high-level
+  `BusyError` operation guard does not make arbitrary raw call sequences atomic.
+  In particular, logits and embedding pointers may be invalidated by the next
+  `decode`/`encode`, and every borrowed model/context view becomes invalid when
+  its owning context or model is closed.
 - Raw API: `require "llama/raw"` exposes `Llama::LibLlama`. Its structs, symbols,
   and pointer lifetimes track the pinned upstream build and may change between
   shard releases.

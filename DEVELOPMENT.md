@@ -100,6 +100,10 @@ This document outlines the development guidelines for the llama.cr project, prim
   callbacks from unmanaged worker threads.
 - Do not add a general C adapter or a second injectable backend abstraction
   without a concrete ABI, callback-threading, or multi-version requirement.
+- High-level generation, embedding, chat, and LoRA mutation reject overlapping
+  operations with `BusyError`. Advanced callers composing `decode`, `memory`,
+  raw pointers, or native callbacks remain responsible for their own
+  synchronization.
 
 ## llama.cpp Version Compatibility
 
@@ -142,7 +146,7 @@ Document which version of llama.cpp the library is compatible with. When updatin
   - `examples/embedding.cr`
   - `examples/tokenize.cr`
   - `examples/server.cr` (build only; dependencies are in `examples/shard.yml`)
-10. Commit changes and create a pull request
+11. Commit changes and create a pull request
 
 ### Standard Linker/Runtime Environment
 
