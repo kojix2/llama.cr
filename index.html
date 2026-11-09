@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Crystal Docs 1.20.3">
+<meta name="generator" content="Crystal Docs 1.21.0">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="llama">
 
@@ -525,8 +525,8 @@
 <img src="https://img.shields.io/badge/PURE-VIBE_CODING-magenta" alt="Static Badge" /></p>
 <p>Crystal bindings for <a href="https://github.com/ggml-org/llama.cpp">llama.cpp</a>, a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.</p>
 <p>The version in <code>shard.yml</code> corresponds to the compatible llama.cpp build number.
-For example, shard version <code>0.10809.1</code> targets llama.cpp build <code>b10809</code>, which
-is the stable release <a href="https://github.com/ggml-org/llama.cpp/releases/tag/v0.4.0">v0.4.0</a>.</p>
+For example, shard version <code>0.12110.0</code> targets llama.cpp build <code>b12110</code>, which
+is the stable release <a href="https://github.com/ggml-org/llama.cpp/releases/tag/v0.9.0">v0.9.0</a>.</p>
 <p>This project is under active development and may change rapidly.</p>
 <h2><a id="features" class="anchor" href="#features">
   <svg class="octicon-link" aria-hidden="true">
@@ -750,6 +750,24 @@ CPU-only llama.cpp build. The defaults are <code>n_gpu_layers: 0</code>,
   <span class="s">&quot;Once upon a time&quot;</span>,
   lazy_mode: <span class="t">Llama</span><span class="t">::</span><span class="t">LazyMode</span><span class="t">::</span><span class="t">ON</span>
 )</code></pre>
+<h3><a id="context-controls" class="anchor" href="#context-controls">
+  <svg class="octicon-link" aria-hidden="true">
+    <use href="#octicon-link"/>
+  </svg>
+</a>Context Controls</h3>
+<p><code>ContextOptions#moe_cache_size</code> sets the experimental device cache size in bytes
+for MoE experts kept in host memory. It defaults to <code>0</code> (disabled) and is
+forwarded by completion, session, chat, and embedder factories:</p>
+<pre><code class="language-crystal">context_options <span class="o">=</span> <span class="t">Llama</span><span class="t">::</span><span class="t">ContextOptions</span>.new(moe_cache_size: <span class="n">512_u64</span> <span class="o">*</span> <span class="n">1024</span> <span class="o">*</span> <span class="n">1024</span>)</code></pre>
+<p><code>Context#causal_attention?</code> reads the active attention mode. Set
+<code>context.causal_attention = false</code> between operations for non-causal attention;
+each input batch must then fit in a single micro-batch. Pooled embedding
+contexts return embeddings without logits in v0.9.0.</p>
+<p>The experimental extended batch API (<code>llama_batch_ext_*</code>, <code>llama_process</code>) is
+available through <code>Llama::LibLlama</code>. Keep its originating context alive, set
+positions and output flags before processing, and release the batch with
+<code>llama_batch_ext_free</code>. The existing <code>Batch</code>, generation, and embedding helpers
+continue to use the supported <code>llama_batch</code> API.</p>
 <h3><a id="resource-lifetime" class="anchor" href="#resource-lifetime">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -785,9 +803,11 @@ error, because their finalizers may still need the llama.cpp backend.</p>
     <use href="#octicon-link"/>
   </svg>
 </a>Saved State Compatibility</h3>
-<p>llama.cpp b10809 updates the session and sequence-state file formats. Session
-or state files written by b10566 are not guaranteed to load with this version;
-recreate them after upgrading.</p>
+<p>llama.cpp v0.9.0 (b12110) uses session format 11 and sequence-state format 4.
+Native state files from v0.4.0 (b10809), which used formats 10 and 3, are not
+compatible; recreate them after upgrading. Portable <code>Session</code> snapshots also
+validate the wrapper and native versions before restoring.</p>
+<p>See <a href="assets/UPSTREAM_CHANGES.md">the upstream API changes</a> for the migration details.</p>
 <h3><a id="advanced-sampling" class="anchor" href="#advanced-sampling">
   <svg class="octicon-link" aria-hidden="true">
     <use href="#octicon-link"/>
@@ -824,7 +844,7 @@ recreate them after upgrading.</p>
   <span class="k">end</span>
 <span class="k">end</span></code></pre>
 <p>Chat history is committed transactionally. A cancelled turn is not committed
-unless <code>commit_partial: true</code> is requested. b10809 recognizes predefined chat
+unless <code>commit_partial: true</code> is requested. b12110 recognizes predefined chat
 template shapes; it is not a general Jinja evaluator. Pass a recognized template
 explicitly when the model does not provide one. <code>Chat#clear</code> removes every
 message, including the initial system message. A second turn, <code>clear</code>, or <code>close</code>
@@ -913,10 +933,10 @@ shard releases.</li>
 <p><code>Llama.check_compatibility!</code> can explicitly check the version reported by the
 library. It is not enforced during initialization, allowing other llama.cpp
 versions to be tested at the user's own risk. Stable packages of the supported
-release report <code>0.4.0</code>, while the official <code>b10809</code> release archives report
-<code>0.4.0-dev</code>. The C API does not report the exact build number, so package pins
+release report <code>0.9.0</code>, while the official <code>b12110</code> release archives report
+<code>0.9.0-dev</code>. The C API does not report the exact build number, so package pins
 and ABI checks are still needed when strict compatibility is required.</p>
-<p>Custom <code>Llama.log_set</code> callbacks are experimental. On the pinned b10809 build,
+<p>Custom <code>Llama.log_set</code> callbacks are experimental. On the pinned b12110 build,
 model loading and multithreaded decode callbacks were observed on the calling
 thread. Callback exceptions are contained at the C boundary and can be retrieved
 with <code>Llama.take_log_callback_error</code>.</p>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Crystal Docs 1.20.3">
+<meta name="generator" content="Crystal Docs 1.21.0">
 <meta name="crystal_docs.project_version" content="main">
 <meta name="crystal_docs.project_name" content="llama">
 
@@ -553,7 +553,7 @@
   </h2>
   
     
-      <a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L39" target="_blank">
+      <a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L39" target="_blank">
         llama/options.cr
       </a>
     
@@ -576,7 +576,7 @@
   <ul class="list-summary">
     
       <li class="entry-summary">
-        <a href="#new%28context_size%3AUInt32%3D0_u32%2Cbatch_size%3AUInt32%3D512_u32%2Cmicro_batch_size%3AUInt32%3D512_u32%2Cthreads%3AInt32%7CNil%3Dnil%2Cbatch_threads%3AInt32%7CNil%3Dnil%2Cembeddings%3ABool%3Dfalse%2Coffload_kqv%3ABool%3Dfalse%2Cop_offload%3ABool%3Dfalse%29-class-method" class="signature"><strong>.new</strong>(context_size : UInt32 = <span class="n">0_u32</span>, batch_size : UInt32 = <span class="n">512_u32</span>, micro_batch_size : UInt32 = <span class="n">512_u32</span>, threads : Int32 | Nil = <span class="n">nil</span>, batch_threads : Int32 | Nil = <span class="n">nil</span>, embeddings : Bool = <span class="n">false</span>, offload_kqv : Bool = <span class="n">false</span>, op_offload : Bool = <span class="n">false</span>)</a>
+        <a href="#new%28context_size%3AUInt32%3D0_u32%2Cbatch_size%3AUInt32%3D512_u32%2Cmicro_batch_size%3AUInt32%3D512_u32%2Cthreads%3AInt32%7CNil%3Dnil%2Cbatch_threads%3AInt32%7CNil%3Dnil%2Cembeddings%3ABool%3Dfalse%2Coffload_kqv%3ABool%3Dfalse%2Cop_offload%3ABool%3Dfalse%2Cmoe_cache_size%3AUInt64%3D0_u64%29-class-method" class="signature"><strong>.new</strong>(context_size : UInt32 = <span class="n">0_u32</span>, batch_size : UInt32 = <span class="n">512_u32</span>, micro_batch_size : UInt32 = <span class="n">512_u32</span>, threads : Int32 | Nil = <span class="n">nil</span>, batch_threads : Int32 | Nil = <span class="n">nil</span>, embeddings : Bool = <span class="n">false</span>, offload_kqv : Bool = <span class="n">false</span>, op_offload : Bool = <span class="n">false</span>, moe_cache_size : UInt64 = <span class="n">0_u64</span>)</a>
         
       </li>
     
@@ -620,6 +620,11 @@
     
       <li class="entry-summary">
         <a href="#micro_batch_size%3AUInt32-instance-method" class="signature"><strong>#micro_batch_size</strong> : UInt32</a>
+        
+      </li>
+    
+      <li class="entry-summary">
+        <a href="#moe_cache_size%3AUInt64-instance-method" class="signature"><strong>#moe_cache_size</strong> : UInt64</a>
         
       </li>
     
@@ -682,18 +687,18 @@
     Constructor Detail
   </h2>
   
-    <div class="entry-detail" id="new(context_size:UInt32=0_u32,batch_size:UInt32=512_u32,micro_batch_size:UInt32=512_u32,threads:Int32|Nil=nil,batch_threads:Int32|Nil=nil,embeddings:Bool=false,offload_kqv:Bool=false,op_offload:Bool=false)-class-method">
+    <div class="entry-detail" id="new(context_size:UInt32=0_u32,batch_size:UInt32=512_u32,micro_batch_size:UInt32=512_u32,threads:Int32|Nil=nil,batch_threads:Int32|Nil=nil,embeddings:Bool=false,offload_kqv:Bool=false,op_offload:Bool=false,moe_cache_size:UInt64=0_u64)-class-method">
       <div class="signature">
         
-        def self.<strong>new</strong>(context_size : UInt32 = <span class="n">0_u32</span>, batch_size : UInt32 = <span class="n">512_u32</span>, micro_batch_size : UInt32 = <span class="n">512_u32</span>, threads : Int32 | Nil = <span class="n">nil</span>, batch_threads : Int32 | Nil = <span class="n">nil</span>, embeddings : Bool = <span class="n">false</span>, offload_kqv : Bool = <span class="n">false</span>, op_offload : Bool = <span class="n">false</span>)
+        def self.<strong>new</strong>(context_size : UInt32 = <span class="n">0_u32</span>, batch_size : UInt32 = <span class="n">512_u32</span>, micro_batch_size : UInt32 = <span class="n">512_u32</span>, threads : Int32 | Nil = <span class="n">nil</span>, batch_threads : Int32 | Nil = <span class="n">nil</span>, embeddings : Bool = <span class="n">false</span>, offload_kqv : Bool = <span class="n">false</span>, op_offload : Bool = <span class="n">false</span>, moe_cache_size : UInt64 = <span class="n">0_u64</span>)
 
-        <a class="method-permalink" href="#new%28context_size%3AUInt32%3D0_u32%2Cbatch_size%3AUInt32%3D512_u32%2Cmicro_batch_size%3AUInt32%3D512_u32%2Cthreads%3AInt32%7CNil%3Dnil%2Cbatch_threads%3AInt32%7CNil%3Dnil%2Cembeddings%3ABool%3Dfalse%2Coffload_kqv%3ABool%3Dfalse%2Cop_offload%3ABool%3Dfalse%29-class-method">#</a>
+        <a class="method-permalink" href="#new%28context_size%3AUInt32%3D0_u32%2Cbatch_size%3AUInt32%3D512_u32%2Cmicro_batch_size%3AUInt32%3D512_u32%2Cthreads%3AInt32%7CNil%3Dnil%2Cbatch_threads%3AInt32%7CNil%3Dnil%2Cembeddings%3ABool%3Dfalse%2Coffload_kqv%3ABool%3Dfalse%2Cop_offload%3ABool%3Dfalse%2Cmoe_cache_size%3AUInt64%3D0_u64%29-class-method">#</a>
       </div>
       
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L49" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L50" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -725,7 +730,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L41" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L41" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -741,7 +746,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L44" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L44" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -757,7 +762,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L40" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L40" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -773,7 +778,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L45" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L45" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -789,7 +794,23 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L42" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L42" target="_blank">View source</a>]
+        
+      </div>
+    </div>
+  
+    <div class="entry-detail" id="moe_cache_size:UInt64-instance-method">
+      <div class="signature">
+        
+        def <strong>moe_cache_size</strong> : UInt64
+
+        <a class="method-permalink" href="#moe_cache_size%3AUInt64-instance-method">#</a>
+      </div>
+      
+      <br/>
+      <div>
+        
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L48" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -805,7 +826,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L46" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L46" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -821,7 +842,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L47" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L47" target="_blank">View source</a>]
         
       </div>
     </div>
@@ -837,7 +858,7 @@
       <br/>
       <div>
         
-          [<a href="https://github.com/kojix2/llama.cr/blob/86b0c7590f0bc754dd3bf89b387d45f8f050c150/src/llama/options.cr#L43" target="_blank">View source</a>]
+          [<a href="https://github.com/kojix2/llama.cr/blob/a2692dbd58d64df7edeb8cfb63e91baf46a46781/src/llama/options.cr#L43" target="_blank">View source</a>]
         
       </div>
     </div>
