@@ -93,7 +93,7 @@ This document outlines the development guidelines for the llama.cr project, prim
   sentence across batches for mean, CLS, last, or rank pooling; that changes
   pooling semantics. Token-level `Pooling::None` remains an advanced `Context`
   use case.
-- b10809 chat templates are recognized template shapes, not arbitrary Jinja.
+- b12110 chat templates are recognized template shapes, not arbitrary Jinja.
   Unsupported shapes must raise `TemplateError`.
 - Custom native log callbacks are experimental. Exceptions must never cross the
   C boundary. Add a C-owned queue only if a supported runtime is shown to invoke
@@ -109,12 +109,12 @@ This document outlines the development guidelines for the llama.cr project, prim
 
 ### Version Mapping Rules
 
-- `shard.yml` version must use `0.<build>.<patch>` format (example: `0.10809.1`).
+- `shard.yml` version must use `0.<build>.<patch>` format (example: `0.12110.0`).
 - Increment `<patch>` for wrapper fixes and additive APIs that retain the same
   llama.cpp build. Reset it to `0` when `<build>` changes.
-- Release tags must match the shard version with a `v` prefix (example: `v0.10809.1`).
+- Release tags must match the shard version with a `v` prefix (example: `v0.12110.0`).
 - When referenced in documentation or scripts, the build is prefixed with `b` (example: `b<build>`).
-- llama.cpp also publishes stable semver tags (`vX.Y.Z`) that point to a specific build (example: `v0.4.0` points to `b10809`). Mention the mapping when the targeted build is such a stable release.
+- llama.cpp also publishes stable semver tags (`vX.Y.Z`) that point to a specific build (example: `v0.9.0` points to `b12110`). Mention the mapping when the targeted build is such a stable release.
 - Runtime compatibility checks must remain opt-in. Users may load other
   llama.cpp versions to evaluate their actual compatibility; do not reject them
   during normal initialization solely because their version string differs.

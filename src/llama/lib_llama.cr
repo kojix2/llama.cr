@@ -9,10 +9,11 @@ module Llama
     LLAMA_FILE_MAGIC_GGSN              = 0x6767736e_u32 # 'ggsn'
     LLAMA_FILE_MAGIC_GGSQ              = 0x67677371_u32 # 'ggsq'
     LLAMA_SESSION_MAGIC                = LLAMA_FILE_MAGIC_GGSN
-    LLAMA_SESSION_VERSION              = 10
+    LLAMA_SESSION_VERSION              = 11
     LLAMA_STATE_SEQ_MAGIC              = LLAMA_FILE_MAGIC_GGSQ
-    LLAMA_STATE_SEQ_VERSION            =     3
+    LLAMA_STATE_SEQ_VERSION            =     4
     LLAMA_STATE_SEQ_FLAGS_PARTIAL_ONLY = 1_u32
+    LLAMA_DRY_MAX_SEQ_BREAKERS         =    64
 
     alias LlamaToken = Int32
     alias LlamaPos = Int32
@@ -23,6 +24,9 @@ module Llama
     type LlamaContext = Void*
     type LlamaSampler = Void*
     type LlamaAdapterLora = Void*
+    type LlamaBatchExt = Void*
+    # Opaque C FILE, distinct from a Crystal IO or file descriptor.
+    type CFile = Void
 
     enum LlamaVocabType
       NONE   = 0
@@ -32,6 +36,8 @@ module Llama
       UGM    = 4
       RWKV   = 5
       PLAMO2 = 6
+      TEST   = 7
+      PLAMO3 = 8
     end
 
     struct LlamaModelQuantizeParams
@@ -118,7 +124,7 @@ module Llama
 
     struct LlamaModelTensorBuftOverride
       pattern : LibC::Char*
-      buft : Int32
+      buft : Void*
     end
 
     struct LlamaLogitBias
@@ -164,6 +170,7 @@ module Llama
       MOSTLY_NVFP4     =   39
       MOSTLY_Q1_0      =   40
       MOSTLY_Q2_0      =   41
+      MOSTLY_F8_E4M3   =   42
       GUESSED          = 1024
     end
 
@@ -209,6 +216,11 @@ module Llama
     enum LlamaContextType
       DEFAULT = 0
       MTP     = 1
+    end
+
+    enum LlamaProcessType
+      ENCODE = 0
+      DECODE = 1
     end
 
     enum LlamaSplitMode
@@ -291,6 +303,12 @@ module Llama
       logits : Int8*
     end
 
+    struct LlamaEmbd
+      data : Float32*
+      n_rows : LibC::SizeT
+      n_embd : LibC::SizeT
+    end
+
     struct LlamaChatMessage
       role : LibC::Char*
       content : LibC::Char*
@@ -298,6 +316,7 @@ module Llama
 
     # Adapter Functions
     fun llama_adapter_lora_init(model : LlamaModel*, path_lora : LibC::Char*) : LlamaAdapterLora*
+    fun llama_adapter_lora_init_from_file_ptr(model : LlamaModel*, file : CFile*) : LlamaAdapterLora*
     # Adapter metadata accessors
     fun llama_adapter_meta_val_str(adapter : LlamaAdapterLora*, key : LibC::Char*, buf : LibC::Char*, buf_size : LibC::SizeT) : Int32
     fun llama_adapter_meta_count(adapter : LlamaAdapterLora*) : Int32
@@ -378,6 +397,7 @@ module Llama
       cb_eval_user_data : Void*
       type_k : Int32
       type_v : Int32
+      moe_cache_size : LibC::SizeT
       abort_callback : Void*
       abort_callback_data : Void*
       embeddings : Bool
@@ -428,6 +448,7 @@ module Llama
 
     # Model Functions
     fun llama_model_load_from_file(path_model : LibC::Char*, params : LlamaModelParams) : LlamaModel*
+    fun llama_model_load_from_file_ptr(file : CFile*, params : LlamaModelParams) : LlamaModel*
     fun llama_model_load_from_splits(paths : LibC::Char**, n_paths : LibC::SizeT, params : LlamaModelParams) : LlamaModel*
     fun llama_model_save_to_file(model : LlamaModel*, path_model : LibC::Char*) : Void
     fun llama_model_free(model : LlamaModel*) : Void
@@ -500,6 +521,19 @@ module Llama
     fun llama_n_seq_max(ctx : LlamaContext*) : UInt32
     fun llama_encode(ctx : LlamaContext*, batch : LlamaBatch) : Int32
     fun llama_decode(ctx : LlamaContext*, batch : LlamaBatch) : Int32
+    fun llama_batch_ext_init(ctx : LlamaContext*) : LlamaBatchExt*
+    fun llama_batch_ext_free(batch : LlamaBatchExt*) : Void
+    fun llama_batch_ext_clear(batch : LlamaBatchExt*) : Void
+    fun llama_batch_ext_add(batch : LlamaBatchExt*, seq_id : LlamaSeqId) : Int32
+    fun llama_batch_ext_add_token(batch : LlamaBatchExt*, seq_id : LlamaSeqId, id : LlamaToken) : Int32
+    fun llama_batch_ext_add_embd(batch : LlamaBatchExt*, seq_id : LlamaSeqId, embd : LlamaEmbd) : Int32
+    fun llama_batch_ext_add_seq(batch : LlamaBatchExt*, idx : Int32, seq_id : LlamaSeqId) : Bool
+    fun llama_batch_ext_set_embd_token(batch : LlamaBatchExt*, idx : Int32, embd : LlamaEmbd) : Bool
+    fun llama_batch_ext_set_embd_state(batch : LlamaBatchExt*, idx : Int32, embd : LlamaEmbd) : Bool
+    fun llama_batch_ext_set_output_embd(batch : LlamaBatchExt*, idx : Int32, value : Bool) : Bool
+    fun llama_batch_ext_set_output_logits(batch : LlamaBatchExt*, idx : Int32, value : Bool) : Bool
+    fun llama_batch_ext_set_pos(batch : LlamaBatchExt*, idx : Int32, pos : LlamaPos*) : Bool
+    fun llama_process(ctx : LlamaContext*, type : LlamaProcessType, batch : LlamaBatchExt*) : Int32
     fun llama_get_logits(ctx : LlamaContext*) : Float32*
     fun llama_get_logits_ith(ctx : LlamaContext*, i : Int32) : Float32*
     fun llama_set_n_threads(ctx : LlamaContext*, n_threads : Int32, n_threads_batch : Int32) : Void
@@ -508,6 +542,7 @@ module Llama
     fun llama_set_embeddings(ctx : LlamaContext*, embeddings : Bool) : Void
     fun llama_get_embeddings(ctx : LlamaContext*) : Float32*
     fun llama_set_causal_attn(ctx : LlamaContext*, causal_attn : Bool) : Void
+    fun llama_get_causal_attn(ctx : LlamaContext*) : Bool
     fun llama_set_warmup(ctx : LlamaContext*, warmup : Bool) : Void
     fun llama_set_abort_callback(ctx : LlamaContext*, abort_callback : Void*, abort_callback_data : Void*) : Void
     fun llama_get_embeddings_ith(ctx : LlamaContext*, i : Int32) : Float32*
@@ -623,6 +658,8 @@ module Llama
       n_p_eval : Int32
       n_eval : Int32
       n_reused : Int32
+      n_reallocs_same : Int32
+      n_reallocs_diff : Int32
     end
 
     struct LlamaPerfSamplerData

@@ -13,9 +13,10 @@ module Llama
     # - n_batch: Logical maximum batch size that can be submitted to llama_decode (default: 512).
     # - n_threads: Number of threads to use for generation (default: 0). If 0, uses the number of hardware threads.
     # - n_threads_batch: Number of threads to use for batch processing (default: 0). If 0, uses the number of hardware threads.
-    # - embeddings: Extract embeddings (together with logits) (default: false). If true, extract embeddings (together with logits).
+    # - embeddings: Extract embeddings (default: false). Pooled embeddings suppress logits.
     # - offload_kqv: Whether to offload the KQV ops (including the KV cache) to GPU (default: false). Requires a GPU build of llama.cpp.
     # - op_offload: Whether to offload host tensor operations to a device (default: false). Requires a supported backend.
+    # - moe_cache_size: Device cache size in bytes for MoE experts kept in host memory (default: 0, disabled). Experimental.
     #
     # Raises:
     # - Llama::Context::Error if the context cannot be created.
@@ -31,6 +32,7 @@ module Llama
       n_ubatch : UInt32 = 512,     # The physical maximum batch size
       n_seq_max : UInt32 = 1,      # Maximum number of independent sequences
       pooling_type : LibLlama::LlamaPoolingType = LibLlama::LlamaPoolingType::UNSPECIFIED,
+      moe_cache_size : UInt64 = 0_u64,
     )
       @operation_mutex = Mutex.new
       @running = false
@@ -59,6 +61,7 @@ module Llama
         params.pooling_type = pooling_type
         params.offload_kqv = offload_kqv
         params.op_offload = op_offload
+        params.moe_cache_size = moe_cache_size
         params.swa_full = true
         @handle = LibLlama.llama_init_from_model(child_lease.not_nil!.handle, params)
 
@@ -66,7 +69,7 @@ module Llama
           error_msg = Llama.format_error(
             "Failed to create context",
             -4, # Context creation error
-            "n_ctx: #{n_ctx}, n_batch: #{n_batch}, n_threads: #{n_threads}, n_threads_batch: #{n_threads_batch}, embeddings: #{embeddings}, offload_kqv: #{offload_kqv}, op_offload: #{op_offload}"
+            "n_ctx: #{n_ctx}, n_batch: #{n_batch}, n_threads: #{n_threads}, n_threads_batch: #{n_threads_batch}, embeddings: #{embeddings}, offload_kqv: #{offload_kqv}, op_offload: #{op_offload}, moe_cache_size: #{moe_cache_size}"
           )
           raise Context::Error.new(error_msg)
         end
@@ -101,7 +104,8 @@ module Llama
         embeddings: options.embeddings,
         offload_kqv: options.offload_kqv,
         op_offload: options.op_offload,
-        n_ubatch: options.micro_batch_size
+        n_ubatch: options.micro_batch_size,
+        moe_cache_size: options.moe_cache_size
       )
     end
 
@@ -169,6 +173,20 @@ module Llama
     # Returns the number of threads used for batch processing
     def n_threads_batch : Int32
       LibLlama.llama_n_threads_batch(unsafe_handle!)
+    end
+
+    # Returns whether this context currently attends only to past tokens.
+    def causal_attention? : Bool
+      LibLlama.llama_get_causal_attn(unsafe_handle!)
+    end
+
+    # Changes causal attention between operations. Non-causal attention requires
+    # each input batch to fit in a single micro-batch.
+    def causal_attention=(enabled : Bool) : Bool
+      with_operation do
+        LibLlama.llama_set_causal_attn(unsafe_handle!, enabled)
+      end
+      enabled
     end
 
     # Returns the state manager for this context
@@ -667,6 +685,9 @@ module Llama
 
     private def validate_batch_for_decode!(batch : LibLlama::LlamaBatch, batch_size : Int32, context_size : Int32) : Nil
       validate_batch_token_count!(batch, batch_size)
+      if !causal_attention? && batch.n_tokens > n_ubatch
+        raise Batch::Error.new("Non-causal attention requires the batch to fit in one micro-batch (#{batch.n_tokens} tokens > #{n_ubatch})")
+      end
       validate_batch_positions!(batch, context_size)
       validate_batch_sequence_ids!(batch)
       validate_batch_logits!(batch)
@@ -1006,6 +1027,12 @@ module Llama
     # It's useful for debugging and performance analysis.
     def print_perf
       LibLlama.llama_perf_context_print(unsafe_handle!)
+    end
+
+    # Copies native diagnostic counters, including graph reallocations.
+    # Use Generation#usage for application-level timing.
+    def perf : LibLlama::LlamaPerfContextData
+      LibLlama.llama_perf_context(unsafe_handle!)
     end
 
     # Reset performance counters for this context

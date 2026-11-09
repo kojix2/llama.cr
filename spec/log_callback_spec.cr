@@ -1,7 +1,7 @@
 require "./spec_helper"
 
 describe "Llama log callback" do
-  it "stays on the caller thread in b10809 and contains callback exceptions" do
+  it "stays on the caller thread in b12110 and contains callback exceptions" do
     callback_threads = [] of UInt64
     mutex = Mutex.new
     caller_thread = Thread.current.object_id

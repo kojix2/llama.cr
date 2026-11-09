@@ -18,7 +18,7 @@ jobs:
       SMALL_MODEL_SHA256: 6151b1929d7f5aa3385d9ddef3393e55587c0a55de661562322bc51dfda93a04
       LORA_MODEL_SHA256: 9fecc3b3cd76bba89d504f29b616eedf7da85b96540e490ca5824d3f7d2776a0
       TINY_ADAPTER_SHA256: 6e1f26287818774005fdc97ea9fb116c89740cf25dd9775e142432791a048bac
-      LLAMA_COMMIT: 5266f24da75dc449bd56cbed7addb9c8e4a6a73e
+      LLAMA_COMMIT: cd959bae99ff4bed22bef2604f45241c09bbb8c8
       ASAN_OPTIONS: detect_leaks=0:strict_string_checks=1
 
     steps:
@@ -66,7 +66,7 @@ jobs:
       - name: Exercise native lifetime and embedding boundaries
         run: |
           MODEL_PATH="$SMALL_MODEL_PATH" crystal spec --link-flags '-fsanitize=address' \
-            spec/batch_spec.cr spec/embedder_spec.cr spec/generator_spec.cr \
+            spec/batch_spec.cr spec/extended_batch_spec.cr spec/embedder_spec.cr spec/generator_spec.cr \
             spec/sampling_plan_integration_spec.cr
           MODEL_PATH="$LORA_MODEL_PATH" crystal spec --link-flags '-fsanitize=address' \
-            spec/context_lora_spec.cr
+            spec/adapter_lora_spec.cr spec/context_lora_spec.cr

@@ -8,6 +8,7 @@ C_PROBE = <<-'C'
 
   #define PRINT_SIZE(type) printf(#type ".sizeof=%zu\n", sizeof(struct type))
   #define PRINT_OFFSET(type, field) printf(#type "." #field "=%zu\n", offsetof(struct type, field))
+  #define PRINT_FIELD_SIZE(type, field) printf(#type "." #field ".sizeof=%zu\n", sizeof(((struct type *) 0)->field))
 
   int main(void) {
       PRINT_SIZE(llama_model_quantize_params);
@@ -73,6 +74,8 @@ C_PROBE = <<-'C'
       PRINT_OFFSET(llama_context_params, cb_eval_user_data);
       PRINT_OFFSET(llama_context_params, type_k);
       PRINT_OFFSET(llama_context_params, type_v);
+      PRINT_OFFSET(llama_context_params, moe_cache_size);
+      PRINT_FIELD_SIZE(llama_context_params, moe_cache_size);
       PRINT_OFFSET(llama_context_params, abort_callback);
       PRINT_OFFSET(llama_context_params, abort_callback_data);
       PRINT_OFFSET(llama_context_params, embeddings);
@@ -84,6 +87,24 @@ C_PROBE = <<-'C'
       PRINT_OFFSET(llama_context_params, samplers);
       PRINT_OFFSET(llama_context_params, n_samplers);
       PRINT_OFFSET(llama_context_params, ctx_other);
+      PRINT_SIZE(llama_embd);
+      PRINT_OFFSET(llama_embd, data);
+      PRINT_OFFSET(llama_embd, n_rows);
+      PRINT_OFFSET(llama_embd, n_embd);
+      PRINT_SIZE(llama_perf_context_data);
+      PRINT_OFFSET(llama_perf_context_data, t_start_ms);
+      PRINT_OFFSET(llama_perf_context_data, t_load_ms);
+      PRINT_OFFSET(llama_perf_context_data, t_p_eval_ms);
+      PRINT_OFFSET(llama_perf_context_data, t_eval_ms);
+      PRINT_OFFSET(llama_perf_context_data, n_p_eval);
+      PRINT_OFFSET(llama_perf_context_data, n_eval);
+      PRINT_OFFSET(llama_perf_context_data, n_reused);
+      PRINT_OFFSET(llama_perf_context_data, n_reallocs_same);
+      PRINT_OFFSET(llama_perf_context_data, n_reallocs_diff);
+      PRINT_SIZE(llama_model_tensor_buft_override);
+      PRINT_OFFSET(llama_model_tensor_buft_override, pattern);
+      PRINT_OFFSET(llama_model_tensor_buft_override, buft);
+      PRINT_FIELD_SIZE(llama_model_tensor_buft_override, buft);
       return 0;
   }
   C
@@ -151,6 +172,8 @@ def crystal_layout : Hash(String, Int32)
     "llama_context_params.cb_eval_user_data"             => offsetof(Llama::LibLlama::LlamaContextParams, @cb_eval_user_data),
     "llama_context_params.type_k"                        => offsetof(Llama::LibLlama::LlamaContextParams, @type_k),
     "llama_context_params.type_v"                        => offsetof(Llama::LibLlama::LlamaContextParams, @type_v),
+    "llama_context_params.moe_cache_size"                => offsetof(Llama::LibLlama::LlamaContextParams, @moe_cache_size),
+    "llama_context_params.moe_cache_size.sizeof"         => sizeof(typeof(Llama::LibLlama::LlamaContextParams.new.moe_cache_size)),
     "llama_context_params.abort_callback"                => offsetof(Llama::LibLlama::LlamaContextParams, @abort_callback),
     "llama_context_params.abort_callback_data"           => offsetof(Llama::LibLlama::LlamaContextParams, @abort_callback_data),
     "llama_context_params.embeddings"                    => offsetof(Llama::LibLlama::LlamaContextParams, @embeddings),
@@ -162,6 +185,24 @@ def crystal_layout : Hash(String, Int32)
     "llama_context_params.samplers"                      => offsetof(Llama::LibLlama::LlamaContextParams, @samplers),
     "llama_context_params.n_samplers"                    => offsetof(Llama::LibLlama::LlamaContextParams, @n_samplers),
     "llama_context_params.ctx_other"                     => offsetof(Llama::LibLlama::LlamaContextParams, @ctx_other),
+    "llama_embd.sizeof"                                  => sizeof(Llama::LibLlama::LlamaEmbd),
+    "llama_embd.data"                                    => offsetof(Llama::LibLlama::LlamaEmbd, @data),
+    "llama_embd.n_rows"                                  => offsetof(Llama::LibLlama::LlamaEmbd, @n_rows),
+    "llama_embd.n_embd"                                  => offsetof(Llama::LibLlama::LlamaEmbd, @n_embd),
+    "llama_perf_context_data.sizeof"                     => sizeof(Llama::LibLlama::LlamaPerfContextData),
+    "llama_perf_context_data.t_start_ms"                 => offsetof(Llama::LibLlama::LlamaPerfContextData, @t_start_ms),
+    "llama_perf_context_data.t_load_ms"                  => offsetof(Llama::LibLlama::LlamaPerfContextData, @t_load_ms),
+    "llama_perf_context_data.t_p_eval_ms"                => offsetof(Llama::LibLlama::LlamaPerfContextData, @t_p_eval_ms),
+    "llama_perf_context_data.t_eval_ms"                  => offsetof(Llama::LibLlama::LlamaPerfContextData, @t_eval_ms),
+    "llama_perf_context_data.n_p_eval"                   => offsetof(Llama::LibLlama::LlamaPerfContextData, @n_p_eval),
+    "llama_perf_context_data.n_eval"                     => offsetof(Llama::LibLlama::LlamaPerfContextData, @n_eval),
+    "llama_perf_context_data.n_reused"                   => offsetof(Llama::LibLlama::LlamaPerfContextData, @n_reused),
+    "llama_perf_context_data.n_reallocs_same"            => offsetof(Llama::LibLlama::LlamaPerfContextData, @n_reallocs_same),
+    "llama_perf_context_data.n_reallocs_diff"            => offsetof(Llama::LibLlama::LlamaPerfContextData, @n_reallocs_diff),
+    "llama_model_tensor_buft_override.sizeof"            => sizeof(Llama::LibLlama::LlamaModelTensorBuftOverride),
+    "llama_model_tensor_buft_override.pattern"           => offsetof(Llama::LibLlama::LlamaModelTensorBuftOverride, @pattern),
+    "llama_model_tensor_buft_override.buft"              => offsetof(Llama::LibLlama::LlamaModelTensorBuftOverride, @buft),
+    "llama_model_tensor_buft_override.buft.sizeof"       => sizeof(typeof(Llama::LibLlama::LlamaModelTensorBuftOverride.new.buft)),
   }
 end
 
@@ -213,4 +254,4 @@ ensure
   File.delete?(executable_path)
 end
 
-puts "ABI layouts match for llama_model_quantize_params, llama_model_params, and llama_context_params"
+puts "ABI layouts match for model/context/quantization parameters, embeddings, performance counters, and buffer overrides"

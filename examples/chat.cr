@@ -54,7 +54,7 @@ begin
     ] of Llama::Sampling::Stage)
     generation_options = Llama::GenerationOptions.new(sampling: sampling)
 
-    # b10809 accepts recognized template shapes rather than arbitrary Jinja.
+    # b12110 accepts recognized template shapes rather than arbitrary Jinja.
     template = model.chat_template || CHATML_TEMPLATE
     model.chat(template: template, context_options: context_options) do |chat|
       loop do

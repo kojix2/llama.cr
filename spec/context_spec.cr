@@ -5,6 +5,48 @@ require "./spec_helper"
 # Or set the MODEL_PATH environment variable
 
 describe Llama::Context do
+  it "forwards disabled MoE cache policy through typed context options" do
+    Llama::Model.open(MODEL_PATH) do |model|
+      options = Llama::ContextOptions.new(moe_cache_size: 0_u64)
+      model.context(options) do |context|
+        context.generate("Hello", 2, 0.0).should_not be_empty
+      end
+    end
+  end
+
+  it "reads and changes causal attention between operations" do
+    Llama::Model.open(MODEL_PATH) do |model|
+      model.context do |context|
+        context.causal_attention?.should be_true
+        context.causal_attention = false
+        context.causal_attention?.should be_false
+        context.with_operation do
+          expect_raises(Llama::BusyError) { context.causal_attention = true }
+        end
+        context.causal_attention = true
+        context.generate("Hello", 2, 0.0).should_not be_empty
+        context.perf.n_reallocs_same.should be >= 0
+        context.perf.n_reallocs_diff.should be >= 0
+        context.close
+        expect_raises(Llama::ClosedError) { context.causal_attention? }
+        expect_raises(Llama::ClosedError) { context.causal_attention = false }
+        expect_raises(Llama::ClosedError) { context.perf }
+      end
+    end
+  end
+
+  it "rejects non-causal batches larger than a micro-batch before native execution" do
+    Llama::Model.open(MODEL_PATH) do |model|
+      model.context(n_ubatch: 2_u32) do |context|
+        context.causal_attention = false
+        batch = Llama::Batch.from_tokens(model.vocab.tokenize("Hello, world!"))
+        expect_raises(Llama::Batch::Error, "one micro-batch") { context.decode!(batch) }
+      ensure
+        batch.try(&.free)
+      end
+    end
+  end
+
   it "supports idempotent close and rejects later operations" do
     model = Llama::Model.new(MODEL_PATH)
     context = model.context

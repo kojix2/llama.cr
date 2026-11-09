@@ -31,7 +31,8 @@ module Llama
         op_offload: context_options.op_offload,
         n_ubatch: context_options.micro_batch_size,
         n_seq_max: @max_sequences,
-        pooling_type: @pooling.to_native
+        pooling_type: @pooling.to_native,
+        moe_cache_size: context_options.moe_cache_size
       )
     end
 

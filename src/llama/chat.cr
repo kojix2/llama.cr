@@ -80,7 +80,7 @@ module Llama
       0
     )
 
-    # b10809 recognizes a predefined set of Jinja template shapes; it is not a
+    # b12110 recognizes a predefined set of Jinja template shapes; it is not a
     # general Jinja evaluator. Surface an unsupported custom template distinctly.
     raise TemplateError.new("chat template is not recognized by llama.cpp") if required_size < 0
     if required_size > MAX_CHAT_TEMPLATE_BYTES

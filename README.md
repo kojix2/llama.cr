@@ -9,8 +9,8 @@
 Crystal bindings for [llama.cpp](https://github.com/ggml-org/llama.cpp), a C/C++ implementation of LLaMA, Falcon, GPT-2, and other large language models.
 
 The version in `shard.yml` corresponds to the compatible llama.cpp build number.
-For example, shard version `0.10809.1` targets llama.cpp build `b10809`, which
-is the stable release [v0.4.0](https://github.com/ggml-org/llama.cpp/releases/tag/v0.4.0).
+For example, shard version `0.12110.0` targets llama.cpp build `b12110`, which
+is the stable release [v0.9.0](https://github.com/ggml-org/llama.cpp/releases/tag/v0.9.0).
 
 This project is under active development and may change rapidly.
 
@@ -282,6 +282,27 @@ response = Llama.generate(
 )
 ```
 
+### Context Controls
+
+`ContextOptions#moe_cache_size` sets the experimental device cache size in bytes
+for MoE experts kept in host memory. It defaults to `0` (disabled) and is
+forwarded by completion, session, chat, and embedder factories:
+
+```crystal
+context_options = Llama::ContextOptions.new(moe_cache_size: 512_u64 * 1024 * 1024)
+```
+
+`Context#causal_attention?` reads the active attention mode. Set
+`context.causal_attention = false` between operations for non-causal attention;
+each input batch must then fit in a single micro-batch. Pooled embedding
+contexts return embeddings without logits in v0.9.0.
+
+The experimental extended batch API (`llama_batch_ext_*`, `llama_process`) is
+available through `Llama::LibLlama`. Keep its originating context alive, set
+positions and output flags before processing, and release the batch with
+`llama_batch_ext_free`. The existing `Batch`, generation, and embedding helpers
+continue to use the supported `llama_batch` API.
+
 ### Resource Lifetime
 
 Native-backed objects provide an idempotent `free` method. Prefer the block APIs
@@ -315,9 +336,12 @@ error, because their finalizers may still need the llama.cpp backend.
 
 ### Saved State Compatibility
 
-llama.cpp b10809 updates the session and sequence-state file formats. Session
-or state files written by b10566 are not guaranteed to load with this version;
-recreate them after upgrading.
+llama.cpp v0.9.0 (b12110) uses session format 11 and sequence-state format 4.
+Native state files from v0.4.0 (b10809), which used formats 10 and 3, are not
+compatible; recreate them after upgrading. Portable `Session` snapshots also
+validate the wrapper and native versions before restoring.
+
+See [the upstream API changes](assets/UPSTREAM_CHANGES.md) for the migration details.
 
 ### Advanced Sampling
 
@@ -355,7 +379,7 @@ end
 ```
 
 Chat history is committed transactionally. A cancelled turn is not committed
-unless `commit_partial: true` is requested. b10809 recognizes predefined chat
+unless `commit_partial: true` is requested. b12110 recognizes predefined chat
 template shapes; it is not a general Jinja evaluator. Pass a recognized template
 explicitly when the model does not provide one. `Chat#clear` removes every
 message, including the initial system message. A second turn, `clear`, or `close`
@@ -434,11 +458,11 @@ See [kojix2.github.io/llama.cr](https://kojix2.github.io/llama.cr) for full API 
 `Llama.check_compatibility!` can explicitly check the version reported by the
 library. It is not enforced during initialization, allowing other llama.cpp
 versions to be tested at the user's own risk. Stable packages of the supported
-release report `0.4.0`, while the official `b10809` release archives report
-`0.4.0-dev`. The C API does not report the exact build number, so package pins
+release report `0.9.0`, while the official `b12110` release archives report
+`0.9.0-dev`. The C API does not report the exact build number, so package pins
 and ABI checks are still needed when strict compatibility is required.
 
-Custom `Llama.log_set` callbacks are experimental. On the pinned b10809 build,
+Custom `Llama.log_set` callbacks are experimental. On the pinned b12110 build,
 model loading and multithreaded decode callbacks were observed on the calling
 thread. Callback exceptions are contained at the C boundary and can be retrieved
 with `Llama.take_log_callback_error`.

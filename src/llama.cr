@@ -92,9 +92,9 @@ module Llama
   end
   LLAMA_CPP_COMPATIBLE_VERSION = "b#{LLAMA_CPP_BUILD}"
 
-  # The b10809 release archives report a development suffix, while stable
+  # The b12110 release archives report a development suffix, while stable
   # package builds from the same release report the plain semantic version.
-  private LLAMA_CPP_REPORTED_VERSIONS = {"0.4.0", "0.4.0-dev"}
+  private LLAMA_CPP_REPORTED_VERSIONS = {"0.9.0", "0.9.0-dev"}
 
   # ==== Native constants (wrapped for user convenience) ====
   DEFAULT_SEED    = LibLlama::LLAMA_DEFAULT_SEED
@@ -157,7 +157,7 @@ module Llama
   # Set a custom log callback.
   #
   # This bridge is experimental because callback thread behavior is controlled
-  # by llama.cpp. The pinned b10809 build has been observed to invoke logging on
+  # by llama.cpp. The pinned b12110 build has been observed to invoke logging on
   # the calling thread, including during multithreaded decode. Exceptions are
   # caught at the native boundary and can be retrieved with
   # `take_log_callback_error`.

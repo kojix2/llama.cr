@@ -45,6 +45,7 @@ module Llama
     getter embeddings : Bool
     getter offload_kqv : Bool
     getter op_offload : Bool
+    getter moe_cache_size : UInt64
 
     def initialize(
       @context_size : UInt32 = 0_u32,
@@ -55,6 +56,7 @@ module Llama
       @embeddings : Bool = false,
       @offload_kqv : Bool = false,
       @op_offload : Bool = false,
+      @moe_cache_size : UInt64 = 0_u64,
     )
       raise ArgumentError.new("batch_size must be positive") if @batch_size == 0
       raise ArgumentError.new("micro_batch_size must be positive") if @micro_batch_size == 0

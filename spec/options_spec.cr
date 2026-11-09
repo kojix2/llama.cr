@@ -15,6 +15,12 @@ describe Llama::GenerationOptions do
 end
 
 describe Llama::ContextOptions do
+  it "retains MoE cache sizes in bytes without narrowing to 32 bits" do
+    Llama::ContextOptions.new.moe_cache_size.should eq(0_u64)
+    size = 8_u64 * 1024 * 1024 * 1024
+    Llama::ContextOptions.new(moe_cache_size: size).moe_cache_size.should eq(size)
+  end
+
   it "validates batch and thread sizes" do
     expect_raises(ArgumentError, "batch_size must be positive") { Llama::ContextOptions.new(batch_size: 0_u32) }
     expect_raises(ArgumentError, "threads must be positive") { Llama::ContextOptions.new(threads: 0) }
